@@ -1,5 +1,7 @@
+import Router from './routes';
+
 function App() {
-  return <div className="h-4">시작</div>;
+  return <Router />;
 }
 
 export default App;

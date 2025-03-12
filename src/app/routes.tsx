@@ -9,23 +9,29 @@ import HomePage from '@/pages/TicketReserve/ui/HomePage';
 import NotificationPage from '@/pages/TicketReserve/ui/NotificationPage';
 import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
 import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
+import HomeLayout from '@/shared/ui/layouts/HomeLayout';
+import MainLayout from '@/shared/ui/layouts/MainLayout';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
-        <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
-        <Route path="/reserve/notification" element={<NotificationPage />} />
-        <Route path="/auth/login" element={<LoginPage />} />
-        <Route path="/auth/signup" element={<SignUpPage />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/menu" element={<MenuPage />} />
-        <Route path="/ticketchage" element={<SeatChangePage />} />
-        <Route path="/ticketlist" element={<TickListPage />} />
-        <Route path="/ticketpayment" element={<TicketPaymentPage />} />
+        <Route element={<HomeLayout />}>
+          <Route path="/" element={<HomePage />} />
+        </Route>
+        <Route element={<MainLayout />}>
+          <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
+          <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
+          <Route path="/reserve/notification" element={<NotificationPage />} />
+          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/auth/signup" element={<SignUpPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/menu" element={<MenuPage />} />
+          <Route path="/ticketchage" element={<SeatChangePage />} />
+          <Route path="/ticketlist" element={<TickListPage />} />
+          <Route path="/ticketpayment" element={<TicketPaymentPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

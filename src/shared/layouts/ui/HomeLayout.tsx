@@ -1,5 +1,5 @@
+import NavBar from '@/shared/ui/NavBar';
 import { Outlet } from 'react-router-dom';
-import NavBar from '../NavBar';
 
 const HomeLayout = () => {
   return (

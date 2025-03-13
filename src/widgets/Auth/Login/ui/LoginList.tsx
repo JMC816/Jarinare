@@ -8,7 +8,10 @@ const LoginList = () => {
       <div className="flex flex-col">
         <div className="mt-5 flex flex-col items-center gap-y-5">
           {OtherLoginArray.map(({ text }, idx) => (
-            <span className="font-bold text-blue opacity-80" key={idx}>
+            <span
+              className="text-base font-bold text-blue opacity-80"
+              key={idx}
+            >
               {text}
             </span>
           ))}

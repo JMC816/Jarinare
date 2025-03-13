@@ -3,7 +3,7 @@ import { Props } from '../types/Login';
 const LoginButton = ({ bgColor, textColor, text, icon }: Props) => {
   return (
     <button
-      className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm font-bold text-${textColor} bg-${bgColor}`}
+      className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold text-${textColor} bg-${bgColor}`}
     >
       {icon ? (
         <img

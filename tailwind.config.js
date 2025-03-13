@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  mode: 'jit',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -8,7 +9,7 @@ export default {
         rightBlue: '#E7F2FD',
         lightestGray: '#F2F3F5',
         lightGray: '#D9D9D9',
-        mediumGray: 'B1B7C1',
+        mediumGray: '#B1B7C1',
         darkGray: '#808080',
         green: '#1EC997',
         red: '#EA4335',
@@ -27,4 +28,10 @@ export default {
     },
   },
   plugins: [],
+  safelist: [
+    {
+      pattern:
+        /(bg|text)-(blue|rightBlue|lightestGray|lightGray|mediumGray|darkGray|green|red|rightImpossible|black|white|)/,
+    },
+  ],
 };

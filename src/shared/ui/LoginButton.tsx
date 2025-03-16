@@ -1,8 +1,11 @@
+import useModalStore from '../modals/Auth/Login/model/store';
 import { Props } from '../types/Login';
 
-const LoginButton = ({ bgColor, textColor, text, icon }: Props) => {
+const LoginButton = ({ bgColor, textColor, text, icon, modalTypes }: Props) => {
+  const { openModal } = useModalStore();
   return (
     <button
+      onClick={() => openModal(modalTypes!)}
       className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold text-${textColor} bg-${bgColor}`}
     >
       {icon ? (

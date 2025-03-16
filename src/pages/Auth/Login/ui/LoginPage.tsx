@@ -1,10 +1,13 @@
+import useModalStore from '@/shared/modals/Auth/Login/model/store';
+import Modal from '@/shared/modals/Auth/Login/ui/Modal';
 import LoginList from '@/widgets/Auth/Login/ui/LoginList';
 import SocialLoginList from '@/widgets/Auth/Login/ui/SocialLoginList';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
+  const { isShow, modalType } = useModalStore();
   return (
-    <div className="mt-[35px] flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
+    <div className="flex h-full w-full flex-col items-center justify-center bg-lightestGray pl-[38px] pr-[37px]">
       <span className="w-full text-lg font-bold">로그인</span>
       <div className="mt-[65px]">
         <LoginList />
@@ -14,11 +17,12 @@ const LoginPage = () => {
       </div>
       <SocialLoginList />
       <Link
-        className="text-md mt-[30px] font-bold text-blue"
+        className="mt-[30px] text-md font-bold text-blue"
         to={'/auth/signup'}
       >
         회원가입
       </Link>
+      {isShow == false || modalType == undefined ? null : <Modal />}
     </div>
   );
 };

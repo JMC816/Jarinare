@@ -1,9 +1,9 @@
 import LoginButton from '@/shared/ui/LoginButton';
 import { LoginContants } from '../types/Login';
 import LoginInput from './LoginInput';
-import LoginStateLine from './LoginStageLine';
 import useModalStore from '../model/store';
 import { Link } from 'react-router-dom';
+import LoginStageLine from './LoginStageLine';
 
 const LoginContant = ({
   title,
@@ -22,7 +22,7 @@ const LoginContant = ({
         </div>
       </div>
       <div className="flex flex-col gap-y-5">
-        <LoginStateLine stage={stage} />
+        <LoginStageLine stage={stage} />
         {modalType === 'PasswordModal' ? (
           <Link to={'/'}>
             <LoginButton

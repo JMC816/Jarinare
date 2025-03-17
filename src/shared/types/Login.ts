@@ -1,4 +1,4 @@
-import { ModalTypes } from '../modals/Auth/Login/types/modal';
+import { ModalTypes } from '../modals/Auth/Login/types/Modal';
 
 export type Props = {
   bgColor: string;
@@ -6,4 +6,5 @@ export type Props = {
   text: string;
   icon?: string;
   modalTypes?: ModalTypes | null;
+  stage: string;
 };

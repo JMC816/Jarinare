@@ -1,7 +1,13 @@
 import useModalStore from '../modals/model/store';
-import { Props } from '../types/Auth';
+import { ButtonProps } from '../modals/types/Auth';
 
-const Button = ({ modalTypes, text, textColor, bgColor, icon }: Props) => {
+const Button = ({
+  modalTypes,
+  text,
+  textColor,
+  bgColor,
+  icon,
+}: ButtonProps) => {
   const { openModal } = useModalStore();
   return (
     <button

@@ -1,6 +1,6 @@
 import SignUpStageLine from '../modals/Auth/SignUp/ui/SignUpStageLine';
 import useModalStore from '../modals/model/store';
-import { Props } from '../types/Auth';
+import { ButtonProps } from '../modals/types/Auth';
 
 const SignUpButton = ({
   bgColor,
@@ -8,7 +8,7 @@ const SignUpButton = ({
   text,
   modalTypes,
   stage,
-}: Props) => {
+}: ButtonProps) => {
   const { openModal } = useModalStore();
   return (
     <div className="mb-[45px] flex flex-col gap-y-5">

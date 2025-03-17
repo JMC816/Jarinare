@@ -1,6 +1,6 @@
-import { AuthStage } from '@/shared/types/Auth';
+import { AuthStageProps } from '@/shared/modals/types/Auth';
 
-const LoginStageLine = ({ stage }: AuthStage) => {
+const LoginStageLine = ({ stage }: AuthStageProps) => {
   return (
     <div className="flex w-full flex-col gap-y-[10px]">
       <span className="flex w-full justify-end text-base font-bold">

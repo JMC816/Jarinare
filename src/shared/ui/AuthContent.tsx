@@ -1,7 +1,7 @@
-import { AuthContents } from '../types/Auth';
+import { AuthContentsProps } from '../modals/types/Auth';
 import AuthInput from './AuthInput';
 
-const AuthContent = ({ title, subtitle, placeholder }: AuthContents) => {
+const AuthContent = ({ title, subtitle, placeholder }: AuthContentsProps) => {
   return (
     <div className="mb-[45px] flex h-full w-full flex-col justify-between">
       <div className="mt-[55px]">

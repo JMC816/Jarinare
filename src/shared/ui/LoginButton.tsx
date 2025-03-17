@@ -1,6 +1,6 @@
 import LoginStageLine from '../modals/Auth/Login/ui/LoginStageLine';
 import useModalStore from '../modals/model/store';
-import { Props } from '../types/Auth';
+import { ButtonProps } from '../modals/types/Auth';
 
 const LoginButton = ({
   bgColor,
@@ -8,7 +8,7 @@ const LoginButton = ({
   text,
   modalTypes,
   stage,
-}: Props) => {
+}: ButtonProps) => {
   const { openModal } = useModalStore();
   return (
     <div className="mb-[45px] flex flex-col gap-y-5">

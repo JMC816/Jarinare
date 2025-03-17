@@ -1,23 +1,25 @@
 import useModalStore from '../modals/Auth/Login/model/store';
-import { Props } from '../types/Login';
+import LoginStageLine from '../modals/Auth/Login/ui/LoginStageLine';
+import { Props } from '../types/Auth';
 
-const LoginButton = ({ bgColor, textColor, text, icon, modalTypes }: Props) => {
+const LoginButton = ({
+  bgColor,
+  textColor,
+  text,
+  modalTypes,
+  stage,
+}: Props) => {
   const { openModal } = useModalStore();
   return (
-    <button
-      onClick={() => openModal(modalTypes!)}
-      className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold text-${textColor} bg-${bgColor}`}
-    >
-      {icon ? (
-        <img
-          className="absolute left-[20px]"
-          width={20}
-          height={20}
-          src={icon}
-        />
-      ) : null}
-      {text}
-    </button>
+    <div className="mb-[45px] flex flex-col gap-y-5">
+      <LoginStageLine stage={stage!} />
+      <button
+        onClick={() => openModal(modalTypes!)}
+        className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold text-${textColor} bg-${bgColor}`}
+      >
+        {text}
+      </button>
+    </div>
   );
 };
 

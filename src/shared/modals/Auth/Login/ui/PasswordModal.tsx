@@ -1,4 +1,6 @@
+import LoginButton from '@/shared/ui/LoginButton';
 import LoginContant from './LoginContant';
+import { Link } from 'react-router-dom';
 
 const PasswordModal = () => {
   return (
@@ -9,6 +11,15 @@ const PasswordModal = () => {
         placeholder="비밀번호"
         stage="2단계"
       />
+      <Link to={'/'}>
+        <LoginButton
+          stage="2단계"
+          text="로그인"
+          bgColor="blue"
+          textColor="white"
+          modalTypes={'PasswordModal'}
+        />
+      </Link>
     </div>
   );
 };

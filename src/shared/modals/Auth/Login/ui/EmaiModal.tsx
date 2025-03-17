@@ -1,3 +1,4 @@
+import LoginButton from '@/shared/ui/LoginButton';
 import LoginContant from './LoginContant';
 
 const EmailModal = () => {
@@ -8,6 +9,13 @@ const EmailModal = () => {
         subtitle="이메일"
         placeholder="이메일"
         stage="1단계"
+      />
+      <LoginButton
+        stage="1단계"
+        text="다음"
+        bgColor="blue"
+        textColor="white"
+        modalTypes={'PasswordModal'}
       />
     </div>
   );

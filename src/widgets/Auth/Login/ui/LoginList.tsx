@@ -1,12 +1,12 @@
 import useModalStore from '@/shared/modals/Auth/Login/model/store';
-import LoginButton from '@/shared/ui/LoginButton';
+import Button from '@/shared/ui/Button';
 import { OtherLoginArray } from '@/widgets/Auth/Login/consts/OtherLogin';
 
 const LoginList = () => {
   const { openModal } = useModalStore();
   return (
     <>
-      <LoginButton
+      <Button
         text="회원번호로 로그인"
         bgColor="blue"
         textColor="white"

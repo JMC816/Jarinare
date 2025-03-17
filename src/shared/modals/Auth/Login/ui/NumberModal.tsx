@@ -1,14 +1,13 @@
 import LoginButton from '@/shared/ui/LoginButton';
-import LoginContant from './LoginContant';
+import AuthContent from '@/shared/ui/AuthContent';
 
 const NumberModal = () => {
   return (
     <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
-      <LoginContant
+      <AuthContent
         title="로그인"
         subtitle="휴대폰 번호"
         placeholder="휴대폰 번호"
-        stage="1단계"
       />
       <LoginButton
         stage="1단계"

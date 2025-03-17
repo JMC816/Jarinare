@@ -1,6 +1,6 @@
-import { LoginStage } from '../types/Login';
+import { AuthStage } from '@/shared/types/Auth';
 
-const LoginStageLine = ({ stage }: LoginStage) => {
+const LoginStageLine = ({ stage }: AuthStage) => {
   return (
     <div className="flex w-full flex-col gap-y-[10px]">
       <span className="flex w-full justify-end text-base font-bold">

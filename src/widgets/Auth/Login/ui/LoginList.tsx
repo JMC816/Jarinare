@@ -1,4 +1,4 @@
-import useModalStore from '@/shared/modals/Auth/Login/model/store';
+import useModalStore from '@/shared/modals/model/store';
 import Button from '@/shared/ui/Button';
 import { OtherLoginArray } from '@/widgets/Auth/Login/consts/OtherLogin';
 

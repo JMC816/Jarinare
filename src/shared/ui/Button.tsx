@@ -1,4 +1,4 @@
-import useModalStore from '../modals/Auth/Login/model/store';
+import useModalStore from '../modals/model/store';
 import { Props } from '../types/Auth';
 
 const Button = ({ modalTypes, text, textColor, bgColor, icon }: Props) => {

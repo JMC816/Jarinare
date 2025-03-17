@@ -1,5 +1,5 @@
-import useModalStore from '../modals/Auth/Login/model/store';
 import LoginStageLine from '../modals/Auth/Login/ui/LoginStageLine';
+import useModalStore from '../modals/model/store';
 import { Props } from '../types/Auth';
 
 const LoginButton = ({

@@ -1,8 +1,8 @@
-import useModalStore from '../model/store';
-import EmailModal from './EmaiModal';
-import NumberModal from './NumberModal';
-import PasswordModal from './PasswordModal';
-import UserNumberModal from './UserNumberModal';
+import EmailModal from '@/shared/modals/Auth/Login/ui/EmaiModal';
+import NumberModal from '@/shared/modals/Auth/Login/ui/NumberModal';
+import PasswordModal from '@/shared/modals/Auth/Login/ui/PasswordModal';
+import UserNumberModal from '@/shared/modals/Auth/Login/ui/UserNumberModal';
+import useModalStore from '@/shared/modals/model/store';
 
 const Modal = () => {
   const { modalType, isShow } = useModalStore();

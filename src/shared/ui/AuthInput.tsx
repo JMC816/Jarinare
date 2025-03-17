@@ -1,6 +1,6 @@
-import { LoginPlaceholer } from '../types/Login';
+import { AuthPlaceholer } from '../types/Auth';
 
-const LoginInput = ({ placeholder }: LoginPlaceholer) => {
+const AuthInput = ({ placeholder }: AuthPlaceholer) => {
   return (
     <input
       placeholder={placeholder}
@@ -9,4 +9,4 @@ const LoginInput = ({ placeholder }: LoginPlaceholer) => {
   );
 };
 
-export default LoginInput;
+export default AuthInput;

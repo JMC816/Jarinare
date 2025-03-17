@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Store } from '../types/Login';
 import { ModalTypes } from '../types/Modal';
+import { Store } from '../types/Auth';
 
 const useModalStore = create<Store>((set) => ({
   modalType: null,

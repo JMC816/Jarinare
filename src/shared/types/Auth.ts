@@ -6,5 +6,5 @@ export type Props = {
   text: string;
   icon?: string;
   modalTypes?: ModalTypes | null;
-  stage: string;
+  stage?: string;
 };

@@ -1,5 +1,5 @@
 import useModalStore from '../modals/model/store';
-import { ButtonProps } from '../modals/types/Auth';
+import { ButtonProps } from '../types/Button';
 
 const Button = ({
   modalTypes,

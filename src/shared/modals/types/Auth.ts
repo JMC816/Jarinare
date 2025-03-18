@@ -7,15 +7,6 @@ export type Store = {
   closeModal: (type: ModalTypes) => void;
 };
 
-export type ButtonProps = {
-  bgColor: string;
-  textColor: string;
-  text: string;
-  icon?: string;
-  modalTypes?: ModalTypes | null;
-  stage?: string;
-};
-
 export type AuthContentsProps = {
   title: string;
   subtitle: string;

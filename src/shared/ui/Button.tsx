@@ -12,7 +12,7 @@ const Button = ({
   return (
     <button
       onClick={() => openModal(modalTypes!)}
-      className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold text-${textColor} bg-${bgColor}`}
+      className={`disabled:bg-lightBlueImpossible relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold text-${textColor} bg-${bgColor}`}
     >
       {icon ? (
         <img

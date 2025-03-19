@@ -6,14 +6,15 @@ export default {
     extend: {
       colors: {
         blue: '#0062FF',
-        rightBlue: '#E7F2FD',
+        lightBlue: '#E7F2FD',
+        lightBlueImpossible: '#B2D0FF',
         lightestGray: '#F2F3F5',
         lightGray: '#D9D9D9',
         mediumGray: '#B1B7C1',
         darkGray: '#808080',
         green: '#1EC997',
         red: '#EA4335',
-        rightImpossible: '#FEE1DF',
+        lightImpossible: '#FEE1DF',
         black: '#000000',
         white: '#ffffff',
       },

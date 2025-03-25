@@ -10,7 +10,7 @@ const LoginList = () => {
         text="회원번호로 로그인"
         bgColor="blue"
         textColor="white"
-        modalTypes={'UserNumberModal'}
+        onModalClick={() => openModal('UserNumberModal')}
       />
       <div className="flex flex-col">
         <div className="mt-5 flex flex-col items-center gap-y-5">

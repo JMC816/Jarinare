@@ -3,22 +3,24 @@ import { ReserveWayArray } from '../constants/ReserveWay';
 
 const ReserveWay = () => {
   return (
-    <div className="flex h-[320px] w-[320px] flex-col items-center justify-center gap-y-5 rounded-lg bg-lightestGray">
-      {ReserveWayArray.map(({ icon, text, attribute, buttonText }, idx) => (
-        <div
-          className="flex h-[55px] w-[280px] items-center rounded-lg bg-white pl-[10px]"
-          key={idx}
-        >
-          <img width={20} height={20} src={icon} />
-          <div className="flex w-[140px] flex-col pl-[10px] font-bold">
-            <span className="text-base text-mediumGray">{text}</span>
-            <span className="text-tiny text-mediumGray">{attribute}</span>
+    <div className="flex h-[320px] w-[320px] flex-col items-center justify-center gap-y-5 rounded-lg bg-lightestGray pb-5 pt-5">
+      {ReserveWayArray.map(
+        ({ icon, text, attribute, buttonText, modal }, idx) => (
+          <div
+            className="flex h-[55px] w-[280px] items-center rounded-lg bg-white pl-[10px]"
+            key={idx}
+          >
+            <img width={20} height={20} src={icon} />
+            <div className="flex w-[140px] flex-col pl-[10px] font-bold">
+              <span className="text-base text-mediumGray">{text}</span>
+              <span className="text-tiny text-mediumGray">{attribute}</span>
+            </div>
+            <div className="pl-[50px]">
+              <MiniButton text={buttonText} modalTypes={modal} />
+            </div>
           </div>
-          <div className="pl-[50px]">
-            <MiniButton text={buttonText} />
-          </div>
-        </div>
-      ))}
+        ),
+      )}
     </div>
   );
 };

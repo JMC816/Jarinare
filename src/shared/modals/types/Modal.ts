@@ -3,3 +3,9 @@ export type ModalTypes =
   | 'UserNumberModal'
   | 'NumberModal'
   | 'PasswordModal';
+
+export type ReserveModalTypes =
+  | 'StartPlaceModal'
+  | 'EndPlaceModal'
+  | 'DayModal'
+  | 'CountModal';

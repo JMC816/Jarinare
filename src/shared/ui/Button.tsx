@@ -1,4 +1,3 @@
-import useModalStore from '../modals/model/store';
 import { ButtonProps } from '../types/Button';
 
 const Button = ({
@@ -7,12 +6,12 @@ const Button = ({
   textColor,
   bgColor,
   icon,
+  onModalClick,
 }: ButtonProps) => {
-  const { openModal } = useModalStore();
   return (
     <button
-      onClick={() => openModal(modalTypes!)}
-      className={`disabled:bg-lightBlueImpossible relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold text-${textColor} bg-${bgColor}`}
+      onClick={() => onModalClick!(modalTypes!)}
+      className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold disabled:bg-lightBlueImpossible text-${textColor} bg-${bgColor}`}
     >
       {icon ? (
         <img

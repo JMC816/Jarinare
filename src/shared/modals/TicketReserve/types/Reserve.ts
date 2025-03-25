@@ -1,0 +1,25 @@
+import { ReserveModalTypes } from '../../types/Modal';
+
+export type Store = {
+  modalType: ReserveModalTypes | null;
+  isShow: boolean;
+  openModal: (type: ReserveModalTypes) => void;
+  closeModal: (type: ReserveModalTypes) => void;
+};
+
+export type ReserveProps = {
+  text: string;
+};
+
+export type ReservePlaceholder = {
+  placeholder: string;
+};
+
+type ValuePiece = Date | null;
+
+export type Value = ValuePiece | [ValuePiece, ValuePiece];
+
+export type CountProps = {
+  count: number;
+  setCount: (type: React.SetStateAction<number>) => void;
+};

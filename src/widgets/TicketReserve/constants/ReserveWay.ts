@@ -9,23 +9,27 @@ export const ReserveWayArray = [
     text: '출발지를 선택하세요',
     attribute: '출발',
     buttonText: '변경',
+    modal: 'StartPlaceModal',
   },
   {
     icon: group,
     text: '도착지를 선택하세요',
     attribute: '도착',
     buttonText: '변경',
+    modal: 'EndPlaceModal',
   },
   {
     icon: calendar,
     text: '날짜를 선택하세요',
     attribute: '가는날',
     buttonText: '변경',
+    modal: 'DayModal',
   },
   {
     icon: person,
     text: '인원을 선택하세요',
     attribute: '인원',
     buttonText: '변경',
+    modal: 'CountModal',
   },
-];
+] as const;

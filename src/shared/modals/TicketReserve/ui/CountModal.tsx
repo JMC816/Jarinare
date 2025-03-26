@@ -6,12 +6,11 @@ import { useDayCount } from '../hooks/Reserve';
 const CountModal = () => {
   const { closeModal } = useModalStore();
   const { countKid, countAdult, setCountKid, setCountAdult } = useDayCount();
-  console.log(countKid, countAdult);
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
       <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[40px] pr-[40px]">
         <span className="w-full pt-[25px] text-base font-bold">인원선택</span>
-        <div className="mt-[40px] flex w-full flex-col gap-[30px] text-tiny font-bold">
+        <div className="mt-[40px] flex w-full flex-col gap-y-[30px] text-tiny font-bold">
           <div className="flex items-center justify-between">
             <span>어른</span>
             <CountButton count={countAdult} setCount={setCountAdult} />

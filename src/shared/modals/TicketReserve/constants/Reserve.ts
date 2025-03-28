@@ -93,22 +93,18 @@ export const StationListArray = [
 export const TrainArray = [
   {
     train: 'KTX',
-    trainType: false,
     icon: check,
   },
   {
     train: 'KTX-산천',
-    trainType: false,
     icon: check,
   },
   {
     train: 'ITX-새마을호',
-    trainType: false,
     icon: check,
   },
   {
     train: '무궁화호',
-    trainType: false,
     icon: check,
   },
 ];
@@ -173,5 +169,24 @@ export const TimeArray = [
   },
   {
     time: '24:00',
+  },
+];
+
+export const TrainNumberArray = [
+  {
+    trainNumber: '1호차 잔여 23석/60석',
+    icon: check,
+  },
+  {
+    trainNumber: '2호차 잔여 23석/60석',
+    icon: check,
+  },
+  {
+    trainNumber: '3호차 잔여 23석/60석',
+    icon: check,
+  },
+  {
+    trainNumber: '4호차 잔여 23석/60석',
+    icon: check,
   },
 ];

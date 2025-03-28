@@ -7,12 +7,12 @@ const SeatCheckButton = ({
   onClick,
 }: SeatCheckButtonProps) => {
   return (
-    <div
+    <button
       onClick={onClick}
       className={`flex h-12 w-[150px] items-center justify-center rounded-xs text-base font-bold bg-${bgColor} text-${textColor}`}
     >
       {text}
-    </div>
+    </button>
   );
 };
 

@@ -6,6 +6,7 @@ import EndPlaceModal from '@/shared/modals/TicketReserve/ui/EndPlaceModal';
 import StartPlaceModal from '@/shared/modals/TicketReserve/ui/StartPlaceModal';
 import TimeChoiceModal from '@/shared/modals/TicketReserve/ui/TimeChoiceModal';
 import TrainChoiceModal from '@/shared/modals/TicketReserve/ui/TrainChoiceModal';
+import TrainNumberChocieModal from '@/shared/modals/TicketReserve/ui/TrainNumberChocieModal';
 
 const Modal = () => {
   const { modalType, isShow } = useModalStore();
@@ -27,6 +28,9 @@ const Modal = () => {
       ) : null}
       {isShow == true && modalType == 'ChoiceResultModal' ? (
         <ChoiceResultModal />
+      ) : null}
+      {isShow == true && modalType == 'TrainNumberChoiceModal' ? (
+        <TrainNumberChocieModal />
       ) : null}
     </div>
   );

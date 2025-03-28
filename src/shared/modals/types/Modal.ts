@@ -11,4 +11,5 @@ export type ReserveModalTypes =
   | 'CountModal'
   | 'TrainChoiceModal'
   | 'TimeChoiceModal'
-  | 'ChoiceResultModal';
+  | 'ChoiceResultModal'
+  | 'TrainNumberChoiceModal';

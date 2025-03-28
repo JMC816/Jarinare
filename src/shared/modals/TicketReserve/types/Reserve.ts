@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { ReserveModalTypes } from '../../types/Modal';
 
 export type Store = {
@@ -16,10 +17,21 @@ export type ReservePlaceholder = {
 };
 
 type ValuePiece = Date | null;
-
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export type CountProps = {
   count: number;
   setCount: (type: React.SetStateAction<number>) => void;
+};
+
+export type ChocieReusltListProps = {
+  title: string;
+  text: ReactNode;
+};
+
+export type ChocieResultButtonProps = {
+  text: string;
+  bgColor: string;
+  textColor: string;
+  onClick: () => void;
 };

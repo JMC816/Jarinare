@@ -16,7 +16,7 @@ const TrainList = () => {
                 <span className="text-darkGray">{takeTime}</span>
               </div>
             </div>
-            <MiniButton text="선택" />
+            <MiniButton text="선택" modalTypes={'ChoiceResultModal'} />
           </div>
         ),
       )}

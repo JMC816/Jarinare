@@ -1,3 +1,5 @@
+import check from '@/assets/icons/check.png';
+
 export const RecommendStationArray = [
   {
     text: '서울',
@@ -85,5 +87,91 @@ export const StationListArray = [
   },
   {
     text: '오송',
+  },
+];
+
+export const TrainArray = [
+  {
+    train: 'KTX',
+    trainType: false,
+    icon: check,
+  },
+  {
+    train: 'KTX-산천',
+    trainType: false,
+    icon: check,
+  },
+  {
+    train: 'ITX-새마을호',
+    trainType: false,
+    icon: check,
+  },
+  {
+    train: '무궁화호',
+    trainType: false,
+    icon: check,
+  },
+];
+
+export const TimeArray = [
+  {
+    time: '05:00',
+  },
+  {
+    time: '06:00',
+  },
+  {
+    time: '07:00',
+  },
+  {
+    time: '08:00',
+  },
+  {
+    time: '09:00',
+  },
+  {
+    time: '10:00',
+  },
+  {
+    time: '11:00',
+  },
+  {
+    time: '12:00',
+  },
+  {
+    time: '13:00',
+  },
+  {
+    time: '14:00',
+  },
+  {
+    time: '15:00',
+  },
+  {
+    time: '16:00',
+  },
+  {
+    time: '17:00',
+  },
+  {
+    time: '18:00',
+  },
+  {
+    time: '19:00',
+  },
+  {
+    time: '20:00',
+  },
+  {
+    time: '21:00',
+  },
+  {
+    time: '22:00',
+  },
+  {
+    time: '23:00',
+  },
+  {
+    time: '24:00',
   },
 ];

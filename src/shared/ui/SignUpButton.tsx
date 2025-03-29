@@ -15,7 +15,7 @@ const SignUpButton = ({
       <SignUpStageLine stage={stage!} />
       <button
         onClick={() => openModal(modalTypes!)}
-        className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold text-${textColor} bg-${bgColor}`}
+        className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold active:brightness-50 text-${textColor} bg-${bgColor}`}
       >
         {text}
       </button>

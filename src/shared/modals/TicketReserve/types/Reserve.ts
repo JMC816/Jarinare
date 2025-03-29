@@ -35,3 +35,7 @@ export type ChocieResultButtonProps = {
   textColor: string;
   onClick: () => void;
 };
+
+export type PlaceModalProp = {
+  modalType: ReserveModalTypes | null;
+};

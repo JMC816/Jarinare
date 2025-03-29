@@ -12,7 +12,7 @@ const TrainNumberChoiceModal = () => {
             <div
               onClick={() => closeModal('TrainNumberChoiceModal')}
               key={idx}
-              className="group flex h-12 w-[300px] items-center justify-between p-[20px] hover:rounded-md hover:bg-lightestGray"
+              className="group flex h-12 w-[300px] cursor-pointer items-center justify-between p-[20px] hover:rounded-md hover:bg-lightestGray"
             >
               <span>{trainNumber}</span>
               <img

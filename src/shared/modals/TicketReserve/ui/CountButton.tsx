@@ -7,14 +7,14 @@ export const CountButton = ({ count, setCount }: CountProps) => {
     <div className="flex h-[30px] w-[100px] items-center justify-between rounded-xs bg-lightestGray p-[3px]">
       <div
         onClick={() => setCount(count - 1)}
-        className="flex h-[25px] w-[25px] items-center justify-center rounded-xs bg-lightGray"
+        className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-xs bg-lightGray active:brightness-50"
       >
         <img src={minus} width={10} />
       </div>
       <span>{count < 0 ? 0 : count}</span>
       <div
         onClick={() => setCount(count + 1)}
-        className="flex h-[25px] w-[25px] items-center justify-center rounded-xs bg-lightGray"
+        className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-xs bg-lightGray active:brightness-50"
       >
         <img src={plus} width={10} />
       </div>

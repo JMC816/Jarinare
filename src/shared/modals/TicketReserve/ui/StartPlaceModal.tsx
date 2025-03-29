@@ -9,7 +9,7 @@ const StartPlaceModal = () => {
       <div className="pl-[28px] pr-[27px]">
         <PlaceTitle text="출발지를 선택해주세요" />
         <PlaceInput placeholder="출발역 선택" />
-        <RecommendStationList />
+        <RecommendStationList modalType={'StartPlaceModal'} />
       </div>
       <div className="mt-5 w-full border border-lightGray" />
       <StationList />

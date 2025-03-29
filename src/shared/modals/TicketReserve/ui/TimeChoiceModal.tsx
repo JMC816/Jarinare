@@ -12,7 +12,7 @@ const TimeChoiceModal = () => {
             <div
               onClick={() => closeModal('TimeChoiceModal')}
               key={idx}
-              className="flex h-[35px] w-[60px] items-center justify-center rounded-md border border-lightGray bg-lightestGray text-tiny text-darkGray"
+              className="flex h-[35px] w-[60px] cursor-pointer items-center justify-center rounded-md border border-lightGray bg-lightestGray text-tiny text-darkGray active:brightness-50"
             >
               {time}
             </div>

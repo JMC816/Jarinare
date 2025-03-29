@@ -6,7 +6,7 @@ const MiniButton = ({ text, modalTypes }: MiniButtonProp) => {
   return (
     <button
       onClick={() => openModal(modalTypes!)}
-      className="flex h-[30px] w-[50px] items-center justify-center rounded-sm bg-lightBlue"
+      className="flex h-[30px] w-[50px] items-center justify-center rounded-sm bg-lightBlue active:brightness-50"
     >
       <span className="text-sm font-bold text-blue">{text}</span>
     </button>

@@ -5,7 +5,7 @@ export type ButtonProps = {
   textColor: string;
   text: string;
   icon?: string;
-  modalTypes?: ModalTypes | ReserveModalTypes | null;
+  modalTypes?: ModalTypes | null;
   stage?: string;
   onModalClick?: (type: ModalTypes | ReserveModalTypes) => void;
 };

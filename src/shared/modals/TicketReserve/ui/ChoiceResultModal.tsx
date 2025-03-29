@@ -35,7 +35,10 @@ const ChoiceResultModal = () => {
             textColor="blue"
           />
           <ChocieResultButton
-            onClick={() => moveSeatCheckPage('/reserve/seatcheck')}
+            onClick={() => {
+              closeModal('ChoiceResultModal');
+              moveSeatCheckPage('/reserve/seatcheck');
+            }}
             text="좌석 조회"
             bgColor="blue"
             textColor="white"

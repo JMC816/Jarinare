@@ -13,3 +13,8 @@ export type ReserveModalTypes =
   | 'TimeChoiceModal'
   | 'ChoiceResultModal'
   | 'TrainNumberChoiceModal';
+
+export type TicketChangeModalTypes =
+  | 'TrainNumberChoiceModal'
+  | 'SeatChangeModal'
+  | 'RequestChangeModal';

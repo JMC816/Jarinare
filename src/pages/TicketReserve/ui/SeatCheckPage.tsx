@@ -20,8 +20,8 @@ const SeatCheckPage = () => {
         />
         <SeatCheckButton
           text="0 / 2 선택"
-          textColor="black"
-          bgColor="lightGray"
+          textColor="white"
+          bgColor="lightBlueImpossible"
         />
       </div>
       {isShow == false || modalType == undefined ? null : <Modal />}

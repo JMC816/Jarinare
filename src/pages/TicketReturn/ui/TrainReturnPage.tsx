@@ -1,5 +1,5 @@
-const TrainRetrunPage = () => {
-  return <div>TrainRetrunPage</div>;
+const TicketReturnPage = () => {
+  return <div>TicketReturnPage</div>;
 };
 
-export default TrainRetrunPage;
+export default TicketReturnPage;

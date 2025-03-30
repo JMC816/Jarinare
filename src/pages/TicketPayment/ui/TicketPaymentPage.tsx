@@ -1,5 +1,5 @@
-const TicketPaymentPage = () => {
+const PaymentTicketPage = () => {
   return <div>TicketPaymentPage</div>;
 };
 
-export default TicketPaymentPage;
+export default PaymentTicketPage;

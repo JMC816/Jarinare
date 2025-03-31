@@ -20,3 +20,5 @@ export type TicketChangeModalTypes =
   | 'RequestChangeModal';
 
 export type TicketReturnModalTypes = 'ReturnModal';
+
+export type MyPageModalTypes = 'DayModal';

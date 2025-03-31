@@ -18,3 +18,5 @@ export type TicketChangeModalTypes =
   | 'TrainNumberChoiceModal'
   | 'SeatChangeModal'
   | 'RequestChangeModal';
+
+export type TicketReturnModalTypes = 'ReturnModal';

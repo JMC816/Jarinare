@@ -10,7 +10,7 @@ import HomePage from '@/pages/TicketReserve/ui/HomePage';
 import NotificationPage from '@/pages/TicketReserve/ui/NotificationPage';
 import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
 import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
-import TicketReturnPage from '@/pages/TicketReturn/ui/TrainReturnPage';
+import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
 import HomeLayout from '@/shared/layouts/ui/HomeLayout';
 import MainLayout from '@/shared/layouts/ui/MainLayout';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';

@@ -22,3 +22,5 @@ export type TicketChangeModalTypes =
 export type TicketReturnModalTypes = 'ReturnModal';
 
 export type MyPageModalTypes = 'DayModal';
+
+export type NotificationModalTypes = 'ResponseModal' | 'AcceptModal';

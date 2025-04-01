@@ -1,3 +1,4 @@
+import useModalStore from '@/shared/modals/model/Notification';
 import { NotificationRequestProps } from '../types/NotificationRequest';
 
 const NotificationRequest = ({
@@ -5,6 +6,7 @@ const NotificationRequest = ({
   requstTime,
   requsetContant,
 }: NotificationRequestProps) => {
+  const { openModal } = useModalStore();
   return (
     <div className="flex h-[80px] flex-col bg-lightBlue p-[10px] active:bg-blue/20">
       <div className="flex justify-between text-tiny text-darkGray">
@@ -12,7 +14,14 @@ const NotificationRequest = ({
         <span>{requstTime}</span>
       </div>
       <span className="text-tiny font-bold">{requsetContant}</span>
-      <span className="text-bold text-xs font-bold text-blue">요청보기</span>
+      <div>
+        <span
+          onClick={() => openModal('ResponseModal')}
+          className="text-bold cursor-pointer text-left text-xs font-bold text-blue"
+        >
+          요청보기
+        </span>
+      </div>
     </div>
   );
 };

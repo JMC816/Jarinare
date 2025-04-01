@@ -1,4 +1,4 @@
-import { ModalTypes } from './Modal';
+import { ModalTypes } from '../../types/Modal';
 
 export type Store = {
   modalType: ModalTypes | null;

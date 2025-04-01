@@ -1,4 +1,4 @@
-import { AuthStageProps } from '@/shared/modals/types/Auth';
+import { AuthStageProps } from '../../types/Auth';
 
 const LoginStageLine = ({ stage }: AuthStageProps) => {
   return (

@@ -21,6 +21,7 @@ const Router = () => {
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/menu" element={<MenuPage />} />
         </Route>
         <Route element={<MainLayout />}>
           <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
@@ -29,7 +30,6 @@ const Router = () => {
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/menu" element={<MenuPage />} />
           <Route path="/ticket/seatchange" element={<TicketSeatChangePage />} />
           <Route path="/ticket/payment" element={<TicketPaymentPage />} />
           <Route path="/ticket/return" element={<TicketReturnPage />} />

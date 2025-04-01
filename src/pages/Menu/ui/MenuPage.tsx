@@ -4,7 +4,7 @@ import { MenuArray } from '../constants/Menu';
 const MenuPage = () => {
   return (
     <div className="flex w-full flex-col items-center">
-      <span className="mt-5 w-full pl-[28px] pr-[27px] text-lg font-bold">
+      <span className="mt-[60px] w-full pl-[28px] pr-[27px] text-lg font-bold">
         메뉴
       </span>
       <div className="mt-[45px] flex w-full flex-col gap-y-[20px] px-[10px]">

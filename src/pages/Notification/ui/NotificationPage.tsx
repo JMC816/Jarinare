@@ -1,4 +1,4 @@
-import NotificationRequest from '@/widgets/TicketReserve/ui/NotificationRequset';
+import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
 
 const NotificationPage = () => {
   return (

@@ -1,5 +1,5 @@
 import SignUpStageLine from '../modals/Auth/SignUp/ui/SignUpStageLine';
-import useModalStore from '../modals/model/store';
+import useModalStore from '../modals/model/AuthStore';
 import { ButtonProps } from '../types/Button';
 
 const SignUpButton = ({

@@ -1,4 +1,4 @@
-import { AuthContentsProps } from '../modals/types/Auth';
+import { AuthContentsProps } from '../modals/Auth/types/Auth';
 import AuthInput from './AuthInput';
 
 const AuthContent = ({ title, subtitle, placeholder }: AuthContentsProps) => {

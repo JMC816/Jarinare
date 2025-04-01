@@ -1,13 +1,13 @@
-import { ModalTypes, ReserveModalTypes } from '../modals/types/Modal';
+import { AuthModalTypes, ReserveModalTypes } from '../modals/types/Modal';
 
 export type ButtonProps = {
   bgColor: string;
   textColor: string;
   text: string;
   icon?: string;
-  modalTypes?: ModalTypes | null;
+  modalTypes?: AuthModalTypes | null;
   stage?: string;
-  onModalClick?: (type: ModalTypes | ReserveModalTypes) => void;
+  onModalClick?: (type: AuthModalTypes | ReserveModalTypes) => void;
 };
 
 export type MiniButtonProp = {

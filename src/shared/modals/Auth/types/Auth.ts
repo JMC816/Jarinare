@@ -1,10 +1,10 @@
-import { ModalTypes } from '../../types/Modal';
+import { AuthModalTypes } from '../../types/Modal';
 
 export type Store = {
-  modalType: ModalTypes | null;
+  modalType: AuthModalTypes | null;
   isShow: boolean;
-  openModal: (type: ModalTypes) => void;
-  closeModal: (type: ModalTypes) => void;
+  openModal: (type: AuthModalTypes) => void;
+  closeModal: (type: AuthModalTypes) => void;
 };
 
 export type AuthContentsProps = {

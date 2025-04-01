@@ -1,4 +1,4 @@
-export type ModalTypes =
+export type AuthModalTypes =
   | 'EmailModal'
   | 'UserNumberModal'
   | 'NumberModal'

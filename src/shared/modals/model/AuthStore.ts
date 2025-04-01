@@ -1,13 +1,13 @@
 import { create } from 'zustand';
-import { ModalTypes } from '../types/Modal';
 import { Store } from '../Auth/types/Auth';
+import { AuthModalTypes } from '../types/Modal';
 
 const useModalStore = create<Store>((set) => ({
   modalType: null,
   isShow: false,
-  openModal: (type: ModalTypes) =>
+  openModal: (type: AuthModalTypes) =>
     set(() => ({ isShow: true, modalType: type })),
-  closeModal: (type: ModalTypes) =>
+  closeModal: (type: AuthModalTypes) =>
     set(() => ({ isShow: false, modalType: type })),
 }));
 

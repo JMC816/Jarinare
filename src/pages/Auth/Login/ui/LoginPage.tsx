@@ -1,4 +1,4 @@
-import useModalStore from '@/shared/modals/model/store';
+import useModalStore from '@/shared/modals/model/AuthStore';
 import LoginList from '@/widgets/Auth/Login/ui/LoginList';
 import SocialLoginList from '@/widgets/Auth/Login/ui/SocialLoginList';
 import Modal from '@/widgets/modals/Auth/Login/ui/Modal';

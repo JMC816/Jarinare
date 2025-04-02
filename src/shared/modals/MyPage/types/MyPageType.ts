@@ -1,4 +1,4 @@
-import { MyPageModalTypes } from '../../types/Modal';
+import { MyPageModalTypes } from '../../types/ModalType';
 
 export type Store = {
   modalType: MyPageModalTypes | null;

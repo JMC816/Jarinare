@@ -1,5 +1,5 @@
 import useModalStore from '../../model/ReserveStore';
-import { TimeArray } from '../constants/Reserve';
+import { TimeArray } from '../constants/ReserveConstants';
 
 const TimeChoiceModal = () => {
   const { closeModal } = useModalStore();

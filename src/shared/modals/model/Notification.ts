@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { NotificationModalTypes } from '../types/Modal';
-import { Store } from '../Notification/types/Notification';
+import { Store } from '../Notification/types/NotificationType';
+import { NotificationModalTypes } from '../types/ModalType';
 
 const useModalStore = create<Store>((set) => ({
   modalType: null,

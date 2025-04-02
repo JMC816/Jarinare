@@ -1,4 +1,4 @@
-import { TicketButtonProps } from '../types/Ticket';
+import { TicketButtonProps } from '../types/TicketType';
 
 const TicketButton = ({
   text,

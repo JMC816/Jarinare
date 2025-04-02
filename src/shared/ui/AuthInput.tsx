@@ -1,4 +1,4 @@
-import { AuthPlaceholerProp } from '../modals/Auth/types/Auth';
+import { AuthPlaceholerProp } from '../modals/Auth/types/AuthType';
 
 const AuthInput = ({ placeholder }: AuthPlaceholerProp) => {
   return (

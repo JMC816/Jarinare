@@ -1,7 +1,7 @@
 import Button from '@/shared/ui/Button';
 import useModalStore from '../../model/ReserveStore';
 import { CountButton } from './CountButton';
-import { useDayCount } from '../hooks/Reserve';
+import { useDayCount } from '../hooks/ReserveHook';
 
 const CountModal = () => {
   const { closeModal } = useModalStore();

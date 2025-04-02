@@ -1,5 +1,5 @@
 import MiniButton from '@/shared/ui/MiniButton';
-import { ReserveWayArray } from '../constants/ReserveWay';
+import { ReserveWayArray } from '../constants/ReserveConstants';
 
 const ReserveWay = () => {
   return (

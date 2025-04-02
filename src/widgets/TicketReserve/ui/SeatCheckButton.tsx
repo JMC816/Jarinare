@@ -1,4 +1,4 @@
-import { SeatCheckButtonProps } from '../types/ReserveTitle';
+import { SeatCheckButtonProps } from '../types/ReserveType';
 
 const SeatCheckButton = ({
   text,

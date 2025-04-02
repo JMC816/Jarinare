@@ -1,4 +1,4 @@
-import { SeatChangeButtonProps } from '../types/TicketChange';
+import { SeatChangeButtonProps } from '../types/TicketChangeType';
 
 const SeatChangeButton = ({
   text,

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { ReserveModalTypes } from '../types/Modal';
-import { Store } from '../TicketReserve/types/Reserve';
+import { Store } from '../TicketReserve/types/ReserveType';
+import { ReserveModalTypes } from '../types/ModalType';
 
 const useModalStore = create<Store>((set) => ({
   modalType: null,

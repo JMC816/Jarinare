@@ -1,5 +1,5 @@
 import useModalStore from '../../model/TicketChangeStore';
-import { TrainNumberArray } from '../constants/TicketChange';
+import { TrainNumberArray } from '../constants/TicketChangeConstants';
 
 const TrainNumberChoiceModal = () => {
   const { closeModal } = useModalStore();

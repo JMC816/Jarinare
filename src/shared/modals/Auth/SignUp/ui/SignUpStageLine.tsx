@@ -1,4 +1,4 @@
-import { AuthStageProps } from '../../types/Auth';
+import { AuthStageProps } from '../../types/AuthType';
 
 const SignUpStageLine = ({ stage }: AuthStageProps) => {
   return (

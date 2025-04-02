@@ -1,6 +1,6 @@
 import notification from '@/assets/icons/notification.png';
-import { ReserveTitleProp } from '../types/ReserveTitle';
 import { Link } from 'react-router-dom';
+import { ReserveTitleProp } from '../types/ReserveType';
 
 const ReserveTitle = ({ text }: ReserveTitleProp) => {
   return (

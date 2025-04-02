@@ -1,5 +1,5 @@
 import Button from '@/shared/ui/Button';
-import { SocialLoginArray } from '../constants/SocialLogin';
+import { SocialLoginArray } from '../constants/SocialLoginConstants';
 
 const SocialLoginList = () => {
   return (

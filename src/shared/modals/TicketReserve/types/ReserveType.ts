@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ReserveModalTypes } from '../../types/Modal';
+import { ReserveModalTypes } from '../../types/ModalType';
 
 export type Store = {
   modalType: ReserveModalTypes | null;

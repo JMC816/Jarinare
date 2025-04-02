@@ -1,5 +1,5 @@
 import useModalStore from '../modals/model/ReserveStore';
-import { MiniButtonProp } from '../types/Button';
+import { MiniButtonProp } from '../types/ButtonType';
 
 const MiniButton = ({ text, modalTypes }: MiniButtonProp) => {
   const { openModal } = useModalStore();

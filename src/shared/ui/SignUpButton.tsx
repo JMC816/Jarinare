@@ -1,6 +1,6 @@
 import SignUpStageLine from '../modals/Auth/SignUp/ui/SignUpStageLine';
 import useModalStore from '../modals/model/AuthStore';
-import { ButtonProps } from '../types/Button';
+import { ButtonProps } from '../types/ButtonType';
 
 const SignUpButton = ({
   bgColor,

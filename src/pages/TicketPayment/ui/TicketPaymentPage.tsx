@@ -1,7 +1,7 @@
 import Ticket from '@/shared/ui/Ticket';
 import arrow from '@/assets/icons/arrow.png';
 import TicketButton from '@/shared/ui/TicketButton';
-import { usePyamentState } from '../hooks/TicketPayment';
+import { usePyamentState } from '../hooks/TicketPaymentHook';
 
 const TicketPaymentPage = () => {
   const { payment, setPayemnt } = usePyamentState();

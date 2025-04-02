@@ -1,4 +1,4 @@
-import { ChocieResultButtonProps } from '../types/Reserve';
+import { ChocieResultButtonProps } from '../types/ReserveType';
 
 const ChocieResultButton = ({
   text,

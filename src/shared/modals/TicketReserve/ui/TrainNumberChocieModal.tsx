@@ -1,5 +1,5 @@
 import useModalStore from '../../model/ReserveStore';
-import { TrainNumberArray } from '../constants/Reserve';
+import { TrainNumberArray } from '../constants/ReserveConstants';
 
 const TrainNumberChoiceModal = () => {
   const { closeModal } = useModalStore();

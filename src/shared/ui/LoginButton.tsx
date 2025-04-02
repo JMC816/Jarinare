@@ -1,6 +1,6 @@
 import LoginStageLine from '../modals/Auth/Login/ui/LoginStageLine';
 import useModalStore from '../modals/model/AuthStore';
-import { ButtonProps } from '../types/Button';
+import { ButtonProps } from '../types/ButtonType';
 
 const LoginButton = ({
   bgColor,

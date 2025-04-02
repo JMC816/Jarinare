@@ -1,4 +1,4 @@
-import { StationListArray } from '../constants/Reserve';
+import { StationListArray } from '../constants/ReserveConstants';
 
 const StationList = () => {
   return (

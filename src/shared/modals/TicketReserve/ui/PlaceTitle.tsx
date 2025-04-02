@@ -1,4 +1,4 @@
-import { ReserveProps } from '../types/Reserve';
+import { ReserveProps } from '../types/ReserveType';
 
 const PlaceTitle = ({ text }: ReserveProps) => {
   return (

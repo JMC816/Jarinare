@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { NavBarArray } from '../constants/NavBar';
-import { usePathName } from '../hooks/NavBar';
 import useModalStore from '../modals/model/ReserveStore';
+import { usePathName } from '../hooks/NavBarHook';
+import { NavBarArray } from '../constants/NavBarConstants';
 
 const NavBar = () => {
   const { location } = usePathName();

@@ -1,5 +1,5 @@
 import MiniButton from '@/shared/ui/MiniButton';
-import { TrainListArray } from '../constants/TrainList';
+import { TrainListArray } from '../constants/ReserveConstants';
 
 const TrainList = () => {
   return (

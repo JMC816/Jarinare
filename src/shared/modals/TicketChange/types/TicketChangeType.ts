@@ -1,4 +1,4 @@
-import { TicketChangeModalTypes } from '../../types/Modal';
+import { TicketChangeModalTypes } from '../../types/ModalType';
 
 export type Store = {
   modalType: TicketChangeModalTypes | null;

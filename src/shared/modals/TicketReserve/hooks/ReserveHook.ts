@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Value } from '../types/Reserve';
 import { useNavigate } from 'react-router-dom';
+import { Value } from '../types/ReserveType';
 
 export const useDaySelect = () => {
   const [value, onChange] = useState<Value>(new Date());

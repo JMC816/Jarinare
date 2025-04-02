@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MenuArray } from '../constants/Menu';
+import { MenuArray } from '../constants/MenuConstants';
 
 const MenuPage = () => {
   return (

@@ -1,5 +1,5 @@
 import useModalStore from '../../model/ReserveStore';
-import { navigate } from '../hooks/Reserve';
+import { navigate } from '../hooks/ReserveHook';
 import ChocieResultButton from './ChocieResultButton';
 import ChoiceResultList from './ChoiceResultList';
 

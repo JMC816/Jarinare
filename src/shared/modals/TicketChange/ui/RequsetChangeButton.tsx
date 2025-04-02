@@ -1,4 +1,4 @@
-import { RequestChangeButtonProps } from '../types/TicketChange';
+import { RequestChangeButtonProps } from '../types/TicketChangeType';
 
 const RequestChangeButton = ({
   text,

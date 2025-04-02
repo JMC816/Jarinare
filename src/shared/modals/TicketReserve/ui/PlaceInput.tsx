@@ -1,4 +1,4 @@
-import { ReservePlaceholder } from '../types/Reserve';
+import { ReservePlaceholder } from '../types/ReserveType';
 
 const PlaceInput = ({ placeholder }: ReservePlaceholder) => {
   return (

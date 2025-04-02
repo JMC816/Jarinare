@@ -1,6 +1,6 @@
 import plus from '@/assets/icons/plus.png';
 import minus from '@/assets/icons/minus.png';
-import { CountProps } from '../types/Reserve';
+import { CountProps } from '../types/ReserveType';
 
 export const CountButton = ({ count, setCount }: CountProps) => {
   return (

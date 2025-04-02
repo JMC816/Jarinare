@@ -1,4 +1,4 @@
-import { TicketListProps } from '../types/Ticket';
+import { TicketListProps } from '../types/TicketType';
 
 const TicketList = ({ title, text, textColor }: TicketListProps) => {
   return (

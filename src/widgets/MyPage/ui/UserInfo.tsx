@@ -1,4 +1,4 @@
-import { UserInfoProps } from '../types/MyPage';
+import { UserInfoProps } from '../types/MyPageType';
 
 const UserInfo = ({ name, userNumber }: UserInfoProps) => {
   return (

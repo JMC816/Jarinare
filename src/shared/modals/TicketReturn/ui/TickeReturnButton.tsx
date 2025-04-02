@@ -1,4 +1,4 @@
-import { TicketButtonProps } from '@/shared/types/Ticket';
+import { TicketButtonProps } from '@/shared/types/TicketType';
 
 const TicketReturnButton = ({
   text,

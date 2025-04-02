@@ -1,6 +1,6 @@
 import useModalStore from '../../model/ReserveStore';
-import { RecommendStationArray } from '../constants/Reserve';
-import { PlaceModalProp } from '../types/Reserve';
+import { RecommendStationArray } from '../constants/ReserveConstants';
+import { PlaceModalProp } from '../types/ReserveType';
 
 const RecommendStationList = ({ modalType }: PlaceModalProp) => {
   const { closeModal } = useModalStore();

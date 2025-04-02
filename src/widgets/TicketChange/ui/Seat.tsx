@@ -1,4 +1,4 @@
-import { SeatProps } from '../types/TicketChange';
+import { SeatProps } from '../types/TicketChangeType';
 
 const Seat = ({ borderColor, bgColor, onClick }: SeatProps) => {
   return (

@@ -1,4 +1,4 @@
-import { AuthModalTypes, ReserveModalTypes } from '../modals/types/Modal';
+import { AuthModalTypes, ReserveModalTypes } from '../modals/types/ModalType';
 
 export type ButtonProps = {
   bgColor: string;

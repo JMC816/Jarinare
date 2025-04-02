@@ -1,4 +1,4 @@
-import { ChocieReusltListProps } from '../types/Reserve';
+import { ChocieReusltListProps } from '../types/ReserveType';
 
 const ChoiceResultList = ({ title, text }: ChocieReusltListProps) => {
   return (

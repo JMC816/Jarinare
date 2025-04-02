@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Store } from '../TicketChange/types/TicketChange';
-import { TicketChangeModalTypes } from '../types/Modal';
+import { Store } from '../TicketChange/types/TicketChangeType';
+import { TicketChangeModalTypes } from '../types/ModalType';
 
 const useModalStore = create<Store>((set) => ({
   modalType: null,

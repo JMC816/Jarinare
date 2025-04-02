@@ -1,7 +1,7 @@
 import Ticket from '@/shared/ui/Ticket';
 import arrow from '@/assets/icons/arrow.png';
 import TicketButton from '@/shared/ui/TicketButton';
-import { navigate } from '../hooks/TicketChange';
+import { navigate } from '../hooks/TicketChangeHook';
 
 const TicketSeatChangePage = () => {
   const { moveSeatChangePage } = navigate();

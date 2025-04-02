@@ -1,4 +1,4 @@
-import { SeatProps } from '../types/ReserveTitle';
+import { SeatProps } from '../types/ReserveType';
 
 const Seat = ({ borderColor, bgColor, onClick }: SeatProps) => {
   return (

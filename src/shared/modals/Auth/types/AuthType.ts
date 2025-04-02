@@ -1,4 +1,4 @@
-import { AuthModalTypes } from '../../types/Modal';
+import { AuthModalTypes } from '../../types/ModalType';
 
 export type Store = {
   modalType: AuthModalTypes | null;

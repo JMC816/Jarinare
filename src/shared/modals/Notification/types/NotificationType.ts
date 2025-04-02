@@ -1,4 +1,4 @@
-import { NotificationModalTypes } from './../../types/Modal';
+import { NotificationModalTypes } from '../../types/ModalType';
 
 export type Store = {
   modalType: NotificationModalTypes | null;

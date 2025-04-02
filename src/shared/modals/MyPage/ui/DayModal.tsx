@@ -4,8 +4,8 @@ import moment, { locale } from 'moment';
 import prev from '@/assets/icons/prev.png';
 import next from '@/assets/icons/next.png';
 import Button from '@/shared/ui/Button';
-import { useDaySelect } from '../hooks/MyPage';
 import useModalStore from '../../model/MyaPageStore';
+import { useDaySelect } from '../hooks/MyPageHook';
 
 const DayModal = () => {
   const { value, onChange } = useDaySelect();

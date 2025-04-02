@@ -1,5 +1,5 @@
 import miniarrow from '@/assets/icons/miniarrow.png';
-import { MiniTicketProps } from '../types/MiniTicket';
+import { MiniTicketProps } from '../types/MiniTicketType';
 
 const MiniTicket = ({
   startDay,

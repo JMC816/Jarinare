@@ -1,5 +1,5 @@
-import useModalStore from '@/shared/modals/model/ReserveStore';
-import Modal from '@/widgets/modals/TicketReserve/ui/Modal';
+import useModalStore from '@/widgets/model/ReserveStore';
+import Modal from '@/widgets/TicketReserve/ui/Modal';
 import SeatCheckButton from '@/widgets/TicketReserve/ui/SeatCheckButton';
 import SeatCheckList from '@/widgets/TicketReserve/ui/SeatCheckList';
 import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';

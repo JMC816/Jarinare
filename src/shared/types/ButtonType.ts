@@ -1,4 +1,4 @@
-import { AuthModalTypes, ReserveModalTypes } from '../modals/types/ModalType';
+import { AuthModalTypes, ReserveModalTypes } from './ModalType';
 
 export type ButtonProps = {
   bgColor: string;
@@ -13,4 +13,5 @@ export type ButtonProps = {
 export type MiniButtonProp = {
   text: string;
   modalTypes?: ReserveModalTypes | null;
+  onModalClick: (type: ReserveModalTypes) => void;
 };

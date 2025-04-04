@@ -1,5 +1,5 @@
 import down from '@/assets/icons/down.png';
-import useModalStore from '@/shared/modals/model/TicketChangeStore';
+import useModalStore from '@/widgets/model/TicketChangeStore';
 
 const SeatChangeMenu = () => {
   const { openModal } = useModalStore();

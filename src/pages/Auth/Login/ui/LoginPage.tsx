@@ -1,7 +1,7 @@
-import useModalStore from '@/shared/modals/model/AuthStore';
 import LoginList from '@/widgets/Auth/Login/ui/LoginList';
+import Modal from '@/widgets/Auth/Login/ui/Modal';
 import SocialLoginList from '@/widgets/Auth/Login/ui/SocialLoginList';
-import Modal from '@/widgets/modals/Auth/Login/ui/Modal';
+import useModalStore from '@/widgets/model/AuthStore';
 import { Link } from 'react-router-dom';
 
 const LoginPage = () => {

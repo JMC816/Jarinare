@@ -1,5 +1,5 @@
-import useModalStore from '@/shared/modals/model/Notification';
-import { NotificationRequestProps } from '../types/NotificationRequestType';
+import useModalStore from '@/widgets/model/Notification';
+import { NotificationRequestProps } from '../types/NotificationType';
 
 const NotificationRequest = ({
   requestTitle,

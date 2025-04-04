@@ -1,5 +1,5 @@
 import down from '@/assets/icons/down.png';
-import useModalStore from '@/shared/modals/model/ReserveStore';
+import useModalStore from '@/widgets/model/ReserveStore';
 
 const TrainCheckMenu = () => {
   const { openModal } = useModalStore();

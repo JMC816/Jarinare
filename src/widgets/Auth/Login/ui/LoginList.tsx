@@ -1,6 +1,6 @@
-import useModalStore from '@/shared/modals/model/AuthStore';
 import Button from '@/shared/ui/Button';
 import { OtherLoginArray } from '../constants/OtherLoginConstants';
+import useModalStore from '@/widgets/model/AuthStore';
 
 const LoginList = () => {
   const { openModal } = useModalStore();

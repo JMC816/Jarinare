@@ -1,5 +1,5 @@
-import useModalStore from '@/shared/modals/model/TicketChangeStore';
-import Modal from '@/widgets/modals/TicketChange/ui/Modal';
+import useModalStore from '@/widgets/model/TicketChangeStore';
+import Modal from '@/widgets/TicketChange/ui/Modal';
 import SeatChangeButton from '@/widgets/TicketChange/ui/SeatChangeButton';
 import SeatChangeList from '@/widgets/TicketChange/ui/SeatChangeList';
 import SeatChangeMenu from '@/widgets/TicketChange/ui/SeatChangeMenu';

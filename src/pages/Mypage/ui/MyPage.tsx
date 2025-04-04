@@ -1,6 +1,6 @@
-import useModalStore from '@/shared/modals/model/MyaPageStore';
 import MiniTicket from '@/shared/ui/MiniTicket';
-import Modal from '@/widgets/modals/MyPage/ui/Modal';
+import useModalStore from '@/widgets/model/MyaPageStore';
+import Modal from '@/widgets/MyPage/ui/Modal';
 import PayDayMenu from '@/widgets/MyPage/ui/PayDayMenu';
 import UserInfo from '@/widgets/MyPage/ui/UserInfo';
 

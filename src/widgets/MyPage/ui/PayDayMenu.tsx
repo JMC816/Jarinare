@@ -1,5 +1,5 @@
 import down from '@/assets/icons/down.png';
-import useModalStore from '@/shared/modals/model/MyaPageStore';
+import useModalStore from '@/widgets/model/MyaPageStore';
 
 const PayDayMenu = () => {
   const { openModal } = useModalStore();

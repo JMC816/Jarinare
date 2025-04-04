@@ -1,5 +1,5 @@
-import useModalStore from '@/shared/modals/model/Notification';
-import Modal from '@/widgets/modals/Notification/ui/Modal';
+import useModalStore from '@/widgets/model/Notification';
+import Modal from '@/widgets/Notification/ui/Modal';
 import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
 
 const NotificationPage = () => {

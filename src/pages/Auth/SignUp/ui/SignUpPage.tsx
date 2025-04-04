@@ -1,7 +1,7 @@
-import useModalStore from '@/shared/modals/model/AuthStore';
 import AuthContent from '@/shared/ui/AuthContent';
-import SignUpButton from '@/shared/ui/SignUpButton';
-import Modal from '@/widgets/modals/Auth/SignUp/ui/Modal';
+import Modal from '@/widgets/Auth/SignUp/ui/Modal';
+import SignUpButton from '@/widgets/Auth/SignUp/ui/SignUpButton';
+import useModalStore from '@/widgets/model/AuthStore';
 
 const SignUpPage = () => {
   const { isShow, modalType } = useModalStore();

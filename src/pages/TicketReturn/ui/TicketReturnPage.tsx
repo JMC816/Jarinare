@@ -1,8 +1,8 @@
 import Ticket from '@/shared/ui/Ticket';
 import arrow from '@/assets/icons/arrow.png';
 import TicketButton from '@/shared/ui/TicketButton';
-import useModalStore from '@/shared/modals/model/TicketReturnStore';
-import Modal from '@/widgets/modals/TicketReturn/ui/Modal';
+import useModalStore from '@/widgets/model/TicketReturnStore';
+import Modal from '@/widgets/TicketReturn/ui/Modal';
 
 const TicketReturnPage = () => {
   const { isShow, modalType, openModal } = useModalStore();

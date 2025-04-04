@@ -1,7 +1,9 @@
 import MiniButton from '@/shared/ui/MiniButton';
 import { TrainListArray } from '../constants/ReserveConstants';
+import useModalStore from '@/widgets/model/ReserveStore';
 
 const TrainList = () => {
+  const { openModal } = useModalStore();
   return (
     <div className="mt-[40px] flex w-full flex-col gap-y-[30px] overflow-y-auto">
       {TrainListArray.map(
@@ -16,7 +18,10 @@ const TrainList = () => {
                 <span className="text-darkGray">{takeTime}</span>
               </div>
             </div>
-            <MiniButton text="선택" modalTypes={'ChoiceResultModal'} />
+            <MiniButton
+              text="선택"
+              onModalClick={() => openModal('ChoiceResultModal')}
+            />
           </div>
         ),
       )}

@@ -1,18 +1,13 @@
-import Button from '@/shared/ui/Button';
-import { SocialLoginArray } from '../constants/SocialLoginConstants';
+import GithubLogin from '@/features/Auth/SocialLogin/ui/GithubLogin';
+import GoogleLogin from '@/features/Auth/SocialLogin/ui/GoogleLogin';
+import KakaoLogin from '@/features/Auth/SocialLogin/ui/KakakoLogin';
 
 const SocialLoginList = () => {
   return (
     <div className="flex flex-col gap-y-2">
-      {SocialLoginArray.map(({ text, bgColor, textColor, icon }, idx) => (
-        <Button
-          key={idx}
-          text={text}
-          bgColor={bgColor}
-          textColor={textColor}
-          icon={icon}
-        />
-      ))}
+      <KakaoLogin />
+      <GithubLogin />
+      <GoogleLogin />
     </div>
   );
 };

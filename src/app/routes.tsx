@@ -1,3 +1,4 @@
+import KakaoRedirect from '@/features/Auth/SocialLogin/ui/KakaoRedirect';
 import LoginPage from '@/pages/Auth/Login/ui/LoginPage';
 import SignUpPage from '@/pages/Auth/SignUp/ui/SignUpPage';
 import MenuPage from '@/pages/Menu/ui/MenuPage';
@@ -13,13 +14,15 @@ import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
 import MainLayout from '@/widgets/layouts/ui/MainLayout';
-
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/auth/login" element={<LoginPage />} />
+        <Route path="/auth/signup" element={<SignUpPage />} />
+        <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />
@@ -28,8 +31,6 @@ const Router = () => {
           <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
           <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
           <Route path="/reserve/notification" element={<NotificationPage />} />
-          <Route path="/auth/login" element={<LoginPage />} />
-          <Route path="/auth/signup" element={<SignUpPage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/ticket/seatchange" element={<TicketSeatChangePage />} />
           <Route path="/ticket/payment" element={<TicketPaymentPage />} />

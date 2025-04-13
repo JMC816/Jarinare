@@ -1,16 +1,17 @@
-import AuthContent from '@/shared/ui/AuthContent';
-import SignUpButton from './SignUpButton';
+import NameForm from '@/features/Auth/SignUp/ui/NameForm';
+import NextButton from './NextButton';
+import useModalStore from '@/widgets/model/AuthStore';
+import BackWardModalButton from '@/widgets/layouts/ui/BackWardModalButton';
+import SignUpStageLine from './SignUpStageLine';
 
 const NumberModal = () => {
+  const { closeModal } = useModalStore();
   return (
     <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
-      <AuthContent
-        title="회원가입"
-        subtitle="휴대폰 번호"
-        placeholder="휴대폰 번호"
-      />
-      <SignUpButton
-        stage="2단계"
+      <BackWardModalButton closeModal={() => closeModal('NumberModal')} />
+      <NameForm />
+      <SignUpStageLine stage={2} width={200} borderRadius="xl" />
+      <NextButton
         text="다음"
         bgColor="blue"
         textColor="white"

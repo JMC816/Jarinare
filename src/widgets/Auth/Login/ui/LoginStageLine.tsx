@@ -1,20 +1,22 @@
 import { AuthStageProps } from '../../types/AuthType';
+import { motion } from 'framer-motion';
 
-const LoginStageLine = ({ stage }: AuthStageProps) => {
+const LoginStageLine = ({ stage, width, borderRadius }: AuthStageProps) => {
   return (
-    <div className="flex w-full flex-col gap-y-[10px]">
+    <div className="mb-[20px] flex w-full flex-col gap-y-[10px]">
       <span className="flex w-full justify-end text-base font-bold">
-        2단계중 {stage}
+        2단계중 {stage}단계
       </span>
-      <div className="h-[10px] rounded-xl bg-lightGray">
-        {stage === '2단계' ? (
-          <div className="h-[10px] w-[300px] rounded-xl bg-black" />
-        ) : (
-          <div className="h-[10px] w-[150px] rounded-s-xl bg-black" />
-        )}
+      <div className="h-[10px] w-[300px] rounded-xl bg-lightGray">
+        <motion.div
+          layoutId="login"
+          initial={{ width }}
+          animate={{ width }}
+          transition={{ duration: 0.5 }}
+          className={`h-[10px] rounded-${borderRadius} bg-black`}
+        />
       </div>
     </div>
   );
 };
-
 export default LoginStageLine;

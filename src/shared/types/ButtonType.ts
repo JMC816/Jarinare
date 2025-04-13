@@ -6,7 +6,6 @@ export type ButtonProps = {
   text: string;
   icon?: string;
   modalTypes?: AuthModalTypes | null;
-  stage?: string;
   onModalClick?: (type: AuthModalTypes | ReserveModalTypes) => void;
 };
 

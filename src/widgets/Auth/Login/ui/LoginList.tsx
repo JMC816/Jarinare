@@ -1,31 +1,15 @@
 import Button from '@/shared/ui/Button';
-import { OtherLoginArray } from '../constants/OtherLoginConstants';
 import useModalStore from '@/widgets/model/AuthStore';
 
 const LoginList = () => {
   const { openModal } = useModalStore();
   return (
-    <>
-      <Button
-        text="회원번호로 로그인"
-        bgColor="blue"
-        textColor="white"
-        onModalClick={() => openModal('UserNumberModal')}
-      />
-      <div className="flex flex-col">
-        <div className="mt-5 flex flex-col items-center gap-y-5">
-          {OtherLoginArray.map(({ text, modal }, idx) => (
-            <span
-              onClick={() => openModal(modal)}
-              className="text-base font-bold text-blue opacity-80"
-              key={idx}
-            >
-              {text}
-            </span>
-          ))}
-        </div>
-      </div>
-    </>
+    <Button
+      text="이메일로 로그인"
+      bgColor="blue"
+      textColor="white"
+      onModalClick={() => openModal('EmailModal')}
+    />
   );
 };
 

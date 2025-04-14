@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OAuthProvider, signInWithCredential } from 'firebase/auth';
 import { auth } from '@/shared/firebase/firebase';
-import { KakaoToken } from '../api/KakaoRedirect';
+import { KakaoToken } from '../api/Kakao';
 
 export const useKakaoLogin = () => {
   const onClick = () => {

@@ -1,18 +1,12 @@
 import { create } from 'zustand';
-import { LoadingStoreType, SignUpStoreType } from '../types/SignUpType';
-
-export const SignUpStore = create<SignUpStoreType>((set) => ({
-  email: '',
-  password: '',
-  name: '',
-  setSignUp: (name, value) =>
-    set((state) => ({
-      ...state,
-      [name]: value,
-    })),
-}));
+import { LoadingStoreType, SignUpMessageType } from '../types/SignUpType';
 
 export const LoadingStore = create<LoadingStoreType>((set) => ({
   isLoading: false,
   setIsLoading: () => set((state) => ({ isLoading: !state.isLoading })),
+}));
+
+export const SignUpMessageStore = create<SignUpMessageType>((set) => ({
+  message: '',
+  setMessage: (message: string) => set(() => ({ message })),
 }));

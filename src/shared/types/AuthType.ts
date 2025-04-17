@@ -1,17 +1,19 @@
-import React from 'react';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 export type AuthContentsProps = {
   title: string;
   subtitle: string;
   placeholder: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name:
+    | UseFormRegisterReturn<'email'>
+    | UseFormRegisterReturn<'name'>
+    | UseFormRegisterReturn<'password'>;
 };
 
 export type AuthInputProps = {
   placeholder: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  name:
+    | UseFormRegisterReturn<'email'>
+    | UseFormRegisterReturn<'name'>
+    | UseFormRegisterReturn<'password'>;
 };

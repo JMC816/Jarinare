@@ -1,42 +1,44 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/shared/firebase/firebase';
 import { useNavigate } from 'react-router-dom';
-import { LoadingStore, LoginStore } from '../model/useLoginStore';
+import { LoadingStore, LoginMessageStore } from '../model/useLoginStore';
+import { UseFormReturn } from 'react-hook-form';
+import { FirebaseError } from 'firebase/app';
 
-export const useLoginState = () => {
-  const { email, password, setLogin } = LoginStore();
-  const { isLoading, setIsLoading } = LoadingStore();
+export const useLoginState = (
+  method: UseFormReturn<{
+    email: string;
+    password: string;
+  }>,
+) => {
   const navigate = useNavigate();
-
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setLogin(name as 'email' | 'password', value);
-    },
-    [setLogin],
-  );
-
-  const onSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (isLoading || email === '' || password === '') return;
-      try {
-        setIsLoading(true);
-        const credentials = await signInWithEmailAndPassword(
-          auth,
-          email,
-          password,
-        );
-        console.log(credentials.user);
-        navigate('/');
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsLoading(false);
+  const { isLoading, setIsLoading } = LoadingStore();
+  const { setMessage } = LoginMessageStore();
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      // 이메일과 비밀번호로 로그인
+      await signInWithEmailAndPassword(
+        auth,
+        method.getValues('email'),
+        method.getValues('password'),
+      );
+      navigate('/');
+    } catch (e) {
+      if (e instanceof FirebaseError) {
+        switch (e.code) {
+          case 'auth/user-not-found':
+            return setMessage('등록되지 않은 사용자 입니다.');
+          case 'auth/wrong-password':
+            return setMessage('비밀번호가 일치하지 않습니다.');
+        }
       }
-    },
-    [isLoading, email, password],
-  );
-  return { login: { email, password }, onChange, onSubmit, isLoading };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { onSubmit, isLoading };
 };

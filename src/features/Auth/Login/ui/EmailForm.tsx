@@ -1,17 +1,24 @@
 import AuthContent from '@/shared/ui/AuthContent';
-import { useLoginState } from '../hooks/useLoginState';
+import { useFormContext } from 'react-hook-form';
 
 const EmailForm = () => {
-  const { login, onChange } = useLoginState();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
   return (
-    <AuthContent
-      title="로그인"
-      subtitle="이메일"
-      placeholder="이메일"
-      name="email"
-      value={login.email}
-      onChange={onChange}
-    />
+    <div className="flex h-full flex-col gap-y-3">
+      <AuthContent
+        title="로그인"
+        subtitle="이메일"
+        placeholder="이메일"
+        name={register('email')}
+      />
+      <span className="animate-bounce text-base font-bold text-red">
+        {/* 이메일 에러 발생 시에만 에러 메세지 생성 */}
+        {errors.email == undefined ? null : String(errors.email?.message)}
+      </span>
+    </div>
   );
 };
 

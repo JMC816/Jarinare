@@ -1,17 +1,24 @@
 import AuthContent from '@/shared/ui/AuthContent';
-import { useSignUpState } from '../hooks/useSignUpState';
+import { useFormContext } from 'react-hook-form';
 
 const NameForm = () => {
-  const { signUp, onChange } = useSignUpState();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
   return (
-    <AuthContent
-      title="회원가입"
-      subtitle="이름"
-      placeholder="이름"
-      name="name"
-      value={signUp.name}
-      onChange={onChange}
-    />
+    <div className="flex h-full flex-col gap-y-3">
+      <AuthContent
+        title="회원가입"
+        subtitle="이름"
+        placeholder="이름"
+        name={register('name')}
+      />
+      <span className="animate-bounce text-base font-bold text-red">
+        {/* 이름 에러 발생 시에만 에러 메세지 생성 */}
+        {errors.name == undefined ? null : String(errors.name?.message)}
+      </span>
+    </div>
   );
 };
 

@@ -1,17 +1,12 @@
 import { create } from 'zustand';
-import { LoadingStoreType, LoginStoreType } from '../types/LoginType';
-
-export const LoginStore = create<LoginStoreType>((set) => ({
-  email: '',
-  password: '',
-  setLogin: (name, value) =>
-    set((state) => ({
-      ...state,
-      [name]: value,
-    })),
-}));
+import { LoadingStoreType, LoginMessageType } from '../types/LoginType';
 
 export const LoadingStore = create<LoadingStoreType>((set) => ({
   isLoading: false,
   setIsLoading: () => set((state) => ({ isLoading: !state.isLoading })),
+}));
+
+export const LoginMessageStore = create<LoginMessageType>((set) => ({
+  message: '',
+  setMessage: (message: string) => set(() => ({ message })),
 }));

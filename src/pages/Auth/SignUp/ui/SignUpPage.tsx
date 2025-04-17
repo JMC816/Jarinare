@@ -12,7 +12,7 @@ import { FormProvider } from 'react-hook-form';
 const SignUpPage = () => {
   const { isShow, modalType } = useModalStore();
   const { method } = SignUp();
-  // 유효성 검사를 통과한 값을 로그인 로직으로 전달
+  // 유효성 검사를 통과한 값을 회원가입 로직으로 전달
   const { onSubmit } = useSignUpState(method);
   const { onClick } = useBackButton();
   return (

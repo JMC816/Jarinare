@@ -5,7 +5,7 @@ import { AuthModalTypes } from '@/shared/types/ModalType';
 const useModalStore = create<Store>((set) => ({
   modalType: null,
   isShow: false,
-  openModal: (type: AuthModalTypes) =>
+  openModal: (type: AuthModalTypes | null) =>
     set(() => ({ isShow: true, modalType: type })),
   closeModal: (type: AuthModalTypes) =>
     set(() => ({ isShow: false, modalType: type })),

@@ -1,43 +1,47 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/shared/firebase/firebase';
 import { useNavigate } from 'react-router-dom';
-import { LoadingStore, SignUpStore } from '../model/SignUpStore';
+import { LoadingStore, SignUpMessageStore } from '../model/SignUpStore';
+import { UseFormReturn } from 'react-hook-form';
+import { FirebaseError } from 'firebase/app';
 
-export const useSignUpState = () => {
-  const { email, password, name, setSignUp } = SignUpStore();
-  const { isLoading, setIsLoading } = LoadingStore();
+export const useSignUpState = (
+  method: UseFormReturn<{
+    email: string;
+    name: string;
+    password: string;
+  }>,
+) => {
   const navigate = useNavigate();
-
-  const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setSignUp(name as 'email' | 'password' | 'name', value);
-    },
-    [setSignUp],
-  );
-
-  const onSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (isLoading || name === '' || email === '' || password === '') return;
-      try {
-        setIsLoading(true);
-        const credentials = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password,
-        );
-        console.log(credentials.user);
-        await updateProfile(credentials.user, { displayName: name });
-        navigate('/');
-      } catch (e) {
-        console.log(e);
-      } finally {
-        setIsLoading(false);
+  const { isLoading, setIsLoading } = LoadingStore();
+  const { message, setMessage } = SignUpMessageStore();
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      // 이메일과 비밀번호로 회원가입
+      const credentials = await createUserWithEmailAndPassword(
+        auth,
+        method.getValues('email'),
+        method.getValues('password'),
+      );
+      // 사용자 프로필 업데이트
+      await updateProfile(credentials.user, {
+        displayName: method.getValues('name'),
+      });
+      navigate('/');
+    } catch (e) {
+      if (e instanceof FirebaseError) {
+        switch (e.code) {
+          case 'auth/email-already-in-use':
+            return setMessage('이미 사용 중인 이메일 입니다.');
+        }
       }
-    },
-    [isLoading, email, password, name],
-  );
-  return { signUp: { email, name, password }, onChange, onSubmit, isLoading };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { onSubmit, isLoading, message, setMessage };
 };

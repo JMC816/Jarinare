@@ -1,4 +1,3 @@
-import { useSignUpState } from '@/features/Auth/SignUp/hooks/useSignUpState';
 import { SignUp } from '@/features/Auth/SignUp/model/SignUpSchema';
 import EmailForm from '@/features/Auth/SignUp/ui/EmailForm';
 import Modal from '@/widgets/Auth/SignUp/ui/Modal';
@@ -12,15 +11,10 @@ import { FormProvider } from 'react-hook-form';
 const SignUpPage = () => {
   const { isShow, modalType } = useModalStore();
   const { method } = SignUp();
-  // 유효성 검사를 통과한 값을 회원가입 로직으로 전달
-  const { onSubmit } = useSignUpState(method);
   const { onClick } = useBackButton();
   return (
     <FormProvider {...method}>
-      <form
-        onSubmit={onSubmit}
-        className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]"
-      >
+      <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
         <BackWardPageButton backPage={onClick} />
         <EmailForm />
         <SignUpStageLine stage={1} width={100} borderRadius="xl" />
@@ -36,7 +30,7 @@ const SignUpPage = () => {
           }
         />
         {isShow == false || modalType == undefined ? null : <Modal />}
-      </form>
+      </div>
     </FormProvider>
   );
 };

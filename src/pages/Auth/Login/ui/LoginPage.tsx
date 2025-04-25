@@ -1,4 +1,3 @@
-import { useLoginState } from '@/features/Auth/Login/hooks/useLoginState';
 import { Login } from '@/features/Auth/Login/model/LoginSchema';
 import LoginList from '@/widgets/Auth/Login/ui/LoginList';
 import Modal from '@/widgets/Auth/Login/ui/Modal';
@@ -12,15 +11,10 @@ import { Link } from 'react-router-dom';
 const LoginPage = () => {
   const { isShow, modalType } = useModalStore();
   const { method } = Login();
-  // 유효성 검사를 통과한 값을 로그인 로직으로 전달
-  const { onSubmit } = useLoginState(method);
   const { onClick } = useBackButton();
   return (
     <FormProvider {...method}>
-      <form
-        onSubmit={onSubmit}
-        className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]"
-      >
+      <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
         <BackWardPageButton backPage={onClick} />
         <span className="mt-[45px] w-full text-lg font-bold">로그인</span>
         <div className="mt-[35px]">
@@ -37,7 +31,7 @@ const LoginPage = () => {
           회원가입
         </Link>
         {isShow == false || modalType == undefined ? null : <Modal />}
-      </form>
+      </div>
     </FormProvider>
   );
 };

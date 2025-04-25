@@ -6,7 +6,6 @@ const NextButton = ({ bgColor, textColor, text, modalTypes }: ButtonProps) => {
   return (
     <div className="mb-[45px] flex flex-col">
       <button
-        type="button"
         onClick={() => openModal(modalTypes!)}
         className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold active:brightness-50 text-${textColor} bg-${bgColor}`}
       >

@@ -7,7 +7,10 @@ import { useFormContext } from 'react-hook-form';
 
 const EmailModal = () => {
   const { closeModal } = useModalStore();
-  const { formState, getValues } = useFormContext();
+  const {
+    formState: { errors },
+    getValues,
+  } = useFormContext();
   return (
     <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
       <BackWardModalButton closeModal={() => closeModal('EmailModal')} />
@@ -19,7 +22,7 @@ const EmailModal = () => {
         textColor="white"
         // 이메일 에러나 빈 값일 시 다음 모달 제한
         modalTypes={
-          formState.errors.email || getValues('email') == ''
+          errors.email || getValues('email') == ''
             ? 'EmailModal'
             : 'PasswordModal'
         }

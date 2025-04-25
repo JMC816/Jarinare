@@ -3,16 +3,10 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/shared/firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { LoadingStore, SignUpMessageStore } from '../model/SignUpStore';
-import { UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormGetValues } from 'react-hook-form';
 import { FirebaseError } from 'firebase/app';
 
-export const useSignUpState = (
-  method: UseFormReturn<{
-    email: string;
-    name: string;
-    password: string;
-  }>,
-) => {
+export const useSignUpState = (getValues: UseFormGetValues<FieldValues>) => {
   const navigate = useNavigate();
   const { isLoading, setIsLoading } = LoadingStore();
   const { message, setMessage } = SignUpMessageStore();
@@ -23,12 +17,12 @@ export const useSignUpState = (
       // 이메일과 비밀번호로 회원가입
       const credentials = await createUserWithEmailAndPassword(
         auth,
-        method.getValues('email'),
-        method.getValues('password'),
+        getValues('email'),
+        getValues('password'),
       );
       // 사용자 프로필 업데이트
       await updateProfile(credentials.user, {
-        displayName: method.getValues('name'),
+        displayName: getValues('name'),
       });
       navigate('/');
     } catch (e) {

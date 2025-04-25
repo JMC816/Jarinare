@@ -4,6 +4,7 @@ import PasswordForm from '@/features/Auth/Login/ui/PasswordForm';
 import useModalStore from '@/widgets/model/AuthStore';
 import LoginStageLine from './LoginStageLine';
 import { useFormContext } from 'react-hook-form';
+import { useLoginState } from '@/features/Auth/Login/hooks/useLoginState';
 
 const PasswordModal = () => {
   const { openModal, closeModal } = useModalStore();
@@ -11,8 +12,13 @@ const PasswordModal = () => {
     formState: { errors },
     getValues,
   } = useFormContext();
+  // 유효성 검사를 통과한 값을 로그인 로직으로 전달
+  const { onSubmit } = useLoginState(getValues);
   return (
-    <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
+    <form
+      onSubmit={onSubmit}
+      className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]"
+    >
       <BackWardModalButton
         openModal={() => openModal('EmailModal')}
         closeModal={() => closeModal('PasswordModal')}
@@ -30,7 +36,7 @@ const PasswordModal = () => {
             : 'PasswordModal'
         }
       />
-    </div>
+    </form>
   );
 };
 

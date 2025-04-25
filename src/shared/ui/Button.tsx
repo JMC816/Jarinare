@@ -10,6 +10,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
+      type="button"
       onClick={() => onModalClick!(modalTypes!)}
       className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm text-base font-bold active:brightness-50 disabled:bg-lightBlueImpossible text-${textColor} bg-${bgColor}`}
     >

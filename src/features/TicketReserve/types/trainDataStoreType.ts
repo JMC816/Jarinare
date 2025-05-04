@@ -1,0 +1,22 @@
+export type TrainDataStoreType = {
+  startDay: string;
+  endDay: string;
+  startTime: string;
+  endTime: string;
+  pay: string;
+  trainType: string;
+  startStation: string;
+  endStation: string;
+  kid: number;
+  adult: number;
+  setStartDay: (type: string) => void;
+  setEndDay: (type: string) => void;
+  setStartTime: (type: string) => void;
+  setEndTime: (type: string) => void;
+  setPay: (type: string) => void;
+  setTrainType: (type: string) => void;
+  setStartStation: (type: string) => void;
+  setEndStation: (type: string) => void;
+  setKid: (type: number) => void;
+  setAdult: (type: number) => void;
+};

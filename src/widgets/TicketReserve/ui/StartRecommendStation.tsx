@@ -3,7 +3,7 @@ import useModalStore from '../../model/ReserveStore';
 import { reserveConstants } from '../constants/ReserveConstants';
 import { PlaceModalProp } from '../types/ReserveType';
 
-const StartRecommendStationList = ({ modalType }: PlaceModalProp) => {
+const RecommendStationList = ({ modalType }: PlaceModalProp) => {
   const { closeModal } = useModalStore();
   const { recommendStationArray } = reserveConstants();
   const { setStartStation } = trainDataStore();
@@ -28,4 +28,4 @@ const StartRecommendStationList = ({ modalType }: PlaceModalProp) => {
   );
 };
 
-export default StartRecommendStationList;
+export default RecommendStationList;

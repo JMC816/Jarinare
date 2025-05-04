@@ -1,12 +1,13 @@
 import MiniButton from '@/shared/ui/MiniButton';
-import { TrainListArray } from '../constants/ReserveConstants';
 import useModalStore from '@/widgets/model/ReserveStore';
+import { reserveConstants } from '../constants/ReserveConstants';
 
 const TrainList = () => {
   const { openModal } = useModalStore();
+  const { trainListArray } = reserveConstants();
   return (
     <div className="mt-[40px] flex w-full flex-col gap-y-[30px] overflow-y-auto">
-      {TrainListArray.map(
+      {trainListArray.map(
         ({ startTime, endTime, trainName, takeTime }, idx) => (
           <div key={idx} className="flex w-full items-center justify-between">
             <div>

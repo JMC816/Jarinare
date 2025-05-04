@@ -3,10 +3,10 @@ import useModalStore from '../../model/ReserveStore';
 import { reserveConstants } from '../constants/ReserveConstants';
 import { PlaceModalProp } from '../types/ReserveType';
 
-const StartRecommendStationList = ({ modalType }: PlaceModalProp) => {
+const EndRecommendStationList = ({ modalType }: PlaceModalProp) => {
   const { closeModal } = useModalStore();
   const { recommendStationArray } = reserveConstants();
-  const { setStartStation } = trainDataStore();
+  const { setEndStation } = trainDataStore();
   return (
     <div className="mt-[15px] w-full">
       <span className="text-base font-bold">추천역</span>
@@ -15,7 +15,7 @@ const StartRecommendStationList = ({ modalType }: PlaceModalProp) => {
           <div
             onClick={() => {
               closeModal(modalType!);
-              setStartStation(text);
+              setEndStation(text);
             }}
             key={idx}
             className="flex h-[35px] w-[60px] cursor-pointer items-center justify-center rounded-md border border-lightGray bg-lightestGray text-tiny text-darkGray active:brightness-50"
@@ -28,4 +28,4 @@ const StartRecommendStationList = ({ modalType }: PlaceModalProp) => {
   );
 };
 
-export default StartRecommendStationList;
+export default EndRecommendStationList;

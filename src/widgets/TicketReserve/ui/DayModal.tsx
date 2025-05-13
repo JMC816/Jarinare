@@ -5,11 +5,12 @@ import prev from '@/assets/icons/prev.png';
 import next from '@/assets/icons/next.png';
 import Button from '@/shared/ui/Button';
 import useModalStore from '../../model/ReserveStore';
-import { useDaySelect } from '../hooks/ReserveHook';
+import { useDaySelect, useMaxDate } from '../hooks/ReserveHook';
 
 const DayModal = () => {
   const { value, onChange } = useDaySelect();
   const { closeModal } = useModalStore();
+  const { maxDate } = useMaxDate();
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
       <div className="mb-[15px] flex h-[380px] w-[345px] flex-col items-center rounded-2xl bg-white">
@@ -17,16 +18,18 @@ const DayModal = () => {
           가는 날
         </span>
         <Calendar
+          minDate={new Date()}
+          maxDate={maxDate}
           onChange={onChange}
           prev2Label={null}
           next2Label={null}
           prevLabel={
-            <div className="flex h-[20px] w-[20px] items-center justify-start">
+            <div className="flex h-[20px] w-[20px] items-center justify-center">
               <img width={9} height={15} src={prev} />
             </div>
           }
           nextLabel={
-            <div className="flex h-[20px] w-[20px] items-center justify-end">
+            <div className="flex h-[20px] w-[20px] items-center justify-center">
               <img width={9} height={15} src={next} />
             </div>
           }

@@ -6,7 +6,13 @@ import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 const ReserveWay = () => {
   const { openModal } = useModalStore();
   const { reserveWayArray } = reserveConstants();
-  const { startStation, endStation, startDay, kid, adult } = trainDataStore();
+  const {
+    startStationForView,
+    endStationForView,
+    startDayForView,
+    kid,
+    adult,
+  } = trainDataStore();
   return (
     <div className="flex h-[320px] w-[320px] flex-col items-center justify-center gap-y-5 rounded-lg bg-lightestGray pb-5 pt-5">
       {reserveWayArray.map(
@@ -18,7 +24,7 @@ const ReserveWay = () => {
             <img width={20} height={20} src={icon} />
             <div className="flex w-[140px] flex-col pl-[10px] font-bold">
               <span
-                className={`text-base ${text === startStation || text === endStation || text === startDay || text.includes(`${kid + adult}명`) ? 'text-black' : 'text-mediumGray'}`}
+                className={`text-base ${text === startStationForView || text === endStationForView || text === startDayForView || text.includes(`${kid + adult}명`) ? 'text-black' : 'text-mediumGray'}`}
               >
                 {text}
               </span>

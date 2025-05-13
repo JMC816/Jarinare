@@ -1,27 +1,36 @@
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '../../model/ReserveStore';
 import { reserveConstants } from '../constants/ReserveConstants';
+import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
 
 const TrainChoiceModal = () => {
   const { closeModal } = useModalStore();
   const { trainArray } = reserveConstants();
+  const { setTrainType, setTrainTypeForView, trainType } = trainDataStore();
+  const { refetch } = trainQueryData();
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
-      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[40px] pr-[40px] font-bold">
-        <span className="w-full pt-[25px] text-base">기차 선택</span>
-        <div className="mt-[30px] flex w-full flex-col items-center gap-y-[20px] text-tiny">
-          {trainArray.map(({ train, icon }, idx) => (
+      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white font-bold">
+        <span className="w-full pl-[40px] pr-[40px] pt-[25px] text-base">
+          기차 선택
+        </span>
+        <div className="mb-[20px] mt-[30px] flex w-full flex-col items-center gap-y-[20px] overflow-y-auto text-tiny">
+          {trainArray.map(({ train, icon, id }, idx) => (
             <div
-              onClick={() => closeModal('TrainChoiceModal')}
               key={idx}
+              onClick={async () => {
+                // 기차 종류가 바뀐 후 refetch로 기차 시간 목록 업데이트
+                await setTrainType(id);
+                refetch();
+                setTrainTypeForView(train);
+                closeModal('TrainChoiceModal');
+              }}
               className="group flex h-12 w-[300px] cursor-pointer items-center justify-between p-[20px] hover:rounded-md hover:bg-lightestGray"
             >
               <span>{train}</span>
-              <img
-                className="hidden group-active:flex"
-                src={icon}
-                width={15}
-                height={11}
-              />
+              {trainType === id ? (
+                <img src={icon} width={15} height={11} />
+              ) : null}
             </div>
           ))}
         </div>

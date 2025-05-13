@@ -7,9 +7,10 @@ import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
 const EndStationList = () => {
   const { isValue } = useCheckStationStore();
   const { closeModal } = useModalStore();
-  const { setEndStation } = trainDataStore();
+  const { setEndStation, setEndStationForView } = trainDataStore();
   const { stations, isLoading } = trainQueryData();
 
+  // 기차역 검색할 시 글자가 포함된 역을 보여주거나 없다면 전체 기차역을 보여줌.
   const filtered = isValue
     ? stations.filter(
         (station) => station && station.nodename.includes(isValue),
@@ -26,8 +27,9 @@ const EndStationList = () => {
           <div
             key={station.nodeid}
             onClick={() => {
-              closeModal('StartPlaceModal');
-              setEndStation(station.nodename);
+              closeModal('EndPlaceModal');
+              setEndStation(station.nodeid);
+              setEndStationForView(station.nodename);
             }}
             className="flex h-[50px] w-full cursor-pointer items-center px-[17px] py-[9px] text-base font-bold text-darkGray hover:rounded-md hover:bg-lightestGray active:brightness-50"
           >

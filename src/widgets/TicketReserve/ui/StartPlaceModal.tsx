@@ -1,7 +1,7 @@
 import { usePlaceInputStore } from '../model/PlaceInputStroe';
 import PlaceInput from './PlaceInput';
 import PlaceTitle from './PlaceTitle';
-import StartRecommendStationList from './RecommendStation';
+import StartRecommendStationList from './StartRecommendStation';
 import StartStationList from './StartStationList';
 
 const StartPlaceModal = () => {

@@ -1,13 +1,13 @@
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '../../model/ReserveStore';
-import { navigate } from '../hooks/ReserveHook';
 import { formatAM_PM, formatTimeView } from '../lib/formatDate';
 import ChocieResultButton from './ChocieResultButton';
 import ChoiceResultList from './ChoiceResultList';
-import { trainTimeInfoStore } from '@/features/TicketReserve/model/trainTimeInfoStore';
+import { useNavigation } from '../hooks/ReserveHook';
 
 const ChoiceResultModal = () => {
   const { closeModal } = useModalStore();
-  const { moveSeatCheckPage } = navigate();
+  const { navigate } = useNavigation();
   // 선택한 기차 시간의 정보
   const {
     selectStartTime,
@@ -16,9 +16,10 @@ const ChoiceResultModal = () => {
     selectKid,
     selectAdult,
     selectPay,
-  } = trainTimeInfoStore();
+  } = trainDataStore();
+
   return (
-    <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
+    <div className="flex flex-col items-center justify-end w-full h-full bg-darkGray/50">
       <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[23px] pr-[22px]">
         <span className="mt-[40px] text-lg font-bold text-blue">
           {formatAM_PM(String(selectStartTime)) < 12 ? '오전' : '오후'}{' '}
@@ -53,7 +54,7 @@ const ChoiceResultModal = () => {
           <ChocieResultButton
             onClick={() => {
               closeModal('ChoiceResultModal');
-              moveSeatCheckPage('/reserve/seatcheck');
+              navigate('/reserve/seatcheck');
             }}
             text="좌석 조회"
             bgColor="blue"

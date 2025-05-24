@@ -30,9 +30,9 @@ export const useDayCount = () => {
   return { countAdult, countKid, setCountAdult, setCountKid };
 };
 
-export const navigate = () => {
-  const moveSeatCheckPage = useNavigate();
-  return { moveSeatCheckPage };
+export const useNavigation = () => {
+  const navigate = useNavigate();
+  return { navigate };
 };
 
 export const useDayHandle = () => {
@@ -82,4 +82,12 @@ export const useMaxDate = () => {
   const date = new Date();
   const maxDate = new Date(date.setDate(new Date().getDate() + 6));
   return { maxDate };
+};
+
+export const useRefetchByTrainNo = () => {
+  const { trainNo } = trainDataStore();
+  const { refetch } = trainQueryData();
+  useEffect(() => {
+    refetch();
+  }, [trainNo]);
 };

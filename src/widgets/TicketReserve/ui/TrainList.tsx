@@ -11,21 +11,23 @@ import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import SkeletonScreen from '@/widgets/layouts/ui/SkeletonScreen';
 import { useRefetchByStartTime } from '../hooks/ReserveHook';
 import TrainTimeChocieButton from './TrainTimeChoiceButton';
-import { trainTimeInfoStore } from '@/features/TicketReserve/model/trainTimeInfoStore';
 
 const TrainList = () => {
   const { openModal } = useModalStore();
   const { isFetching, trainTime } = trainQueryData();
-  const { startDay, startTime, kid, adult } = trainDataStore();
-  const today = isToday();
   const {
+    startDay,
+    startTime,
+    kid,
+    adult,
     setSelectStartTime,
     setSelectEndTime,
     setSelectTrainType,
     setSelectKid,
     setSelectAdult,
     setSelectPay,
-  } = trainTimeInfoStore();
+  } = trainDataStore();
+  const today = isToday();
 
   // startTime이 변경되면 자동으로 기차 시간 목록 업데이트
   useRefetchByStartTime();
@@ -55,7 +57,7 @@ const TrainList = () => {
   return (
     <div className="mt-[40px] flex w-full flex-col gap-y-[30px] overflow-y-auto">
       {filtered.length === 0 ? (
-        <span className="flex justify-center text-tiny font-bold">
+        <span className="flex justify-center font-bold text-tiny">
           조회된 열차 목록이 없어요.
         </span>
       ) : (
@@ -70,7 +72,7 @@ const TrainList = () => {
             },
             idx,
           ) => (
-            <div key={idx} className="flex w-full items-center justify-between">
+            <div key={idx} className="flex items-center justify-between w-full">
               <div>
                 <span className="text-lg font-bold">
                   {formatAM_PM(String(depplandtime)) < 12 ? '오전' : '오후'}{' '}

@@ -48,7 +48,7 @@ export type SeatCheckButtonProps = {
   text: string;
   bgColor: string;
   textColor: string;
-  onClick: () => void;
+  onClick: (() => Promise<void>) | (() => void) | null;
 };
 
 export type SeatProps = {

@@ -30,7 +30,7 @@ export const trainQueryData = (): QueryDataProps => {
   const trainTimeQuery = results[1];
   return {
     stations: stationQuery.data || [],
-    trainTime: trainTimeQuery.data!,
+    trainTime: trainTimeQuery.data || [],
     isLoading: stationQuery.isLoading,
     isFetching: trainTimeQuery.isFetching,
     refetch: trainTimeQuery.refetch,

@@ -13,6 +13,7 @@ export const trainDataStore = create(
       endTime: '',
       pay: '',
       trainType: '',
+      trainNo: '1',
       startStation: '',
       endStation: '',
       kid: 0,
@@ -22,12 +23,22 @@ export const trainDataStore = create(
       startDayForView: '',
       trainTypeForView: '',
       startTimeForView: '',
+      selectStartTime: 0,
+      selectEndTime: 0,
+      selectTrainType: '',
+      selectKid: 0,
+      selectAdult: 0,
+      selectPay: 0,
+      setSelectKid: (selectKid: number) => set(() => ({ selectKid })),
+      setSelectAdult: (selectAdult: number) => set(() => ({ selectAdult })),
+      setSelectPay: (selectPay: number) => set(() => ({ selectPay })),
       setStartDay: (startDay: string) => set(() => ({ startDay })),
       setEndDay: (endDay: string) => set(() => ({ endDay })),
       setStartTime: (startTime: string) => set(() => ({ startTime })),
       setEndTime: (endTime: string) => set(() => ({ endTime })),
       setPay: (pay: string) => set(() => ({ pay })),
       setTrainType: (trainType: string) => set(() => ({ trainType })),
+      setTrainNo: (trainNo: string) => set(() => ({ trainNo })),
       setStartStation: (startStation: string) => set(() => ({ startStation })),
       setEndStation: (endStation: string) => set(() => ({ endStation })),
       setKid: (kid: number) => set(() => ({ kid })),
@@ -42,6 +53,12 @@ export const trainDataStore = create(
         set(() => ({ trainTypeForView })),
       setStartTimeForView: (startTimeForView: string) =>
         set(() => ({ startTimeForView })),
+      setSelectStartTime: (selectStartTime: number) =>
+        set(() => ({ selectStartTime })),
+      setSelectEndTime: (selectEndTime: number) =>
+        set(() => ({ selectEndTime })),
+      setSelectTrainType: (selectTrainType: string) =>
+        set(() => ({ selectTrainType })),
     }),
     {
       name: 'trainTiem-storage',

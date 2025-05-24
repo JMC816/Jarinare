@@ -4,6 +4,7 @@ import calendar from '@/assets/icons/calendar.png';
 import person from '@/assets/icons/person.png';
 import check from '@/assets/icons/check.png';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 
 export const reserveConstants = () => {
   const {
@@ -13,6 +14,8 @@ export const reserveConstants = () => {
     kid,
     adult,
   } = trainDataStore();
+
+  const { seatsAllInfo } = useSeatQueryData();
 
   const recommendStationArray = [
     {
@@ -210,21 +213,25 @@ export const reserveConstants = () => {
       time: '2400',
     },
   ];
-  const trainNumberArray = [
+  const trainNoArray = [
     {
-      trainNumber: '1호차 잔여 23석/60석',
+      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '1').length}`,
+      trainNo: '1',
       icon: check,
     },
     {
-      trainNumber: '2호차 잔여 23석/60석',
+      trainNoView: ` ${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '2').length}`,
+      trainNo: '2',
       icon: check,
     },
     {
-      trainNumber: '3호차 잔여 23석/60석',
+      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '3').length}`,
+      trainNo: '3',
       icon: check,
     },
     {
-      trainNumber: '4호차 잔여 23석/60석',
+      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '4').length}`,
+      trainNo: '4',
       icon: check,
     },
   ];
@@ -262,12 +269,14 @@ export const reserveConstants = () => {
       modalType: 'CountModal',
     },
   ] as const;
+  const seatsRows = [1, 2, 3, 4, 5, 6];
 
   return {
     recommendStationArray,
     trainArray,
     timeArray,
-    trainNumberArray,
+    trainNoArray,
     reserveWayArray,
+    seatsRows,
   };
 };

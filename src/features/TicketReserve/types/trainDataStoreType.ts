@@ -5,6 +5,7 @@ export type TrainDataStoreType = {
   endTime: string;
   pay: string;
   trainType: string;
+  trainNo: string;
   startStation: string;
   endStation: string;
   kid: number;
@@ -14,12 +15,19 @@ export type TrainDataStoreType = {
   startDayForView: string;
   trainTypeForView: string;
   startTimeForView: string;
+  selectStartTime: number;
+  selectEndTime: number;
+  selectTrainType: string;
+  selectKid: number;
+  selectAdult: number;
+  selectPay: number;
   setStartDay: (type: string) => void;
   setEndDay: (type: string) => void;
   setStartTime: (type: string) => void;
   setEndTime: (type: string) => void;
   setPay: (type: string) => void;
   setTrainType: (type: string) => void;
+  setTrainNo: (type: string) => void;
   setStartStation: (type: string) => void;
   setEndStation: (type: string) => void;
   setKid: (type: number) => void;
@@ -29,4 +37,10 @@ export type TrainDataStoreType = {
   setStartDayForView: (type: string) => void;
   setTrainTypeForView: (type: string) => void;
   setStartTimeForView: (type: string) => void;
+  setSelectStartTime: (type: number) => void;
+  setSelectEndTime: (type: number) => void;
+  setSelectTrainType: (type: string) => void;
+  setSelectKid: (type: number) => void;
+  setSelectAdult: (type: number) => void;
+  setSelectPay: (type: number) => void;
 };

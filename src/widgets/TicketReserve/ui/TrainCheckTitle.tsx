@@ -1,7 +1,7 @@
 import black_prev from '@/assets/icons/black_prev.png';
 import black_next from '@/assets/icons/black_next.png';
-import { formatDateForView } from '../lib/formatDate';
 import { useDayHandle } from '../hooks/ReserveHook';
+import { formatDateForView } from '@/shared/lib/formatDate';
 
 const TrainCheckTitle = () => {
   const { day, handleYesterday, handleTomorrow } = useDayHandle();

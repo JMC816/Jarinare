@@ -14,7 +14,7 @@ import { SeatType } from '@/entities/Seat/types/seatType';
 import { seatsStateStore } from '../model/seatsStateStore';
 import { seatsStateCountStore } from '../model/seatsStateCountStore';
 import { useNavigate } from 'react-router-dom';
-import { formatTodayDate } from '../lib/format';
+import { formatTodayDate } from '@/shared/lib/formatDate';
 
 export const useSeatQueryData = () => {
   const {

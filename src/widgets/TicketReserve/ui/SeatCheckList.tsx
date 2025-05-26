@@ -45,7 +45,7 @@ const SeatCheckList = () => {
         const rightSeats = [`C${row}`, `D${row}`];
 
         return (
-          <div key={row} className="flex items-center justify-between mb-6">
+          <div key={row} className="mb-6 flex items-center justify-between">
             <div className="flex w-[100px] gap-2">
               {leftSeats.map((id) => {
                 // 좌석 번호에 맞게 ture(선택)/false(미선택) 반영

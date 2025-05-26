@@ -1,16 +1,17 @@
 import useModalStore from '@/widgets/model/ReserveStore';
 import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
+
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import SkeletonScreen from '@/widgets/layouts/ui/SkeletonScreen';
+import { useRefetchByStartTime } from '../hooks/ReserveHook';
+import TrainTimeChocieButton from './TrainTimeChoiceButton';
 import {
   formatAM_PM,
   formatTime,
   formatTimeView,
   formatTodayDate,
   isToday,
-} from '../lib/formatDate';
-import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
-import SkeletonScreen from '@/widgets/layouts/ui/SkeletonScreen';
-import { useRefetchByStartTime } from '../hooks/ReserveHook';
-import TrainTimeChocieButton from './TrainTimeChoiceButton';
+} from '@/shared/lib/formatDate';
 
 const TrainList = () => {
   const { openModal } = useModalStore();
@@ -57,7 +58,7 @@ const TrainList = () => {
   return (
     <div className="mt-[40px] flex w-full flex-col gap-y-[30px] overflow-y-auto">
       {filtered.length === 0 ? (
-        <span className="flex justify-center font-bold text-tiny">
+        <span className="flex justify-center text-tiny font-bold">
           조회된 열차 목록이 없어요.
         </span>
       ) : (
@@ -72,7 +73,7 @@ const TrainList = () => {
             },
             idx,
           ) => (
-            <div key={idx} className="flex items-center justify-between w-full">
+            <div key={idx} className="flex w-full items-center justify-between">
               <div>
                 <span className="text-lg font-bold">
                   {formatAM_PM(String(depplandtime)) < 12 ? '오전' : '오후'}{' '}

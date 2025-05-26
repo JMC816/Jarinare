@@ -1,9 +1,9 @@
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '../../model/ReserveStore';
-import { formatAM_PM, formatTimeView } from '../lib/formatDate';
 import ChocieResultButton from './ChocieResultButton';
 import ChoiceResultList from './ChoiceResultList';
 import { useNavigation } from '../hooks/ReserveHook';
+import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
 
 const ChoiceResultModal = () => {
   const { closeModal } = useModalStore();
@@ -19,7 +19,7 @@ const ChoiceResultModal = () => {
   } = trainDataStore();
 
   return (
-    <div className="flex flex-col items-center justify-end w-full h-full bg-darkGray/50">
+    <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
       <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[23px] pr-[22px]">
         <span className="mt-[40px] text-lg font-bold text-blue">
           {formatAM_PM(String(selectStartTime)) < 12 ? '오전' : '오후'}{' '}

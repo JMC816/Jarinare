@@ -1,7 +1,7 @@
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '../../model/ReserveStore';
 import { reserveConstants } from '../constants/ReserveConstants';
-import { formatTime } from '../lib/formatDate';
+import { formatTime } from '@/shared/lib/formatDate';
 
 const TimeChoiceModal = () => {
   const { closeModal } = useModalStore();

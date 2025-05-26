@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Value } from '../types/ReserveType';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+
+import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
 import {
   formatDate,
   formatDateForView,
   formatStartDate,
-} from '../lib/formatDate';
-import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
+} from '@/shared/lib/formatDate';
 
 export const useDaySelect = () => {
   const [value, onChange] = useState<Value>(new Date());

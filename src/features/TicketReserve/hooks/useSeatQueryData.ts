@@ -15,6 +15,7 @@ import { seatsStateStore } from '../model/seatsStateStore';
 import { seatsStateCountStore } from '../model/seatsStateCountStore';
 import { useNavigate } from 'react-router-dom';
 import { formatTodayDate } from '@/shared/lib/formatDate';
+import { seatsInfoStore } from '../model/seatsInfoStore';
 
 export const useSeatQueryData = () => {
   const {
@@ -27,7 +28,7 @@ export const useSeatQueryData = () => {
     selectKid,
   } = trainDataStore();
   const { seatsState, setSeatsState } = seatsStateStore();
-  const [seatsInfo, setSeatInfo] = useState<SeatType[]>([]);
+  const { seatsInfo, setSeatsInfo } = seatsInfoStore();
   const [seatsAllInfo, setSeatAllInfo] = useState<SeatType[]>([]);
   const { seatsStateCount, setSeatsStateCount } = seatsStateCountStore();
   const [isAutoSelected, setIsAutoSelected] = useState(false);
@@ -75,7 +76,7 @@ export const useSeatQueryData = () => {
           id: doc.id,
         };
       });
-      setSeatInfo(seats);
+      setSeatsInfo(seats);
 
       // 호차 변경될 때 좌석 선택 초기화
       setSeatsState({});

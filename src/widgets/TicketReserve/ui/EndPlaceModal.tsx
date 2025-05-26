@@ -1,18 +1,22 @@
+import { usePlaceInputStore } from '../model/PlaceInputStroe';
+import EndRecommendStationList from './EndRecommendStation';
+import EndStationList from './EndStationList';
 import PlaceInput from './PlaceInput';
 import PlaceTitle from './PlaceTitle';
-import RecommendStationList from './RecommendStation';
-import StationList from './StationList';
 
 const EndPlaceModal = () => {
+  const { isShow } = usePlaceInputStore();
   return (
     <div className="flex h-full w-full flex-col items-center bg-white">
       <div className="pl-[28px] pr-[27px]">
         <PlaceTitle text="도착지 선택해주세요" />
         <PlaceInput placeholder="도착역 선택" />
-        <RecommendStationList modalType={'EndPlaceModal'} />
+        {isShow ? null : (
+          <EndRecommendStationList modalType={'EndPlaceModal'} />
+        )}
       </div>
-      <div className="mt-5 w-full border border-lightGray" />
-      <StationList />
+      {isShow ? null : <div className="mt-5 w-full border border-lightGray" />}
+      <EndStationList />
     </div>
   );
 };

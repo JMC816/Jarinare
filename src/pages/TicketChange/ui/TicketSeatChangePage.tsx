@@ -1,10 +1,10 @@
 import Ticket from '@/shared/ui/Ticket';
 import arrow from '@/assets/icons/arrow.png';
 import TicketButton from '@/shared/ui/TicketButton';
-import { navigate } from '../hooks/TicketChangeHook';
+import { useNaviation } from '../hooks/TicketChangeHook';
 
 const TicketSeatChangePage = () => {
-  const { moveSeatChangePage } = navigate();
+  const { navigate } = useNaviation();
   return (
     <div className="flex w-full flex-col items-center pl-[38px] pr-[37px]">
       <div className="mt-[30px] w-full">
@@ -18,7 +18,7 @@ const TicketSeatChangePage = () => {
         </div>
         <div className="mt-[60px]">
           <TicketButton
-            onClick={() => moveSeatChangePage('/seatchange')}
+            onClick={() => navigate('/seatchange')}
             text="좌석 변경"
             bgColor="blue"
             textColor="white"

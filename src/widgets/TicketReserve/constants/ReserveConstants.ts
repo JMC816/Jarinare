@@ -3,276 +3,280 @@ import group from '@/assets/icons/group.png';
 import calendar from '@/assets/icons/calendar.png';
 import person from '@/assets/icons/person.png';
 import check from '@/assets/icons/check.png';
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 
-export const RecommendStationArray = [
-  {
-    text: '서울',
-  },
-  {
-    text: '대전',
-  },
-  {
-    text: '부산',
-  },
-  {
-    text: '대구',
-  },
-  {
-    text: '울산',
-  },
-  {
-    text: '부전',
-  },
-  {
-    text: '천안아산',
-  },
-  {
-    text: '광명',
-  },
-  {
-    text: '동대구',
-  },
-  {
-    text: '오송',
-  },
-];
+export const reserveConstants = () => {
+  const {
+    startStationForView,
+    endStationForView,
+    startDayForView,
+    kid,
+    adult,
+  } = trainDataStore();
 
-export const StationListArray = [
-  {
-    text: '가남',
-  },
-  {
-    text: '가평',
-  },
-  {
-    text: '각계',
-  },
-  {
-    text: '감곡장호원',
-  },
-  {
-    text: '강경',
-  },
-  {
-    text: '강구',
-  },
-  {
-    text: '강릉',
-  },
-  {
-    text: '강촌',
-  },
-  {
-    text: '서울',
-  },
-  {
-    text: '대전',
-  },
-  {
-    text: '부산',
-  },
-  {
-    text: '대구',
-  },
-  {
-    text: '울산',
-  },
-  {
-    text: '부전',
-  },
-  {
-    text: '천안아산',
-  },
-  {
-    text: '광명',
-  },
-  {
-    text: '동대구',
-  },
-  {
-    text: '오송',
-  },
-];
+  const { seatsAllInfo } = useSeatQueryData();
 
-export const TrainArray = [
-  {
-    train: 'KTX',
-    icon: check,
-  },
-  {
-    train: 'KTX-산천',
-    icon: check,
-  },
-  {
-    train: 'ITX-새마을호',
-    icon: check,
-  },
-  {
-    train: '무궁화호',
-    icon: check,
-  },
-];
+  const recommendStationArray = [
+    {
+      text: '서울',
+      id: 'NAT010000',
+    },
+    {
+      text: '대전',
+      id: 'NAT011668',
+    },
+    {
+      text: '부산',
+      id: 'NAT014445',
+    },
+    {
+      text: '대구',
+      id: 'NAT013239',
+    },
+    {
+      text: '울산',
+      id: 'NATH13717',
+    },
+    {
+      text: '부전',
+      id: 'NAT750046',
+    },
+    {
+      text: '천안아산',
+      id: 'NATH10960',
+    },
+    {
+      text: '광명',
+      id: 'NATH10219',
+    },
+    {
+      text: '동대구',
+      id: 'NAT013271',
+    },
+    {
+      text: '오송',
+      id: 'NAT050044',
+    },
+  ];
+  const trainArray = [
+    {
+      id: '00',
+      train: 'KTX',
+      icon: check,
+    },
+    {
+      id: '01',
+      train: '새마을호',
+      icon: check,
+    },
+    {
+      id: '02',
+      train: '무궁화호',
+      icon: check,
+    },
+    {
+      id: '03',
+      train: '통근열차',
+      icon: check,
+    },
+    {
+      id: '04',
+      train: '누리호',
+      icon: check,
+    },
+    {
+      id: '06',
+      train: 'AREX직통',
+      icon: check,
+    },
+    {
+      id: '07',
+      train: 'KTX-산천(A-type)',
+      icon: check,
+    },
+    {
+      id: '08',
+      train: 'ITX-새마을호',
+      icon: check,
+    },
+    {
+      id: '09',
+      train: 'ITX-청춘',
+      icon: check,
+    },
+    {
+      id: '10',
+      train: 'KTX-산천(B-type)',
+      icon: check,
+    },
+    {
+      id: '16',
+      train: 'KTX-이음',
+      icon: check,
+    },
+    {
+      id: '17',
+      train: 'SRT',
+      icon: check,
+    },
+    {
+      id: '18',
+      train: 'ITX-마음',
+      icon: check,
+    },
+    {
+      id: '19',
+      train: 'KTX-청룡',
+      icon: check,
+    },
+  ];
+  const timeArray = [
+    {
+      timeView: '05:00',
+      time: '0500',
+    },
+    {
+      timeView: '06:00',
+      time: '0600',
+    },
+    {
+      timeView: '07:00',
+      time: '0700',
+    },
+    {
+      timeView: '08:00',
+      time: '0800',
+    },
+    {
+      timeView: '09:00',
+      time: '0900',
+    },
+    {
+      timeView: '10:00',
+      time: '1000',
+    },
+    {
+      timeView: '11:00',
+      time: '1100',
+    },
+    {
+      timeView: '12:00',
+      time: '1200',
+    },
+    {
+      timeView: '13:00',
+      time: '1300',
+    },
+    {
+      timeView: '14:00',
+      time: '1400',
+    },
+    {
+      timeView: '15:00',
+      time: '1500',
+    },
+    {
+      timeView: '16:00',
+      time: '1600',
+    },
+    {
+      timeView: '17:00',
+      time: '1700',
+    },
+    {
+      timeView: '18:00',
+      time: '1800',
+    },
+    {
+      timeView: '19:00',
+      time: '1900',
+    },
+    {
+      timeView: '20:00',
+      time: '2000',
+    },
+    {
+      timeView: '21:00',
+      time: '2100',
+    },
+    {
+      timeView: '22:00',
+      time: '2200',
+    },
+    {
+      timeView: '23:00',
+      time: '2300',
+    },
+    {
+      timeView: '24:00',
+      time: '2400',
+    },
+  ];
+  const trainNoArray = [
+    {
+      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '1').length}`,
+      trainNo: '1',
+      icon: check,
+    },
+    {
+      trainNoView: ` ${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '2').length}`,
+      trainNo: '2',
+      icon: check,
+    },
+    {
+      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '3').length}`,
+      trainNo: '3',
+      icon: check,
+    },
+    {
+      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '4').length}`,
+      trainNo: '4',
+      icon: check,
+    },
+  ];
+  const reserveWayArray = [
+    {
+      icon: square,
+      text:
+        startStationForView === ''
+          ? '출발지를 선택하세요'
+          : startStationForView,
+      attribute: '출발',
+      buttonText: '변경',
+      modalType: 'StartPlaceModal',
+    },
+    {
+      icon: group,
+      text:
+        endStationForView === '' ? '도착지를 선택하세요' : endStationForView,
+      attribute: '도착',
+      buttonText: '변경',
+      modalType: 'EndPlaceModal',
+    },
+    {
+      icon: calendar,
+      text: startDayForView === '' ? '날짜를 선택하세요' : startDayForView,
+      attribute: '가는날',
+      buttonText: '변경',
+      modalType: 'DayModal',
+    },
+    {
+      icon: person,
+      text: kid === 0 && adult === 0 ? '인원을 선택하세요' : adult + kid + '명',
+      attribute: '인원',
+      buttonText: '변경',
+      modalType: 'CountModal',
+    },
+  ] as const;
+  const seatsRows = [1, 2, 3, 4, 5, 6];
 
-export const TimeArray = [
-  {
-    time: '05:00',
-  },
-  {
-    time: '06:00',
-  },
-  {
-    time: '07:00',
-  },
-  {
-    time: '08:00',
-  },
-  {
-    time: '09:00',
-  },
-  {
-    time: '10:00',
-  },
-  {
-    time: '11:00',
-  },
-  {
-    time: '12:00',
-  },
-  {
-    time: '13:00',
-  },
-  {
-    time: '14:00',
-  },
-  {
-    time: '15:00',
-  },
-  {
-    time: '16:00',
-  },
-  {
-    time: '17:00',
-  },
-  {
-    time: '18:00',
-  },
-  {
-    time: '19:00',
-  },
-  {
-    time: '20:00',
-  },
-  {
-    time: '21:00',
-  },
-  {
-    time: '22:00',
-  },
-  {
-    time: '23:00',
-  },
-  {
-    time: '24:00',
-  },
-];
-
-export const TrainNumberArray = [
-  {
-    trainNumber: '1호차 잔여 23석/60석',
-    icon: check,
-  },
-  {
-    trainNumber: '2호차 잔여 23석/60석',
-    icon: check,
-  },
-  {
-    trainNumber: '3호차 잔여 23석/60석',
-    icon: check,
-  },
-  {
-    trainNumber: '4호차 잔여 23석/60석',
-    icon: check,
-  },
-];
-
-export const ReserveWayArray = [
-  {
-    icon: square,
-    text: '출발지를 선택하세요',
-    attribute: '출발',
-    buttonText: '변경',
-    modalType: 'StartPlaceModal',
-  },
-  {
-    icon: group,
-    text: '도착지를 선택하세요',
-    attribute: '도착',
-    buttonText: '변경',
-    modalType: 'EndPlaceModal',
-  },
-  {
-    icon: calendar,
-    text: '날짜를 선택하세요',
-    attribute: '가는날',
-    buttonText: '변경',
-    modalType: 'DayModal',
-  },
-  {
-    icon: person,
-    text: '인원을 선택하세요',
-    attribute: '인원',
-    buttonText: '변경',
-    modalType: 'CountModal',
-  },
-] as const;
-
-export const TrainListArray = [
-  {
-    startTime: '오전 5:03',
-    endTime: '오전 6:02',
-    trainName: 'KTX-산천 201',
-    takeTime: '59분',
-  },
-  {
-    startTime: '오전 5:03',
-    endTime: '오전 6:02',
-    trainName: 'KTX-산천 201',
-    takeTime: '59분',
-  },
-  {
-    startTime: '오전 5:03',
-    endTime: '오전 6:02',
-    trainName: 'KTX-산천 201',
-    takeTime: '59분',
-  },
-  {
-    startTime: '오전 5:03',
-    endTime: '오전 6:02',
-    trainName: 'KTX-산천 201',
-    takeTime: '59분',
-  },
-  {
-    startTime: '오전 5:03',
-    endTime: '오전 6:02',
-    trainName: 'KTX-산천 201',
-    takeTime: '59분',
-  },
-  {
-    startTime: '오전 5:03',
-    endTime: '오전 6:02',
-    trainName: 'KTX-산천 201',
-    takeTime: '59분',
-  },
-  {
-    startTime: '오전 5:03',
-    endTime: '오전 6:02',
-    trainName: 'KTX-산천 201',
-    takeTime: '59분',
-  },
-  {
-    startTime: '오전 5:03',
-    endTime: '오전 6:02',
-    trainName: 'KTX-산천 201',
-    takeTime: '59분',
-  },
-];
+  return {
+    recommendStationArray,
+    trainArray,
+    timeArray,
+    trainNoArray,
+    reserveWayArray,
+    seatsRows,
+  };
+};

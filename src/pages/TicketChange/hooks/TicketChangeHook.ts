@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-export const navigate = () => {
-  const moveSeatChangePage = useNavigate();
-  return { moveSeatChangePage };
+export const useNaviation = () => {
+  const navigate = useNavigate();
+  return { navigate };
 };

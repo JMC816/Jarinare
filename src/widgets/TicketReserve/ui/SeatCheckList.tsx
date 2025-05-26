@@ -1,10 +1,27 @@
+import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 import Seat from './Seat';
+import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
+import { auth } from '@/shared/firebase/firebase';
+import { reserveConstants } from '../constants/ReserveConstants';
 
 const SeatCheckList = () => {
+  const { handleSingleSelect, seatsInfo, seatsState } = useSeatQueryData();
+  const { seatsRows } = reserveConstants();
+  const user = auth.currentUser;
+
+  if (!user) return;
+
+  if (!seatsState)
+    return (
+      <div className="mt-[15px] h-[420px]">
+        <LoadingScreen />
+      </div>
+    );
+
   return (
     <div className="mt-[15px] h-[420px] w-[320px] rounded-lg bg-lightestGray px-5">
       <div className="flex justify-between text-lg font-bold text-black">
-        <div className="flex gap-x-5">
+        <div className="flex gap-x-2">
           <span className="flex h-[40px] w-[40px] items-center justify-center">
             A
           </span>
@@ -12,37 +29,86 @@ const SeatCheckList = () => {
             B
           </span>
         </div>
-        <div className="flex gap-x-5">
+        <div className="flex gap-x-2">
           <span className="flex h-[40px] w-[40px] items-center justify-center">
-            A
+            C
           </span>
           <span className="flex h-[40px] w-[40px] items-center justify-center">
-            B
+            D
           </span>
         </div>
       </div>
-      <div className="mt-[10px] flex justify-between">
-        <div className="grid w-[100px] grid-cols-2 gap-5">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((idx) => (
-            <Seat key={idx} borderColor="lightGray" bgColor="lightesGray" />
-          ))}
-        </div>
-        <div className="flex flex-col justify-between text-lg font-bold">
-          {[6, 5, 4, 3, 2, 1].map((idx) => (
-            <span
-              key={idx}
-              className="flex h-[40px] w-[40px] items-center justify-center gap-5"
-            >
-              {idx}
-            </span>
-          ))}
-        </div>
-        <div className="grid w-[100px] grid-cols-2 gap-5">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((idx) => (
-            <Seat key={idx} borderColor="lightGray" bgColor="lightesGray" />
-          ))}
-        </div>
-      </div>
+      {seatsRows.map((row) => {
+        // 왼쪽 좌석 A1~A6, B1~B6
+        const leftSeats = [`A${row}`, `B${row}`];
+        // 오른쪽 좌석 C1~C6, D1~D6
+        const rightSeats = [`C${row}`, `D${row}`];
+
+        return (
+          <div key={row} className="mb-6 flex items-center justify-between">
+            <div className="flex w-[100px] gap-2">
+              {leftSeats.map((id) => {
+                // 좌석 번호에 맞게 ture(선택)/false(미선택) 반영
+                const seatState = seatsState[id];
+
+                // 예매된 본인 좌석
+                const isMine = seatsInfo.some(
+                  (item) => item.seatId === id && item.userId === user.uid,
+                );
+
+                // 예매된 본인 이외의 좌석
+                const isOther = seatsInfo.some(
+                  (item) => item.seatId === id && item.userId !== user.uid,
+                );
+                return (
+                  <Seat
+                    key={id}
+                    onClick={() => handleSingleSelect(id)}
+                    borderColor="lightGray"
+                    bgColor={
+                      isMine
+                        ? 'blue'
+                        : isOther
+                          ? 'lightGray'
+                          : seatState
+                            ? 'blue'
+                            : 'lightesGray'
+                    }
+                  />
+                );
+              })}
+            </div>
+            <div className="w-[40px] text-center text-lg font-bold">{row}</div>
+            <div className="flex w-[100px] justify-end gap-2">
+              {rightSeats.map((id) => {
+                const seatState = seatsState[id];
+                const isMine = seatsInfo.some(
+                  (item) => item.seatId === id && item.userId === user?.uid,
+                );
+                const isOther = seatsInfo.some(
+                  (item) => item.seatId === id && item.userId !== user?.uid,
+                );
+                return (
+                  <Seat
+                    key={id}
+                    onClick={() => handleSingleSelect(id)}
+                    borderColor="lightGray"
+                    bgColor={
+                      isMine
+                        ? 'blue'
+                        : isOther
+                          ? 'lightGray'
+                          : seatState
+                            ? 'blue'
+                            : 'lightesGray'
+                    }
+                  />
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

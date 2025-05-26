@@ -70,9 +70,9 @@ export const useSeatQueryData = () => {
           userId: data.userId,
           trainNoId: data.trainNoId,
           startDay: data.startDay,
-          selectStartTime: data.selectStartTime,
-          selectEndTime: data.selectEndTime,
-          selectTrainType: data.selectTrainType,
+          startTime: data.startTime,
+          endTime: data.endTime,
+          trainType: data.trainType,
           id: doc.id,
         };
       });
@@ -107,9 +107,9 @@ export const useSeatQueryData = () => {
                 userId: data.userId,
                 trainNoId: data.trainNoId,
                 startDay: data.startDay,
-                selectStartTime: data.selectStartTime,
-                selectEndTime: data.selectEndTime,
-                selectTrainType: data.selectTrainType,
+                startTime: data.startTime,
+                endTime: data.endTime,
+                trainType: data.trainType,
                 id: doc.id,
               };
             });
@@ -129,7 +129,7 @@ export const useSeatQueryData = () => {
   useEffect(() => {
     const deleteSeats = async () => {
       const filtered = seatsInfo.filter(
-        (item) => item.selectEndTime < String(formatTodayDate()),
+        (item) => item.endTime < formatTodayDate(),
       );
       try {
         await Promise.all(

@@ -1,6 +1,7 @@
 import { auth, db } from '@/shared/firebase/firebase';
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -13,12 +14,14 @@ import { SeatType } from '@/entities/Seat/types/seatType';
 import { seatsStateStore } from '../model/seatsStateStore';
 import { seatsStateCountStore } from '../model/seatsStateCountStore';
 import { useNavigate } from 'react-router-dom';
+import { formatTodayDate } from '../lib/format';
 
 export const useSeatQueryData = () => {
   const {
     startDay,
     trainNo,
     selectStartTime,
+    selectEndTime,
     selectTrainType,
     selectAdult,
     selectKid,
@@ -67,6 +70,7 @@ export const useSeatQueryData = () => {
           trainNoId: data.trainNoId,
           startDay: data.startDay,
           selectStartTime: data.selectStartTime,
+          selectEndTime: data.selectEndTime,
           selectTrainType: data.selectTrainType,
           id: doc.id,
         };
@@ -86,39 +90,71 @@ export const useSeatQueryData = () => {
       // 모든 호차의 좌석 개수
       let allSeats: SeatType[] = [];
 
-      await Promise.all(
-        trainNos.map(async (trainNoId) => {
-          const seatsQuery = query(
-            collection(db, 'train', docId, 'no', trainNoId, 'seats'),
-            orderBy('createAt'),
-          );
+      try {
+        await Promise.all(
+          trainNos.map(async (trainNoId) => {
+            const seatsQuery = query(
+              collection(db, 'train', docId, 'no', trainNoId, 'seats'),
+              orderBy('createAt'),
+            );
 
-          const existSeats = await getDocs(seatsQuery);
-          const seats = existSeats.docs.map((doc) => {
-            const data = doc.data();
-            return {
-              seatId: data.seatId,
-              userId: data.userId,
-              trainNoId: data.trainNoId,
-              startDay: data.startDay,
-              selectStartTime: data.selectStartTime,
-              selectTrainType: data.selectTrainType,
-              id: doc.id,
-            };
-          });
-          // 각 호차들의 좌석들을 배열에 저장
-          allSeats = [...allSeats, ...seats];
-        }),
-      );
-      setSeatAllInfo(allSeats);
+            const existSeats = await getDocs(seatsQuery);
+            const seats = existSeats.docs.map((doc) => {
+              const data = doc.data();
+              return {
+                seatId: data.seatId,
+                userId: data.userId,
+                trainNoId: data.trainNoId,
+                startDay: data.startDay,
+                selectStartTime: data.selectStartTime,
+                selectEndTime: data.selectEndTime,
+                selectTrainType: data.selectTrainType,
+                id: doc.id,
+              };
+            });
+            // 각 호차들의 좌석들을 배열에 저장
+            allSeats = [...allSeats, ...seats];
+          }),
+        );
+        setSeatAllInfo(allSeats);
+      } catch (e) {
+        console.log(e);
+      }
     };
     getAllSeats();
   }, [trainNo]);
 
+  // 각 기차의 도착 시간이 현재 시간보다 이전일 때 해당 좌석 제거
+  useEffect(() => {
+    const deleteSeats = async () => {
+      const filtered = seatsInfo.filter(
+        (item) => item.selectEndTime < String(formatTodayDate()),
+      );
+      try {
+        await Promise.all(
+          filtered.map((seat) => {
+            deleteDoc(
+              doc(
+                db,
+                'train',
+                docId,
+                'no',
+                seat.trainNoId,
+                'seats',
+                seat.seatId,
+              ),
+            );
+          }),
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    deleteSeats();
+  }, []);
+
   const handleSingleSelect = (id: string) => {
     if (!user) return;
-
-    const isSelected = seatsState[id] === true;
 
     // 사용자(본인)이 이미 누른 좌석을 클릭한 경우(중복 제거)
     const isMine = seatsInfo.some(
@@ -137,6 +173,8 @@ export const useSeatQueryData = () => {
     if (isOther) {
       return;
     }
+
+    const isSelected = seatsState[id] === true;
 
     // 선택한 좌석과 인원 수가 동일하면 더 이상 선택 안되지만,
     // 선택된 좌석을 다시 선택하면 빈 좌석으로 바뀐다.
@@ -168,6 +206,7 @@ export const useSeatQueryData = () => {
 
     // 빈 좌석이 선택할 좌석 만큼 없으면 선택 막기
     const reservedSeatIds = seatsInfo.map((id) => id.seatId);
+
     const isAllSelectedCount = selectKid + selectAdult;
     if (24 - reservedSeatIds.length < isAllSelectedCount) return;
 
@@ -220,6 +259,7 @@ export const useSeatQueryData = () => {
             trainNoId,
             startDay,
             startTime: selectStartTime,
+            endTime: selectEndTime,
             trainType: selectTrainType,
             createAt: new Date(),
           });

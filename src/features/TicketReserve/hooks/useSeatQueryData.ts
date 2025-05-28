@@ -73,6 +73,7 @@ export const useSeatQueryData = () => {
           startTime: data.startTime,
           endTime: data.endTime,
           trainType: data.trainType,
+          createAt: data.createAt,
           id: doc.id,
         };
       });
@@ -110,6 +111,7 @@ export const useSeatQueryData = () => {
                 startTime: data.startTime,
                 endTime: data.endTime,
                 trainType: data.trainType,
+                createAt: data.createAt,
                 id: doc.id,
               };
             });

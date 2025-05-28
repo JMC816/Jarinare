@@ -6,5 +6,6 @@ export type SeatType = {
   startTime: number;
   endTime: number;
   trainType: string;
+  createAt: number;
   id: string;
 };

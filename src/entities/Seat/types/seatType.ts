@@ -7,5 +7,8 @@ export type SeatType = {
   endTime: number;
   trainType: string;
   createAt: number;
+  startDayForView: string;
+  startStationForView: string;
+  endStationForView: string;
   id: string;
 };

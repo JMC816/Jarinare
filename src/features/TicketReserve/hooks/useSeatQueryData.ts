@@ -1,12 +1,14 @@
 import { auth, db } from '@/shared/firebase/firebase';
 import {
   collection,
+  collectionGroup,
   deleteDoc,
   doc,
   getDocs,
   orderBy,
   query,
   setDoc,
+  where,
 } from 'firebase/firestore';
 import { trainDataStore } from '../model/trainDataStore';
 import { useEffect, useState } from 'react';
@@ -15,6 +17,7 @@ import { seatsStateStore } from '../model/seatsStateStore';
 import { seatsStateCountStore } from '../model/seatsStateCountStore';
 import { useNavigate } from 'react-router-dom';
 import { formatTodayDate } from '@/shared/lib/formatDate';
+import { seatsInfoStore } from '../model/seatsInfoStore';
 
 export const useSeatQueryData = () => {
   const {
@@ -25,10 +28,14 @@ export const useSeatQueryData = () => {
     selectTrainType,
     selectAdult,
     selectKid,
+    startDayForView,
+    startStationForView,
+    endStationForView,
   } = trainDataStore();
   const { seatsState, setSeatsState } = seatsStateStore();
-  const [seatsInfo, setSeatInfo] = useState<SeatType[]>([]);
+  const { seatsInfo, setSeatsInfo } = seatsInfoStore();
   const [seatsAllInfo, setSeatAllInfo] = useState<SeatType[]>([]);
+  const [userSeats, setUserSeats] = useState<SeatType[]>([]);
   const { seatsStateCount, setSeatsStateCount } = seatsStateCountStore();
   const [isAutoSelected, setIsAutoSelected] = useState(false);
 
@@ -69,13 +76,17 @@ export const useSeatQueryData = () => {
           userId: data.userId,
           trainNoId: data.trainNoId,
           startDay: data.startDay,
-          selectStartTime: data.selectStartTime,
-          selectEndTime: data.selectEndTime,
-          selectTrainType: data.selectTrainType,
+          startTime: data.startTime,
+          endTime: data.endTime,
+          trainType: data.trainType,
+          createAt: data.createAt.seconds,
+          startDayForView: data.startDayForView,
+          startStationForView: data.startStationForView,
+          endStationForView: data.endSatationForView,
           id: doc.id,
         };
       });
-      setSeatInfo(seats);
+      setSeatsInfo(seats);
 
       // 호차 변경될 때 좌석 선택 초기화
       setSeatsState({});
@@ -106,9 +117,13 @@ export const useSeatQueryData = () => {
                 userId: data.userId,
                 trainNoId: data.trainNoId,
                 startDay: data.startDay,
-                selectStartTime: data.selectStartTime,
-                selectEndTime: data.selectEndTime,
-                selectTrainType: data.selectTrainType,
+                startTime: data.startTime,
+                endTime: data.endTime,
+                trainType: data.trainType,
+                createAt: data.createAt.seconds,
+                startDayForView: data.startDayForView,
+                startStationForView: data.startStationForView,
+                endStationForView: endStationForView,
                 id: doc.id,
               };
             });
@@ -128,7 +143,7 @@ export const useSeatQueryData = () => {
   useEffect(() => {
     const deleteSeats = async () => {
       const filtered = seatsInfo.filter(
-        (item) => item.selectEndTime < String(formatTodayDate()),
+        (item) => item.endTime < formatTodayDate(),
       );
       try {
         await Promise.all(
@@ -151,6 +166,43 @@ export const useSeatQueryData = () => {
       }
     };
     deleteSeats();
+  }, []);
+
+  // 각 사용자의 모든 좌석 데이터를 가져옴
+  useEffect(() => {
+    const getAllSeatsByUser = async () => {
+      if (!user) return;
+      try {
+        const userSeatsQuery = query(
+          collectionGroup(db, 'seats'),
+          where('userId', '==', user.uid),
+          orderBy('createAt'),
+        );
+
+        const querySnapshot = await getDocs(userSeatsQuery);
+        const userSeats = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            seatId: data.seatId,
+            userId: data.userId,
+            trainNoId: data.trainNoId,
+            startDay: data.startDay,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            trainType: data.trainType,
+            createAt: data.createAt.seconds,
+            startDayForView: data.startDayForView,
+            startStationForView: data.startStationForView,
+            endStationForView: data.endStationForView,
+            id: doc.id,
+          };
+        });
+        setUserSeats(userSeats);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    getAllSeatsByUser();
   }, []);
 
   const handleSingleSelect = (id: string) => {
@@ -262,6 +314,9 @@ export const useSeatQueryData = () => {
             endTime: selectEndTime,
             trainType: selectTrainType,
             createAt: new Date(),
+            startDayForView,
+            startStationForView,
+            endStationForView,
           });
         }),
       );
@@ -274,6 +329,7 @@ export const useSeatQueryData = () => {
     handleSingleSelect,
     handleAllSelect,
     createSelectedSeats,
+    userSeats,
     seatsState,
     seatsInfo,
     seatsAllInfo,

@@ -3,8 +3,12 @@ export type SeatType = {
   userId: string;
   trainNoId: string;
   startDay: string;
-  selectStartTime: string;
-  selectEndTime: string;
-  selectTrainType: string;
+  startTime: number;
+  endTime: number;
+  trainType: string;
+  createAt: number;
+  startDayForView: string;
+  startStationForView: string;
+  endStationForView: string;
   id: string;
 };

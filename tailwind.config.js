@@ -35,6 +35,14 @@ export default {
         lg: '18px',
       },
     },
+    keyframes: {
+      pulse: {
+        '50%': { opacity: '0.2' },
+      },
+      animation: {
+        pulse: 'pulse 0.5s ease-in-out infinite',
+      },
+    },
   },
   plugins: [],
   safelist: [

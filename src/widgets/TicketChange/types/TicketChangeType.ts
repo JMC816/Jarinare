@@ -24,5 +24,6 @@ export type SeatChangeButtonProps = {
 export type SeatProps = {
   bgColor: string;
   borderColor: string;
+  isChangeTarget: boolean;
   onClick?: () => void;
 };

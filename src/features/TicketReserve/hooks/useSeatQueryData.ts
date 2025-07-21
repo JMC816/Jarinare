@@ -150,7 +150,8 @@ export const useSeatQueryData = () => {
 
   // TODO: 추후 데이터 삭제 기능 수정 예정
   // 각 기차의 도착 시간이 현재 시간보다 이전일 때 해당 좌석 제거
-  useEffect(() => {
+  /*
+   useEffect(() => {
     const deleteSeats = async () => {
       const filtered = seatsInfo.filter(
         (item) => item.endTime < formatTodayDate(),
@@ -179,7 +180,8 @@ export const useSeatQueryData = () => {
       }
     };
     deleteSeats();
-  }, []);
+   }, []);
+  */
 
   const handleSingleSelect = (id: string) => {
     if (!user) return;

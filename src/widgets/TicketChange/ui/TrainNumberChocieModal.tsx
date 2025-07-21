@@ -1,20 +1,29 @@
-import useModalStore from '../../model/TicketChangeStore';
-import { TrainNumberArray } from '../constants/TicketChangeConstants';
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import useModalStore from '@/widgets/model/TicketChangeStore';
+import { reserveConstants } from '@/widgets/TicketReserve/constants/ReserveConstants';
 
 const TrainNumberChoiceModal = () => {
   const { closeModal } = useModalStore();
+  const { trainNoArray } = reserveConstants();
+  const { setTrainNo } = trainDataStore();
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
       <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[40px] pr-[40px] font-bold">
         <span className="w-full pt-[25px] text-base">기차 선택</span>
         <div className="mt-[30px] flex w-full flex-col items-center gap-y-[20px] text-tiny">
-          {TrainNumberArray.map(({ trainNumber, icon }, idx) => (
+          {trainNoArray.map(({ trainNoView, trainNo, icon }, idx) => (
             <div
-              onClick={() => closeModal('TrainNumberChoiceModal')}
+              onClick={async () => {
+                await setTrainNo(trainNo);
+                closeModal('TrainNumberChoiceModal');
+              }}
               key={idx}
               className="group flex h-12 w-[300px] cursor-pointer items-center justify-between p-[20px] hover:rounded-md hover:bg-lightestGray"
             >
-              <span>{trainNumber}</span>
+              <span>
+                {trainNo}호차 잔여
+                <span className="text-blue">{trainNoView}</span>석/24석
+              </span>
               <img
                 className="hidden group-active:flex"
                 src={icon}

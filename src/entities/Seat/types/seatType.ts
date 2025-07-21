@@ -10,5 +10,8 @@ export type SeatType = {
   startDayForView: string;
   startStationForView: string;
   endStationForView: string;
+  selectKid: number;
+  selectAdult: number;
+  selectPay: number;
   id: string;
 };

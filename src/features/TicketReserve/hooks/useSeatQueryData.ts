@@ -1,14 +1,12 @@
 import { auth, db } from '@/shared/firebase/firebase';
 import {
   collection,
-  collectionGroup,
   deleteDoc,
   doc,
   getDocs,
   orderBy,
   query,
   setDoc,
-  where,
 } from 'firebase/firestore';
 import { trainDataStore } from '../model/trainDataStore';
 import { useEffect, useState } from 'react';
@@ -31,19 +29,18 @@ export const useSeatQueryData = () => {
     startDayForView,
     startStationForView,
     endStationForView,
+    selectPay,
   } = trainDataStore();
   const { seatsState, setSeatsState } = seatsStateStore();
   const { seatsInfo, setSeatsInfo } = seatsInfoStore();
   const [seatsAllInfo, setSeatAllInfo] = useState<SeatType[]>([]);
-  const [userSeats, setUserSeats] = useState<SeatType[]>([]);
   const { seatsStateCount, setSeatsStateCount } = seatsStateCountStore();
   const [isAutoSelected, setIsAutoSelected] = useState(false);
 
   const navigate = useNavigate();
 
   const user = auth.currentUser;
-  const docId = `${startDay}_${selectStartTime}_${selectTrainType}`;
-  const trainNoId = `${trainNo}`;
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
 
   // 선택된 좌석 수
   const selectedCount = Object.values(seatsState).filter(Boolean).length;
@@ -58,11 +55,11 @@ export const useSeatQueryData = () => {
     }
   }, [seatsState]);
 
-  // 좌석 정보
+  // 각 호차별 좌석 상태
   useEffect(() => {
     const getSeats = async () => {
       const seatsQuery = query(
-        collection(db, 'train', docId, 'no', trainNoId, 'seats'),
+        collection(db, 'train', docIds, 'no', trainNo, 'seats'),
         orderBy('createAt'),
       );
 
@@ -82,8 +79,11 @@ export const useSeatQueryData = () => {
           createAt: data.createAt.seconds,
           startDayForView: data.startDayForView,
           startStationForView: data.startStationForView,
-          endStationForView: data.endSatationForView,
-          id: doc.id,
+          endStationForView: data.endStationForView,
+          selectKid: data.selectKid,
+          selectAdult: data.selectAdult,
+          selectPay: data.selectPay,
+          id: data.id,
         };
       });
       setSeatsInfo(seats);
@@ -94,41 +94,50 @@ export const useSeatQueryData = () => {
     getSeats();
   }, [trainNo]);
 
+  // 각 사용자의 모든 호차의 좌석 개수
   useEffect(() => {
     const getAllSeats = async () => {
+      if (!user) return;
+
       const trainNos = ['1', '2', '3', '4'];
 
-      // 모든 호차의 좌석 개수
       let allSeats: SeatType[] = [];
 
       try {
-        await Promise.all(
-          trainNos.map(async (trainNoId) => {
-            const seatsQuery = query(
-              collection(db, 'train', docId, 'no', trainNoId, 'seats'),
-              orderBy('createAt'),
-            );
+        const docIds = await getDocs(collection(db, 'train'));
 
-            const existSeats = await getDocs(seatsQuery);
-            const seats = existSeats.docs.map((doc) => {
-              const data = doc.data();
-              return {
-                seatId: data.seatId,
-                userId: data.userId,
-                trainNoId: data.trainNoId,
-                startDay: data.startDay,
-                startTime: data.startTime,
-                endTime: data.endTime,
-                trainType: data.trainType,
-                createAt: data.createAt.seconds,
-                startDayForView: data.startDayForView,
-                startStationForView: data.startStationForView,
-                endStationForView: endStationForView,
-                id: doc.id,
-              };
-            });
-            // 각 호차들의 좌석들을 배열에 저장
-            allSeats = [...allSeats, ...seats];
+        await Promise.all(
+          docIds.docs.map(async (doc) => {
+            for (const trainNoId of trainNos) {
+              const seatsQuery = query(
+                collection(db, 'train', doc.id, 'no', trainNoId, 'seats'),
+                orderBy('createAt'),
+              );
+
+              const existSeats = await getDocs(seatsQuery);
+              const seats = existSeats.docs.map((doc) => {
+                const data = doc.data();
+                return {
+                  seatId: data.seatId,
+                  userId: data.userId,
+                  trainNoId: data.trainNoId,
+                  startDay: data.startDay,
+                  startTime: data.startTime,
+                  endTime: data.endTime,
+                  trainType: data.trainType,
+                  createAt: data.createAt.seconds,
+                  startDayForView: data.startDayForView,
+                  startStationForView: data.startStationForView,
+                  endStationForView: endStationForView,
+                  selectKid: data.selectKid,
+                  selectAdult: data.selectAdult,
+                  selectPay: data.selectPay,
+                  id: data.id,
+                };
+              });
+              // 각 호차들의 좌석들을 배열에 저장
+              allSeats = [...allSeats, ...seats];
+            }
           }),
         );
         setSeatAllInfo(allSeats);
@@ -139,22 +148,27 @@ export const useSeatQueryData = () => {
     getAllSeats();
   }, [trainNo]);
 
+  // TODO: 추후 데이터 삭제 기능 수정 예정
   // 각 기차의 도착 시간이 현재 시간보다 이전일 때 해당 좌석 제거
-  useEffect(() => {
+  /*
+   useEffect(() => {
     const deleteSeats = async () => {
       const filtered = seatsInfo.filter(
         (item) => item.endTime < formatTodayDate(),
       );
       try {
+        const docIds = await getDocs(collection(db, 'train'));
+        const docId = docIds.docs.map((doc) => doc.id);
+
         await Promise.all(
-          filtered.map((seat) => {
+          filtered.map((seat, idx) => {
             deleteDoc(
               doc(
                 db,
                 'train',
-                docId,
+                docId[idx],
                 'no',
-                seat.trainNoId,
+                seat.trainNoIds,
                 'seats',
                 seat.seatId,
               ),
@@ -166,60 +180,30 @@ export const useSeatQueryData = () => {
       }
     };
     deleteSeats();
-  }, []);
-
-  // 각 사용자의 모든 좌석 데이터를 가져옴
-  useEffect(() => {
-    const getAllSeatsByUser = async () => {
-      if (!user) return;
-      try {
-        const userSeatsQuery = query(
-          collectionGroup(db, 'seats'),
-          where('userId', '==', user.uid),
-          orderBy('createAt'),
-        );
-
-        const querySnapshot = await getDocs(userSeatsQuery);
-        const userSeats = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          return {
-            seatId: data.seatId,
-            userId: data.userId,
-            trainNoId: data.trainNoId,
-            startDay: data.startDay,
-            startTime: data.startTime,
-            endTime: data.endTime,
-            trainType: data.trainType,
-            createAt: data.createAt.seconds,
-            startDayForView: data.startDayForView,
-            startStationForView: data.startStationForView,
-            endStationForView: data.endStationForView,
-            id: doc.id,
-          };
-        });
-        setUserSeats(userSeats);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    getAllSeatsByUser();
-  }, []);
+   }, []);
+  */
 
   const handleSingleSelect = (id: string) => {
     if (!user) return;
 
-    // 사용자(본인)이 이미 누른 좌석을 클릭한 경우(중복 제거)
+    // 사용자(본인)이 이미 누른 좌석이면서 호차를 클릭한 경우(중복 제거)
     const isMine = seatsInfo.some(
-      (item) => item.seatId === id && item.userId === user.uid,
+      (item) =>
+        item.trainNoId === trainNo &&
+        item.seatId === id &&
+        item.userId === user.uid,
     );
 
     if (isMine) {
       return;
     }
 
-    // 다른 사용자가 이미 선택된 좌석을 클릭한 경우(중복 제거)
+    // 다른 사용자가 이미 선택된 좌석이면서 호차를 클릭한 경우(중복 제거)
     const isOther = seatsInfo.some(
-      (item) => item.seatId === id && item.userId !== user.uid,
+      (item) =>
+        item.trainNoId === trainNo &&
+        item.seatId === id &&
+        item.userId !== user.uid,
     );
 
     if (isOther) {
@@ -305,10 +289,10 @@ export const useSeatQueryData = () => {
       // firestore에 좌석 데이터 저장
       await Promise.all(
         filtered.map((seatId) => {
-          setDoc(doc(db, 'train', docId, 'no', trainNoId, 'seats', seatId), {
+          setDoc(doc(db, 'train', docIds, 'no', trainNo, 'seats', seatId), {
             userId: user.uid,
             seatId,
-            trainNoId,
+            trainNoId: trainNo,
             startDay,
             startTime: selectStartTime,
             endTime: selectEndTime,
@@ -317,9 +301,16 @@ export const useSeatQueryData = () => {
             startDayForView,
             startStationForView,
             endStationForView,
+            selectKid,
+            selectAdult,
+            selectPay,
+            id: docIds,
           });
         }),
       );
+      await setDoc(doc(db, 'train', docIds), {
+        id: docIds,
+      });
       navigate('/');
     } catch (e) {
       console.log(e);
@@ -329,7 +320,6 @@ export const useSeatQueryData = () => {
     handleSingleSelect,
     handleAllSelect,
     createSelectedSeats,
-    userSeats,
     seatsState,
     seatsInfo,
     seatsAllInfo,

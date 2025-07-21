@@ -1,11 +1,23 @@
 import miniarrow from '@/assets/icons/miniarrow.png';
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
 import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
+import { useNavigation } from '../hooks/useNavigation';
+import { groupSeatsStore } from '../model/groupSeatsStore';
 
 const MiniTicket = () => {
-  const { groupedArray } = useTicketLists();
-  return groupedArray.map((groups, idx) => (
-    <div key={idx} className="flex h-[100px] w-[320px]">
+  const { groupedArray } = useTicketLists() ?? {};
+  const { setGroupSeats } = groupSeatsStore();
+  const { navigate } = useNavigation();
+
+  return groupedArray?.map((groups, idx) => (
+    <div
+      key={idx}
+      onClick={() => {
+        navigate('/ticket/seatchange', { state: { groups } });
+        setGroupSeats(groups);
+      }}
+      className="flex h-[100px] w-[320px]"
+    >
       <div className="flex h-[100px] w-[230px] flex-col items-center justify-between rounded-lg bg-lightestGray py-[15px]">
         <div className="flex h-5 w-[200px] items-center justify-center rounded-xs bg-white">
           <span className="text-xs font-bold text-blue">

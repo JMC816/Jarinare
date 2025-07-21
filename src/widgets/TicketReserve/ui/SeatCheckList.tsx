@@ -82,6 +82,7 @@ const SeatCheckList = () => {
             <div className="flex w-[100px] justify-end gap-2">
               {rightSeats.map((id) => {
                 const seatState = seatsState[id];
+
                 const isMine = seatsInfo.some(
                   (item) => item.seatId === id && item.userId === user?.uid,
                 );

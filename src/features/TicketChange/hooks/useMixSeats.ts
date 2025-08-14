@@ -11,6 +11,8 @@ import { seatIdsStore } from '../models/seatIdsStore';
 import { prevSeatsTargetStore } from '../models/prevSeatsTargetStore';
 import { seatsTargetStore } from '../models/seatsTargetStore';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import { shareKeepSeatsStore } from '../models/shareKeepSeatsStore';
+import { seatsChangeMixTargetSeatIdStore } from '../models/seatsChangeMixTargetSeatIdStore';
 
 export const useMixSeats = () => {
   const { seatsState, setSeatsState } = seatsStateStore();
@@ -22,13 +24,12 @@ export const useMixSeats = () => {
   const { prevSeatsTarget, setPrevSeatsTarget } = prevSeatsTargetStore();
   const { setSeatsTarget } = seatsTargetStore();
   const { trainNo } = trainDataStore();
+  const { setShareKeepSeats } = shareKeepSeatsStore();
+  const { setSeatsChangeMixTargetSeatId } = seatsChangeMixTargetSeatIdStore();
 
   const [keepSeats, setKeepSeats] = useState<SeatType[]>([]);
   const [seatsChangeMixTargetOrAllTarget, setSeatsChangeMixTargetOrAllTarget] =
     useState<string[]>([]);
-  const [seatsChangeMixTargetSeatId, setSeatsChangeMixTargetSeatId] = useState<
-    string[]
-  >([]);
 
   // 좌석 id가 true인 것만 추출
   const filtered = Object.entries(seatsState)
@@ -73,6 +74,11 @@ export const useMixSeats = () => {
       return selectedGroupSeatsByTime;
     });
   }, [groupedArray, groupSeats, seatsChangeInfo, id]);
+
+  // 알림 기능에서 데이터 전송 시 사용할 이전 좌석 상태
+  useEffect(() => {
+    setShareKeepSeats(keepSeats);
+  }, [keepSeats]);
 
   useEffect(() => {
     // 예매된 좌석들(본인 포함)
@@ -133,59 +139,64 @@ export const useMixSeats = () => {
     return resetSeatsState;
   }, [trainNo]);
 
-  const mixSeatsChange = async () => {
+  const mixSeatsChange = async (
+    emptySeatsTarget: string[],
+    mySeats: SeatType[],
+    newKeepSeats: SeatType[],
+    mixSeatId: string[],
+  ) => {
     await runTransaction(db, async (transaction) => {
       const mySeatDocs = [];
       const targetSeatDocs = [];
 
-      for (let i = 0; i < groupSeats.length; i++) {
+      for (let i = 0; i < mySeats.length; i++) {
         const mySeatRef = doc(
           db,
           'train',
-          groupSeats[i].id,
+          mySeats[i].id,
           'no',
-          groupSeats[i].trainNoId,
+          mySeats[i].trainNoId,
           'seats',
-          groupSeats[i].seatId,
+          mySeats[i].seatId,
         );
 
         await setDoc(
           doc(
             db,
             'train',
-            keepSeats[0].id,
+            newKeepSeats[0].id,
             'no',
-            keepSeats[0].trainNoId,
+            newKeepSeats[0].trainNoId,
             'seats',
-            seatsChangeMixTargetSeatId[i],
+            mixSeatId[i],
           ),
           {
-            userId: keepSeats[0].userId,
-            seatId: seatsChangeMixTargetSeatId[i],
-            trainNoId: keepSeats[0].trainNoId,
-            startDay: keepSeats[0].startDay,
-            startTime: keepSeats[0].startTime,
-            endTime: keepSeats[0].endTime,
-            trainType: keepSeats[0].trainType,
-            createAt: Timestamp.fromMillis(keepSeats[0].createAt * 1000),
-            startDayForView: keepSeats[0].startDayForView,
-            startStationForView: keepSeats[0].startStationForView,
-            endStationForView: keepSeats[0].endStationForView,
-            selectKid: keepSeats[0].selectAdult,
-            selectAdult: keepSeats[0].selectAdult,
-            selectPay: keepSeats[0].selectPay,
-            id: keepSeats[0].id,
+            userId: newKeepSeats[0].userId,
+            seatId: mixSeatId[i],
+            trainNoId: newKeepSeats[0].trainNoId,
+            startDay: newKeepSeats[0].startDay,
+            startTime: newKeepSeats[0].startTime,
+            endTime: newKeepSeats[0].endTime,
+            trainType: newKeepSeats[0].trainType,
+            createAt: Timestamp.fromMillis(newKeepSeats[0].createAt * 1000),
+            startDayForView: newKeepSeats[0].startDayForView,
+            startStationForView: newKeepSeats[0].startStationForView,
+            endStationForView: newKeepSeats[0].endStationForView,
+            selectKid: newKeepSeats[0].selectAdult,
+            selectAdult: newKeepSeats[0].selectAdult,
+            selectPay: newKeepSeats[0].selectPay,
+            id: newKeepSeats[0].id,
           },
         );
 
         const targetSeatRef = doc(
           db,
           'train',
-          keepSeats[0].id,
+          newKeepSeats[0].id,
           'no',
-          keepSeats[0].trainNoId,
+          newKeepSeats[0].trainNoId,
           'seats',
-          seatsChangeMixTargetSeatId[i],
+          mixSeatId[i],
         );
 
         const mySeat = await transaction.get(mySeatRef);
@@ -202,7 +213,7 @@ export const useMixSeats = () => {
       }
 
       // 저장된 배열을 순회하면서 좌석을 교체
-      for (let i = 0; i < groupSeats.length; i++) {
+      for (let i = 0; i < mySeats.length; i++) {
         const mySeatInfo = mySeatDocs[i];
         const targetSeatInfo = targetSeatDocs[i];
 
@@ -229,7 +240,7 @@ export const useMixSeats = () => {
 
       // 업데이트 후 mySeatInfo.ref는 상대방의 좌석 정보를 담고 있으므로
       // 선택한 빈 좌석 만큼 상대방의 좌석 제거
-      for (let i = 0; i < filtered.length; i++) {
+      for (let i = 0; i < emptySeatsTarget.length; i++) {
         const mySeatInfo = mySeatDocs[i];
         transaction.delete(mySeatInfo.ref);
       }
@@ -241,5 +252,6 @@ export const useMixSeats = () => {
     seatsChangeMixTargetOrAllTarget,
     keepSeats,
     setKeepSeats,
+    setShareKeepSeats,
   };
 };

@@ -4,6 +4,7 @@ import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getDatabase } from 'firebase/database';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -18,6 +19,7 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_APP_messagingSenderId,
   appId: import.meta.env.VITE_APP_appId,
   measurementId: import.meta.env.VITE_APP_measurementId,
+  databaseURL: import.meta.env.VITE_APP_databaseUrl,
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -26,3 +28,4 @@ const analytics = getAnalytics(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const db = getFirestore(app);
+export const realtimeDb = getDatabase(app);

@@ -1,13 +1,12 @@
 import { db } from '@/shared/firebase/firebase';
-import { groupSeatsStore } from '@/widgets/TicketList/model/groupSeatsStore';
 import { doc, runTransaction } from 'firebase/firestore';
-import { seatsChangeTargetStore } from '../models/seatsChangeTargetStore';
+import { SeatType } from '@/entities/Seat/types/seatType';
 
 export const useOccupiedSeats = () => {
-  const { groupSeats } = groupSeatsStore();
-  const { seatsChangeTarget } = seatsChangeTargetStore();
-
-  const occupiedSeatsChange = async () => {
+  const occupiedSeatsChange = async (
+    groupSeats: SeatType[],
+    seatsChangeTarget: SeatType[],
+  ) => {
     await runTransaction(db, async (transaction) => {
       const mySeatDocs = [];
       const targetSeatDocs = [];

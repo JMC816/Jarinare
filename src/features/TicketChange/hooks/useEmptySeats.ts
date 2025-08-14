@@ -1,26 +1,19 @@
 import { auth, db } from '@/shared/firebase/firebase';
 import { groupSeatsStore } from '@/widgets/TicketList/model/groupSeatsStore';
-import { seatsStateStore } from '../models/seatsStateStore';
 import { doc, runTransaction } from 'firebase/firestore';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 
 export const useEmptySeats = () => {
-  const { seatsState } = seatsStateStore();
   const { groupSeats } = groupSeatsStore();
   const { trainNo } = trainDataStore();
 
   const user = auth.currentUser;
 
-  const emptySeatsChange = async () => {
+  const emptySeatsChange = async (emptySeatsTarget: string[]) => {
     if (!user) return;
 
-    // 좌석 id가 true인 것만 추출
-    const filtered = Object.entries(seatsState)
-      .filter(([_, value]) => value === true)
-      .map(([key]) => key);
-
     // 좌석을 선택했을 때 예매된 좌석 개수랑 같지 않으면 update 실행 x
-    if (filtered.length !== groupSeats.length) return;
+    if (emptySeatsTarget.length !== groupSeats.length) return;
 
     try {
       await runTransaction(db, async (transaction) => {
@@ -47,7 +40,7 @@ export const useEmptySeats = () => {
 
         for (let i = 0; i < groupSeats.length; i++) {
           const mySeat = mySeatsDocs[i];
-          const newSeatId = filtered[i];
+          const newSeatId = emptySeatsTarget[i];
 
           const newSeatsRef = doc(
             db,

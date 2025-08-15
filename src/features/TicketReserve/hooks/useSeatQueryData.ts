@@ -1,7 +1,6 @@
 import { auth, db } from '@/shared/firebase/firebase';
 import {
   collection,
-  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -14,7 +13,6 @@ import { SeatType } from '@/entities/Seat/types/seatType';
 import { seatsStateStore } from '../model/seatsStateStore';
 import { seatsStateCountStore } from '../model/seatsStateCountStore';
 import { useNavigate } from 'react-router-dom';
-import { formatTodayDate } from '@/shared/lib/formatDate';
 import { seatsInfoStore } from '../model/seatsInfoStore';
 
 export const useSeatQueryData = () => {
@@ -147,41 +145,6 @@ export const useSeatQueryData = () => {
     };
     getAllSeats();
   }, [trainNo]);
-
-  // TODO: 추후 데이터 삭제 기능 수정 예정
-  // 각 기차의 도착 시간이 현재 시간보다 이전일 때 해당 좌석 제거
-  /*
-   useEffect(() => {
-    const deleteSeats = async () => {
-      const filtered = seatsInfo.filter(
-        (item) => item.endTime < formatTodayDate(),
-      );
-      try {
-        const docIds = await getDocs(collection(db, 'train'));
-        const docId = docIds.docs.map((doc) => doc.id);
-
-        await Promise.all(
-          filtered.map((seat, idx) => {
-            deleteDoc(
-              doc(
-                db,
-                'train',
-                docId[idx],
-                'no',
-                seat.trainNoIds,
-                'seats',
-                seat.seatId,
-              ),
-            );
-          }),
-        );
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    deleteSeats();
-   }, []);
-  */
 
   const handleSingleSelect = (id: string) => {
     if (!user) return;

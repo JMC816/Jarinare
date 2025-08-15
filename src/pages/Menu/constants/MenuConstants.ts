@@ -9,7 +9,7 @@ export const MenuArray = [
   },
   {
     text: '승차권 반환',
-    link: '/ticket/return',
+    link: '/returnlist',
   },
   {
     text: '승차권 결제',

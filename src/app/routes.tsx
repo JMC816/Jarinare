@@ -11,6 +11,7 @@ import TicketPaymentPage from '@/pages/TicketPayment/ui/TicketPaymentPage';
 import HomePage from '@/pages/TicketReserve/ui/HomePage';
 import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
 import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
+import SeatReturnePage from '@/pages/TicketReturn/ui/SeatReturnPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
 import MainLayout from '@/widgets/layouts/ui/MainLayout';
@@ -34,9 +35,10 @@ const Router = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/ticket/seatchange" element={<TicketSeatChangePage />} />
           <Route path="/ticket/payment" element={<TicketPaymentPage />} />
-          <Route path="/ticket/return" element={<TicketReturnPage />} />
+          <Route path="/returnlist" element={<TicketReturnPage />} />
           <Route path="/seatchange" element={<SeatChangePage />} />
           <Route path="/ticketlist" element={<TickListPage />} />
+          <Route path="/return" element={<SeatReturnePage />} />
           <Route path="/notification" element={<NotificationPage />} />
         </Route>
       </Routes>

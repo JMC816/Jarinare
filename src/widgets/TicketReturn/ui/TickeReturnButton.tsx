@@ -9,7 +9,7 @@ const TicketReturnButton = ({
   return (
     <button
       onClick={onClick}
-      className={`h-12 w-[100px] rounded-xs bg-${bgColor} text-${textColor} text-base active:brightness-50`}
+      className={`h-12 w-[100px] rounded-xs bg-${bgColor} text-base font-bold text-${textColor} active:brightness-50`}
     >
       {text}
     </button>

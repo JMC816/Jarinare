@@ -1,32 +1,12 @@
-import Ticket from '@/shared/ui/Ticket';
-import arrow from '@/assets/icons/arrow.png';
-import TicketButton from '@/shared/ui/TicketButton';
-import useModalStore from '@/widgets/model/TicketReturnStore';
-import Modal from '@/widgets/TicketReturn/ui/Modal';
+import MiniTicket from '@/widgets/TicketReturn/ui/MiniTicket';
 
 const TicketReturnPage = () => {
-  const { isShow, modalType, openModal } = useModalStore();
   return (
-    <div className="flex w-full flex-col items-center pl-[38px] pr-[37px]">
-      <div className="mt-[30px] w-full">
-        <div className="flex justify-center text-lg font-bold">
-          <span>서울</span>
-          <img src={arrow} width={25} height={20} className="mx-[30px]" />
-          <span>대전</span>
-        </div>
-        <div className="mt-[55px]">
-          <Ticket />
-        </div>
-        <div className="mt-[60px] flex flex-col">
-          <TicketButton
-            onClick={() => openModal('ReturnModal')}
-            text="반환"
-            bgColor="lightImpossible"
-            textColor="red"
-          />
-        </div>
+    <div className="flex w-full flex-col items-center overflow-scroll pl-[28px] pr-[27px]">
+      <span className="mt-5 w-full text-lg font-bold">내 승차권</span>
+      <div className="mt-5 flex flex-col gap-y-5 overflow-y-auto">
+        <MiniTicket />
       </div>
-      {isShow == false || modalType == undefined ? null : <Modal />}
     </div>
   );
 };

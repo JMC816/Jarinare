@@ -5,7 +5,8 @@ import { auth } from '@/shared/firebase/firebase';
 import { reserveConstants } from '../constants/ReserveConstants';
 
 const SeatCheckList = () => {
-  const { handleSingleSelect, seatsInfo, seatsState } = useSeatQueryData();
+  const { handleSingleSelect, seatsInfo, seatsState, locks, isLocksLoaded } =
+    useSeatQueryData();
   const { seatsRows } = reserveConstants();
   const user = auth.currentUser;
 
@@ -60,15 +61,22 @@ const SeatCheckList = () => {
                 const isOther = seatsInfo.some(
                   (item) => item.seatId === id && item.userId !== user.uid,
                 );
+
+                // 실시간 상대방 좌석 잠금
+                const isLocked = Object.entries(locks).some(
+                  (item) => item[0] === id && item[1] !== user.uid,
+                );
                 return (
                   <Seat
                     key={id}
-                    onClick={() => handleSingleSelect(id)}
+                    onClick={
+                      isLocksLoaded ? () => handleSingleSelect(id) : null
+                    }
                     borderColor="lightGray"
                     bgColor={
                       isMine
                         ? 'blue'
-                        : isOther
+                        : isOther || isLocked
                           ? 'lightGray'
                           : seatState
                             ? 'blue'
@@ -86,18 +94,25 @@ const SeatCheckList = () => {
                 const isMine = seatsInfo.some(
                   (item) => item.seatId === id && item.userId === user?.uid,
                 );
+
                 const isOther = seatsInfo.some(
                   (item) => item.seatId === id && item.userId !== user?.uid,
+                );
+
+                const isLocked = Object.entries(locks).some(
+                  (item) => item[0] === id && item[1] !== user.uid,
                 );
                 return (
                   <Seat
                     key={id}
-                    onClick={() => handleSingleSelect(id)}
+                    onClick={
+                      isLocksLoaded ? () => handleSingleSelect(id) : null
+                    }
                     borderColor="lightGray"
                     bgColor={
                       isMine
                         ? 'blue'
-                        : isOther
+                        : isOther || isLocked
                           ? 'lightGray'
                           : seatState
                             ? 'blue'

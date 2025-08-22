@@ -9,12 +9,25 @@ import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
 
 const SeatCheckPage = () => {
   const { isShow, modalType } = useModalStore();
-  const { createSelectedSeats, handleAllSelect, seatsStateCount } =
-    useSeatQueryData();
+  const {
+    createSelectedSeats,
+    handleAllSelect,
+    seatsStateCount,
+    isLocksLoaded,
+  } = useSeatQueryData();
   const { selectKid, selectAdult } = trainDataStore();
 
+  // 좌석 전체를 선택하지 않으면 false
+  // 좌석을 전체 선택하면 true
+  // 전체보다 적게 선택하면 false
   const isAllSelected =
     seatsStateCount === 0 ? false : seatsStateCount === selectKid + selectAdult;
+
+  // 좌석 전체를 선택하지 않으면 false
+  // 좌석을 전체 선택하면 false
+  // 전체보다 적게 선택하면 true
+  const isAllLocked =
+    seatsStateCount === 0 ? false : seatsStateCount <= selectKid + selectAdult;
 
   return (
     <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
@@ -23,10 +36,12 @@ const SeatCheckPage = () => {
       <SeatCheckState />
       <div className="mt-[10px] flex justify-between gap-x-5">
         <SeatCheckButton
-          onClick={handleAllSelect}
+          onClick={isLocksLoaded && isAllLocked ? null : handleAllSelect}
           text="자동 좌석 선택"
           textColor="white"
-          bgColor="blue"
+          bgColor={
+            isLocksLoaded && isAllLocked ? 'lightBlueImpossible' : 'blue'
+          }
         />
         <SeatCheckButton
           onClick={isAllSelected ? createSelectedSeats : null}

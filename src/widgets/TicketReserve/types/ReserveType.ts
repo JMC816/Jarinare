@@ -54,5 +54,5 @@ export type SeatCheckButtonProps = {
 export type SeatProps = {
   bgColor: string;
   borderColor: string;
-  onClick?: () => void;
+  onClick: (() => Promise<void>) | null;
 };

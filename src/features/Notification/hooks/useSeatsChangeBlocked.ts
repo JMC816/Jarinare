@@ -1,15 +1,18 @@
+import { SeatType } from '@/entities/Seat/types/seatType';
 import { seatsTargetStore } from '@/features/TicketChange/models/seatsTargetStore';
 import { auth, realtimeDb } from '@/shared/firebase/firebase';
-import { groupSeatsStore } from '@/widgets/TicketList/model/groupSeatsStore';
 import { get, ref } from 'firebase/database';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const useSeatsChangeBlocked = () => {
+  const location = useLocation();
   const { seatsTarget } = seatsTargetStore();
-  const { groupSeats } = groupSeatsStore();
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
 
   const user = auth.currentUser;
+
+  const mySeats: SeatType[] = location.state;
 
   useEffect(() => {
     const seatsChangeBlocked = async () => {
@@ -23,7 +26,9 @@ export const useSeatsChangeBlocked = () => {
         return setIsBlocked(false);
       }
 
-      for (const key of Object.keys(data)) {
+      const filteredKeys = Object.keys(data).filter((key) => key !== 'locks');
+
+      for (const key of filteredKeys) {
         const allDbRef = await get(ref(realtimeDb, key));
 
         // 데이터가 존재하면서
@@ -35,7 +40,7 @@ export const useSeatsChangeBlocked = () => {
           // 요청 데이터 안에 본인이 예매한 티켓의 좌석 데이터(요청 보낼 데이터)가 포함되면 그 티켓에서는 좌석 변경 불가
           if (
             value.includes(
-              `${groupSeats[0].id}_${groupSeats[0].trainNoId}_${groupSeats.map((item) => item.seatId)}`,
+              `${mySeats[0]?.id}_${mySeats[0]?.trainNoId}_${mySeats.map((item) => item.seatId)}`,
             )
           ) {
             return setIsBlocked(true);
@@ -44,7 +49,7 @@ export const useSeatsChangeBlocked = () => {
       }
     };
     seatsChangeBlocked();
-  }, [groupSeats, seatsTarget]);
+  }, [mySeats, seatsTarget]);
 
   return { isBlocked };
 };

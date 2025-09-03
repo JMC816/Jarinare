@@ -21,7 +21,7 @@ export const useHandleChange = () => {
       ),
     );
 
-    const mySeats = response.val()[filteredKey[0]].mySeat as SeatType[];
+    const mySeat = response.val()[filteredKey[0]].mySeat as SeatType[];
 
     const seatsChangeTarget = response.val()[filteredKey[0]]
       .targetSeat as SeatType[];
@@ -38,22 +38,22 @@ export const useHandleChange = () => {
       .isSeatsChangeTarget as boolean;
 
     if (
-      mySeats.length > newKeepSeats.length &&
+      mySeat.length > newKeepSeats.length &&
       newKeepSeats.length !== 0 &&
       isSeatsChangeTarget === false
     ) {
       return await mixSeatsChange(
         emptySeatsTarget,
-        mySeats,
+        mySeat,
         newKeepSeats,
         mixSeatId,
       );
     }
     if (
-      mySeats.length === seatsChangeTarget.length &&
+      mySeat.length === seatsChangeTarget.length &&
       isSeatsChangeTarget === true
     ) {
-      return await occupiedSeatsChange(mySeats, seatsChangeTarget);
+      return await occupiedSeatsChange(mySeat, seatsChangeTarget);
     }
   };
   return { handleClick };

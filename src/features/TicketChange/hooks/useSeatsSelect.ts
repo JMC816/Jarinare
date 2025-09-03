@@ -1,113 +1,176 @@
-import { auth } from '@/shared/firebase/firebase';
+import { auth, realtimeDb } from '@/shared/firebase/firebase';
 import { seatsStateStore } from '../models/seatsStateStore';
 import { useSeatsGroupInfo } from '@/features/TicketChange/hooks/useSeatsGroupInfo';
-import { groupSeatsStore } from '@/widgets/TicketList/model/groupSeatsStore';
 import { seatsChangeInfoStore } from '../models/seatsChangeInfoStore';
 import { seatsChangeTargetStore } from '../models/seatsChangeTargetStore';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { useMixSeats } from './useMixSeats';
+import { useEffect, useRef, useState } from 'react';
+import {
+  DataSnapshot,
+  off,
+  onDisconnect,
+  onValue,
+  ref,
+  remove,
+  set,
+} from 'firebase/database';
+import { useLocation } from 'react-router-dom';
+import { SeatType } from '@/entities/Seat/types/seatType';
+import { SeatLockType } from '@/entities/Seat/types/seatLockType';
 
 export const useSeatsSelect = () => {
   const { seatsState, setSeatsState } = seatsStateStore();
   const { groupedArray } = useSeatsGroupInfo() || {};
-  const { groupSeats } = groupSeatsStore();
   const { seatsChangeInfo } = seatsChangeInfoStore();
   const { setSeatsChangeTarget, setIsSeatsChangeTarget } =
     seatsChangeTargetStore();
-  const { trainNo } = trainDataStore();
+  const { trainNo, startDay, selectStartTime, selectTrainType } =
+    trainDataStore();
   const { seatsChangeMixTargetOrAllTarget } = useMixSeats();
 
+  const [locks, setLocks] = useState<Record<string, SeatLockType>>({});
+
+  // 잠긴 좌석의 초기 렌더링 상태
+  const [isLocksLoaded, setIsLocksLoaded] = useState(false);
+
+  // 좌석 중복 클릭 방지
+  const isSelectingRef = useRef<Record<string, boolean>>({});
+
+  const location = useLocation();
+  const mySeats: SeatType[] = location.state;
+
   const user = auth.currentUser;
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
 
   const selectedCount = Object.values(seatsState).filter(Boolean).length;
 
-  const handleSeatsSelect = (id: string) => {
+  // 실시간 상대방 좌석 잠금
+  useEffect(() => {
+    const path = `locks/${docIds}/${trainNo}`;
+    const dbRef = ref(realtimeDb, path);
+
+    const cb = async (snapshot: DataSnapshot) => {
+      const seats = (snapshot.val() as Record<string, SeatLockType>) || {};
+
+      // 상대방이 선택한 좌석
+      const othersOnly = Object.fromEntries(
+        Object.entries(seats).filter(([, seat]) => seat.userId !== user?.uid),
+      );
+
+      setLocks(othersOnly);
+      setIsLocksLoaded(true);
+    };
+
+    onValue(dbRef, cb);
+    return () =>
+      // 실시간 DB는 off로 직접 해제
+      off(dbRef, 'value', cb);
+  }, [realtimeDb, docIds, trainNo]);
+
+  // 좌석 잠금
+  const lockSeat = async (seatId: string) => {
+    if (!user) return;
+    const seatLockRef = ref(realtimeDb, `locks/${docIds}/${trainNo}/${seatId}`);
+    await set(seatLockRef, {
+      userId: user.uid,
+      mySeats,
+      trainNo,
+    });
+
+    // 브라우저가 닫히면 자동 해제
+    onDisconnect(seatLockRef).remove();
+  };
+
+  // 좌석 잠금 해제
+  const unlockSeat = async (seatId: string) => {
+    const seatLockRef = ref(realtimeDb, `locks/${docIds}/${trainNo}/${seatId}`);
+    await remove(seatLockRef);
+  };
+
+  const handleSeatsSelect = async (id: string) => {
     if (!user) return;
 
-    // 변경할려는 좌석의 수와 동일하거나 그보다 적은 타 좌석
-    const filteredGroupSeats = groupedArray.filter(
-      (item) => item.length <= groupSeats.length,
-    );
+    if (isSelectingRef.current[id]) return;
+    isSelectingRef.current[id] = true;
 
-    // 선택한 각 좌석
-    const eachSeat = seatsChangeInfo.filter((item) => item.seatId === id);
+    try {
+      // 변경할려는 좌석의 수와 동일하거나 그보다 적은 타 좌석
+      const filteredGroupSeats = groupedArray.filter(
+        (item) => item.length <= mySeats.length,
+      );
 
-    // 선택한 좌석이 동일한 생성 시간인 좌석들
-    const selectedGroupSeatsByTime = filteredGroupSeats
-      .flat()
-      .filter((item) => {
-        const isTarget = eachSeat[0]?.createAt ?? 0;
-        return item.createAt === isTarget;
-      });
+      // 선택한 각 좌석
+      const eachSeat = seatsChangeInfo.filter((item) => item.seatId === id);
 
-    // 내 좌석이지만 다른 승차권인 좌석
-    const mySeatsNotInThisTicket = seatsChangeInfo
-      .filter((item) => item.userId === user?.uid)
-      .filter((item) => groupSeats[0].createAt !== item.createAt);
+      // 선택한 좌석이 동일한 생성 시간인 좌석들
+      const selectedGroupSeatsByTime = filteredGroupSeats
+        .flat()
+        .filter((item) => {
+          const isTarget = eachSeat[0]?.createAt ?? 0;
+          return item.createAt === isTarget;
+        });
 
-    // 현재 사용자의 좌석들이지만 해당 승차권의 좌석이 아닌 좌석이 하나라도 있으면 선택 금지
-    if (
-      selectedGroupSeatsByTime.filter((item) =>
-        mySeatsNotInThisTicket.includes(item),
-      ).length > 0
-    ) {
-      return;
-    }
-    setSeatsChangeTarget(selectedGroupSeatsByTime);
+      // 내 좌석이지만 다른 승차권인 좌석
+      const mySeatsNotInThisTicket = seatsChangeInfo
+        .filter((item) => item.userId === user?.uid)
+        .filter((item) => mySeats[0].createAt !== item.createAt);
 
-    // 선택한 좌석과 내 좌석의 개수가 동일하면 true 그렇지 않으면 false
-    if (selectedGroupSeatsByTime.length === groupSeats.length) {
-      setIsSeatsChangeTarget(true);
-      return;
-    }
-    setIsSeatsChangeTarget(false);
-
-    // 사용자(본인)이 이미 누른 좌석이면서 호차를 클릭한 경우(중복 제거)
-    const isMine = seatsChangeInfo.some(
-      (item) =>
-        item.trainNoId === trainNo &&
-        item.seatId === id &&
-        item.userId === user.uid,
-    );
-
-    if (isMine) {
-      return;
-    }
-
-    // 다른 사용자가 이미 선택된 좌석이면서 호차를 클릭한 경우(중복 제거)
-    const isOther = seatsChangeInfo.some(
-      (item) =>
-        item.trainNoId === trainNo &&
-        item.seatId === id &&
-        item.userId !== user.uid,
-    );
-
-    if (isOther) {
-      return;
-    }
-
-    const isSelected = seatsState[id] === true;
-
-    // 선택한 좌석과 각 티켓의 예매된 좌석 수가 동일하거나 또는 내 예매 좌석과 (빈 좌석 + 상대방 좌석)의 개수가 동일하면 더 이상 선택이 안되지만,
-    // 선택된 좌석을 다시 선택하면 빈 좌석으로 바뀐다.
-    if (
-      selectedCount === groupSeats.length ||
-      groupSeats.length === seatsChangeMixTargetOrAllTarget.length
-    ) {
-      if (isSelected) {
-        setSeatsState({ ...seatsState, [id]: false });
+      // 현재 사용자의 좌석들이지만 해당 승차권의 좌석이 아닌 좌석이 하나라도 있으면 선택 금지
+      if (
+        selectedGroupSeatsByTime.filter((item) =>
+          mySeatsNotInThisTicket.includes(item),
+        ).length > 0
+      ) {
         return;
       }
-      return;
-    }
+      setSeatsChangeTarget(selectedGroupSeatsByTime);
 
-    // 선택한 좌석을 다시 선택하면 빈 좌석으로 바뀐다.
-    if (isSelected) {
-      setSeatsState({ ...seatsState, [id]: false });
-      return;
+      // 선택한 좌석과 내 좌석의 개수가 동일하면 true 그렇지 않으면 false
+      if (selectedGroupSeatsByTime.length === mySeats.length) {
+        setIsSeatsChangeTarget(true);
+        return;
+      }
+      setIsSeatsChangeTarget(false);
+
+      // 선택할려는 좌석이 이미 예매된 좌석(본인 포함)이거나
+      // 잠긴 좌석(상대방)이면 선택 불가
+      const isMineOrOthers = seatsChangeInfo.some(
+        (item) => item.trainNoId === trainNo && item.seatId === id,
+      );
+      const isLockedByOther = !!locks[id];
+      if (isMineOrOthers || isLockedByOther) return;
+
+      const isSelected = seatsState[id] === true;
+
+      // 선택한 좌석과 각 티켓의 예매된 좌석 수가 동일하거나 또는 내 예매 좌석과 (빈 좌석 + 상대방 좌석)의 개수가 동일하면 더 이상 선택이 안되지만,
+      // 선택된 좌석을 다시 선택하면 빈 좌석으로 바뀐다.
+      if (
+        selectedCount === mySeats.length ||
+        mySeats.length === seatsChangeMixTargetOrAllTarget.length
+      ) {
+        if (isSelected) {
+          setSeatsState({ ...seatsState, [id]: false });
+          await unlockSeat(id);
+          return;
+        }
+        return;
+      }
+
+      // 선택한 좌석을 다시 선택하면 빈 좌석으로 바뀐다.
+      if (isSelected) {
+        setSeatsState({ ...seatsState, [id]: false });
+        await unlockSeat(id);
+        return;
+      }
+      // 빈 좌석을 선택하면 선택한 좌석으로 바뀐다.
+      setSeatsState({ ...seatsState, [id]: true });
+      // 선택한 후 잠금
+      await lockSeat(id);
+    } finally {
+      // 빈 좌석으로 바뀌면 해제
+      isSelectingRef.current[id] = false;
     }
-    // 빈 좌석을 선택하면 선택한 좌석으로 바뀐다.
-    setSeatsState({ ...seatsState, [id]: true });
   };
-  return { handleSeatsSelect };
+  return { handleSeatsSelect, locks, isLocksLoaded };
 };

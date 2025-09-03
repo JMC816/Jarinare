@@ -38,7 +38,11 @@ const TicketSeatChangePage = () => {
         </div>
         <div className="mt-[60px]">
           <TicketButton
-            onClick={() => navigate('/seatchange', { state: filtred })}
+            onClick={() => {
+              navigate('/seatchange', {
+                state: Array.isArray(seats) ? seats : [seats],
+              });
+            }}
             text="좌석 변경"
             bgColor="blue"
             textColor="white"

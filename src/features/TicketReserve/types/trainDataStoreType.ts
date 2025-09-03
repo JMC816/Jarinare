@@ -21,6 +21,7 @@ export type TrainDataStoreType = {
   selectKid: number;
   selectAdult: number;
   selectPay: number;
+  seatsId: string[];
   setStartDay: (type: string) => void;
   setEndDay: (type: string) => void;
   setStartTime: (type: string) => void;
@@ -43,4 +44,5 @@ export type TrainDataStoreType = {
   setSelectKid: (type: number) => void;
   setSelectAdult: (type: number) => void;
   setSelectPay: (type: number) => void;
+  setSeatsId: (type: string[]) => void;
 };

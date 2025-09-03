@@ -1,3 +1,4 @@
+import { SeatType } from '@/entities/Seat/types/seatType';
 import { useEmptySeats } from '@/features/TicketChange/hooks/useEmptySeats';
 import { seatsChangeInfoStore } from '@/features/TicketChange/models/seatsChangeInfoStore';
 import { seatsChangeMixTargetSeatIdStore } from '@/features/TicketChange/models/seatsChangeMixTargetSeatIdStore';
@@ -5,11 +6,11 @@ import { seatsChangeTargetStore } from '@/features/TicketChange/models/seatsChan
 import { seatsStateStore } from '@/features/TicketChange/models/seatsStateStore';
 import { shareKeepSeatsStore } from '@/features/TicketChange/models/shareKeepSeatsStore';
 import { realtimeDb } from '@/shared/firebase/firebase';
-import { groupSeatsStore } from '@/widgets/TicketList/model/groupSeatsStore';
 import { ref, set } from 'firebase/database';
+import { useLocation } from 'react-router-dom';
 
 export const useChangeRequest = () => {
-  const { groupSeats } = groupSeatsStore();
+  const location = useLocation();
   const { seatsChangeInfo } = seatsChangeInfoStore();
   const { shareKeepSeats } = shareKeepSeatsStore();
   const { isSeatsChangeTarget } = seatsChangeTargetStore();
@@ -17,9 +18,11 @@ export const useChangeRequest = () => {
   const { emptySeatsChange } = useEmptySeats();
   const { seatsChangeMixTargetSeatId } = seatsChangeMixTargetSeatIdStore();
 
+  const mySeats: SeatType[] = location.state;
+
   // 좌석 id가 true인 것만 추출
   const emptySeatsTarget = Object.entries(seatsState)
-    .filter(([_, value]) => value === true)
+    .filter(([, value]) => value === true)
     .map(([key]) => key);
 
   // 좌석 변경 요청
@@ -33,14 +36,14 @@ export const useChangeRequest = () => {
       await set(
         ref(
           realtimeDb,
-          `${targetSeats[0].userId}_change/${groupSeats[0].id}_${groupSeats[0].trainNoId}_${groupSeats.map((item) => item.seatId)}`,
+          `${targetSeats[0].userId}_change/${mySeats[0].id}_${mySeats[0].trainNoId}_${mySeats.map((item) => item.seatId)}`,
         ),
         {
-          mySeat: groupSeats,
+          mySeat: mySeats,
           targetSeat: targetSeats,
           keepSeats: shareKeepSeats,
           isSeatsChangeTarget,
-          seatIds: groupSeats.map((item) => item.seatId),
+          seatIds: mySeats.map((item) => item.seatId),
           emptySeatsTarget,
           mixTarget: {
             seatsChangeMixTargetSeatId,

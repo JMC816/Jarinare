@@ -2,19 +2,29 @@ import miniarrow from '@/assets/icons/miniarrow.png';
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
 import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
 import { useNavigation } from '../hooks/useNavigation';
-import { groupSeatsStore } from '../model/groupSeatsStore';
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 
 const MiniTicket = () => {
   const { groupedArray } = useTicketLists() ?? {};
-  const { setGroupSeats } = groupSeatsStore();
   const { navigate } = useNavigation();
+  const {
+    setStartDay,
+    setSelectStartTime,
+    setSelectTrainType,
+    setSeatsId,
+    setTrainNo,
+  } = trainDataStore();
 
   return groupedArray?.map((groups, idx) => (
     <div
       key={idx}
       onClick={() => {
         navigate('/ticket/seatchange', { state: { groups } });
-        setGroupSeats(groups);
+        setStartDay(groups[0].startDay);
+        setSelectStartTime(groups[0].startTime);
+        setSelectTrainType(groups[0].trainType);
+        setTrainNo(groups[0].trainNoId);
+        setSeatsId(groups.map((item) => item.seatId));
       }}
       className="flex h-[100px] w-[320px]"
     >

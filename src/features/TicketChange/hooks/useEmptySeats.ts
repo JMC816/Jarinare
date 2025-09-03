@@ -1,34 +1,37 @@
 import { auth, db } from '@/shared/firebase/firebase';
-import { groupSeatsStore } from '@/widgets/TicketList/model/groupSeatsStore';
 import { doc, runTransaction } from 'firebase/firestore';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import { useLocation } from 'react-router-dom';
+import { SeatType } from '@/entities/Seat/types/seatType';
 
 export const useEmptySeats = () => {
-  const { groupSeats } = groupSeatsStore();
+  const location = useLocation();
   const { trainNo } = trainDataStore();
 
   const user = auth.currentUser;
+
+  const mySeats: SeatType[] = location.state;
 
   const emptySeatsChange = async (emptySeatsTarget: string[]) => {
     if (!user) return;
 
     // 좌석을 선택했을 때 예매된 좌석 개수랑 같지 않으면 update 실행 x
-    if (emptySeatsTarget.length !== groupSeats.length) return;
+    if (emptySeatsTarget.length !== mySeats.length) return;
 
     try {
       await runTransaction(db, async (transaction) => {
         const mySeatsDocs = [];
 
         // 예매된 좌석 불러오기
-        for (let i = 0; i < groupSeats.length; i++) {
+        for (let i = 0; i < mySeats.length; i++) {
           const mySeatsRef = doc(
             db,
             'train',
-            groupSeats[i].id,
+            mySeats[i].id,
             'no',
-            groupSeats[i].trainNoId,
+            mySeats[i].trainNoId,
             'seats',
-            groupSeats[i].seatId,
+            mySeats[i].seatId,
           );
 
           const mySeatsSnap = await transaction.get(mySeatsRef);
@@ -38,14 +41,14 @@ export const useEmptySeats = () => {
           mySeatsDocs.push({ ref: mySeatsRef, data: mySeatsSnap.data() });
         }
 
-        for (let i = 0; i < groupSeats.length; i++) {
+        for (let i = 0; i < mySeats.length; i++) {
           const mySeat = mySeatsDocs[i];
           const newSeatId = emptySeatsTarget[i];
 
           const newSeatsRef = doc(
             db,
             'train',
-            groupSeats[i].id,
+            mySeats[i].id,
             'no',
             trainNo,
             'seats',

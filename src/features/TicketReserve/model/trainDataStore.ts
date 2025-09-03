@@ -29,6 +29,7 @@ export const trainDataStore = create(
       selectKid: 0,
       selectAdult: 0,
       selectPay: 0,
+      seatsId: [],
       setSelectKid: (selectKid: number) => set(() => ({ selectKid })),
       setSelectAdult: (selectAdult: number) => set(() => ({ selectAdult })),
       setSelectPay: (selectPay: number) => set(() => ({ selectPay })),
@@ -59,6 +60,7 @@ export const trainDataStore = create(
         set(() => ({ selectEndTime })),
       setSelectTrainType: (selectTrainType: string) =>
         set(() => ({ selectTrainType })),
+      setSeatsId: (seatsId: string[]) => set(() => ({ seatsId })),
     }),
     {
       name: 'trainTiem-storage',

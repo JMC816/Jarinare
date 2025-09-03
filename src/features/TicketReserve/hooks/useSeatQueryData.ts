@@ -45,6 +45,7 @@ export const useSeatQueryData = () => {
   const { seatsState, setSeatsState } = seatsStateStore();
   const { seatsInfo, setSeatsInfo } = seatsInfoStore();
   const [seatsAllInfo, setSeatAllInfo] = useState<SeatType[]>([]);
+
   const { seatsStateCount, setSeatsStateCount } = seatsStateCountStore();
 
   // 잠긴 좌석의 초기 렌더링 상태
@@ -159,7 +160,7 @@ export const useSeatQueryData = () => {
                   createAt: createAtSeconds,
                   startDayForView: data.startDayForView,
                   startStationForView: data.startStationForView,
-                  endStationForView: endStationForView,
+                  endStationForView: data.endStationForView,
                   selectKid: data.selectKid,
                   selectAdult: data.selectAdult,
                   selectPay: data.selectPay,
@@ -311,7 +312,7 @@ export const useSeatQueryData = () => {
     // 호차 변경 시 좌석 잠금 해제
     const resetLocksChangedTrainNoId = async () => {
       const filtered = Object.entries(seatsState)
-        .filter(([_, value]) => value === true)
+        .filter(([, value]) => value === true)
         .map(([key]) => key);
       await Promise.all(
         filtered.map((seatId) =>
@@ -333,7 +334,7 @@ export const useSeatQueryData = () => {
     setIsMutating(true);
 
     const filtered = Object.entries(seatsState)
-      .filter(([_, value]) => value === true)
+      .filter(([, value]) => value === true)
       .map(([key]) => key);
 
     try {

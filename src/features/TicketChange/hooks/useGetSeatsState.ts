@@ -2,20 +2,33 @@ import { db } from '@/shared/firebase/firebase';
 import { seatsStateStore } from '../models/seatsStateStore';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  Timestamp,
+} from 'firebase/firestore';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
-import { groupSeatsStore } from '@/widgets/TicketList/model/groupSeatsStore';
 import { seatsChangeInfoStore } from '../models/seatsChangeInfoStore';
 import { seatsChangeTargetStore } from '../models/seatsChangeTargetStore';
+import { SeatType } from '@/entities/Seat/types/seatType';
+import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateCountStore';
 
 export const useGetSeatsState = () => {
-  const { setSeatsState } = seatsStateStore();
-  const { trainNo } = trainDataStore();
+  const { seatsState, setSeatsState } = seatsStateStore();
+  const { trainNo, selectStartTime, selectTrainType, startDay } =
+    trainDataStore();
   const { seatsChangeInfo, setSeatsChangeInfo } = seatsChangeInfoStore();
-  const { groupSeats } = groupSeatsStore();
   const { setIsSeatsChangeTarget } = seatsChangeTargetStore();
+  const { seatsStateCount, setSeatsStateCount } = seatsStateCountStore();
 
   const location = useLocation();
+
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
+
+  // 선택된 좌석 수
+  const selectedCount = Object.values(seatsState).filter(Boolean).length;
 
   // 좌석 변경 페이지를 벗어나면 좌석 선택 상태 초기화
   useEffect(() => {
@@ -26,17 +39,26 @@ export const useGetSeatsState = () => {
 
   // 각 호차별 좌석 상태
   useEffect(() => {
-    const getSeats = async () => {
-      const seatsQuery = query(
-        collection(db, 'train', groupSeats[0].id, 'no', trainNo, 'seats'),
-        orderBy('createAt'),
-      );
+    if (!trainNo) return;
 
-      // db에 있는 seats 컬렉션을 가져온다.
-      const existSeats = await getDocs(seatsQuery);
+    const seatsQuery = query(
+      collection(db, 'train', docIds, 'no', trainNo, 'seats'),
+      orderBy('createAt', 'asc'),
+    );
 
-      const seats = existSeats.docs.map((doc) => {
-        const data = doc.data();
+    const unsub = onSnapshot(seatsQuery, (snap) => {
+      const seats = snap.docs.map((item) => {
+        const data = item.data();
+        const ts: Timestamp = data.createAt;
+
+        // serverTimestamp()는 처음엔 null일 수 있으므로 방어코드
+        const createAtSeconds =
+          typeof ts?.seconds === 'number'
+            ? ts.seconds
+            : typeof ts?.toMillis === 'function'
+              ? Math.floor(ts.toMillis() / 1000)
+              : 0;
+
         return {
           seatId: data.seatId,
           userId: data.userId,
@@ -45,7 +67,7 @@ export const useGetSeatsState = () => {
           startTime: data.startTime,
           endTime: data.endTime,
           trainType: data.trainType,
-          createAt: data.createAt.seconds,
+          createAt: createAtSeconds,
           startDayForView: data.startDayForView,
           startStationForView: data.startStationForView,
           endStationForView: data.endStationForView,
@@ -53,14 +75,11 @@ export const useGetSeatsState = () => {
           selectAdult: data.selectAdult,
           selectPay: data.selectPay,
           id: data.id,
-        };
+        } as SeatType;
       });
       setSeatsChangeInfo(seats);
-
-      // 호차 변경될 때 좌석 선택 초기화
-      setSeatsState({});
-    };
-    getSeats();
+    });
+    return () => unsub();
   }, [trainNo]);
 
   // 호차 변경시 변경활 좌석 상태 초기화
@@ -68,5 +87,10 @@ export const useGetSeatsState = () => {
     setIsSeatsChangeTarget(false);
   }, [trainNo]);
 
-  return { seatsChangeInfo };
+  useEffect(() => {
+    // 선택한 좌석 즉시 반영
+    setSeatsStateCount(selectedCount);
+  }, [seatsState]);
+
+  return { seatsChangeInfo, seatsStateCount };
 };

@@ -7,14 +7,16 @@ import { useSeatsSelect } from '@/features/TicketChange/hooks/useSeatsSelect';
 import { useMixSeats } from '@/features/TicketChange/hooks/useMixSeats';
 import { seatsStateStore } from '@/features/TicketChange/models/seatsStateStore';
 import { useGetSeatsState } from '@/features/TicketChange/hooks/useGetSeatsState';
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 
 const SeatChangeList = () => {
   const { seatsRows } = reserveConstants();
   const { seatsState } = seatsStateStore();
   const { seatsChangeMixTargetOrAllTarget } = useMixSeats();
-  const { handleSeatsSelect } = useSeatsSelect();
+  const { handleSeatsSelect, locks, isLocksLoaded } = useSeatsSelect();
   const { setId } = seatIdsStore();
   const { seatsChangeInfo } = useGetSeatsState();
+  const { trainNo } = trainDataStore();
 
   const user = auth.currentUser;
 
@@ -75,20 +77,30 @@ const SeatChangeList = () => {
                     (seatId) => seatId === id,
                   );
 
+                // 실시간 상대방 좌석 잠금
+                const isLocked = Object.entries(locks).some(
+                  (item) =>
+                    item[0] === id &&
+                    item[1].userId !== user.uid &&
+                    item[1].trainNo === trainNo,
+                );
+
                 return (
                   <Seat
                     // 좌석을 선택한 경우와 변경할 좌석을 선택한 경우가 같을 때
                     isChangeTarget={isMineByChangeLittleTarget}
                     key={id}
-                    onClick={() => {
-                      handleSeatsSelect(id);
+                    onClick={async () => {
                       setId(id);
+                      if (isLocksLoaded) {
+                        await handleSeatsSelect(id);
+                      }
                     }}
                     borderColor="lightGray"
                     bgColor={
                       isMine
                         ? 'green'
-                        : isOther
+                        : isOther || isLocked
                           ? 'lightGray'
                           : seatState
                             ? 'blue'
@@ -115,19 +127,29 @@ const SeatChangeList = () => {
                     (seatId) => seatId === id,
                   );
 
+                // 실시간 상대방 좌석 잠금
+                const isLocked = Object.entries(locks).some(
+                  (item) =>
+                    item[0] === id &&
+                    item[1].userId !== user.uid &&
+                    item[1].trainNo === trainNo,
+                );
+
                 return (
                   <Seat
                     isChangeTarget={isMineByChangeLittleTarget}
                     key={id}
-                    onClick={() => {
-                      handleSeatsSelect(id);
+                    onClick={async () => {
                       setId(id);
+                      if (isLocksLoaded) {
+                        await handleSeatsSelect(id);
+                      }
                     }}
                     borderColor="lightGray"
                     bgColor={
                       isMine
                         ? 'green'
-                        : isOther
+                        : isOther || isLocked
                           ? 'lightGray'
                           : seatState
                             ? 'blue'

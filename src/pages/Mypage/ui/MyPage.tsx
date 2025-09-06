@@ -1,34 +1,37 @@
-import MiniTicket from '@/shared/ui/MiniTicket';
+import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
 import useModalStore from '@/widgets/model/MyaPageStore';
 import Modal from '@/widgets/MyPage/ui/Modal';
-import PayDayMenu from '@/widgets/MyPage/ui/PayDayMenu';
 import UserInfo from '@/widgets/MyPage/ui/UserInfo';
+import { useNaviation } from '../hooks/useNavigation';
 
 const MyPage = () => {
   const { isShow, modalType } = useModalStore();
+  const { point } = useGetPoint();
+  const { navigate } = useNaviation();
+
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
         <span className="mt-5 w-full text-lg font-bold">마이페이지</span>
         <div className="mt-[40px] w-full">
-          <UserInfo name="000" userNumber={20251234} />
+          <UserInfo />
         </div>
       </div>
       <div className="mt-[30px] h-5 w-full bg-lightestGray" />
       <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
-        <span className="mt-5 w-full text-base font-bold">
-          승차권 구매 이력
+        <span className="mt-5 w-full text-base text-darkGray underline">
+          내 포인트
         </span>
-        <PayDayMenu />
-        <div className="mt-5 flex flex-col gap-y-5">
-          <MiniTicket
-            startDay="출발 2월 23일 (일)"
-            startStation="서울"
-            startTime="오후 8시 32분"
-            endStation="대전"
-            endTime="오후 11시 32분"
-            trainName="KTX 산천 201"
-          />
+        <div className="mt-5 flex w-full items-center justify-between gap-y-5">
+          <span className="text-2xl font-semibold">
+            {point.toLocaleString('ko-KR')} 원
+          </span>
+          <button
+            onClick={() => navigate('/mypage/point')}
+            className="h-[35px] w-[55px] rounded-xs bg-blue text-sm font-bold text-white active:brightness-50"
+          >
+            더보기
+          </button>
         </div>
       </div>
       {isShow == false || modalType == undefined ? null : <Modal />}

@@ -4,6 +4,7 @@ import SignUpPage from '@/pages/Auth/SignUp/ui/SignUpPage';
 import MenuPage from '@/pages/Menu/ui/MenuPage';
 import MyPage from '@/pages/Mypage/ui/MyPage';
 import NotificationPage from '@/pages/Notification/ui/NotificationPage';
+import PontPage from '@/pages/Point/ui/PointPage';
 import SeatChangePage from '@/pages/TicketChange/ui/SeatChangePage';
 import TicketSeatChangePage from '@/pages/TicketChange/ui/TicketSeatChangePage';
 import TickListPage from '@/pages/TicketList/ui/TicketListPage';
@@ -33,6 +34,7 @@ const Router = () => {
           <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
           <Route path="/reserve/notification" element={<NotificationPage />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage/point" element={<PontPage />} />
           <Route path="/ticket/seatchange" element={<TicketSeatChangePage />} />
           <Route path="/ticket/payment" element={<TicketPaymentPage />} />
           <Route path="/returnlist" element={<TicketReturnPage />} />

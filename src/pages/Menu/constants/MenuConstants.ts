@@ -17,6 +17,6 @@ export const MenuArray = [
   },
   {
     text: '마이 페이지',
-    lintk: '/mypage',
+    link: '/mypage',
   },
 ];

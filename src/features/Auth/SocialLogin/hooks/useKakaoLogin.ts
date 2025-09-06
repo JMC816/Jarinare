@@ -2,8 +2,9 @@ import { KAKAO_AUTH_URL } from '@/shared/Social/KakaoConfig';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OAuthProvider, signInWithCredential } from 'firebase/auth';
-import { auth } from '@/shared/firebase/firebase';
+import { auth, db } from '@/shared/firebase/firebase';
 import { KakaoToken } from '../api/Kakao';
+import { doc, setDoc } from 'firebase/firestore';
 
 export const useKakaoLogin = () => {
   const onClick = () => {
@@ -28,8 +29,16 @@ export const useKakaoRedirect = () => {
         const credential = provider.credential({
           idToken: tokenData.id_token,
         });
+
         // 인증 자격으로 로그인
         await signInWithCredential(auth, credential);
+
+        await setDoc(doc(db, 'users', auth.currentUser!.uid), {
+          userId: auth.currentUser?.uid,
+          changeCount: 0,
+          point: 0,
+        });
+
         navigate('/');
       } catch (e) {
         console.log(e);

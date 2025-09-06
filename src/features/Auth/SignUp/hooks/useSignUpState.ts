@@ -1,10 +1,11 @@
 import React from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '@/shared/firebase/firebase';
+import { auth, db } from '@/shared/firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { LoadingStore, SignUpMessageStore } from '../model/SignUpStore';
 import { FieldValues, UseFormGetValues } from 'react-hook-form';
 import { FirebaseError } from 'firebase/app';
+import { doc, setDoc } from 'firebase/firestore';
 
 export const useSignUpState = (getValues: UseFormGetValues<FieldValues>) => {
   const navigate = useNavigate();
@@ -20,10 +21,16 @@ export const useSignUpState = (getValues: UseFormGetValues<FieldValues>) => {
         getValues('email'),
         getValues('password'),
       );
+      await setDoc(doc(db, 'users', credentials.user.uid), {
+        userId: credentials.user.uid,
+        changeCount: 0,
+        point: 0,
+      });
       // 사용자 프로필 업데이트
       await updateProfile(credentials.user, {
         displayName: getValues('name'),
       });
+
       navigate('/');
     } catch (e) {
       if (e instanceof FirebaseError) {

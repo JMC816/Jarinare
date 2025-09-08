@@ -4,8 +4,8 @@ import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import { resolve } from 'path';
 
-// https://vite.dev/config/
 export default defineConfig({
+  base: '/',
   plugins: [react()],
   css: {
     postcss: {

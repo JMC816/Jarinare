@@ -3,14 +3,20 @@ import Seat from './Seat';
 import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
 import { auth } from '@/shared/firebase/firebase';
 import { reserveConstants } from '../constants/ReserveConstants';
+import { seatsStateStore } from '@/features/TicketReserve/model/seatsStateStore';
+import { useResetSeatsState } from '@/features/TicketReserve/hooks/useResetSeatsState';
 
 const SeatCheckList = () => {
-  const { handleSingleSelect, seatsInfo, seatsState, locks, isLocksLoaded } =
+  const { handleSingleSelect, seatsInfo, locks, isLocksLoaded } =
     useSeatQueryData();
+  const { seatsState } = seatsStateStore();
   const { seatsRows } = reserveConstants();
   const user = auth.currentUser;
 
   if (!user) return;
+
+  // 호차 변경 시 좌석 선택 초기화
+  useResetSeatsState();
 
   if (!seatsState)
     return (

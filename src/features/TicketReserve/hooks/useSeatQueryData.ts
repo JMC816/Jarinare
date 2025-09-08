@@ -39,7 +39,6 @@ export const useSeatQueryData = () => {
     startDayForView,
     startStationForView,
     endStationForView,
-    selectPay,
   } = trainDataStore();
 
   const { seatsState, setSeatsState } = seatsStateStore();
@@ -64,11 +63,6 @@ export const useSeatQueryData = () => {
 
   // 선택된 좌석 수
   const selectedCount = Object.values(seatsState).filter(Boolean).length;
-
-  // 호차 변경 시 좌석 선택 초기화
-  useEffect(() => {
-    setSeatsState({});
-  }, [trainNo]);
 
   // 각 호차별 실시간 좌석 상태
   useEffect(() => {
@@ -181,7 +175,7 @@ export const useSeatQueryData = () => {
     };
 
     getAllSeats();
-  }, [trainNo]); // 성능상 필요할 때만 돌리기기
+  }, [trainNo]);
 
   // 실시간 상대방 좌석 잠금
   useEffect(() => {
@@ -328,7 +322,7 @@ export const useSeatQueryData = () => {
     setSeatsStateCount(selectedCount);
   }, [seatsState]);
 
-  const createSelectedSeats = async () => {
+  const createSelectedSeats = async (calculatedPay: number) => {
     if (!user) return;
     if (isMutating) return;
     setIsMutating(true);
@@ -354,7 +348,7 @@ export const useSeatQueryData = () => {
             endStationForView,
             selectKid,
             selectAdult,
-            selectPay,
+            selectPay: calculatedPay,
             id: docIds,
           }),
         ),

@@ -51,6 +51,13 @@ export type SeatCheckButtonProps = {
   onClick: (() => Promise<void>) | (() => void) | null;
 };
 
+export type PaymnetButtonProps = {
+  text: string;
+  bgColor: string;
+  textColor: string;
+  onClick: () => void;
+};
+
 export type SeatProps = {
   bgColor: string;
   borderColor: string;

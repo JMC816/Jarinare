@@ -13,8 +13,8 @@ const TrainNumberChoiceModal = () => {
         <div className="mt-[30px] flex w-full flex-col items-center gap-y-[20px] text-tiny">
           {trainNoArray.map(({ trainNoView, trainNo, icon }, idx) => (
             <div
-              onClick={async () => {
-                await setTrainNo(trainNo);
+              onClick={() => {
+                setTrainNo(trainNo);
                 closeModal('TrainNumberChoiceModal');
               }}
               key={idx}

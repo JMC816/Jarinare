@@ -8,13 +8,9 @@ import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';
 import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
 
 const SeatCheckPage = () => {
-  const { isShow, modalType } = useModalStore();
-  const {
-    createSelectedSeats,
-    handleAllSelect,
-    seatsStateCount,
-    isLocksLoaded,
-  } = useSeatQueryData();
+  const { isShow, modalType, openModal } = useModalStore();
+  const { handleAllSelect, seatsStateCount, isLocksLoaded } =
+    useSeatQueryData();
   const { selectKid, selectAdult } = trainDataStore();
 
   // 좌석 전체를 선택하지 않으면 false
@@ -44,7 +40,7 @@ const SeatCheckPage = () => {
           }
         />
         <SeatCheckButton
-          onClick={isAllSelected ? createSelectedSeats : null}
+          onClick={isAllSelected ? () => openModal('PayModal') : null}
           text={
             isAllSelected
               ? '예매'

@@ -1,14 +1,20 @@
 import notification from '@/assets/icons/notification.png';
 import { Link } from 'react-router-dom';
 import { ReserveTitleProp } from '../types/ReserveType';
+import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
 
 const ReserveTitle = ({ text }: ReserveTitleProp) => {
+  const { response } = useChangeResponse();
+
   return (
     <div className="mb-[25px] mt-[60px] flex w-full items-center justify-between">
       <span className="text-lg font-bold">{text}</span>
       {text == '어디로 갈까요?' ? (
-        <Link to={'/reserve/notification'}>
+        <Link to={'/reserve/notification'} className="relative">
           <img width={19} height={24} src={notification} />
+          {response && Object.entries(response?.val()).length > 0 ? (
+            <span className="absolute bottom-6 left-4 size-1.5 animate-ping rounded-full bg-blue" />
+          ) : null}
         </Link>
       ) : (
         <Link className="text-sm font-bold text-blue" to={'/ticketList'}>

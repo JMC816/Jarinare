@@ -39,8 +39,13 @@ export default {
       pulse: {
         '50%': { opacity: '0.2' },
       },
+      ping: {
+        '75%': { transform: 'scale(2)', opacity: 0 },
+        '100%': { transform: 'scale(2)', opacity: 0 },
+      },
       animation: {
         pulse: 'pulse 0.5s ease-in-out infinite',
+        ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;',
       },
     },
   },

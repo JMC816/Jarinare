@@ -1,6 +1,6 @@
 import Calendar from 'react-calendar';
 import '@/widgets/TicketReserve/styles/react-calendar.css';
-import moment, { locale } from 'moment';
+import moment from 'moment';
 import prev from '@/assets/icons/prev.png';
 import next from '@/assets/icons/next.png';
 import Button from '@/shared/ui/Button';
@@ -31,7 +31,7 @@ const DayModal = () => {
             </div>
           }
           value={value}
-          formatDay={(locale, date) => moment(date).format('DD')}
+          formatDay={(_, date) => moment(date).format('DD')}
         />
         <div className="mb-[15px]">
           <Button

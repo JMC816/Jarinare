@@ -1,4 +1,3 @@
-import Ticket from '@/shared/ui/Ticket';
 import arrow from '@/assets/icons/arrow.png';
 import TicketButton from '@/shared/ui/TicketButton';
 import { usePyamentState } from '../hooks/TicketPaymentHook';
@@ -13,9 +12,7 @@ const TicketPaymentPage = () => {
           <img src={arrow} width={25} height={20} className="mx-[30px]" />
           <span>대전</span>
         </div>
-        <div className="mt-[55px]">
-          <Ticket />
-        </div>
+        <div className="mt-[55px]" />
         <div className={`${payment ? 'mt-[60px]' : 'mt-[20px]'} flex flex-col`}>
           {payment ? null : (
             <span className="mb-[20px] flex w-full justify-center text-base font-bold text-mediumGray">

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Store } from '../MyPage/types/MyPageType';
 import { MyPageModalTypes } from '@/shared/types/ModalType';
+import { Store } from '../MyPage/types/myPageModalStoreType';
 
 const useModalStore = create<Store>((set) => ({
   modalType: null,

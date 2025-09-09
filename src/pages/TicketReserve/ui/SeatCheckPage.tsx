@@ -1,5 +1,6 @@
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/ReserveStore';
 import Modal from '@/widgets/TicketReserve/ui/Modal';
 import SeatCheckButton from '@/widgets/TicketReserve/ui/SeatCheckButton';
@@ -27,6 +28,7 @@ const SeatCheckPage = () => {
 
   return (
     <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
+      <BackWardPageButton />
       <SeatCheckMenu />
       <SeatCheckList />
       <SeatCheckState />

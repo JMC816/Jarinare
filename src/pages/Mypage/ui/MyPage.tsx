@@ -3,6 +3,7 @@ import useModalStore from '@/widgets/model/MyaPageStore';
 import Modal from '@/widgets/MyPage/ui/Modal';
 import UserInfo from '@/widgets/MyPage/ui/UserInfo';
 import { useNaviation } from '../hooks/useNavigation';
+import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 
 const MyPage = () => {
   const { isShow, modalType } = useModalStore();
@@ -12,6 +13,7 @@ const MyPage = () => {
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
+        <BackWardPageButton />
         <span className="mt-5 w-full text-lg font-bold">마이페이지</span>
         <div className="mt-[40px] w-full">
           <UserInfo />

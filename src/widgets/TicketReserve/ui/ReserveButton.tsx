@@ -2,11 +2,17 @@ import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { ReserveButtonProps } from '@/shared/types/ButtonType';
 
-const ReserveButton = ({ text, textColor, bgColor }: ReserveButtonProps) => {
+const ReserveButton = ({
+  text,
+  textColor,
+  bgColor,
+  disabled,
+}: ReserveButtonProps) => {
   const { refetch } = trainQueryData();
   const { startStation, endStation, startDay } = trainDataStore();
   return (
     <button
+      disabled={disabled}
       type="button"
       onClick={() => {
         if (startStation && endStation && startDay) {

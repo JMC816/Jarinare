@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { Store } from '../Notification/types/NotificationType';
 import { NotificationModalTypes } from '@/shared/types/ModalType';
 
-const useModalStore = create<Store>((set) => ({
+const useNotifiModalStore = create<Store>((set) => ({
   modalType: null,
   isShow: false,
   openModal: (type: NotificationModalTypes) =>
@@ -11,4 +11,4 @@ const useModalStore = create<Store>((set) => ({
     set(() => ({ isShow: false, modalType: type })),
 }));
 
-export default useModalStore;
+export default useNotifiModalStore;

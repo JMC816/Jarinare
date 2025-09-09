@@ -2,6 +2,7 @@ import { SeatType } from '@/entities/Seat/types/seatType';
 import { useSeatsChangeBlocked } from '@/features/Notification/hooks/useSeatsChangeBlocked';
 import { seatsChangeTargetStore } from '@/features/TicketChange/models/seatsChangeTargetStore';
 import { seatsTargetStore } from '@/features/TicketChange/models/seatsTargetStore';
+import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/TicketChangeStore';
 import Modal from '@/widgets/TicketChange/ui/Modal';
 import SeatChangeButton from '@/widgets/TicketChange/ui/SeatChangeButton';
@@ -31,6 +32,7 @@ const SeatChangePage = () => {
 
   return (
     <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
+      <BackWardPageButton />
       <SeatChangeMenu />
       <SeatChangeList />
       <SeatChangeState />

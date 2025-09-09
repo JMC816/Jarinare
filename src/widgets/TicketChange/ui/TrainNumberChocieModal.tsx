@@ -14,14 +14,14 @@ const TrainNumberChoiceModal = () => {
           {trainNoArray.map(({ trainNoView, trainNo, icon }, idx) => (
             <div
               onClick={async () => {
-                await setTrainNo(trainNo);
+                setTrainNo(trainNo);
                 closeModal('TrainNumberChoiceModal');
               }}
               key={idx}
               className="group flex h-12 w-[300px] cursor-pointer items-center justify-between p-[20px] hover:rounded-md hover:bg-lightestGray"
             >
               <span>
-                {trainNo}호차 잔여
+                {trainNo}호차 잔여&nbsp;
                 <span className="text-blue">{trainNoView}</span>석/24석
               </span>
               <img

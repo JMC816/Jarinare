@@ -1,16 +1,19 @@
 import { Link } from 'react-router-dom';
 import { usePathName } from '../hooks/NavBarHook';
-import { NavBarArray } from '../constants/NavBarConstants';
-import useModalStore from '@/widgets/model/ReserveStore';
+import { NavBarConstants } from '../constants/NavBarConstants';
+import useReserveModalStore from '@/widgets/model/ReserveStore';
+import useNotifiModalStore from '@/widgets/model/Notification';
 
 const NavBar = () => {
   const { location } = usePathName();
-  const { isShow } = useModalStore();
+  const isReserveShow = useReserveModalStore((state) => state.isShow);
+  const isNotifiShow = useNotifiModalStore((state) => state.isShow);
+
   return (
     <div
-      className={`fixed ${isShow === true ? 'hidden' : null} bottom-0 flex h-20 w-[375px] items-center justify-around border-t-[1px] border-lightGray bg-white`}
+      className={`fixed ${isReserveShow || isNotifiShow === true ? 'hidden' : null} bottom-0 flex h-20 w-[375px] items-center justify-around border-t-[1px] border-lightGray bg-white`}
     >
-      {NavBarArray.map(({ on_icon, off_icon, text, path }, idx) => (
+      {NavBarConstants().map(({ on_icon, off_icon, text, path }, idx) => (
         <Link to={path} className="flex flex-col items-center" key={idx}>
           <img
             width={24}

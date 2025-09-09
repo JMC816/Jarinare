@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { Store } from '../TicketReserve/types/ReserveType';
 import { ReserveModalTypes } from '@/shared/types/ModalType';
 
-const useModalStore = create<Store>((set) => ({
+const useReserveModalStore = create<Store>((set) => ({
   modalType: null,
   isShow: false,
   openModal: (type: ReserveModalTypes) =>
@@ -11,4 +11,4 @@ const useModalStore = create<Store>((set) => ({
     set(() => ({ isShow: false, modalType: type })),
 }));
 
-export default useModalStore;
+export default useReserveModalStore;

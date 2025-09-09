@@ -6,7 +6,7 @@ import { formatDateForView } from '@/shared/lib/formatDate';
 const TrainCheckTitle = () => {
   const { day, handleYesterday, handleTomorrow } = useDayHandle();
   return (
-    <div className="flex w-full justify-between">
+    <div className="mt-[30px] flex w-full justify-between">
       <div
         onClick={handleYesterday}
         className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-xs bg-lightGray active:brightness-50"

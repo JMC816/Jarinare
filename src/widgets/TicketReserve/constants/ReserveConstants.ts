@@ -8,12 +8,17 @@ import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryDat
 
 export const reserveConstants = () => {
   const {
+    startDay,
+    selectStartTime,
+    selectTrainType,
     startStationForView,
     endStationForView,
     startDayForView,
     kid,
     adult,
   } = trainDataStore();
+
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
 
   const { seatsAllInfo } = useSeatQueryData();
 
@@ -215,22 +220,22 @@ export const reserveConstants = () => {
   ];
   const trainNoArray = [
     {
-      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '1').length}`,
+      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '1').length}`,
       trainNo: '1',
       icon: check,
     },
     {
-      trainNoView: ` ${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '2').length}`,
+      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '2').length}`,
       trainNo: '2',
       icon: check,
     },
     {
-      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '3').length}`,
+      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '3').length}`,
       trainNo: '3',
       icon: check,
     },
     {
-      trainNoView: `${seatsAllInfo.filter(({ trainNoId }) => trainNoId === '4').length}`,
+      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '4').length}`,
       trainNo: '4',
       icon: check,
     },

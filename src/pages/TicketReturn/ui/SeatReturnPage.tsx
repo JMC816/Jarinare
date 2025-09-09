@@ -6,6 +6,7 @@ import useModalStore from '@/widgets/model/TicketReturnStore';
 import Modal from '@/widgets/TicketReturn/ui/Modal';
 import TicketButton from '@/shared/ui/TicketButton';
 import { seatsReturnDataStore } from '../models/seatsReturnDataStore';
+import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 
 const SeatReturnePage = () => {
   const { location } = useTicketLocation();
@@ -16,8 +17,9 @@ const SeatReturnePage = () => {
   const filtred = seats.map((id) => id.seatId);
 
   return (
-    <div className="flex w-full flex-col items-center pl-[38px] pr-[37px]">
-      <div className="mt-[30px] w-full">
+    <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
+      <BackWardPageButton />
+      <div className="mt-[30px] w-full pl-[10px] pr-[10px]">
         <div className="flex justify-center text-lg font-bold">
           <span>{seats[0].startStationForView}</span>
           <img src={arrow} width={25} height={20} className="mx-[30px]" />

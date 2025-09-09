@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MenuArray } from '../constants/MenuConstants';
+import { MenuConstants } from '../constants/MenuConstants';
 
 const MenuPage = () => {
   return (
@@ -8,7 +8,7 @@ const MenuPage = () => {
         메뉴
       </span>
       <div className="mt-[45px] flex w-full flex-col gap-y-[20px] px-[10px]">
-        {MenuArray.map(({ text, link }, idx) => (
+        {MenuConstants().map(({ text, link }, idx) => (
           <Link
             to={link!}
             className="flex gap-x-[10px] px-[17px] py-[9px] hover:rounded-md hover:bg-lightestGray"

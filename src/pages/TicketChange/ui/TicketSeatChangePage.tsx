@@ -5,19 +5,23 @@ import { useNaviation } from '../hooks/TicketChangeHook';
 import { useTicketLocation } from '../hooks/useTicketLocation';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useReset } from '../hooks/useReset';
+import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 
 const TicketSeatChangePage = () => {
   const { navigate } = useNaviation();
   const { location } = useTicketLocation();
   const seats: SeatType[] = location.state.groups;
 
-  const filtred = seats.map((id) => id.seatId);
+  const filtred = seats?.map((id) => id.seatId);
 
   useReset();
 
+  if (!seats) return;
+
   return (
-    <div className="flex w-full flex-col items-center pl-[38px] pr-[37px]">
-      <div className="mt-[30px] w-full">
+    <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
+      <BackWardPageButton />
+      <div className="mt-[30px] w-full pl-[10px] pr-[10px]">
         <div className="flex justify-center text-lg font-bold">
           <span>{seats[0].startStationForView}</span>
           <img src={arrow} width={25} height={20} className="mx-[30px]" />

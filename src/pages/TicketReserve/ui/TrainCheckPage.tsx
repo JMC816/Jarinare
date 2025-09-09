@@ -1,3 +1,4 @@
+import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/ReserveStore';
 import Modal from '@/widgets/TicketReserve/ui/Modal';
 import TrainCheckMenu from '@/widgets/TicketReserve/ui/TrainCheckMenu';
@@ -8,6 +9,7 @@ const TrainCheckPage = () => {
   const { isShow, modalType } = useModalStore();
   return (
     <div className="flex w-full flex-col items-center overflow-y-hidden pl-[28px] pr-[27px]">
+      <BackWardPageButton />
       <TrainCheckTitle />
       <TrainCheckMenu />
       <TrainList />

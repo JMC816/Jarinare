@@ -2,7 +2,6 @@ import { Login } from '@/features/Auth/Login/model/LoginSchema';
 import LoginList from '@/widgets/Auth/Login/ui/LoginList';
 import Modal from '@/widgets/Auth/Login/ui/Modal';
 import SocialLoginList from '@/widgets/Auth/Login/ui/SocialLoginList';
-import { useBackButton } from '@/widgets/layouts/hooks/BackWardHook';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/AuthStore';
 import { FormProvider } from 'react-hook-form';
@@ -11,11 +10,10 @@ import { Link } from 'react-router-dom';
 const LoginPage = () => {
   const { isShow, modalType } = useModalStore();
   const { method } = Login();
-  const { onClick } = useBackButton();
   return (
     <FormProvider {...method}>
       <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
-        <BackWardPageButton backPage={onClick} />
+        <BackWardPageButton />
         <span className="mt-[45px] w-full text-lg font-bold">로그인</span>
         <div className="mt-[35px]">
           <LoginList />

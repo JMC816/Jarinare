@@ -8,7 +8,6 @@ import PontPage from '@/pages/Point/ui/PointPage';
 import SeatChangePage from '@/pages/TicketChange/ui/SeatChangePage';
 import TicketSeatChangePage from '@/pages/TicketChange/ui/TicketSeatChangePage';
 import TickListPage from '@/pages/TicketList/ui/TicketListPage';
-import TicketPaymentPage from '@/pages/TicketPayment/ui/TicketPaymentPage';
 import HomePage from '@/pages/TicketReserve/ui/HomePage';
 import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
 import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
@@ -28,20 +27,18 @@ const Router = () => {
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage/point" element={<PontPage />} />
+          <Route path="/returnlist" element={<TicketReturnPage />} />
+          <Route path="/ticketlist" element={<TickListPage />} />
+          <Route path="/reserve/notification" element={<NotificationPage />} />
+          <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
         </Route>
         <Route element={<MainLayout />}>
           <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
-          <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
-          <Route path="/reserve/notification" element={<NotificationPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/mypage/point" element={<PontPage />} />
           <Route path="/ticket/seatchange" element={<TicketSeatChangePage />} />
-          <Route path="/ticket/payment" element={<TicketPaymentPage />} />
-          <Route path="/returnlist" element={<TicketReturnPage />} />
           <Route path="/seatchange" element={<SeatChangePage />} />
-          <Route path="/ticketlist" element={<TickListPage />} />
           <Route path="/return" element={<SeatReturnePage />} />
-          <Route path="/notification" element={<NotificationPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

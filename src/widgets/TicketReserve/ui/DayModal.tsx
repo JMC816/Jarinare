@@ -6,6 +6,7 @@ import next from '@/assets/icons/next.png';
 import Button from '@/shared/ui/Button';
 import useModalStore from '../../model/ReserveStore';
 import { useDaySelect, useMaxDate } from '../hooks/ReserveHook';
+import CrossModalButton from '@/widgets/layouts/ui/CrossModalButton';
 
 const DayModal = () => {
   const { value, onChange } = useDaySelect();
@@ -13,10 +14,13 @@ const DayModal = () => {
   const { maxDate } = useMaxDate();
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
-      <div className="mb-[15px] flex h-[380px] w-[345px] flex-col items-center rounded-2xl bg-white">
-        <span className="w-full pl-[40px] pt-[25px] text-base font-bold">
-          가는 날
-        </span>
+      <div className="mb-[15px] flex h-[400px] w-[345px] flex-col items-center rounded-2xl bg-white">
+        <div className="flex w-full justify-between pb-[20px] pl-[40px] pr-[40px] pt-[25px]">
+          <span className="w-full text-base font-bold">가는 날</span>
+          <div>
+            <CrossModalButton closeModal={() => closeModal('DayModal')} />
+          </div>
+        </div>
         <Calendar
           minDate={new Date()}
           maxDate={maxDate}

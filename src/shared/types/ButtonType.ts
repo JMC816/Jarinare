@@ -17,6 +17,7 @@ export type MiniButtonProp = {
 };
 
 export type ReserveButtonProps = {
+  disabled: boolean;
   bgColor: string;
   textColor: string;
   text: string;

@@ -38,7 +38,7 @@ export const trainDataStore = create(
       setStartTime: (startTime: string) => set(() => ({ startTime })),
       setEndTime: (endTime: string) => set(() => ({ endTime })),
       setPay: (pay: string) => set(() => ({ pay })),
-      setTrainType: (trainType: string) => set(() => ({ trainType })),
+      setTrainType: async (trainType: string) => set(() => ({ trainType })),
       setTrainNo: (trainNo: string) => set(() => ({ trainNo })),
       setStartStation: (startStation: string) => set(() => ({ startStation })),
       setEndStation: (endStation: string) => set(() => ({ endStation })),

@@ -1,5 +1,6 @@
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { NotificationModalTypes } from '@/shared/types/ModalType';
+import { Timestamp } from 'firebase/firestore';
 
 export type Store = {
   modalType: NotificationModalTypes | null;
@@ -10,6 +11,6 @@ export type Store = {
 
 export type NotificationRequestProps = {
   requestTitle: string;
-  requstTime: string;
+  requstTime: Timestamp;
   requsetContant: SeatType[];
 };

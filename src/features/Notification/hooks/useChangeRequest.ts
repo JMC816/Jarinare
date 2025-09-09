@@ -6,7 +6,7 @@ import { seatsChangeTargetStore } from '@/features/TicketChange/models/seatsChan
 import { seatsStateStore } from '@/features/TicketChange/models/seatsStateStore';
 import { shareKeepSeatsStore } from '@/features/TicketChange/models/shareKeepSeatsStore';
 import { realtimeDb } from '@/shared/firebase/firebase';
-import { ref, set } from 'firebase/database';
+import { ref, serverTimestamp, set } from 'firebase/database';
 import { useLocation } from 'react-router-dom';
 
 export const useChangeRequest = () => {
@@ -39,6 +39,7 @@ export const useChangeRequest = () => {
           `${targetSeats[0].userId}_change/${mySeats[0].id}_${mySeats[0].trainNoId}_${mySeats.map((item) => item.seatId)}`,
         ),
         {
+          createdAt: serverTimestamp(),
           mySeat: mySeats,
           targetSeat: targetSeats,
           keepSeats: shareKeepSeats,

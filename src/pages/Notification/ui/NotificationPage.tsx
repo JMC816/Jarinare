@@ -4,6 +4,7 @@ import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/Notification';
 import Modal from '@/widgets/Notification/ui/Modal';
 import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
+import { Timestamp } from 'firebase/firestore';
 
 const NotificationPage = () => {
   const { isShow, modalType } = useModalStore();
@@ -21,7 +22,7 @@ const NotificationPage = () => {
             <NotificationRequest
               key={key}
               requestTitle="좌석 변경"
-              requstTime="30분전"
+              requstTime={response.val()[key].createdAt as Timestamp}
               requsetContant={response.val()[key].mySeat as SeatType[]}
             />
           ))}

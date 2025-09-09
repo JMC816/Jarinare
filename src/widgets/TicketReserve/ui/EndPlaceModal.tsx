@@ -12,7 +12,7 @@ const EndPlaceModal = () => {
   return (
     <div className="flex h-full w-full flex-col items-center bg-white">
       <div className="pl-[28px] pr-[27px]">
-        <BackWardModalButton backPage={() => closeModal('EndPlaceModal')} />
+        <BackWardModalButton closeModal={() => closeModal('EndPlaceModal')} />
         <PlaceTitle text="도착지 선택해주세요" />
         <PlaceInput placeholder="도착역 선택" />
         {isShow ? null : (

@@ -25,8 +25,14 @@ export const useSeatsSelect = () => {
   const { seatsChangeInfo } = seatsChangeInfoStore();
   const { setSeatsChangeTarget, setIsSeatsChangeTarget } =
     seatsChangeTargetStore();
-  const { trainNo, startDay, selectStartTime, selectTrainType } =
-    trainDataStore();
+  const {
+    trainNo,
+    startDay,
+    selectStartTime,
+    selectTrainType,
+    startStationForView,
+    endStationForView,
+  } = trainDataStore();
   const { seatsChangeMixTargetOrAllTarget } = useMixSeats();
 
   const [locks, setLocks] = useState<Record<string, SeatLockType>>({});
@@ -41,7 +47,7 @@ export const useSeatsSelect = () => {
   const mySeats: SeatType[] = location.state;
 
   const user = auth.currentUser;
-  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
 
   const selectedCount = Object.values(seatsState).filter(Boolean).length;
 

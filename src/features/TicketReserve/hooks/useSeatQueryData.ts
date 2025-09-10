@@ -59,7 +59,7 @@ export const useSeatQueryData = () => {
   const navigate = useNavigate();
 
   const user = auth.currentUser;
-  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
 
   // 선택된 좌석 수
   const selectedCount = Object.values(seatsState).filter(Boolean).length;

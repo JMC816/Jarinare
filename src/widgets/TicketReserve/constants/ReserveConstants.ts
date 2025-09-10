@@ -18,7 +18,7 @@ export const reserveConstants = () => {
     adult,
   } = trainDataStore();
 
-  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
 
   const { seatsAllInfo } = useSeatQueryData();
 

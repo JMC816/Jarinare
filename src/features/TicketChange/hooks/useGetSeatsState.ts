@@ -17,15 +17,21 @@ import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateC
 
 export const useGetSeatsState = () => {
   const { seatsState, setSeatsState } = seatsStateStore();
-  const { trainNo, selectStartTime, selectTrainType, startDay } =
-    trainDataStore();
+  const {
+    trainNo,
+    selectStartTime,
+    selectTrainType,
+    startDay,
+    endStationForView,
+    startStationForView,
+  } = trainDataStore();
   const { seatsChangeInfo, setSeatsChangeInfo } = seatsChangeInfoStore();
   const { setIsSeatsChangeTarget } = seatsChangeTargetStore();
   const { seatsStateCount, setSeatsStateCount } = seatsStateCountStore();
 
   const location = useLocation();
 
-  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
 
   // 선택된 좌석 수
   const selectedCount = Object.values(seatsState).filter(Boolean).length;

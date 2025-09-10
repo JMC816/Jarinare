@@ -35,8 +35,14 @@ export const useMixSeats = () => {
   const { id } = seatIdsStore();
   const { prevSeatsTarget, setPrevSeatsTarget } = prevSeatsTargetStore();
   const { setSeatsTarget } = seatsTargetStore();
-  const { trainNo, startDay, selectStartTime, selectTrainType } =
-    trainDataStore();
+  const {
+    trainNo,
+    startDay,
+    selectStartTime,
+    selectTrainType,
+    startStationForView,
+    endStationForView,
+  } = trainDataStore();
   const { setShareKeepSeats } = shareKeepSeatsStore();
   const { setSeatsChangeMixTargetSeatId } = seatsChangeMixTargetSeatIdStore();
   const { setDeleteLocksByRequest } = deleteLocksByRequestStore();
@@ -61,7 +67,7 @@ export const useMixSeats = () => {
 
   const user = auth.currentUser;
 
-  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}`;
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
 
   // 좌석 id가 true인 것만 추출
   const filtered = Object.entries(seatsState)

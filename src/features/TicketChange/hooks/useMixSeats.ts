@@ -35,14 +35,7 @@ export const useMixSeats = () => {
   const { id } = seatIdsStore();
   const { prevSeatsTarget, setPrevSeatsTarget } = prevSeatsTargetStore();
   const { setSeatsTarget } = seatsTargetStore();
-  const {
-    trainNo,
-    startDay,
-    selectStartTime,
-    selectTrainType,
-    startStationForView,
-    endStationForView,
-  } = trainDataStore();
+  const { trainNo } = trainDataStore();
   const { setShareKeepSeats } = shareKeepSeatsStore();
   const { setSeatsChangeMixTargetSeatId } = seatsChangeMixTargetSeatIdStore();
   const { setDeleteLocksByRequest } = deleteLocksByRequestStore();
@@ -67,8 +60,6 @@ export const useMixSeats = () => {
 
   const user = auth.currentUser;
 
-  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
-
   // 좌석 id가 true인 것만 추출
   const filtered = Object.entries(seatsState)
     .filter(([, value]) => value === true)
@@ -76,7 +67,7 @@ export const useMixSeats = () => {
 
   // 실시간 상대방 좌석 잠금
   useEffect(() => {
-    const path = `locks/${docIds}/${trainNo}`;
+    const path = `locks/${mySeats[0]?.id}/${trainNo}`;
     const dbRef = ref(realtimeDb, path);
 
     const cb = async (snapshot: DataSnapshot) => {
@@ -102,7 +93,7 @@ export const useMixSeats = () => {
     return () =>
       // 실시간 DB는 off로 직접 해제
       off(dbRef, 'value', cb);
-  }, [realtimeDb, docIds, trainNo]);
+  }, [realtimeDb, mySeats[0]?.id, trainNo]);
 
   // 호차 변경시 좌석 잠금 해제
   useEffect(() => {
@@ -114,7 +105,7 @@ export const useMixSeats = () => {
       seatIds.map(async (item) => {
         const seatLockRef = ref(
           realtimeDb,
-          `locks/${docIds}/${trainNoId[0]}/${item}`,
+          `locks/${mySeats[0].id}/${trainNoId[0]}/${item}`,
         );
         await remove(seatLockRef);
       });
@@ -132,7 +123,7 @@ export const useMixSeats = () => {
     seatIds.map(async (item) => {
       const seatLockRef = ref(
         realtimeDb,
-        `locks/${docIds}/${trainNoId[0]}/${item}`,
+        `locks/${mySeats[0].id}/${trainNoId[0]}/${item}`,
       );
       await remove(seatLockRef);
     });
@@ -140,7 +131,10 @@ export const useMixSeats = () => {
   // 좌석 잠금
   const lockSeat = async (seatId: string) => {
     if (!user) return;
-    const seatLockRef = ref(realtimeDb, `locks/${docIds}/${trainNo}/${seatId}`);
+    const seatLockRef = ref(
+      realtimeDb,
+      `locks/${mySeats[0].id}/${trainNo}/${seatId}`,
+    );
     await set(seatLockRef, {
       userId: user.uid,
       mySeats,
@@ -153,7 +147,10 @@ export const useMixSeats = () => {
 
   // 좌석 잠금 해제
   const unlockSeat = async (seatId: string) => {
-    const seatLockRef = ref(realtimeDb, `locks/${docIds}/${trainNo}/${seatId}`);
+    const seatLockRef = ref(
+      realtimeDb,
+      `locks/${mySeats[0].id}/${trainNo}/${seatId}`,
+    );
     await remove(seatLockRef);
   };
 

@@ -5,20 +5,20 @@ import person from '@/assets/icons/person.png';
 import check from '@/assets/icons/check.png';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
+import { SeatType } from '@/entities/Seat/types/seatType';
+import { useLocation } from 'react-router-dom';
 
 export const reserveConstants = () => {
   const {
-    startDay,
-    selectStartTime,
-    selectTrainType,
     startStationForView,
     endStationForView,
     startDayForView,
     kid,
     adult,
   } = trainDataStore();
+  const location = useLocation();
 
-  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
+  const mySeats: SeatType[] = location.state || [];
 
   const { seatsAllInfo } = useSeatQueryData();
 
@@ -220,22 +220,22 @@ export const reserveConstants = () => {
   ];
   const trainNoArray = [
     {
-      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '1').length}`,
+      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '1').length}`,
       trainNo: '1',
       icon: check,
     },
     {
-      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '2').length}`,
+      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '2').length}`,
       trainNo: '2',
       icon: check,
     },
     {
-      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '3').length}`,
+      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '3').length}`,
       trainNo: '3',
       icon: check,
     },
     {
-      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '4').length}`,
+      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '4').length}`,
       trainNo: '4',
       icon: check,
     },

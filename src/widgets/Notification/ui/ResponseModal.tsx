@@ -4,6 +4,7 @@ import { responesBySeatIdStore } from '../model/responseBySeatIdStore';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
 import { useHandleChange } from '@/features/TicketChange/hooks/useHandleChange';
 import CrossModalButton from '@/widgets/layouts/ui/CrossModalButton';
+import { useIsAcceptRequest } from '@/features/Notification/hooks/useIsAcceptRequest';
 
 const ResponseModal = () => {
   const { openModal, closeModal } = useModalStore();
@@ -11,6 +12,7 @@ const ResponseModal = () => {
   const { response } = useChangeResponse();
   const { handleClick } = useHandleChange();
   const { deleteRequsetAndResponse } = useDeleteNotification();
+  const { accpetRequest, refuseRequest } = useIsAcceptRequest();
 
   if (!response) {
     return;
@@ -27,7 +29,11 @@ const ResponseModal = () => {
         </div>
         <div className="mt-[20px] flex gap-x-5 text-base font-bold">
           <button
-            onClick={() => closeModal('ResponseModal')}
+            onClick={async () => {
+              closeModal('ResponseModal');
+              await refuseRequest(response);
+              await deleteRequsetAndResponse(response);
+            }}
             className="flex h-12 w-[100px] items-center justify-center rounded-xs bg-lightBlue text-blue active:brightness-50"
           >
             거절
@@ -37,6 +43,7 @@ const ResponseModal = () => {
               closeModal('ResponseModal');
               openModal('AcceptModal');
               await handleClick(response);
+              await accpetRequest(response);
               await deleteRequsetAndResponse(response);
               setTimeout(() => {
                 closeModal('AcceptModal');

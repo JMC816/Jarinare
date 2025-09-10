@@ -329,7 +329,7 @@ export const useMixSeats = () => {
             }
           ).mySeat;
 
-          mySeats.map(async (item) => {
+          mySeats?.map(async (item) => {
             const seatLockRef = ref(
               realtimeDb,
               `locks/${mySeats[0].id}/${mySeats[0].trainNoId}/${item.seatId}`,
@@ -393,7 +393,7 @@ export const useMixSeats = () => {
             }
           ).mixTarget?.trainNoId;
 
-          mixSeatId.map(async (item) => {
+          mixSeatId?.map(async (item) => {
             const seatLockRef = ref(
               realtimeDb,
               `locks/${mixId}/${mixTrainNoId}/${item}`,

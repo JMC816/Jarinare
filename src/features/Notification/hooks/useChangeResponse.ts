@@ -23,5 +23,5 @@ export const useChangeResponse = () => {
     changeResponse();
   }, []);
 
-  return { response, setResponse };
+  return { response };
 };

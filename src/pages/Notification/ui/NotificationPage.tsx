@@ -1,14 +1,18 @@
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
+import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptResponse';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/Notification';
+import { AcceptResponse } from '@/widgets/Notification/ui/acceptResponse';
 import Modal from '@/widgets/Notification/ui/Modal';
 import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
+import { RefuseResponse } from '@/widgets/Notification/ui/refuseResponse';
 import { Timestamp } from 'firebase/firestore';
 
 const NotificationPage = () => {
   const { isShow, modalType } = useModalStore();
   const { response } = useChangeResponse();
+  const { refuseResponse, acceptResponse } = useIsAcceptResponse();
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -24,6 +28,34 @@ const NotificationPage = () => {
               requestTitle="좌석 변경"
               requstTime={response.val()[key].createdAt as Timestamp}
               requsetContant={response.val()[key].mySeat as SeatType[]}
+            />
+          ))}
+        {acceptResponse &&
+          Object.keys(acceptResponse.val()).map((key) => (
+            <AcceptResponse
+              key={key}
+              responseTitle={acceptResponse.val()[key].text as string}
+              responseTime={acceptResponse.val()[key].createdAt as Timestamp}
+              responseContant={
+                acceptResponse.val()[key].targetSeats as SeatType[]
+              }
+              responseDeleteContant={
+                acceptResponse.val()[key].mySeats as SeatType[]
+              }
+            />
+          ))}
+        {refuseResponse &&
+          Object.keys(refuseResponse.val()).map((key) => (
+            <RefuseResponse
+              key={key}
+              responseTitle={refuseResponse.val()[key].text as string}
+              responseTime={refuseResponse.val()[key].createdAt as Timestamp}
+              responseContant={
+                refuseResponse.val()[key].targetSeats as SeatType[]
+              }
+              responseDeleteContant={
+                refuseResponse.val()[key].mySeats as SeatType[]
+              }
             />
           ))}
       </div>

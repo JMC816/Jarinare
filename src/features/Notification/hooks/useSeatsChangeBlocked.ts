@@ -11,6 +11,7 @@ export const useSeatsChangeBlocked = () => {
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
 
   const user = auth.currentUser;
+  console.log(user?.uid);
 
   const mySeats: SeatType[] = location.state;
 
@@ -26,14 +27,23 @@ export const useSeatsChangeBlocked = () => {
         return setIsBlocked(false);
       }
 
-      const filteredKeys = Object.keys(data).filter((key) => key !== 'locks');
+      const filteredKeys = Object.keys(data).filter(
+        (key) =>
+          key !== 'locks' &&
+          key !== `${user.uid}_refuse` &&
+          key !== `${user.uid}`,
+      );
 
       for (const key of filteredKeys) {
         const allDbRef = await get(ref(realtimeDb, key));
 
         // 데이터가 존재하면서
         // 데이터의 키(userId)가 요청을 보낸 사용자의 key(userId)와 다를 때(키는 달라도 데이터는 같을 수 있기 때문에 중복 제거)
-        if (allDbRef.exists() && key !== `${user.uid}_change`) {
+        if (
+          (allDbRef.exists() && key !== `${user.uid}_change`) ||
+          `${user.uid}_refuse` ||
+          `${user.uid}_accpet`
+        ) {
           const values = allDbRef.val();
           const value = Object.keys(values);
 

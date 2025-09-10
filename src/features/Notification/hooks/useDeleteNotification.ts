@@ -18,7 +18,7 @@ export const useDeleteNotification = () => {
     // 변경 요청을 보낸 좌석 데이터로 만들어진 key
     const filteredKey = keys.filter((item) =>
       item.includes(
-        `${seatIdsAndTrainNoId[0].trainNoId}_${seatIdsAndTrainNoId[0].seatId}`,
+        `${seatIdsAndTrainNoId[0].id}_${seatIdsAndTrainNoId[0].trainNoId}_${seatIdsAndTrainNoId[0].seatId}`,
       ),
     );
 
@@ -50,5 +50,6 @@ export const useDeleteNotification = () => {
       await remove(seatLockRef);
     });
   };
+
   return { deleteRequsetAndResponse };
 };

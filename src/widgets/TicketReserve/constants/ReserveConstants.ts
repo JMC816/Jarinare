@@ -10,17 +10,22 @@ import { useLocation } from 'react-router-dom';
 
 export const reserveConstants = () => {
   const {
+    startDay,
+    selectStartTime,
+    selectTrainType,
     startStationForView,
     endStationForView,
     startDayForView,
     kid,
     adult,
   } = trainDataStore();
+  const { seatsAllInfo } = useSeatQueryData();
+
   const location = useLocation();
 
   const mySeats: SeatType[] = location.state || [];
 
-  const { seatsAllInfo } = useSeatQueryData();
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
 
   const recommendStationArray = [
     {
@@ -220,22 +225,22 @@ export const reserveConstants = () => {
   ];
   const trainNoArray = [
     {
-      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '1').length}`,
+      trainNoView: `${location.pathname === '/reserve/seatcheck' ? seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '1').length : seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '1').length}`,
       trainNo: '1',
       icon: check,
     },
     {
-      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '2').length}`,
+      trainNoView: `${location.pathname === '/reserve/seatcheck' ? seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '2').length : seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '2').length}`,
       trainNo: '2',
       icon: check,
     },
     {
-      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '3').length}`,
+      trainNoView: `${location.pathname === '/reserve/seatcheck' ? seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '3').length : seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '3').length}`,
       trainNo: '3',
       icon: check,
     },
     {
-      trainNoView: `${seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '4').length}`,
+      trainNoView: `${location.pathname === '/reserve/seatcheck' ? seatsAllInfo.filter(({ id, trainNoId }) => id === docIds && trainNoId === '4').length : seatsAllInfo.filter(({ id, trainNoId }) => id === mySeats[0]?.id && trainNoId === '4').length}`,
       trainNo: '4',
       icon: check,
     },

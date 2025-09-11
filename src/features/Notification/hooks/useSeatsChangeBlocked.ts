@@ -11,7 +11,6 @@ export const useSeatsChangeBlocked = () => {
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
 
   const user = auth.currentUser;
-  console.log(user?.uid);
 
   const mySeats: SeatType[] = location.state;
 

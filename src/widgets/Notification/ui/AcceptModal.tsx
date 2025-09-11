@@ -12,7 +12,7 @@ const AcceptModal = () => {
             className="absolute right-0.5 top-2"
           />
         </div>
-        <span className="mt-[25px]">자리 요청을 보냈습니다!</span>
+        <span className="mt-[25px]">자리가 변경되었습니다!</span>
       </div>
     </div>
   );

@@ -1,54 +1,61 @@
-# React + TypeScript + Vite
+# 🚆 자리나래
+### 기차 통합 예매 플랫폼
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<blockquote>
+  <ul>
+    <li>개발기간: 2025.02.07-09.08</li>
+    <li>개발인원: 1명</li>
+  </ul>
+</blockquote>
 
-Currently, two official plugins are available:
+<br>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 📚 기술 스택
+##### 1. Front-end
+<blockquote>
+  React.js
+</blockquote>
 
-## Expanding the ESLint configuration
+##### 2. Back-end Service
+<blockquote>
+  Firebase (Auth, Firestore, Realtime DB)
+</blockquote>
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+##### 3. Deployment
+<blockquote>
+  Vercel
+</blockquote>
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+<br>
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🔗 API
+ ##### 1. 지역별 기차역 목록
+<blockquote>
+  GET  /getCtyAcctoTrainSttnList
+</blockquote>
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+ ##### 2. 기차역별 시간표 목록
+<blockquote>
+  GET  /getStrtpntAlocFndTrainInfo
+</blockquote>
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+<br>
+
+## 🖌 UI 디자인
+<blockquote>
+  Figma
+</blockquote>
+👉 [ 자리나레 디자인 ]
+<br>
+https://www.figma.com/design/teybASghDsTKX21SB6P9XS/%EC%9E%90%EB%A6%AC%EB%82%98%EB%A0%88?node-id=0-1&t=5p8SWi8THEdGacsW-1
+<br>
+
+<br>
+
+## 📝 기능명세서
+<blockquote>
+  Notion
+</blockquote>
+👉 [ 자리나레 기능명세서 ]
+<br>
+https://www.notion.so/194eaf50d33880bab9d2f2eae6e6465a?source=copy_link

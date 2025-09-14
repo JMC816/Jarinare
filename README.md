@@ -39,7 +39,7 @@ https://www.figma.com/design/teybASghDsTKX21SB6P9XS/%EC%9E%90%EB%A6%AC%EB%82%98%
 
 <br>
 
-## 📝 기획
+## 🗒️ 기획
 <blockquote>
   Notion
 </blockquote>
@@ -158,4 +158,36 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/bc2dd0c4-ff49-484b-a841-32c03c8ba16c" />
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/1a88d166-8b82-42e2-b7c0-1e8691862ca8" />
 </div>
+
+<br>
+
+## 📝 트러블슈팅
+
+### 🚨 문제 배경
+좌석 변경 기능을 구현하면서 내 좌석과 상대방 좌석을 동시에 변경해야 하기 위해
+Firestore의 updateDoc를 사용하여 각각의 좌석을 업데이트했지만 동시 접근 시 상대방에게 좌석이 다 몰리는 문제가 발생했습니다.
+
+### 🌟 해결 방법
+Firebase 공식문서를 보고 runTransaction 기능을 알게 되었고, 이를 사용하면 한 트랜잭션 안에서 여러 문서를 동시에 읽고 쓰는 처리가 가능하다는 것을 알게 되었습니다.
+트랜잭션을 적용하여 내 좌석과 상대방 좌석을 동시에 교체하도록 코드를 수정했습니다.
+
+### 🙌 이전 코드와 비교
+<table>
+  <tr>
+    <td align="center">
+      <img width="273" height="557" alt="Image1" src="https://github.com/user-attachments/assets/b22c52fe-4a3a-457f-99c8-25921dfcfbde" />
+      <br/>updateDoc을 사용했을 때
+    </td>
+    <td align="center">
+      <img width="273" height="557" alt="Image2" src="https://github.com/user-attachments/assets/fa6c7cc9-3a9b-4d44-915e-daa251854ecf" />
+      <br/>runTranscation을 사용했을 때
+    </td>
+  </tr>
+</table>
+
+### 🤩 해당 경험을 통해 알게 된 점
+Firestore에서 updateDoc만 사용할 경우 동시 요청 시 데이터 불일치가 발생할 수 있다는 문제를 경험했습니다.
+<br>
+runTransaction에 대해 알게 되었고, 어떠한 상황에서 사용해야하는지 알게되었습니다.
+
 

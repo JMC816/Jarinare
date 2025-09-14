@@ -59,7 +59,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>소셜 로그인 / 회원가입(구글,깃허브,카카오)</li>
 </ul>
 <br>
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/3aff8a7b-6844-4d33-9b36-7e0647f1c7f5" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/2e58698b-ab5c-40f3-bfbd-f24319c103df" />
 <br>
 
 <br>
@@ -71,7 +71,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>실제 기차 운행 스케줄을 연동하여 해당 열차 시간대 기준으로 좌석 현황 제공</li>
 </ul>
 
-![Image](https://github.com/user-attachments/assets/4d9b6fcb-58fb-4d97-a2b4-c571961ef2c4)
+<img width="273" height="557" src="https://github.com/user-attachments/assets/a61a6415-0e2f-47d0-8c13-e62962f3d42a">
 
 #### [ 좌석 선택 ] 
 <ul>
@@ -80,7 +80,10 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>실시간 좌석 선택 반영(좌석 잠금/해제, 동시 사용자의 중복 선택 방지)</li>
 </ul>
 
-![Image](https://github.com/user-attachments/assets/94817645-56d0-4951-b5d0-cd489c635267)
+<div>
+  <img width="273" height="557" src="https://github.com/user-attachments/assets/21bf8e0e-1f31-4117-8562-6f19cacb9ae9">
+  <img width="273" height="557" src="https://github.com/user-attachments/assets/b2bd21a2-7bd1-49a4-bd3f-9b719ce13f80">
+</div>
 
 <br>
 
@@ -103,22 +106,19 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 #### [ 빈 좌석과 변경 ]
-![Image](https://github.com/user-attachments/assets/efc78d97-fca5-428a-af8b-9c16f2b8aad6)
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/6bad2ba5-ff45-497b-87d1-4464c13b4a9f" />
 
 #### [ 상대방의 좌석과 변경 ]
 <ul>
   <li>서로 보유한 좌석 수가 동일한 경우</li>
 </ul>
-
-![Image](https://github.com/user-attachments/assets/f5731d2d-b43f-4975-ae39-398b40751d10)
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/dd455440-560f-4322-bbb5-a93593f56243" />
 
 #### [ 상대방의 좌석과 변경 ]
 <ul>
   <li>상대방의 좌석과 빈 좌석을 혼합하여 좌석 수가 동일한 경우</li>
 </ul>
-
-![Image](https://github.com/user-attachments/assets/5a2138f9-f016-40bc-96f8-7a6e21462b71)
-
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/c8f9703f-7b3c-42f0-b116-0d4e9f26db33" />
 <br>
 
 ### 4. 좌석 결제
@@ -126,7 +126,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>예매된 좌석 결제 기능(포인트로 결제 가능)</li>
 </ul>
 
-![Image](https://github.com/user-attachments/assets/1d867650-285c-4bfa-a173-0215915e83a4)
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/7c356a26-de7b-403a-a7d2-70ee6a3caa20" />
 
 <br>
 
@@ -135,7 +135,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>예매 취소 및 좌석 반환</li>
 </ul>
 
-![Image](https://github.com/user-attachments/assets/2cb39e0e-11d5-424d-814e-9100d369bfff)
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/2fc24a93-a259-4d1b-b923-c1bb9455e5f8" />
 
 <br>
 
@@ -144,7 +144,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>좌석 변경 요청에 대한 알림 및 요청 수락/거절에 대한 알림</li>
 </ul>
 
-![Image](https://github.com/user-attachments/assets/c50d4f14-79c9-44bb-92a4-380fdbd46c5e)
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/fd1f8ceb-dda7-424d-a16c-64ee025e2ce9" />
 
 <br>
 
@@ -155,7 +155,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 <div>
-<img width="268" height="546" alt="Image" src="https://github.com/user-attachments/assets/bc2dd0c4-ff49-484b-a841-32c03c8ba16c" />
-<img width="266" height="548" alt="Image" src="https://github.com/user-attachments/assets/1a88d166-8b82-42e2-b7c0-1e8691862ca8" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/bc2dd0c4-ff49-484b-a841-32c03c8ba16c" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/1a88d166-8b82-42e2-b7c0-1e8691862ca8" />
 </div>
 

@@ -35,6 +35,7 @@ const PayModal = () => {
           </span>
           <div className="mt-[40px] flex items-center gap-2">
             <input
+              autoComplete="off"
               type="checkbox"
               id="check"
               checked={checked}

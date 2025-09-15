@@ -3,7 +3,7 @@
 
 <blockquote>
   <ul>
-    <li>개발기간: 2025.02.07-09.08</li>
+    <li>개발기간: 2025.02.07 - 진행중</li>
     <li>개발인원: 1명</li>
   </ul>
 </blockquote>
@@ -11,17 +11,17 @@
 <br>
 
 ## 📚 기술 스택
-##### 1. Front-end
+### 1. Front-end
 <blockquote>
   React.js
 </blockquote>
 
-##### 2. Back-end Service
+### 2. Back-end Service
 <blockquote>
   Firebase (Auth, Firestore, Realtime DB)
 </blockquote>
 
-##### 3. Deployment
+### 3. Deployment
 <blockquote>
   Vercel
 </blockquote>
@@ -58,8 +58,14 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>자체 계정 생성 및 로그인</li>
   <li>소셜 로그인 / 회원가입(구글,깃허브,카카오)</li>
 </ul>
+
+#### [ 회원가입 ]
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/d9bead2f-d423-4e1e-888e-2c89b5c4720c" />
+
 <br>
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/2e58698b-ab5c-40f3-bfbd-f24319c103df" />
+
+#### [ 로그인 ]
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/84985de9-1d48-4b2b-a0d1-77e939d8a790" />
 <br>
 
 <br>
@@ -175,12 +181,12 @@ Firebase 공식문서를 보고 runTransaction 기능을 알게 되었고, 이�
 <table>
   <tr>
     <td align="center">
+      <b>updateDoc을 사용했을 때</b><br/>
       <img width="273" height="557" alt="Image1" src="https://github.com/user-attachments/assets/b22c52fe-4a3a-457f-99c8-25921dfcfbde" />
-      <br/>updateDoc을 사용했을 때
     </td>
     <td align="center">
+      <b>runTranscation을 사용했을 때</b><br/>
       <img width="273" height="557" alt="Image2" src="https://github.com/user-attachments/assets/fa6c7cc9-3a9b-4d44-915e-daa251854ecf" />
-      <br/>runTranscation을 사용했을 때
     </td>
   </tr>
 </table>

@@ -2,7 +2,7 @@ import { useGetPayment } from '@/features/Point/hooks/useGetPayment';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import { Payment } from '@/widgets/Point/ui/Payment';
 
-const PontPage = () => {
+const PointPage = () => {
   const { payment } = useGetPayment();
 
   return (
@@ -23,4 +23,4 @@ const PontPage = () => {
   );
 };
 
-export default PontPage;
+export default PointPage;

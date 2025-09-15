@@ -1,7 +1,7 @@
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import MiniTicket from '@/widgets/TicketList/ui/MiniTicket';
 
-const TickListPage = () => {
+const TicketListPage = () => {
   return (
     <div className="flex w-full flex-col items-center overflow-scroll pl-[28px] pr-[27px]">
       <BackWardPageButton />
@@ -13,4 +13,4 @@ const TickListPage = () => {
   );
 };
 
-export default TickListPage;
+export default TicketListPage;

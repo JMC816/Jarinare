@@ -8,7 +8,7 @@ import TicketButton from '@/shared/ui/TicketButton';
 import { seatsReturnDataStore } from '../models/seatsReturnDataStore';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 
-const SeatReturnePage = () => {
+const SeatReturnPage = () => {
   const { location } = useTicketLocation();
   const { openModal, modalType, isShow } = useModalStore();
   const { setSeatsReturnData } = seatsReturnDataStore();
@@ -55,4 +55,4 @@ const SeatReturnePage = () => {
   );
 };
 
-export default SeatReturnePage;
+export default SeatReturnPage;

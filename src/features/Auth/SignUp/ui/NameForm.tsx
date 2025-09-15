@@ -9,6 +9,7 @@ const NameForm = () => {
   return (
     <div className="flex h-full flex-col gap-y-3">
       <AuthContent
+        type="text"
         title="회원가입"
         subtitle="이름"
         placeholder="이름"

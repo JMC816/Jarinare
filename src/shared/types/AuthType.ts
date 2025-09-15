@@ -8,6 +8,7 @@ export type AuthContentsProps = {
     | UseFormRegisterReturn<'email'>
     | UseFormRegisterReturn<'name'>
     | UseFormRegisterReturn<'password'>;
+  type: string;
 };
 
 export type AuthInputProps = {
@@ -16,4 +17,5 @@ export type AuthInputProps = {
     | UseFormRegisterReturn<'email'>
     | UseFormRegisterReturn<'name'>
     | UseFormRegisterReturn<'password'>;
+  type: string;
 };

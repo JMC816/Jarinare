@@ -8,10 +8,10 @@ const PasswordForm = () => {
     formState: { errors },
   } = useFormContext();
   const { message } = SignUpMessageStore();
-  console.log(message);
   return (
     <div className="flex h-full flex-col gap-y-3">
       <AuthContent
+        type="password"
         title="회원가입"
         subtitle="비밀번호"
         placeholder="비밀번호"

@@ -9,6 +9,7 @@ const EmailForm = () => {
   return (
     <div className="flex h-full flex-col gap-y-3">
       <AuthContent
+        type="email"
         title="로그인"
         subtitle="이메일"
         placeholder="이메일"

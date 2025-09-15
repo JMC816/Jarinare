@@ -11,8 +11,8 @@ const CrossModalButton = ({
     <div className="flex w-full justify-end">
       <img
         onClick={() => {
-          closeModal!(modalType!);
-          openModal!(modalType!);
+          closeModal?.(modalType!);
+          openModal?.(modalType!);
         }}
         src={cross}
         className="h-[20px] w-[20px] cursor-pointer"

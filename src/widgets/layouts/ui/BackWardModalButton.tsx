@@ -10,8 +10,8 @@ const BackWardModalButton = ({
     <div className="flex w-full justify-start">
       <img
         onClick={() => {
-          closeModal!(modalType!);
-          openModal!(modalType!);
+          closeModal?.(modalType!);
+          openModal?.(modalType!);
         }}
         src={backward}
         className="mt-[30px] h-[20px] w-[12px] cursor-pointer"

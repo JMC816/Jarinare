@@ -21,7 +21,7 @@ export const NavBarConstants = () => {
       {
         on_icon: person,
         off_icon: off_person,
-        text: '나',
+        text: '마이',
         path: '/mypage',
       },
       {

@@ -3,7 +3,6 @@ import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
 
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import SkeletonScreen from '@/widgets/layouts/ui/SkeletonScreen';
-import { useRefetchByStartTime } from '../hooks/ReserveHook';
 import TrainTimeChocieButton from './TrainTimeChoiceButton';
 import {
   formatAM_PM,
@@ -29,9 +28,6 @@ const TrainList = () => {
     setSelectPay,
   } = trainDataStore();
   const today = isToday();
-
-  // startTime이 변경되면 자동으로 기차 시간 목록 업데이트
-  useRefetchByStartTime();
 
   const filtered = trainTime.filter((time) => {
     // 오늘 날짜가 기차 출발 날짜와 동일하면 현재 시간 이후의 기차 시간 목록만 보여주지만,

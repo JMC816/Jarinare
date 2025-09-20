@@ -9,6 +9,7 @@ import {
   formatDateForView,
   formatStartDate,
 } from '@/shared/lib/formatDate';
+import { useDebouncedRefetch } from '@/features/TicketReserve/hooks/useDebouncedRefetch';
 
 export const useDaySelect = () => {
   const [value, onChange] = useState<Value>(new Date());
@@ -39,7 +40,7 @@ export const useNavigation = () => {
 export const useDayHandle = () => {
   const { setStartDay, setStartDayForView, startDay } = trainDataStore();
   const [day, setDay] = useState(formatStartDate(startDay));
-  const { refetch } = trainQueryData();
+
   // 어제 날짜
   const handleYesterday = () => {
     const today = new Date();
@@ -63,32 +64,26 @@ export const useDayHandle = () => {
     setStartDayForView(formatDateForView(prevDate));
   };
 
-  // 날짜가 바뀔 때 마다 refetch로 기차 시간 목록 업데이트
-  useEffect(() => {
-    refetch();
-  }, [startDay]);
-
   return { day, handleYesterday, handleTomorrow };
 };
 
 export const useRefetchByStartTime = () => {
   const { startTime } = trainDataStore();
   const { refetch } = trainQueryData();
+
+  // 1초 디바운싱으로 증가
+  const debouncedRefetch = useDebouncedRefetch(refetch, 1000);
+
   useEffect(() => {
-    refetch();
-  }, [startTime]);
+    // startTime이 실제로 변경되었을 때만 refetch
+    if (startTime && startTime.trim() !== '') {
+      debouncedRefetch();
+    }
+  }, [startTime, debouncedRefetch]);
 };
 
 export const useMaxDate = () => {
   const date = new Date();
   const maxDate = new Date(date.setDate(new Date().getDate() + 6));
   return { maxDate };
-};
-
-export const useRefetchByTrainNo = () => {
-  const { trainNo } = trainDataStore();
-  const { refetch } = trainQueryData();
-  useEffect(() => {
-    refetch();
-  }, [trainNo]);
 };

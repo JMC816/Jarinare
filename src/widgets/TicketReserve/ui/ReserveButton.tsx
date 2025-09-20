@@ -15,7 +15,12 @@ const ReserveButton = ({
       disabled={disabled}
       type="button"
       onClick={() => {
-        if (startStation && endStation && startDay) {
+        if (
+          startStation &&
+          endStation &&
+          startDay &&
+          startStation !== endStation
+        ) {
           refetch();
         }
       }}

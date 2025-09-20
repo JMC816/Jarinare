@@ -169,6 +169,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 ## 📝 트러블슈팅
 
+### 1. 좌석 변경 불일치 문제 해결
 ### 🚨 문제 배경
 좌석 변경 기능을 구현하면서 내 좌석과 상대방 좌석을 동시에 변경해야 하기 위해
 Firestore의 updateDoc를 사용하여 각각의 좌석을 업데이트했지만 동시 접근 시 상대방에게 좌석이 다 몰리는 문제가 발생했습니다.
@@ -195,3 +196,37 @@ Firebase 공식문서를 보고 runTransaction 기능을 알게 되었고, 이�
 Firestore에서 updateDoc만 사용할 경우 동시 요청 시 데이터 불일치가 발생할 수 있다는 문제를 경험했습니다.
 <br>
 runTransaction에 대해 알게 되었고, 어떠한 상황에서 사용해야하는지 알게되었습니다.
+
+<br>
+
+### 2. API 중복 호출 문제 해결 및 디바운싱 적용
+### 🚨 문제 배경
+기차 시간을 조회할 때마다 API 호출이 반복적으로 발생하여 네트워크 요청 수가 불필요하게 늘어나고, 조회 결과를 가져오는 시간이 지연되는 문제가 있었습니다.
+
+### 🌟 해결 방법
+네트워크 탭을 통해 호출 로그를 분석한 결과, 조회 호출 이외에도 날짜 변경으로 인한 호출과 시간 변경으로 인한 호출이 동시에 발생하면서 동일한 기차 시간 조회 API가 불필요하게 2번 호출되는 문제가 있음을 확인했습니다.
+이를 해결하기 위해 날짜와 시간 변경 로직을 통합하여 조건 변경이 완료된 시점에서 한 번만 API가 호출되도록 수정했으며, 추가적으로 디바운싱(Debouncing) 기법을 적용하여 사용자가 조회 조건을 빠르게 연속 입력하는 경우에도 불필요한 중복 호출을 방지했습니다.
+
+### 🙌 이전 코드와 비교
+<table>
+  <tr>
+    <td align="center">
+      <b>디바운싱 적용 전</b><br/>
+      <img width="273" height="64" alt="Image" src="https://github.com/user-attachments/assets/890b44fb-f995-4817-8238-415b1c477d94" />
+      <br>
+      <img width="273" height="557" alt="Image1" src="https://github.com/user-attachments/assets/162f509b-1983-484d-8858-65a7860baa16" />
+      <br>
+    </td>
+    <td align="center">
+      <b>디바운싱 적용 후</b><br/>
+      <img width="273" height="21" alt="Image" src="https://github.com/user-attachments/assets/bf8518ba-4797-41cc-8f76-c99ec939e107" />
+      <br>
+      <img width="273" height="557" alt="Image2" src="https://github.com/user-attachments/assets/7d157d7d-5fcc-491e-a0ab-a5c64274b338" />
+    </td>
+  </tr>
+</table>
+
+### 🤩 해당 경험을 통해 알게 된 점
+API 호출 시간을 기존 <b>약 6초에서 약 1~3초</b>로 단축할 수 있어, 사용자 경험을 크게 향상시킬 수 있음을 경험했습니다.
+<br>
+네트워크 로그 분석을 통해 불필요한 API 호출 문제를 발견하고, 디바운싱(Debouncing) 기법을 적용하여 빠른 연속 입력 시에도 중복 호출을 방지할 수 있음을 경험했습니다.

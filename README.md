@@ -211,14 +211,14 @@ runTransaction에 대해 알게 되었고, 어떠한 상황에서 사용해야�
 <table>
   <tr>
     <td align="center">
-      <b>디바운싱 적용 전</b><br/>
+      <b>수정 전</b><br/>
       <img width="273" height="64" alt="Image" src="https://github.com/user-attachments/assets/890b44fb-f995-4817-8238-415b1c477d94" />
       <br>
       <img width="273" height="557" alt="Image1" src="https://github.com/user-attachments/assets/162f509b-1983-484d-8858-65a7860baa16" />
       <br>
     </td>
     <td align="center">
-      <b>디바운싱 적용 후</b><br/>
+      <b>수정 후</b><br/>
       <img width="273" height="21" alt="Image" src="https://github.com/user-attachments/assets/bf8518ba-4797-41cc-8f76-c99ec939e107" />
       <br>
       <img width="273" height="557" alt="Image2" src="https://github.com/user-attachments/assets/7d157d7d-5fcc-491e-a0ab-a5c64274b338" />

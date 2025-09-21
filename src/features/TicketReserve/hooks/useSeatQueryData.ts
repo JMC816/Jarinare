@@ -9,6 +9,8 @@ import {
   setDoc,
   serverTimestamp,
   Timestamp,
+  QuerySnapshot,
+  DocumentData,
 } from 'firebase/firestore';
 import { trainDataStore } from '../model/trainDataStore';
 import { useEffect, useState, useRef } from 'react';
@@ -66,49 +68,92 @@ export const useSeatQueryData = () => {
 
   // 각 호차별 실시간 좌석 상태
   useEffect(() => {
-    if (!trainNo) return;
+    if (!trainNo || !docIds) return;
 
-    const seatsQuery = query(
-      collection(db, 'train', docIds, 'no', trainNo, 'seats'),
-      orderBy('createAt', 'asc'),
-    );
+    let isMounted = true;
+    let unsub: (() => void) | null = null;
 
-    const unsub = onSnapshot(seatsQuery, (snap) => {
-      const seats = snap.docs.map((item) => {
-        const data = item.data();
-        const ts: Timestamp = data.createAt;
+    const loadSeatsData = async () => {
+      try {
+        const seatsQuery = query(
+          collection(db, 'train', docIds, 'no', trainNo, 'seats'),
+          orderBy('createAt', 'asc'),
+        );
 
-        // serverTimestamp()는 처음엔 null일 수 있으므로 방어코드
-        const createAtSeconds =
-          typeof ts?.seconds === 'number'
-            ? ts.seconds
-            : typeof ts?.toMillis === 'function'
-              ? Math.floor(ts.toMillis() / 1000)
-              : 0;
+        const initialSnapshot = await getDocs(seatsQuery);
 
-        return {
-          seatId: data.seatId,
-          userId: data.userId,
-          trainNoId: data.trainNoId,
-          startDay: data.startDay,
-          startTime: data.startTime,
-          endTime: data.endTime,
-          trainType: data.trainType,
-          createAt: createAtSeconds,
-          startDayForView: data.startDayForView,
-          startStationForView: data.startStationForView,
-          endStationForView: data.endStationForView,
-          selectKid: data.selectKid,
-          selectAdult: data.selectAdult,
-          selectPay: data.selectPay,
-          id: data.id,
-        } as SeatType;
-      });
+        if (!isMounted) return;
 
-      setSeatsInfo(seats);
-    });
+        const processSeats = (
+          snap: QuerySnapshot<DocumentData, DocumentData>,
+        ) => {
+          const seats = snap.docs.map((item) => {
+            const data = item.data();
+            const ts: Timestamp = data.createAt;
 
-    return () => unsub();
+            // serverTimestamp()는 처음엔 null일 수 있으므로 방어코드
+            const createAtSeconds =
+              typeof ts?.seconds === 'number'
+                ? ts.seconds
+                : typeof ts?.toMillis === 'function'
+                  ? Math.floor(ts.toMillis() / 1000)
+                  : 0;
+
+            return {
+              seatId: data.seatId,
+              userId: data.userId,
+              trainNoId: data.trainNoId,
+              startDay: data.startDay,
+              startTime: data.startTime,
+              endTime: data.endTime,
+              trainType: data.trainType,
+              createAt: createAtSeconds,
+              startDayForView: data.startDayForView,
+              startStationForView: data.startStationForView,
+              endStationForView: data.endStationForView,
+              selectKid: data.selectKid,
+              selectAdult: data.selectAdult,
+              selectPay: data.selectPay,
+              id: data.id,
+            } as SeatType;
+          });
+
+          setSeatsInfo(seats);
+        };
+
+        // 초기 데이터 처리
+        processSeats(initialSnapshot);
+
+        unsub = onSnapshot(
+          seatsQuery,
+          (snap) => {
+            if (!isMounted) return;
+            processSeats(snap);
+          },
+          (error) => {
+            console.log('좌석 상태 실시간 조회 오류:', error);
+            if (isMounted) {
+              setSeatsInfo([]);
+            }
+          },
+        );
+      } catch (error) {
+        console.error('좌석 데이터 로드 오류:', error);
+        if (isMounted) {
+          setSeatsInfo([]);
+        }
+      }
+    };
+    // 디바운싱 적용
+    const timeoutId = setTimeout(loadSeatsData, 200);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
+      if (unsub) {
+        unsub();
+      }
+    };
   }, [db, docIds, trainNo]);
 
   // 각 사용자의 모든 호차 좌석 개수

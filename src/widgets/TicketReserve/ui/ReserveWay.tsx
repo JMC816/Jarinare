@@ -18,11 +18,11 @@ const ReserveWay = () => {
       {reserveWayArray.map(
         ({ icon, text, attribute, buttonText, modalType }, idx) => (
           <div
-            className="flex h-[55px] w-[280px] items-center rounded-lg bg-white pl-[10px]"
+            className="flex h-[55px] w-[280px] items-center rounded-lg bg-white pl-[10px] pr-[10px]"
             key={idx}
           >
             <img width={20} height={20} src={icon} />
-            <div className="flex w-[140px] flex-col pl-[10px] font-bold">
+            <div className="flex w-full flex-col pl-[10px] font-bold">
               <span
                 className={`text-base ${text === startStationForView || text === endStationForView || text === startDayForView || text.includes(`${kid + adult}명`) ? 'text-black' : 'text-mediumGray'}`}
               >
@@ -30,7 +30,7 @@ const ReserveWay = () => {
               </span>
               <span className="text-tiny text-mediumGray">{attribute}</span>
             </div>
-            <div className="pl-[50px]">
+            <div className="pl-[40px]">
               <MiniButton
                 text={buttonText}
                 onModalClick={() => openModal(modalType)}

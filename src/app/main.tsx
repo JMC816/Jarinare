@@ -5,6 +5,7 @@ import '../index.css';
 import { QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+import { Analytics } from '@vercel/analytics/react';
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')!).render(
       persistOptions={{ persister }}
     >
       <App />
+      <Analytics />
     </PersistQueryClientProvider>
   </StrictMode>,
 );

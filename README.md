@@ -148,9 +148,17 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 ### 6. 알림
 <ul>
   <li>좌석 변경 요청에 대한 알림 및 요청 수락/거절에 대한 알림</li>
+  <li>토글로 알림 활성화/비활성화 제어</li>
 </ul>
 
+#### [ 좌석 변경 요청 알림 ]
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/fd1f8ceb-dda7-424d-a16c-64ee025e2ce9" />
+
+#### [ 수락/거절 알림 ]
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/7e97b346-2534-4c21-8366-931b27ec2efc" />
+
+#### [ 알림 활성화/비활성화 ]
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/6ab604bf-fdae-4f34-8c8b-6ffcb1c0a5c4" />
 
 <br>
 

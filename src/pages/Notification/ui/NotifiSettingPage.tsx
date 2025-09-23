@@ -33,36 +33,36 @@ export const NotifiSettingPage = () => {
 
   return (
     <div className="flex w-full flex-col items-center">
-      <div className="flex w-full flex-col pl-[28px] pr-[27px] text-lg">
+      <div className="flex w-full flex-col pl-[28px] pr-[27px]">
         <BackWardPageButton />
         <div className="mt-5 flex w-full justify-between font-bold">
-          <span>설정</span>
+          <span className="text-lg">설정</span>
         </div>
-        <div className="mt-5 text-base">
-          <div className="flex items-center justify-between">
-            <span>전체 알림</span>
-            <Toggle
-              toggle={
-                isNotification.data()!.change && isNotification.data()!.response
-              }
-              handleToggle={handleAllToggle}
-            />
-          </div>
-          <div className="mb-[20px] mt-[20px] h-5 w-full bg-lightestGray" />
-          <div className="flex items-center justify-between">
-            <span>좌석 변경 알림</span>
-            <Toggle
-              toggle={isNotification.data()!.change}
-              handleToggle={handleChangeToggle}
-            />
-          </div>
-          <div className="mt-[10px] flex items-center justify-between">
-            <span>변경 수락/거절 알림</span>
-            <Toggle
-              toggle={isNotification.data()!.response}
-              handleToggle={handleResponseToggle}
-            />
-          </div>
+        <div className="mt-5 flex items-center justify-between">
+          <span className="text-base">전체 알림</span>
+          <Toggle
+            toggle={
+              isNotification.data()!.change && isNotification.data()!.response
+            }
+            handleToggle={handleAllToggle}
+          />
+        </div>
+      </div>
+      <div className="mb-[20px] mt-[20px] h-5 w-full bg-lightestGray" />
+      <div className="flex w-full flex-col pl-[28px] pr-[27px] text-lg">
+        <div className="flex items-center justify-between">
+          <span className="text-base">좌석 변경 알림</span>
+          <Toggle
+            toggle={isNotification.data()!.change}
+            handleToggle={handleChangeToggle}
+          />
+        </div>
+        <div className="mt-[10px] flex items-center justify-between">
+          <span className="text-base">변경 수락/거절 알림</span>
+          <Toggle
+            toggle={isNotification.data()!.response}
+            handleToggle={handleResponseToggle}
+          />
         </div>
       </div>
     </div>

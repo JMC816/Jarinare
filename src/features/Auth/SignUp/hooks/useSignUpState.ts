@@ -25,6 +25,8 @@ export const useSignUpState = (getValues: UseFormGetValues<FieldValues>) => {
         userId: credentials.user.uid,
         changeCount: 0,
         point: 0,
+        change: true,
+        response: true,
       });
       // 사용자 프로필 업데이트
       await updateProfile(credentials.user, {

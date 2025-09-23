@@ -8,6 +8,8 @@ import Modal from '@/widgets/Notification/ui/Modal';
 import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
 import { RefuseResponse } from '@/widgets/Notification/ui/refuseResponse';
 import { Timestamp } from 'firebase/firestore';
+import setting from '@/assets/icons/setting.png';
+import { Link } from 'react-router-dom';
 
 const NotificationPage = () => {
   const { isShow, modalType } = useModalStore();
@@ -18,7 +20,12 @@ const NotificationPage = () => {
     <div className="flex w-full flex-col items-center">
       <div className="flex w-full flex-col pl-[28px] pr-[27px] text-lg font-bold">
         <BackWardPageButton />
-        <span className="mt-5">알림</span>
+        <div className="mt-5 flex w-full justify-between">
+          <span>알림</span>
+          <Link to={'/reserve/notification/setting'}>
+            <img width={27} height={27} src={setting} />
+          </Link>
+        </div>
       </div>
       <div className="mt-5 w-full">
         {response &&

@@ -1,14 +1,10 @@
 import { IsAcceptRepsonseProps } from '../types/isAcceptResponseType';
-import { useDeleteIsAccept } from '@/features/Notification/hooks/useDeleteIsAccept';
 
 export const RefuseResponse = ({
   responseTitle,
   responseTime,
   responseContant,
-  responseDeleteContant,
 }: IsAcceptRepsonseProps) => {
-  const { deleteRefuse } = useDeleteIsAccept();
-
   const elapsedTime = () => {
     const requestTime = new Date(responseTime ? Number(responseTime) : 0);
     const nowTime = new Date();
@@ -39,19 +35,11 @@ export const RefuseResponse = ({
         <span>좌석 변경</span>
         <span>{elapsedTime()}</span>
       </div>
-      <span className="text-tiny font-bold">
+      <span className="mt-1 text-tiny font-bold">
         {responseContant?.map((item) => item.seatId).join(' • ')} 자리에서
         변경이 <span className="text-red">{responseTitle}&nbsp;</span>
         되었습니다.
       </span>
-      <div>
-        <span
-          onClick={() => deleteRefuse(responseDeleteContant)}
-          className="text-bold cursor-pointer text-left text-xs font-bold text-blue"
-        >
-          확인
-        </span>
-      </div>
     </div>
   );
 };

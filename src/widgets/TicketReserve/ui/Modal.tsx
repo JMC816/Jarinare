@@ -8,6 +8,7 @@ import TimeChoiceModal from './TimeChoiceModal';
 import ChoiceResultModal from './ChoiceResultModal';
 import TrainNumberChoiceModal from './TrainNumberChocieModal';
 import PayModal from './PayModal';
+import ErrorModal from './ErrorModal';
 
 const Modal = () => {
   const { modalType, isShow } = useModalStore();
@@ -34,6 +35,7 @@ const Modal = () => {
         <TrainNumberChoiceModal />
       ) : null}
       {isShow == true && modalType == 'PayModal' ? <PayModal /> : null}
+      {isShow == true && modalType == 'ErrorModal' ? <ErrorModal /> : null}
     </div>
   );
 };

@@ -4,7 +4,6 @@ import ReserveButton from '@/widgets/TicketReserve/ui/ReserveButton';
 import ReserveTicket from '@/widgets/TicketReserve/ui/ReserveTicket';
 import ReserveTitle from '@/widgets/TicketReserve/ui/ReserveTitle';
 import ReserveWay from '@/widgets/TicketReserve/ui/ReserveWay';
-import { Link } from 'react-router-dom';
 import { useResetTrainType } from '../hooks/homeHook';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 
@@ -17,6 +16,7 @@ const HomePage = () => {
     adult,
     kid,
   } = trainDataStore();
+
   // home 페이지 렌더링 시 기차 종류 초기화
   useResetTrainType();
 
@@ -33,14 +33,12 @@ const HomePage = () => {
       <ReserveTitle text="어디로 갈까요?" />
       <ReserveWay />
       <div className="mt-5">
-        <Link to={'/reserve/trainCheck'}>
-          <ReserveButton
-            disabled={disabled}
-            text="조회"
-            textColor="white"
-            bgColor="blue"
-          />
-        </Link>
+        <ReserveButton
+          disabled={disabled}
+          text="조회"
+          textColor="white"
+          bgColor="blue"
+        />
       </div>
       <ReserveTitle text="내 승차권" />
       <ReserveTicket />

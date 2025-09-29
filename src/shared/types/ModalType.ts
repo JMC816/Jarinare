@@ -9,7 +9,8 @@ export type ReserveModalTypes =
   | 'TimeChoiceModal'
   | 'ChoiceResultModal'
   | 'TrainNumberChoiceModal'
-  | 'PayModal';
+  | 'PayModal'
+  | 'ErrorModal';
 
 export type TicketChangeModalTypes =
   | 'TrainNumberChoiceModal'

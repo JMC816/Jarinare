@@ -13,7 +13,7 @@
 ## 📚 기술 스택
 ### 1. Front-end
 <blockquote>
-  React.js
+  React.js, Zustand, Tanstack Query
 </blockquote>
 
 ### 2. Back-end Service

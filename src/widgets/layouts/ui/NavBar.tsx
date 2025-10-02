@@ -11,7 +11,7 @@ const NavBar = () => {
 
   return (
     <div
-      className={`fixed ${isReserveShow || isNotifiShow === true ? 'hidden' : null} bottom-0 flex h-20 w-[375px] items-center justify-around border-t-[1px] border-lightGray bg-white`}
+      className={`fixed ${isReserveShow || isNotifiShow === true ? 'hidden' : null} bottom-0 flex h-20 w-full items-center justify-around border-t-[1px] border-lightGray bg-white`}
     >
       {NavBarConstants().map(({ on_icon, off_icon, text, path }, idx) => (
         <Link to={path} className="flex flex-col items-center" key={idx}>

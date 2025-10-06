@@ -1,5 +1,5 @@
-import { kakaoMessage } from './src/features/Notification/hooks/kakaoMessage';
 import getSeats from './getSeatsData';
+import { kakaoMessage } from './src/features/Notification/hooks/kakaoMessage';
 
 export default async function sendKakaoMessages() {
   const seatsAllInfo = await getSeats();

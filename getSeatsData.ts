@@ -1,23 +1,36 @@
 import { SeatType } from './src/entities/Seat/types/seatType';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { db } from './src/shared/firebase/firebase';
+import admin from 'firebase-admin';
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    }),
+  });
+}
+
+const db = admin.firestore();
 
 const getSeats = async (): Promise<SeatType[]> => {
   const trainNos = ['1', '2', '3', '4'];
   let allSeats: SeatType[] = [];
 
-  const trainCol = await getDocs(collection(db, 'train'));
+  const trainCol = await db.collection('train').get();
 
   for (const trainDoc of trainCol.docs) {
     for (const trainNoId of trainNos) {
-      const seatsQuery = query(
-        collection(db, 'train', trainDoc.id, 'no', trainNoId, 'seats'),
-        orderBy('createAt'),
-      );
+      const seatsSnap = await db
+        .collection('train')
+        .doc(trainDoc.id)
+        .collection('no')
+        .doc(trainNoId)
+        .collection('seats')
+        .orderBy('createAt')
+        .get();
 
-      const existSeats = await getDocs(seatsQuery);
-
-      const seats = existSeats.docs.map((doc) => {
+      const seats = seatsSnap.docs.map((doc) => {
         const data = doc.data();
         return {
           ...(data as SeatType),

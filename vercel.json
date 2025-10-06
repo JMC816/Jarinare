@@ -7,7 +7,7 @@
   ],
   "crons": [
     {
-      "path": "/api/sendKakaoMessage",
+      "path": "/api/sendKakaoMessages",
       "schedule": "*/1 * * * *"
     }
   ]

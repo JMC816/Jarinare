@@ -1,4 +1,5 @@
 import KakaoRedirect from '@/features/Auth/SocialLogin/ui/KakaoRedirect';
+import KakaoRedirectLink from '@/widgets/Notification/ui/kakaoRedirectLink';
 import LoginPage from '@/pages/Auth/Login/ui/LoginPage';
 import SignUpPage from '@/pages/Auth/SignUp/ui/SignUpPage';
 import MenuPage from '@/pages/Menu/ui/MenuPage';
@@ -26,6 +27,7 @@ const Router = () => {
         <Route path="/auth/signup" element={<SignUpPage />} />
         <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />
         <Route element={<HomeLayout />}>
+          <Route path="/oauth/kakao/link" element={<KakaoRedirectLink />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />
           <Route path="/mypage" element={<MyPage />} />

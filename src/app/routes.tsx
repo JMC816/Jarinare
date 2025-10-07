@@ -1,10 +1,6 @@
 import KakaoRedirect from '@/features/Auth/SocialLogin/ui/KakaoRedirect';
 import LoginPage from '@/pages/Auth/Login/ui/LoginPage';
 import SignUpPage from '@/pages/Auth/SignUp/ui/SignUpPage';
-import BoardPage from '@/pages/Board/ui/BoardPage';
-import BoardWirtePage from '@/pages/Board/ui/BoardWritePage';
-import EventWirtePage from '@/pages/Board/ui/EventWritePage';
-import NoticeWirtePage from '@/pages/Board/ui/NoticeWritePage';
 import MenuPage from '@/pages/Menu/ui/MenuPage';
 import MyPage from '@/pages/Mypage/ui/MyPage';
 import NotificationPage from '@/pages/Notification/ui/NotificationPage';
@@ -32,10 +28,6 @@ const Router = () => {
         <Route element={<HomeLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/menu" element={<MenuPage />} />
-          <Route path="/board" element={<BoardPage />} />
-          <Route path="/board/notice" element={<NoticeWirtePage />} />
-          <Route path="/board/event" element={<EventWirtePage />} />
-          <Route path="/board/board" element={<BoardWirtePage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/point" element={<PointPage />} />
           <Route path="/returnlist" element={<TicketReturnPage />} />

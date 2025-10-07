@@ -39,6 +39,30 @@ export const useKakaoRedirect = () => {
           point: 0,
         });
 
+        // HACK: 추후 백단 변경 예정
+
+        //  onAuthStateChanged(auth, async (user) => {
+        //    if (user) {
+        //      // 이미 로그인된 사용자라면 계정에 토큰 연동
+        //      await linkWithCredential(user, credential);
+
+        //      // Firestore에 access token 저장
+        //      await updateDoc(doc(db, 'users', user.uid), {
+        //        kakaoTokens: arrayUnion(tokenData.access_token),
+        //      });
+        //    } else {
+        //      // 새로 로그인하는 경우
+        //      await signInWithCredential(auth, credential);
+
+        //      await setDoc(doc(db, 'users', auth.currentUser!.uid), {
+        //        userId: auth.currentUser?.uid,
+        //        changeCount: 0,
+        //        point: 0,
+        //        kakaoTokens: [tokenData.access_token], // DB에 저장
+        //      });
+        //    }
+        //  });
+
         navigate('/');
       } catch (e) {
         console.log(e);

@@ -10,6 +10,11 @@
 
 <br>
 
+## 🔗 배포 링크
+https://jarinare.vercel.app/
+
+<br>
+
 ## 📚 기술 스택
 ### 1. Front-end
 <blockquote>

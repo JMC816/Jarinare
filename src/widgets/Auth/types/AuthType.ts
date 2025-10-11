@@ -5,6 +5,7 @@ export type Store = {
   isShow: boolean;
   openModal: (type: AuthModalTypes | null) => void;
   closeModal: (type: AuthModalTypes) => void;
+  resetModal: () => void;
 };
 
 export type AuthStageProps = {

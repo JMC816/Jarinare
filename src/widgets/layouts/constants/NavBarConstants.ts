@@ -49,6 +49,12 @@ export const NavBarConstants = () => {
         path: '/',
       },
       {
+        on_icon: on_board,
+        off_icon: off_board,
+        text: '게시판',
+        path: '/board',
+      },
+      {
         on_icon: on_key,
         off_icon: off_key,
         text: '로그인',

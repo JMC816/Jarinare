@@ -14,17 +14,20 @@ export const useIsNotificationResponse = () => {
 
   // 실시간 알림 활성화 유무
   useEffect(() => {
-    const isToggle = () => {
-      const userDoc = doc(db, 'users', user!.uid);
-      const unsub = onSnapshot(userDoc, (docSnap) => {
-        if (docSnap.exists()) {
-          setIsNotification(docSnap);
-        }
-      });
-      return () => unsub();
-    };
-    isToggle();
-  }, []);
+    // 로그인하지 않은 경우 실행하지 않음
+    if (!user) {
+      return;
+    }
+
+    const userDoc = doc(db, 'users', user.uid);
+    const unsub = onSnapshot(userDoc, (docSnap) => {
+      if (docSnap.exists()) {
+        setIsNotification(docSnap);
+      }
+    });
+
+    return () => unsub();
+  }, [user]);
 
   return { isNotification };
 };

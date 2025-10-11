@@ -20,6 +20,7 @@ import SeatReturnPage from '@/pages/TicketReturn/ui/SeatReturnPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
 import MainLayout from '@/widgets/layouts/ui/MainLayout';
+import PublicHomeLayout from '@/widgets/layouts/ui/PublicHomeLayout';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const Router = () => {
@@ -30,10 +31,14 @@ const Router = () => {
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />
           <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />
-          <Route element={<HomeLayout />}>
+          {/* 로그인 불필요하 페이지들 */}
+          <Route element={<PublicHomeLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/menu" element={<MenuPage />} />
-            <Route path="/board" element={<BoardPage />} />
+            <Route path="/board" element={<BoardPage />} />{' '}
+          </Route>
+          {/* 로그인 필수 페이지들 */}
+          <Route element={<HomeLayout />}>
             <Route path="/board/notice" element={<NoticeWirtePage />} />
             <Route path="/board/event" element={<EventWirtePage />} />
             <Route path="/board/board" element={<BoardWirtePage />} />

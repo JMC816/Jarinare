@@ -8,15 +8,12 @@ import { useLoginState } from '@/features/Auth/Login/hooks/useLoginState';
 
 const PasswordModal = () => {
   const { openModal, closeModal } = useModalStore();
-  const {
-    formState: { errors },
-    getValues,
-  } = useFormContext();
+  const { handleSubmit } = useFormContext();
   // 유효성 검사를 통과한 값을 로그인 로직으로 전달
-  const { onSubmit } = useLoginState(getValues);
+  const { onSubmit } = useLoginState();
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]"
     >
       <BackWardModalButton
@@ -25,17 +22,7 @@ const PasswordModal = () => {
       />
       <PasswordForm />
       <LoginStageLine stage={2} width={300} borderRadius="xl" />
-      <LoginButton
-        text="로그인"
-        bgColor="blue"
-        textColor="white"
-        // 비밀번호 에러나 빈 값일 시 로그인 제한
-        modalTypes={
-          errors.password || getValues('password') == ''
-            ? 'PasswordModal'
-            : 'PasswordModal'
-        }
-      />
+      <LoginButton text="로그인" bgColor="blue" textColor="white" />
     </form>
   );
 };

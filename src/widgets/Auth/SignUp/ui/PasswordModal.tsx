@@ -8,15 +8,17 @@ import { useSignUpState } from '@/features/Auth/SignUp/hooks/useSignUpState';
 
 const PasswordModal = () => {
   const { openModal, closeModal } = useModalStore();
-  const {
-    formState: { errors },
-    getValues,
-  } = useFormContext();
+  const { handleSubmit } = useFormContext();
   // 유효성 검사를 통과한 값을 회원가입 로직으로 전달
-  const { onSubmit } = useSignUpState(getValues);
+  const { onSubmit } = useSignUpState();
   return (
     <form
-      onSubmit={onSubmit}
+      onSubmit={() => {
+        handleSubmit(onSubmit);
+        closeModal('EmailModal');
+        closeModal('NameModal');
+        closeModal('PasswordModal');
+      }}
       className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]"
     >
       <BackWardModalButton
@@ -25,17 +27,7 @@ const PasswordModal = () => {
       />
       <PasswordForm />
       <SignUpStageLine stage={3} width={300} borderRadius="xl" />
-      <SignUpButton
-        text="회원가입"
-        bgColor="blue"
-        textColor="white"
-        modalTypes={
-          // 비밀번호 에러나 빈 값일 시 회원가입 제한
-          errors.password || getValues('password') == ''
-            ? 'PasswordModal'
-            : 'PasswordModal'
-        }
-      />
+      <SignUpButton text="회원가입" bgColor="blue" textColor="white" />
     </form>
   );
 };

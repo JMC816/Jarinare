@@ -7,3 +7,8 @@ export type SignUpMessageType = {
   message: string;
   setMessage: (type: string) => void;
 };
+
+export type EmailErrorType = {
+  emailError: string;
+  setEmailError: (error: string) => void;
+};

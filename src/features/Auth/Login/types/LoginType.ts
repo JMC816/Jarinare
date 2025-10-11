@@ -7,3 +7,8 @@ export type LoginMessageType = {
   message: string;
   setMessage: (type: string) => void;
 };
+
+export type EmailErrorType = {
+  emailError: string;
+  setEmailError: (type: string) => void;
+};

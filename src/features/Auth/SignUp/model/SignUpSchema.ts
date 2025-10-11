@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 const passwordRegex = new RegExp(
-  /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$/,
+  /^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).+$/,
 );
 
 export const SignUpSchema = z.object({
@@ -22,7 +22,7 @@ export const SignUpSchema = z.object({
     .max(10, { message: '비밀번호는 최대 10자 입니다.' })
     .regex(
       passwordRegex,
-      '대문자, 소문자, 숫자, 특수문자가 최소 1개 이상이 포함되어야 합니다.',
+      '소문자, 숫자, 특수문자가 최소 1개 이상이 포함되어야 합니다.',
     ),
 });
 
@@ -35,6 +35,7 @@ export const SignUp = () => {
       password: '',
     },
     mode: 'onChange',
+    reValidateMode: 'onChange',
   });
   return { method };
 };

@@ -1,25 +1,23 @@
-import React from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '@/shared/firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { LoadingStore, SignUpMessageStore } from '../model/SignUpStore';
-import { FieldValues, UseFormGetValues } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form';
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc } from 'firebase/firestore';
 
-export const useSignUpState = (getValues: UseFormGetValues<FieldValues>) => {
+export const useSignUpState = () => {
   const navigate = useNavigate();
   const { isLoading, setIsLoading } = LoadingStore();
   const { message, setMessage } = SignUpMessageStore();
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = async (data: FieldValues) => {
     try {
       setIsLoading(true);
       // 이메일과 비밀번호로 회원가입
       const credentials = await createUserWithEmailAndPassword(
         auth,
-        getValues('email'),
-        getValues('password'),
+        data.email,
+        data.password,
       );
       await setDoc(doc(db, 'users', credentials.user.uid), {
         userId: credentials.user.uid,
@@ -30,7 +28,7 @@ export const useSignUpState = (getValues: UseFormGetValues<FieldValues>) => {
       });
       // 사용자 프로필 업데이트
       await updateProfile(credentials.user, {
-        displayName: getValues('name'),
+        displayName: data.name,
       });
 
       navigate('/');

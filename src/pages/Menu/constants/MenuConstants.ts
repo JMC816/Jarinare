@@ -5,6 +5,10 @@ export const MenuConstants = () => {
   if (user) {
     return [
       {
+        text: '게시판',
+        link: '/board',
+      },
+      {
         text: '승차권 반환',
         link: '/returnlist',
       },

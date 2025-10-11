@@ -3,9 +3,12 @@ import off_key from '@/assets/icons/off_key.png';
 import off_person from '@/assets/icons/off_person.png';
 import person from '@/assets/icons/person.png';
 import off_menu from '@/assets/icons/off_menu.png';
+import off_board from '@/assets/icons/off_board.png';
 import on_home from '@/assets/icons/on_home.png';
 import on_key from '@/assets/icons/on_key.png';
 import on_menu from '@/assets/icons/on_menu.png';
+import on_board from '@/assets/icons/on_board.png';
+
 import { auth } from '@/shared/firebase/firebase';
 
 export const NavBarConstants = () => {
@@ -17,6 +20,12 @@ export const NavBarConstants = () => {
         off_icon: off_home,
         text: '홈',
         path: '/',
+      },
+      {
+        on_icon: on_board,
+        off_icon: off_board,
+        text: '게시판',
+        path: '/board',
       },
       {
         on_icon: person,

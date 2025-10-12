@@ -54,3 +54,12 @@ export const formatStartDate = (startDay: string) => {
   const days = Number(startDay.slice(6, 8));
   return new Date(year, month, days);
 };
+
+export const formatStartTime = (startTime: string) => {
+  const year = Number(startTime.slice(0, 4));
+  const month = Number(startTime.slice(4, 6)) - 1;
+  const days = Number(startTime.slice(6, 8));
+  const hours = Number(startTime.slice(8, 10));
+  const minutes = Number(startTime.slice(10, 12));
+  return new Date(year, month, days, hours, minutes);
+};

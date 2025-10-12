@@ -43,10 +43,36 @@ export default {
         '75%': { transform: 'scale(2)', opacity: 0 },
         '100%': { transform: 'scale(2)', opacity: 0 },
       },
-      animation: {
-        pulse: 'pulse 0.5s ease-in-out infinite',
-        ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;',
+      spin: {
+        '0%': { transform: 'rotate(0deg)' },
+        '100%': { transform: 'rotate(720deg)' },
       },
+      fadein: {
+        '0%': {
+          opacity: '0.5',
+          transform: 'translateY(-10px)',
+        },
+        '100%': {
+          opacity: '1',
+          transform: 'translateY(0)',
+        },
+      },
+      fadeout: {
+        '0%': {
+          opacity: '1',
+        },
+        '100%': {
+          opacity: '0',
+          transform: 'translateY(-10px)',
+        },
+      },
+    },
+    animation: {
+      pulse: 'pulse 2s ease-in-out infinite',
+      ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;',
+      spin: 'spin 1s linear infinite;',
+      fadein: 'fadein 0.5s',
+      fadeout: 'fadeout 1s',
     },
   },
   plugins: [],

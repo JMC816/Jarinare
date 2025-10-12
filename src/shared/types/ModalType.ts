@@ -22,3 +22,7 @@ export type TicketReturnModalTypes = 'ReturnModal';
 export type MyPageModalTypes = 'DayModal';
 
 export type NotificationModalTypes = 'ResponseModal' | 'AcceptModal';
+
+export type BoardModalTypes = 'noticeModal' | 'EventModal' | 'BoardModal';
+
+export type GolobalModalTypes = 'GlobalModal';

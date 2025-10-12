@@ -18,6 +18,7 @@ import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
 import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
 import SeatReturnPage from '@/pages/TicketReturn/ui/SeatReturnPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
+import Modal from '@/shared/ui/Modal';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
 import MainLayout from '@/widgets/layouts/ui/MainLayout';
 import PublicHomeLayout from '@/widgets/layouts/ui/PublicHomeLayout';
@@ -66,6 +67,7 @@ const Router = () => {
             <Route path="/return" element={<SeatReturnPage />} />
           </Route>
         </Routes>
+        <Modal />
       </div>
     </BrowserRouter>
   );

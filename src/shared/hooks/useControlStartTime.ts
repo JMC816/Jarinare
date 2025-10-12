@@ -35,7 +35,7 @@ export const useControlStartTime = () => {
 
       const seatTime = formatStartTime(String(item[0].startTime)).getTime();
       // 출발 5분 전
-      const alertStart = seatTime - 60 * 60 * 1000;
+      const alertStart = seatTime - 5 * 60 * 1000;
       // 출발 1분 전
       const alertEnd = seatTime - 1 * 60 * 1000;
 

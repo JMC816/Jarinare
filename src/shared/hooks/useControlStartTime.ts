@@ -48,6 +48,7 @@ export const useControlStartTime = () => {
       } else if (now < alertStart) {
         // 실행하기까지 남은 시간
         const delay = alertStart - now;
+        // 시간 예약
         const timer = setTimeout(() => {
           setIsExistData((prev) => new Set(prev).add(seatKey));
         }, delay);

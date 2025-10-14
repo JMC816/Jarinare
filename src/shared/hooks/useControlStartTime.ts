@@ -3,9 +3,11 @@ import { formatStartTime, isToday } from '../lib/formatDate';
 import { useEffect, useState } from 'react';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
+import { useCreateStartTime } from '@/features/Notification/hooks/useCreateStartTime';
 
 export const useControlStartTime = () => {
   const { groupedArray } = useTicketLists() ?? {};
+  const { creatStartTime } = useCreateStartTime();
 
   const [timeDifferenceData, setTimeDifferenceData] = useState<SeatType[][]>([
     [],
@@ -59,6 +61,9 @@ export const useControlStartTime = () => {
     // 시간 조건에 해당하는 데이터만 사용
     if (newTimeDiffData.length > 0) {
       setTimeDifferenceData(newTimeDiffData);
+      (async () => {
+        await creatStartTime(newTimeDiffData);
+      })();
     }
 
     return () => timers.forEach(clearTimeout);

@@ -10,11 +10,14 @@ import { RefuseResponse } from '@/widgets/Notification/ui/refuseResponse';
 import { Timestamp } from 'firebase/firestore';
 import setting from '@/assets/icons/setting.png';
 import { Link } from 'react-router-dom';
+import StartTimeNotification from '@/widgets/Notification/ui/StartTimeNotification';
+import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
 
 const NotificationPage = () => {
   const { isShow, modalType } = useModalStore();
   const { response } = useChangeResponse();
   const { refuseResponse, acceptResponse } = useIsAcceptResponse();
+  const { readStartTime } = useReadStartTime();
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -28,6 +31,14 @@ const NotificationPage = () => {
         </div>
       </div>
       <div className="mt-5 w-full">
+        {readStartTime &&
+          Object.keys(readStartTime.val()).map((key) => (
+            <StartTimeNotification
+              key={key}
+              createdAt={readStartTime.val()[key].createdAt as Timestamp}
+              seats={readStartTime.val()[key].seats as SeatType[]}
+            />
+          ))}
         {response &&
           Object.keys(response.val()).map((key) => (
             <NotificationRequest

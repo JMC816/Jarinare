@@ -154,6 +154,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 <ul>
   <li>좌석 변경 요청에 대한 알림 및 요청 수락/거절에 대한 알림</li>
   <li>토글로 알림 활성화/비활성화 제어</li>
+  <li>출발 5분 전부터 1분 전까지 출발 알림 표시 및 알림 클릭 시 해당 티켓으로 이동</li>
 </ul>
 
 #### [ 좌석 변경 요청 알림 ]
@@ -164,6 +165,12 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 #### [ 알림 활성화/비활성화 ]
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/6ab604bf-fdae-4f34-8c8b-6ffcb1c0a5c4" />
+
+#### [ 출발 알림 ]
+<div>
+  <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/11c31b4f-8ab3-4635-9388-abb4cbca6739" />
+  <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/fca94dde-4a07-4ca9-ac6e-7e06901381c8" />
+</div>
 
 <br>
 

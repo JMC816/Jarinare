@@ -1,4 +1,4 @@
-import { StartTimeNotificationType } from '../types/StartTimeResponseType';
+import { StartTimeNotificationType } from '../types/startTimeNotificationType';
 
 const StartTimeNotification = ({
   createdAt,

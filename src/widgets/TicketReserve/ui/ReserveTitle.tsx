@@ -4,11 +4,17 @@ import { ReserveTitleProp } from '../types/ReserveType';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
 import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptResponse';
 import { useIsNotificationResponse } from '@/features/Notification/hooks/useIsNotificationResponse';
+import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
 
 const ReserveTitle = ({ text }: ReserveTitleProp) => {
   const { response } = useChangeResponse();
   const { acceptResponse, refuseResponse } = useIsAcceptResponse();
   const { isNotification } = useIsNotificationResponse();
+  const { readStartTime } = useReadStartTime();
+
+  // 출발 알림 개수
+  const isReadStartTime =
+    readStartTime && Object.entries(readStartTime?.val()).length;
 
   // 거절 알림 개수
   const isRefuseResponse =
@@ -38,7 +44,8 @@ const ReserveTitle = ({ text }: ReserveTitleProp) => {
           <img width={19} height={24} src={notification} />
           {isChangeRefuseOrAcceptResponse ||
           isSeatsChangeResponse ||
-          (isChangeRefuseOrAcceptResponse && isSeatsChangeResponse) ? (
+          (isChangeRefuseOrAcceptResponse && isSeatsChangeResponse) ||
+          isReadStartTime ? (
             <span className="absolute bottom-6 left-4 size-1.5 animate-ping rounded-full bg-blue" />
           ) : null}
         </Link>

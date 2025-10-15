@@ -1,7 +1,7 @@
 import off_home from '@/assets/icons/off_home.png';
 import off_key from '@/assets/icons/off_key.png';
-import off_person from '@/assets/icons/off_person.png';
-import person from '@/assets/icons/person.png';
+import off_user from '@/assets/icons/off_user.png';
+import on_user from '@/assets/icons/on_user.png';
 import off_menu from '@/assets/icons/off_menu.png';
 import off_board from '@/assets/icons/off_board.png';
 import on_home from '@/assets/icons/on_home.png';
@@ -28,8 +28,8 @@ export const NavBarConstants = () => {
         path: '/board',
       },
       {
-        on_icon: person,
-        off_icon: off_person,
+        on_icon: on_user,
+        off_icon: off_user,
         text: '마이',
         path: '/mypage',
       },

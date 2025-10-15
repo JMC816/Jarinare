@@ -21,7 +21,7 @@ const ReserveWay = () => {
             className="flex h-[55px] w-[280px] items-center rounded-lg bg-white pl-[10px] pr-[10px]"
             key={idx}
           >
-            <img width={20} height={20} src={icon} />
+            <img width={25} height={25} src={icon} />
             <div className="flex w-full flex-col pl-[10px] font-bold">
               <span
                 className={`text-base ${text === startStationForView || text === endStationForView || text === startDayForView || text.includes(`${kid + adult}명`) ? 'text-black' : 'text-mediumGray'}`}

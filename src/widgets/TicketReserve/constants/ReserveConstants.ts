@@ -1,7 +1,7 @@
-import square from '@/assets/icons/square.png';
-import group from '@/assets/icons/group.png';
+import start_station from '@/assets/icons/start_station.png';
+import end_station from '@/assets/icons/end_station.png';
 import calendar from '@/assets/icons/calendar.png';
-import person from '@/assets/icons/person.png';
+import on_user from '@/assets/icons/on_user.png';
 import check from '@/assets/icons/check.png';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
@@ -247,7 +247,7 @@ export const reserveConstants = () => {
   ];
   const reserveWayArray = [
     {
-      icon: square,
+      icon: start_station,
       text:
         startStationForView === ''
           ? '출발지를 선택하세요'
@@ -257,7 +257,7 @@ export const reserveConstants = () => {
       modalType: 'StartPlaceModal',
     },
     {
-      icon: group,
+      icon: end_station,
       text:
         endStationForView === '' ? '도착지를 선택하세요' : endStationForView,
       attribute: '도착',
@@ -272,7 +272,7 @@ export const reserveConstants = () => {
       modalType: 'DayModal',
     },
     {
-      icon: person,
+      icon: on_user,
       text: kid === 0 && adult === 0 ? '인원을 선택하세요' : adult + kid + '명',
       attribute: '인원',
       buttonText: '변경',

@@ -8,13 +8,13 @@ const MenuPage = () => {
         메뉴
       </span>
       <div className="mt-[45px] flex w-full flex-col gap-y-[20px] px-[10px]">
-        {MenuConstants().map(({ text, link }, idx) => (
+        {MenuConstants().map(({ text, link, icon }, idx) => (
           <Link
             to={link!}
             className="flex gap-x-[10px] px-[17px] py-[9px] hover:rounded-md hover:bg-lightestGray"
             key={idx}
           >
-            <div className="h-[30px] w-[30px] rounded-xs bg-black" />
+            <img width={25} height={25} src={icon} />
             <span className="flex items-center text-base font-bold">
               {text}
             </span>

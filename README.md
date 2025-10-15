@@ -37,7 +37,7 @@ https://jarinare.vercel.app/
 <blockquote>
   Figma
 </blockquote>
-👉 [ 자리나레 디자인 ]
+👉 [ 자리나래 디자인 ]
 <br>
 https://www.figma.com/design/teybASghDsTKX21SB6P9XS/%EC%9E%90%EB%A6%AC%EB%82%98%EB%A0%88?node-id=0-1&t=5p8SWi8THEdGacsW-1
 <br>
@@ -48,7 +48,7 @@ https://www.figma.com/design/teybASghDsTKX21SB6P9XS/%EC%9E%90%EB%A6%AC%EB%82%98%
 <blockquote>
   Notion
 </blockquote>
-👉 [ 자리나레 기획 ]
+👉 [ 자리나래 기획 ]
 <br>
 https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000cbde5b245
 <br>

@@ -16,20 +16,45 @@ https://jarinare.vercel.app/
 <br>
 
 ## 📚 기술 스택
-### 1. Front-end
-<blockquote>
-  React.js, Zustand, Tanstack Query, TailwindCSS
-</blockquote>
 
-### 2. Back-end Service
-<blockquote>
-  Firebase (Auth, Firestore, Realtime DB)
-</blockquote>
-
-### 3. Deployment
-<blockquote>
-  Vercel
-</blockquote>
+  <tr>
+    <td>
+      <h3>1. Front-end</h3>
+      <blockquote>
+      <ul>
+        <li>React.js (Ver 19.0)</li>
+        <li>Zustand (Ver 5.0.3)</li>
+        <li>Tanstack Query (Ver 5.74.3)</li>
+      </ul>
+      </blockquote>
+    </td>
+    <td>
+      <h3>2. CSS</h3>
+      <blockquote>
+      <ul>
+        <li>TailwindCSS (Ver 3.4.0)</li>
+      </ul>
+      </blockquote>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <h3>3. Back-End Service</h3>
+      <blockquote>
+      <ul>
+        <li>Firebase (Auth, Firestore, Realtime DB) (Ver 11.6.0)</li>
+      </ul>
+      </blockquote>
+    </td>
+    <td>
+      <h3>4. Deployment</h3>
+      <blockquote>
+      <ul>
+        <li>Vercel</li>
+      </ul>
+      </blockquote>
+    </td>
+  </tr>
 
 <br>
 

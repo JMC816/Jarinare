@@ -141,6 +141,12 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>수락 시, 보유자에게 포인트 자동 지급</li>
 </ul>
 
+#### [ 공통 예외처리 ]
+<ul>
+  <li>좌석 변경 요청을 보낸 좌석은 상대방들에겐 변경 요청 가능한 좌석이므로 변경 요청 데이터가 있을 시 좌석 선택 불가</li>
+  <li>좌석 변경 요청을 보낸 티켓 안에 또 다른 본인의 좌석이 있다면, 그 좌석의 티켓에서는 좌석 변경 불가(본인과본인의 불필요한 좌석 변경 방지)</li>
+</ul>
+
 #### [ 빈 좌석과 변경 ]
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/6bad2ba5-ff45-497b-87d1-4464c13b4a9f" />
 
@@ -153,6 +159,12 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 #### [ 상대방의 좌석과 변경 ]
 <ul>
   <li>상대방의 좌석과 빈 좌석을 혼합하여 좌석 수가 동일한 경우</li>
+</ul>
+
+#### [ 예외처리 ]
+<ul>
+  <li>변경 요청 데이터에 빈좌석 + 상대방 좌석가 존재하고 내가 선택한 좌석이 빈좌석 + 상대방 좌석이라면 변경 요청 불가</li>
+  <li>빈 좌석은 변동이 있어도 상대방 좌석은 고정적이므로 변경 요청 데이터에는 포함되기 때문에 변경 요청 불가</li>
 </ul>
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/c8f9703f-7b3c-42f0-b116-0d4e9f26db33" />
 <br>

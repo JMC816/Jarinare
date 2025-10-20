@@ -13,12 +13,12 @@ const PasswordModal = () => {
   const { onSubmit } = useSignUpState();
   return (
     <form
-      onSubmit={() => {
-        handleSubmit(onSubmit);
+      onSubmit={handleSubmit(async (data) => {
+        await onSubmit(data);
         closeModal('EmailModal');
         closeModal('NameModal');
         closeModal('PasswordModal');
-      }}
+      })}
       className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]"
     >
       <BackWardModalButton

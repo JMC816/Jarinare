@@ -6,4 +6,6 @@ export type IsAcceptRepsonseProps = {
   responseTime: Timestamp;
   responseContant: SeatType[];
   responseDeleteContant: SeatType[];
+  onClick: () => void;
+  isRead: boolean;
 };

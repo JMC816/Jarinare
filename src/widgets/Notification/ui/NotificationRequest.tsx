@@ -7,6 +7,8 @@ const NotificationRequest = ({
   requestTitle,
   requstTime,
   requsetContant,
+  isRead,
+  onClick,
 }: NotificationRequestProps) => {
   const { openModal } = useModalStore();
   const { setSeatIds } = responesBySeatIdStore();
@@ -37,7 +39,10 @@ const NotificationRequest = ({
   };
 
   return (
-    <div className="flex h-[80px] flex-col bg-lightBlue p-[10px] active:bg-blue/20">
+    <div
+      onClick={onClick}
+      className={`flex h-[80px] flex-col border-b border-lightestGray ${isRead ? 'bg-lightestGray' : 'bg-white'} p-[10px]`}
+    >
       <div className="flex justify-between text-tiny text-darkGray">
         <span>{requestTitle}</span>
         <span>{elapsedTime()}</span>

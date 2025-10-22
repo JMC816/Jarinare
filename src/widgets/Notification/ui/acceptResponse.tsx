@@ -4,6 +4,8 @@ export const AcceptResponse = ({
   responseTitle,
   responseTime,
   responseContant,
+  isRead,
+  onClick,
 }: IsAcceptRepsonseProps) => {
   const elapsedTime = () => {
     const requestTime = new Date(responseTime ? Number(responseTime) : 0);
@@ -30,7 +32,10 @@ export const AcceptResponse = ({
   };
 
   return (
-    <div className="flex h-[80px] flex-col bg-lightBlue p-[10px] active:bg-blue/20">
+    <div
+      onClick={onClick}
+      className={`flex h-[80px] flex-col border-b border-lightestGray ${isRead ? 'bg-lightestGray' : 'bg-white'} p-[10px]`}
+    >
       <div className="flex justify-between text-tiny text-darkGray">
         <span>좌석 변경</span>
         <span>{elapsedTime()}</span>

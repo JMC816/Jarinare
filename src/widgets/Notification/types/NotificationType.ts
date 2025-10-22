@@ -13,4 +13,6 @@ export type NotificationRequestProps = {
   requestTitle: string;
   requstTime: Timestamp;
   requsetContant: SeatType[];
+  onClick: () => void;
+  isRead: boolean;
 };

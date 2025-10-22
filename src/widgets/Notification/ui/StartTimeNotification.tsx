@@ -3,6 +3,8 @@ import { StartTimeNotificationType } from '../types/startTimeNotificationType';
 const StartTimeNotification = ({
   createdAt,
   seats,
+  isRead,
+  onClick,
 }: StartTimeNotificationType) => {
   const elapsedTime = () => {
     const requestTime = new Date(createdAt ? Number(createdAt) : 0);
@@ -29,7 +31,10 @@ const StartTimeNotification = ({
   };
 
   return (
-    <div className="flex h-[80px] flex-col bg-lightBlue p-[10px] active:bg-blue/20">
+    <div
+      onClick={onClick}
+      className={`flex h-[80px] flex-col border-b border-lightestGray ${isRead ? 'bg-lightestGray' : 'bg-white'} p-[10px]`}
+    >
       <div className="flex justify-between text-tiny text-darkGray">
         <span>{elapsedTime()}</span>
       </div>

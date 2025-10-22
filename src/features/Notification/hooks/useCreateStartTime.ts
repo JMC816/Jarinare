@@ -16,6 +16,7 @@ export const useCreateStartTime = () => {
         {
           createdAt: serverTimestamp(),
           seats: item,
+          isRead: false,
         },
       );
     }

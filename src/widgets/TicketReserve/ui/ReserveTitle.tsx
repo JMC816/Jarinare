@@ -13,7 +13,7 @@ const ReserveTitle = ({ text }: ReserveTitleProp) => {
   const { readStartTime } = useReadStartTime();
 
   // 출발 알림 개수
-  const isReadStartTime =
+  const isStartTimeResponse =
     readStartTime && Object.entries(readStartTime?.val()).length;
 
   // 거절 알림 개수
@@ -36,16 +36,74 @@ const ReserveTitle = ({ text }: ReserveTitleProp) => {
   const isSeatsChangeResponse = (isChangeResponse! > 0 &&
     isNotification?.data()!.change) as boolean;
 
+  // 각 알림이 존재하는지 유무
+  const isExistNotification =
+    isChangeRefuseOrAcceptResponse ||
+    isSeatsChangeResponse ||
+    (isChangeRefuseOrAcceptResponse && isSeatsChangeResponse) ||
+    isStartTimeResponse;
+
+  // 좌석 변경 알림 데이터들(key)
+  const changeResponseKeys = response && Object.keys(response.val());
+
+  // 수락 알림 데이터들(key)
+  const acceptResponseKeys =
+    acceptResponse && Object.keys(acceptResponse.val());
+
+  // 거절 알림 데이터들(key)
+  const refuseResponseKeys =
+    refuseResponse && Object.keys(refuseResponse.val());
+
+  // 출발 알림 데이터들(key)
+  const startTimeResponseKeys =
+    readStartTime && Object.keys(readStartTime.val());
+
+  // 좌석 변경 요청 읽음 유무
+  const isReadChangeResponse =
+    changeResponseKeys === undefined
+      ? false
+      : changeResponseKeys
+          .map((key) => response?.val()[key].isRead as boolean)
+          .includes(false);
+
+  // 수락 알림 읽음 유무
+  const isReadAcceptResponse =
+    acceptResponseKeys === undefined
+      ? false
+      : acceptResponseKeys
+          .map((key) => acceptResponse?.val()[key].isRead as boolean)
+          .includes(false);
+
+  // 거절 알림 읽음 유무
+  const isReadRefuseResponse =
+    refuseResponseKeys === undefined
+      ? false
+      : refuseResponseKeys
+          .map((key) => refuseResponse?.val()[key].isRead as boolean)
+          .includes(false);
+
+  // 출발 알림 읽음 유무
+  const isReadStartTimeResponse =
+    startTimeResponseKeys === undefined
+      ? false
+      : startTimeResponseKeys
+          .map((key) => readStartTime?.val()[key].isRead as boolean)
+          .includes(false);
+
+  // 각 알림 읽음 유무
+  const isReadNotification =
+    isReadChangeResponse ||
+    isReadAcceptResponse ||
+    isReadRefuseResponse ||
+    isReadStartTimeResponse;
+
   return (
     <div className="mb-[25px] mt-[60px] flex w-full items-center justify-between">
       <span className="text-lg font-bold">{text}</span>
       {text == '어디로 갈까요?' ? (
         <Link to={'/reserve/notification'} className="relative">
           <img width={19} height={24} src={notification} />
-          {isChangeRefuseOrAcceptResponse ||
-          isSeatsChangeResponse ||
-          (isChangeRefuseOrAcceptResponse && isSeatsChangeResponse) ||
-          isReadStartTime ? (
+          {isReadNotification && isExistNotification ? (
             <span className="absolute bottom-6 left-4 size-1.5 animate-ping rounded-full bg-blue" />
           ) : null}
         </Link>

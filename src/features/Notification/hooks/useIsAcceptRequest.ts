@@ -31,6 +31,7 @@ export const useIsAcceptRequest = () => {
         createdAt: serverTimestamp(),
         mySeats,
         targetSeats,
+        isRead: false,
       },
     );
   };
@@ -60,6 +61,7 @@ export const useIsAcceptRequest = () => {
         createdAt: serverTimestamp(),
         mySeats,
         targetSeats,
+        isRead: false,
       },
     );
   };

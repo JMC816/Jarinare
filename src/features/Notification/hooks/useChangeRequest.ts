@@ -51,6 +51,7 @@ export const useChangeRequest = () => {
             id: targetSeats[0].id,
             trainNoId: targetSeats[0].trainNoId,
           },
+          isRead: false,
         },
       );
     } else {

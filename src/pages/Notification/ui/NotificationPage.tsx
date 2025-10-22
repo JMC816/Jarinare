@@ -12,12 +12,20 @@ import setting from '@/assets/icons/setting.png';
 import { Link } from 'react-router-dom';
 import StartTimeNotification from '@/widgets/Notification/ui/StartTimeNotification';
 import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
+import { useIsReadNotification } from '@/features/Notification/hooks/useIsReadNotification';
 
 const NotificationPage = () => {
   const { isShow, modalType } = useModalStore();
   const { response } = useChangeResponse();
   const { refuseResponse, acceptResponse } = useIsAcceptResponse();
   const { readStartTime } = useReadStartTime();
+  const {
+    updateChangeResponse,
+    updateAcceptResponse,
+    updateRefuseResponse,
+    updateStartTimeResponse,
+    updateAllResponse,
+  } = useIsReadNotification();
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -30,13 +38,21 @@ const NotificationPage = () => {
           </Link>
         </div>
       </div>
-      <div className="mt-5 w-full">
+      <span
+        onClick={async () => await updateAllResponse()}
+        className="mt-[20px] flex w-full justify-end pr-[10px] text-base text-darkGray underline"
+      >
+        모두 읽음
+      </span>
+      <div className="mt-[5px] w-full border-t border-lightestGray">
         {readStartTime &&
           Object.keys(readStartTime.val()).map((key) => (
             <StartTimeNotification
               key={key}
               createdAt={readStartTime.val()[key].createdAt as Timestamp}
               seats={readStartTime.val()[key].seats as SeatType[]}
+              isRead={readStartTime.val()[key].isRead as boolean}
+              onClick={async () => await updateStartTimeResponse(key)}
             />
           ))}
         {response &&
@@ -46,6 +62,8 @@ const NotificationPage = () => {
               requestTitle="좌석 변경"
               requstTime={response.val()[key].createdAt as Timestamp}
               requsetContant={response.val()[key].mySeat as SeatType[]}
+              isRead={response.val()[key].isRead as boolean}
+              onClick={async () => await updateChangeResponse(key)}
             />
           ))}
         {acceptResponse &&
@@ -60,6 +78,8 @@ const NotificationPage = () => {
               responseDeleteContant={
                 acceptResponse.val()[key].mySeats as SeatType[]
               }
+              isRead={acceptResponse.val()[key].isRead as boolean}
+              onClick={async () => await updateAcceptResponse(key)}
             />
           ))}
         {refuseResponse &&
@@ -74,6 +94,8 @@ const NotificationPage = () => {
               responseDeleteContant={
                 refuseResponse.val()[key].mySeats as SeatType[]
               }
+              isRead={refuseResponse.val()[key].isRead as boolean}
+              onClick={async () => await updateRefuseResponse(key)}
             />
           ))}
       </div>

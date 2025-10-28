@@ -19,7 +19,7 @@ https://jarinare.vercel.app/
 
   <tr>
     <td>
-      <h3>1. Front-end</h3>
+      <h3>1. Front-End</h3>
       <blockquote>
       <ul>
         <li>React.js (Ver 19.0)</li>

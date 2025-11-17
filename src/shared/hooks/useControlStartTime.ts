@@ -67,7 +67,8 @@ export const useControlStartTime = () => {
     }
 
     return () => timers.forEach(clearTimeout);
-  }, [groupedArray, user, isExistData]);
+    // user 객체는 참조 값이 다르므로, user.uid로 불필요한 렌더링 최적화
+  }, [groupedArray, user?.uid, isExistData]);
 
   return { timeDifferenceData };
 };

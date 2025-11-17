@@ -6,13 +6,17 @@ import { useTicketLocation } from '../hooks/useTicketLocation';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useReset } from '../hooks/useReset';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
+import { memo, useMemo } from 'react';
 
-const TicketSeatChangePage = () => {
+const TicketSeatChangePage = memo(() => {
   const { navigate } = useNaviation();
   const { location } = useTicketLocation();
   const seats: SeatType[] = location.state.groups;
 
-  const filtred = seats?.map((id) => id.seatId);
+  // useMeme로 불필요한 재계산 방지
+  const filtred = useMemo(() => {
+    return seats?.map((id) => id.seatId);
+  }, [seats]);
 
   useReset();
 
@@ -55,6 +59,8 @@ const TicketSeatChangePage = () => {
       </div>
     </div>
   );
-};
+});
+
+TicketSeatChangePage.displayName = 'TicketSeatChangePage';
 
 export default TicketSeatChangePage;

@@ -57,6 +57,14 @@ export default {
           transform: 'translateY(0)',
         },
       },
+      intro_fadein: {
+        '0%': {
+          opacity: '0.5',
+        },
+        '100%': {
+          opacity: '1',
+        },
+      },
       fadeout: {
         '0%': {
           opacity: '1',
@@ -66,6 +74,14 @@ export default {
           transform: 'translateY(-10px)',
         },
       },
+      intro_fadeout: {
+        '0%': {
+          opacity: '1',
+        },
+        '100%': {
+          opacity: '0',
+        },
+      },
     },
     animation: {
       pulse: 'pulse 2s ease-in-out infinite',
@@ -73,6 +89,8 @@ export default {
       spin: 'spin 1s linear infinite;',
       fadein: 'fadein 0.5s',
       fadeout: 'fadeout 1s',
+      intro_fadein: 'intro_fadein 0.5s',
+      intro_fadeout: 'intro_fadeout 1s',
     },
   },
   plugins: [],

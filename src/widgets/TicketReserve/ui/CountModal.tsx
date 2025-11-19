@@ -9,7 +9,7 @@ const CountModal = () => {
   const { countKid, countAdult, setCountKid, setCountAdult } = useDayCount();
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
-      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[40px] pr-[40px]">
+      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[40px] pr-[40px] md:mb-[50px]">
         <div className="flex w-full justify-between pb-[20px] pt-[25px]">
           <span className="w-full text-base font-bold">인원선택</span>
           <div>

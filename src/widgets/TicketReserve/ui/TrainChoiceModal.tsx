@@ -8,7 +8,7 @@ const TrainChoiceModal = () => {
   const { setTrainType, setTrainTypeForView, trainType } = trainDataStore();
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
-      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white font-bold">
+      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white font-bold md:mb-[50px]">
         <span className="w-full pl-[40px] pr-[40px] pt-[25px] text-base">
           기차 선택
         </span>

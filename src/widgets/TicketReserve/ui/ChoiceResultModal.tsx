@@ -20,7 +20,7 @@ const ChoiceResultModal = () => {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
-      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[23px] pr-[22px]">
+      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[23px] pr-[22px] md:mb-[50px]">
         <span className="mt-[40px] text-lg font-bold text-blue">
           {formatAM_PM(String(selectStartTime)) < 12 ? '오전' : '오후'}{' '}
           {/* 출발 시간 */}

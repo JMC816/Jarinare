@@ -14,6 +14,7 @@ export type MiniButtonProp = {
   text: string;
   modalTypes?: ReserveModalTypes | null;
   onModalClick: (type: ReserveModalTypes) => void;
+  disabled: boolean;
 };
 
 export type ReserveButtonProps = {

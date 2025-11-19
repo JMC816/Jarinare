@@ -93,6 +93,7 @@ const TrainList = () => {
                 </div>
               </div>
               <TrainTimeChocieButton
+                disabled={adultcharge === 0 ? true : false}
                 text="선택"
                 onModalClick={() => {
                   openModal('ChoiceResultModal');

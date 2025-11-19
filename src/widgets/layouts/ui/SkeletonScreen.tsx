@@ -1,5 +1,5 @@
 const SkeletonScreen = () => {
-  const arr = Array.from({ length: 7 }, (_, i) => i);
+  const arr = Array.from({ length: 20 }, (_, i) => i);
   return (
     <div className="mt-[40px] flex w-[320px] flex-col gap-y-[30px]">
       {arr.map((idx) => (

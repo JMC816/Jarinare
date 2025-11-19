@@ -82,7 +82,12 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 ## ⚙️ 기능 정의
 
-### 1. 로그인 및 회원가입
+### 1. 인트로
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/9df65f00-93fb-4b10-bd05-78964e5c398c" />
+
+<br/>
+
+### 2. 로그인 및 회원가입
 
 <ul>
   <li>자체 계정 생성 및 로그인</li>
@@ -100,7 +105,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 2. 좌석 예매
+### 3. 좌석 예매
 
 #### [ 좌석 조회 ]
 <ul>
@@ -123,7 +128,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 3. 좌석 변경
+### 4. 좌석 변경
 
 #### [ 좌석 교환 요청 ]
 <ul>
@@ -169,7 +174,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/c8f9703f-7b3c-42f0-b116-0d4e9f26db33" />
 <br>
 
-### 4. 좌석 결제
+### 5. 좌석 결제
 <ul>
   <li>예매된 좌석 결제 기능(포인트로 결제 가능)</li>
 </ul>
@@ -178,7 +183,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 5. 좌석 반환
+### 6. 좌석 반환
 <ul>
   <li>예매 취소 및 좌석 반환</li>
 </ul>
@@ -187,7 +192,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 6. 알림
+### 7. 알림
 <ul>
   <li>좌석 변경 요청에 대한 알림 및 요청 수락/거절에 대한 알림</li>
   <li>토글로 알림 활성화/비활성화 제어</li>
@@ -211,7 +216,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 7. 포인트 적립 및 업데이트
+### 8. 포인트 적립 및 업데이트
 <ul>
   <li>포인트 적립</li>
   <li>결제 및 활동에 따른 포인트 업데이트</li>

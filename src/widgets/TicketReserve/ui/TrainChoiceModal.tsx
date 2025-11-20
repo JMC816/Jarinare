@@ -1,6 +1,7 @@
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '../../model/ReserveStore';
 import { reserveConstants } from '../constants/ReserveConstants';
+import CrossModalButton from '@/widgets/layouts/ui/CrossModalButton';
 
 const TrainChoiceModal = () => {
   const { closeModal } = useModalStore();
@@ -9,9 +10,12 @@ const TrainChoiceModal = () => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
       <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white font-bold md:mb-[50px]">
-        <span className="w-full pl-[40px] pr-[40px] pt-[25px] text-base">
-          기차 선택
-        </span>
+        <div className="flex w-full justify-between pl-[40px] pr-[40px] pt-[25px]">
+          <span className="text-base">기차 선택</span>
+          <div>
+            <CrossModalButton closeModal={() => closeModal('DayModal')} />
+          </div>
+        </div>
         <div className="mb-[20px] mt-[30px] flex w-full flex-col items-center gap-y-[20px] overflow-y-auto text-tiny">
           {trainArray.map(({ train, icon, id }, idx) => (
             <div

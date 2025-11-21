@@ -16,7 +16,6 @@ const PayModal = () => {
   const { point } = useGetPoint();
   const { updatePoint } = useUpdatePoint();
   const { seatsStateCount } = seatsStateCountStore();
-  console.log(seatsStateCount);
 
   const onChange = () => {
     setChekced((prev) => !prev);

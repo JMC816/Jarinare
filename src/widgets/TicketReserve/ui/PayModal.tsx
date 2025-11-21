@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
 import { useUpdatePoint } from '@/features/Point/hooks/useUpdatePoint';
 import PaymentButton from './PaymentButton';
+import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateCountStore';
 
 const PayModal = () => {
   const { closeModal } = useModalStore();
@@ -14,6 +15,8 @@ const PayModal = () => {
   const [value, setValue] = useState<number | null>(null);
   const { point } = useGetPoint();
   const { updatePoint } = useUpdatePoint();
+  const { seatsStateCount } = seatsStateCountStore();
+  console.log(seatsStateCount);
 
   const onChange = () => {
     setChekced((prev) => !prev);
@@ -31,7 +34,7 @@ const PayModal = () => {
         </span>
         <div className="flex w-full flex-col">
           <span className="text-2xl font-bold">
-            {selectPay.toLocaleString('ko-KR')} 원
+            {(selectPay * seatsStateCount).toLocaleString('ko-KR')} 원
           </span>
           <div className="mt-[40px] flex items-center gap-2">
             <input
@@ -60,7 +63,10 @@ const PayModal = () => {
                 className={`rounded-xs border border-lightGray px-1 text-end [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
                 value={!checked ? '' : Number(value)}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (selectPay && point >= Number(e.target.value)) {
+                  if (
+                    selectPay * seatsStateCount &&
+                    point >= Number(e.target.value)
+                  ) {
                     setValue(
                       e.target.value === '' ? 0 : Number(e.target.value),
                     );
@@ -90,8 +96,11 @@ const PayModal = () => {
               <span>최종 결제금액</span>
               <span>
                 {checked
-                  ? (selectPay - Number(value)).toLocaleString('ko-KR')
-                  : selectPay.toLocaleString('ko-KR')}{' '}
+                  ? (
+                      selectPay * seatsStateCount -
+                      Number(value)
+                    ).toLocaleString('ko-KR')
+                  : (selectPay * seatsStateCount).toLocaleString('ko-KR')}{' '}
                 원
               </span>
             </div>
@@ -99,7 +108,7 @@ const PayModal = () => {
             <div className="mt-[15px] flex flex-col rounded-md bg-lightestGray p-3 text-base">
               <div className="flex justify-between">
                 <span className="h-[20px] text-darkGray">총 결제금액</span>
-                <span>{selectPay} 원</span>
+                <span>{selectPay * seatsStateCount} 원</span>
               </div>
               {checked ? (
                 <div className="flex h-[20px] justify-between">
@@ -124,7 +133,9 @@ const PayModal = () => {
           />
           <PaymentButton
             onClick={async () => {
-              await createSelectedSeats(selectPay - Number(value));
+              await createSelectedSeats(
+                selectPay * seatsStateCount - Number(value),
+              );
               await updatePoint(point - Number(value));
 
               closeModal('PayModal');

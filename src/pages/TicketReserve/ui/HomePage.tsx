@@ -28,7 +28,7 @@ const HomePage = () => {
 
   return (
     <div
-      className={`flex flex-col items-center pl-[28px] pr-[27px] ${isShow === true ? 'overflow-hidden' : null}`}
+      className={`mb-[40px] flex flex-col items-center pl-[28px] pr-[27px] ${isShow === true ? 'overflow-hidden' : null}`}
     >
       <ReserveTitle text="어디로 갈까요?" />
       <ReserveWay />

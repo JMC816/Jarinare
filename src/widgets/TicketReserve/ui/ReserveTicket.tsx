@@ -43,7 +43,7 @@ const ReserveTicket = () => {
         setTrainNo(groupedArray[0][0].trainNoId);
         setSeatsId(groupedArray[0].map((item) => item.seatId));
       }}
-      className="mb-[100px] flex h-[100px] w-[320px]"
+      className="mb-[100px] flex h-[100px] w-[320px] pb-[200px]"
     >
       <div className="flex h-[100px] w-[230px] flex-col items-center justify-between rounded-lg bg-lightestGray py-[15px]">
         <div className="flex h-5 w-[200px] items-center justify-center rounded-xs bg-white">

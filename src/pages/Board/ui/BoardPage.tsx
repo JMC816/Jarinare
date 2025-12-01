@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import backward from '@/assets/icons/backward.png';
 import edit from '@/assets/icons/edit.png';
-
+import { ComingSoonModal } from '@/shared/ui/ComingSoonModal';
 // 샘플 데이터 (인스타그램 피드 형태)
 
 const BoardPage = () => {
@@ -68,7 +68,6 @@ const BoardPage = () => {
           자유게시판
         </button>
       </div>
-
       <div className="flex-1 overflow-y-auto bg-gray-50">
         {activeTab === 'notice' ? (
           <Notice />
@@ -77,6 +76,9 @@ const BoardPage = () => {
         ) : (
           <Board />
         )}
+      </div>
+      <div className="fixed mx-auto my-0 h-screen w-[375px]">
+        <ComingSoonModal />
       </div>
     </div>
   );

@@ -25,4 +25,4 @@ export type NotificationModalTypes = 'ResponseModal' | 'AcceptModal';
 
 export type BoardModalTypes = 'noticeModal' | 'EventModal' | 'BoardModal';
 
-export type GolobalModalTypes = 'GlobalModal';
+export type GolobalModalTypes = 'GlobalModal' | 'ComingSoonModal';

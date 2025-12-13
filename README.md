@@ -231,8 +231,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 ## 📝 트러블슈팅
 
-### API 중복 호출 문제 해결 및 디바운싱 적용
-
+### 1. API 중복 호출 문제 해결 및 디바운싱 적용
 ### 🚨 문제 배경
 기차 시간을 조회할 때마다 API 호출이 반복적으로 발생하여 네트워크 요청 수가 불필요하게 늘어나고, 조회 결과를 가져오는 시간이 지연되는 문제가 있었습니다.
 
@@ -262,3 +261,33 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 ### 🤩 해당 경험을 통해 알게 된 점
 네트워크 로그 분석을 통해 불필요한 API 문제를 발견하고, 디바운싱 기법을 적용하여 빠른 중복 호출을 방지할 수 있음을 배웠습니다. 이를 통해 렌더링 효율과 사용자 경험을 함께 경험할 수 있음을 체감했습니다.
+
+<br>
+
+### 2. 좌석 변경 불일치 문제 해결
+### 🚨 문제 배경
+좌석 변경 기능을 구현하면서 내 좌석과 상대방 좌석을 동시에 변경해야 하기 위해
+Firestore의 updateDoc를 사용하여 각각의 좌석을 업데이트했지만 동시 접근 시 상대방에게 좌석이 다 몰리는 문제가 발생했습니다.
+
+### 🌟 해결 방법
+Firebase 공식문서를 보고 runTransaction 기능을 알게 되었고, 이를 사용하면 한 <b>트랜잭션</b> 안에서 여러 문서를 동시에 읽고 쓰는 처리가 가능하다는 것을 알게 되었습니다.
+<b>트랜잭션</b>을 적용하여 내 좌석과 상대방 좌석을 동시에 교체하도록 코드를 수정했습니다.
+
+### 🙌 이전 코드와 비교
+<table>
+  <tr>
+    <td align="center">
+      <b>updateDoc을 사용했을 때</b><br/>
+      <img width="273" height="557" alt="Image1" src="https://github.com/user-attachments/assets/b22c52fe-4a3a-457f-99c8-25921dfcfbde" />
+    </td>
+    <td align="center">
+      <b>runTranscation을 사용했을 때</b><br/>
+      <img width="273" height="557" alt="Image2" src="https://github.com/user-attachments/assets/fa6c7cc9-3a9b-4d44-915e-daa251854ecf" />
+    </td>
+  </tr>
+</table>
+
+### 🤩 해당 경험을 통해 알게 된 점
+Firestore에서 updateDoc만 사용할 경우 동시 요청 시 데이터 불일치가 발생할 수 있다는 문제를 경험했습니다.
+<br>
+runTransaction에 대해 알게 되었고, 어떠한 상황에서 사용해야하는지 알게되었습니다.

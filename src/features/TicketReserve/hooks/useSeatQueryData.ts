@@ -22,11 +22,11 @@ import { seatsInfoStore } from '../model/seatsInfoStore';
 import {
   onValue,
   ref,
-  set,
   remove,
   onDisconnect,
   off,
   DataSnapshot,
+  runTransaction,
 } from 'firebase/database';
 
 export const useSeatQueryData = () => {
@@ -246,14 +246,38 @@ export const useSeatQueryData = () => {
     };
   }, [realtimeDb, docIds, trainNo]);
 
-  // 좌석 잠금
-  const lockSeat = async (seatId: string) => {
-    if (!user) return;
+  // 좌석 잠금 (트랜잭션을 사용한 원자적 잠금 시도)
+  const lockSeat = async (seatId: string): Promise<boolean> => {
+    if (!user) return false;
     const seatLockRef = ref(realtimeDb, `locks/${docIds}/${trainNo}/${seatId}`);
-    await set(seatLockRef, user.uid);
 
-    // 브라우저가 닫히면 자동 해제
-    onDisconnect(seatLockRef).remove();
+    try {
+      const result = await runTransaction(seatLockRef, (currentData) => {
+        // 현재 잠금 상태 확인
+        // null이거나 undefined이거나 본인이 잠금한 경우에만 잠금 가능
+        if (
+          currentData === null ||
+          currentData === undefined ||
+          currentData === user.uid
+        ) {
+          return user.uid;
+        }
+        // 다른 사용자가 이미 잠금한 경우, 현재 값을 유지 (트랜잭션 실패)
+        return currentData;
+      });
+
+      // 트랜잭션이 성공하고 본인이 잠금한 경우
+      if (result.committed && result.snapshot.val() === user.uid) {
+        // 브라우저가 닫히면 자동 해제
+        onDisconnect(seatLockRef).remove();
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      console.error('좌석 잠금 트랜잭션 오류:', error);
+      return false;
+    }
   };
 
   // 좌석 잠금 해제
@@ -268,20 +292,18 @@ export const useSeatQueryData = () => {
     if (isSelectingRef.current[id]) return;
     isSelectingRef.current[id] = true;
     try {
-      // 선택할려는 좌석이 이미 예매된 좌석(본인 포함)이거나
-      // 잠긴 좌석(상대방)이면 선택 불가
+      // 선택할려는 좌석이 이미 예매된 좌석(본인 포함)이면 선택 불가
       const isMineOrOthers = seatsInfo.some(
         (item) => item.trainNoId === trainNo && item.seatId === id,
       );
-      const isLockedByOther = !!locks[id];
-      if (isMineOrOthers || isLockedByOther) return;
+      if (isMineOrOthers) return;
 
       const isSelected = seatsState[id] === true;
 
       // 선택한 좌석을 다시 선택하면 빈 좌석으로 바뀐다.
       if (isSelected) {
+        // 본인이 잠금한 경우에만 해제
         setSeatsState({ ...seatsState, [id]: false });
-        // 빈 좌석으로 되면 잠금 해제
         await unlockSeat(id);
         return;
       }
@@ -289,12 +311,13 @@ export const useSeatQueryData = () => {
       // 선택 인원 수 제한
       if (selectedCount >= selectAdult + selectKid) return;
 
-      // 빈 좌석을 선택하면 선택한 좌석으로 바뀐다.
-      setSeatsState({ ...seatsState, [id]: true });
-      // 선택한 후 잠금
-      await lockSeat(id);
+      // 잠금을 먼저 시도하고, 성공한 경우에만 로컬 상태 업데이트
+      const lockSuccess = await lockSeat(id);
+      if (lockSuccess) {
+        // 잠금 성공 시에만 로컬 상태 업데이트
+        setSeatsState({ ...seatsState, [id]: true });
+      }
     } finally {
-      // 빈 좌석으로 바뀌면 해제
       isSelectingRef.current[id] = false;
     }
   };

@@ -41,7 +41,11 @@ const Ticket = memo(
           textColor="black"
         />
         <div className="w-full border border-lightGray" />
-        <TicketList title="요금" text={`${selectPay}원`} textColor="black" />
+        <TicketList
+          title="요금"
+          text={`${selectPay.toLocaleString('ko-KR')}원`}
+          textColor="black"
+        />
       </div>
     );
   },

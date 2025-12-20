@@ -87,7 +87,7 @@ const TrainList = () => {
                     {adultcharge === 0 ? (
                       <span className="text-red">매진</span>
                     ) : (
-                      adultcharge + '원'
+                      adultcharge.toLocaleString('ko-KR') + '원'
                     )}
                   </span>
                 </div>

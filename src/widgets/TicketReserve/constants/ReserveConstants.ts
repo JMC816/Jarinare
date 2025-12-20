@@ -102,7 +102,7 @@ export const reserveConstants = () => {
     },
     {
       id: '07',
-      train: 'KTX-산천(A-type)',
+      train: 'KTX-산천A',
       icon: check,
     },
     {
@@ -117,7 +117,7 @@ export const reserveConstants = () => {
     },
     {
       id: '10',
-      train: 'KTX-산천(B-type)',
+      train: 'KTX-산천B',
       icon: check,
     },
     {

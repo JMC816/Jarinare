@@ -42,7 +42,10 @@ const ChoiceResultModal = () => {
             }
           />
           <div className="mb-[25px] mt-[25px] w-full border border-lightGray" />
-          <ChoiceResultList title="요금" text={selectPay + '원'} />
+          <ChoiceResultList
+            title="요금"
+            text={selectPay.toLocaleString('ko-KR') + '원'}
+          />
         </div>
         <div className="mt-[20px] flex w-full justify-between text-base font-bold">
           <ChocieResultButton

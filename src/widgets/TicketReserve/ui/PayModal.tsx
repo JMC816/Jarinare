@@ -42,7 +42,8 @@ const PayModal = () => {
               id="check"
               checked={checked}
               onChange={onChange}
-              className={`appearance-none rounded border border-blue p-2 ${checked ? "bg-blue bg-[url('@/assets/icons/point_check.png')] bg-center bg-no-repeat" : null} `}
+              disabled={point === 0}
+              className={`appearance-none rounded border border-blue p-2 ${checked ? "bg-blue bg-[url('@/assets/icons/point_check.png')] bg-center bg-no-repeat" : null} ${point === 0 ? 'cursor-not-allowed opacity-50' : ''}`}
             />
             <label htmlFor="check" className="flex">
               <span
@@ -57,38 +58,40 @@ const PayModal = () => {
               className={`flex w-full justify-between gap-1 ${checked ? 'text-black' : 'text-lightGray'} h-9`}
             >
               <input
-                type="number"
+                type="text"
                 disabled={!checked}
-                className={`rounded-xs border border-lightGray px-1 text-end [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none`}
-                value={!checked ? '' : Number(value)}
+                className={`rounded-xs border border-lightGray px-1 text-end`}
+                value={
+                  !checked
+                    ? ''
+                    : value === null || value === 0
+                      ? ''
+                      : value.toLocaleString('ko-KR')
+                }
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const inputValue = e.target.value.replace(/,/g, '');
+                  const numValue = inputValue === '' ? 0 : Number(inputValue);
                   if (
                     selectPay * seatsStateCount &&
-                    point >= Number(e.target.value)
+                    (inputValue === '' || (point >= numValue && numValue >= 0))
                   ) {
-                    setValue(
-                      e.target.value === '' ? 0 : Number(e.target.value),
-                    );
+                    setValue(numValue);
                   }
                 }}
               />
               <button
                 onClick={onClick}
                 disabled={!checked}
-                className="rounded-xs border border-lightGray bg-white px-2 text-base active:brightness-50"
+                className="rounded-xs border border-lightGray bg-white px-2 text-sm active:brightness-50"
               >
                 모두 사용
               </button>
             </div>
-            {checked ? (
-              <span className="flex h-[20px] w-full justify-end text-base text-darkGray">
-                보유 포인트&nbsp;
-                <span className="text-blue">
-                  {point.toLocaleString('ko-kr')}
-                </span>
-                &nbsp;원
-              </span>
-            ) : null}
+            <span className="flex h-[20px] w-full justify-end text-base text-darkGray">
+              보유 포인트&nbsp;
+              <span className="text-blue">{point.toLocaleString('ko-KR')}</span>
+              &nbsp;원
+            </span>
           </div>
           <div className={`${checked ? 'mt-[40px]' : 'mt-[60px]'}`}>
             <div className="flex justify-between text-lg font-bold">
@@ -107,7 +110,9 @@ const PayModal = () => {
             <div className="mt-[15px] flex flex-col rounded-md bg-lightestGray p-3 text-base">
               <div className="flex justify-between">
                 <span className="h-[20px] text-darkGray">총 결제금액</span>
-                <span>{selectPay * seatsStateCount} 원</span>
+                <span>
+                  {(selectPay * seatsStateCount).toLocaleString('ko-KR')} 원
+                </span>
               </div>
               {checked ? (
                 <div className="flex h-[20px] justify-between">

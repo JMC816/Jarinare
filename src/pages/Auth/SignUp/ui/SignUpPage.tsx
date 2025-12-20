@@ -31,21 +31,23 @@ const SignUpPage = () => {
 
   return (
     <FormProvider {...method}>
-      <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
-        <BackWardPageButton />
-        <EmailForm />
-        <SignUpStageLine stage={1} width={100} borderRadius="xl" />
-        <div className="mb-[45px] flex flex-col">
-          <button
-            type="button"
-            onClick={handleNextClick}
-            disabled={isChecking}
-            className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm bg-blue text-base font-bold text-white active:brightness-50 disabled:bg-blue/30`}
-          >
-            {isChecking ? '확인 중...' : '다음'}
-          </button>
+      <div className="flex h-screen w-full items-center justify-center">
+        <div className="flex h-[667px] w-[375px] flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
+          <BackWardPageButton />
+          <EmailForm />
+          <SignUpStageLine stage={1} width={100} borderRadius="xl" />
+          <div className="mb-[45px] flex flex-col">
+            <button
+              type="button"
+              onClick={handleNextClick}
+              disabled={isChecking}
+              className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm bg-blue text-base font-bold text-white active:brightness-50 disabled:bg-blue/30`}
+            >
+              {isChecking ? '확인 중...' : '다음'}
+            </button>
+          </div>
+          {isShow == false || modalType == undefined ? null : <Modal />}
         </div>
-        {isShow == false || modalType == undefined ? null : <Modal />}
       </div>
     </FormProvider>
   );

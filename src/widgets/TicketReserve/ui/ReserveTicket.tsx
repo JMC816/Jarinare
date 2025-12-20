@@ -80,9 +80,37 @@ const ReserveTicket = () => {
         </div>
       </div>
       <div className="flex h-[100px] w-[90px] items-center justify-center rounded-lg bg-lightBlue text-center text-base font-bold text-blue">
-        {groupedArray[0][0].trainType.slice(0, 3)}
-        <br />
-        {groupedArray[0][0].trainType.slice(4)}
+        {(() => {
+          const trainType = groupedArray[0][0].trainType;
+          const parts = trainType.split('-');
+          const firstPart = parts[0]; // "KTX"
+          const rest = parts.slice(1).join('-'); // "산천(A-type)-241"
+
+          // "(A-type)" 패턴에서 "A" 추출
+          const typeMatch = rest.match(/\(([A-Z])-type\)/);
+          const type = typeMatch ? typeMatch[1] : '';
+
+          // "산천" 추출 (괄호 전까지)
+          const name = rest.split('(')[0];
+
+          // 마지막 숫자 추출
+          const numberMatch = rest.match(/-(\d+)$/);
+          const number = numberMatch ? numberMatch[1] : '';
+
+          return (
+            <>
+              {firstPart}
+              <br />
+              {name} {type}
+              {number && (
+                <>
+                  <br />
+                  {number}
+                </>
+              )}
+            </>
+          );
+        })()}
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import GithubLogin from '@/features/Auth/SocialLogin/ui/GithubLogin';
-import GoogleLogin from '@/features/Auth/SocialLogin/ui/GoogleLogin';
 import KakaoLogin from '@/features/Auth/SocialLogin/ui/KakakoLogin';
 
 const SocialLoginList = () => {
@@ -7,7 +6,7 @@ const SocialLoginList = () => {
     <div className="flex flex-col gap-y-2">
       <KakaoLogin />
       <GithubLogin />
-      <GoogleLogin />
+      {/* <GoogleLogin /> */}
     </div>
   );
 };

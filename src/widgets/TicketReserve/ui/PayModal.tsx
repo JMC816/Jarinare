@@ -126,9 +126,7 @@ const PayModal = () => {
             </div>
           </div>
         </div>
-        <div
-          className={`${checked ? 'mt-[40px]' : 'mt-[60px]'} flex w-full items-center gap-5 text-tiny`}
-        >
+        <div className="mt-[30px] flex w-full items-center gap-5 text-tiny">
           <PaymentButton
             onClick={() => closeModal('PayModal')}
             bgColor="lightBlue"

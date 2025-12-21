@@ -61,10 +61,24 @@ export const useSeatsSelect = () => {
     };
 
     onValue(dbRef, cb);
-    return () =>
+    return () => {
       // 실시간 DB는 off로 직접 해제
       off(dbRef, 'value', cb);
-  }, [realtimeDb, mySeats[0].id, trainNo]);
+
+      // 페이지 벗어나면 좌석 잠금 해제
+      (async () => {
+        Object.keys(seatsState)
+          .filter((id) => seatsState[id] === true)
+          .forEach(async (id) => {
+            const seatLockRef = ref(
+              realtimeDb,
+              `locks/${mySeats[0].id}/${trainNo}/${id}`,
+            );
+            await remove(seatLockRef);
+          });
+      })();
+    };
+  }, [realtimeDb, mySeats[0].id, trainNo, seatsState]);
 
   // 좌석 잠금
   const lockSeat = async (seatId: string) => {

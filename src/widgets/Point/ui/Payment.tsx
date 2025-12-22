@@ -25,7 +25,7 @@ export const Payment = ({ accruedPoint, createAt }: PaymentType) => {
           {Number('2000').toLocaleString('ko-KR')} 원
         </span>
         <span className="text-tiny text-darkGray">
-          {accruedPoint.toLocaleString('ko-KR')} 원
+          {Number(accruedPoint ?? 0).toLocaleString('ko-KR')} 원
         </span>
       </div>
     </div>

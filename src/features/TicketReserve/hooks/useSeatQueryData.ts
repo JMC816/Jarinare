@@ -339,24 +339,232 @@ export const useSeatQueryData = () => {
       return;
 
     const rows = ['A', 'B', 'C', 'D'];
-    const columns = 6;
-    const selectedSeatIds: string[] = [];
+    const columns = [1, 2, 3, 4, 5, 6];
 
-    while (selectedSeatIds.length < isAllSelectedCount) {
-      // A ~ D
-      const randomRow = rows[Math.floor(Math.random() * rows.length)];
-      // 1 ~ 6
-      const randomColumn = Math.floor(Math.random() * columns + 1);
-      const seatId = `${randomRow}${randomColumn}`;
+    // 사용 가능한 좌석 확인 함수
+    const isAvailable = (seatId: string): boolean => {
+      return (
+        !reservedSeatIds.includes(seatId) &&
+        !lockedSeatIds.includes(seatId) &&
+        !seatsState[seatId]
+      );
+    };
 
-      const isAlreadySelected = selectedSeatIds.includes(seatId);
-      const isReserved = reservedSeatIds.includes(seatId);
-      const islocked = lockedSeatIds.includes(seatId);
+    let selectedSeatIds: string[] = [];
 
-      // 이미 선택했거나 예약된 좌석이거나 잠긴 좌석은 제외
-      if (isAlreadySelected || isReserved || islocked) continue;
+    // 2인: 같은 열에서 인접한 두 행 (예: A1 B1)
+    if (isAllSelectedCount === 2) {
+      for (const col of columns) {
+        // A-B 쌍
+        const seatA = `A${col}`;
+        const seatB = `B${col}`;
+        if (isAvailable(seatA) && isAvailable(seatB)) {
+          selectedSeatIds = [seatA, seatB];
+          break;
+        }
+        // B-C 쌍
+        const seatB2 = `B${col}`;
+        const seatC = `C${col}`;
+        if (isAvailable(seatB2) && isAvailable(seatC)) {
+          selectedSeatIds = [seatB2, seatC];
+          break;
+        }
+        // C-D 쌍
+        const seatC2 = `C${col}`;
+        const seatD = `D${col}`;
+        if (isAvailable(seatC2) && isAvailable(seatD)) {
+          selectedSeatIds = [seatC2, seatD];
+          break;
+        }
+      }
+    }
+    // 3인: ㄱ자 형태 (예: A1 B1 A2)
+    else if (isAllSelectedCount === 3) {
+      for (const col of columns) {
+        // 다음 열이 있는지 확인
+        if (col >= 6) continue;
 
-      selectedSeatIds.push(seatId);
+        // A1 B1 A2 형태
+        const seatA1 = `A${col}`;
+        const seatB1 = `B${col}`;
+        const seatA2 = `A${col + 1}`;
+        if (isAvailable(seatA1) && isAvailable(seatB1) && isAvailable(seatA2)) {
+          selectedSeatIds = [seatA1, seatB1, seatA2];
+          break;
+        }
+
+        // B1 C1 B2 형태
+        const seatB1_2 = `B${col}`;
+        const seatC1 = `C${col}`;
+        const seatB2 = `B${col + 1}`;
+        if (
+          isAvailable(seatB1_2) &&
+          isAvailable(seatC1) &&
+          isAvailable(seatB2)
+        ) {
+          selectedSeatIds = [seatB1_2, seatC1, seatB2];
+          break;
+        }
+
+        // C1 D1 C2 형태
+        const seatC1_2 = `C${col}`;
+        const seatD1 = `D${col}`;
+        const seatC2 = `C${col + 1}`;
+        if (
+          isAvailable(seatC1_2) &&
+          isAvailable(seatD1) &&
+          isAvailable(seatC2)
+        ) {
+          selectedSeatIds = [seatC1_2, seatD1, seatC2];
+          break;
+        }
+
+        // A1 B1 B2 형태 (다른 ㄱ자 형태)
+        const seatA1_2 = `A${col}`;
+        const seatB1_3 = `B${col}`;
+        const seatB2_2 = `B${col + 1}`;
+        if (
+          isAvailable(seatA1_2) &&
+          isAvailable(seatB1_3) &&
+          isAvailable(seatB2_2)
+        ) {
+          selectedSeatIds = [seatA1_2, seatB1_3, seatB2_2];
+          break;
+        }
+      }
+    }
+    // 4인: ㅁ자 형태 2x2 정사각형 (예: A1 B1 A2 B2)
+    else if (isAllSelectedCount === 4) {
+      for (const col of columns) {
+        // 다음 열이 있는지 확인
+        if (col >= 6) continue;
+
+        // A1 B1 A2 B2 형태
+        const seatA1 = `A${col}`;
+        const seatB1 = `B${col}`;
+        const seatA2 = `A${col + 1}`;
+        const seatB2 = `B${col + 1}`;
+        if (
+          isAvailable(seatA1) &&
+          isAvailable(seatB1) &&
+          isAvailable(seatA2) &&
+          isAvailable(seatB2)
+        ) {
+          selectedSeatIds = [seatA1, seatB1, seatA2, seatB2];
+          break;
+        }
+
+        // B1 C1 B2 C2 형태
+        const seatB1_4 = `B${col}`;
+        const seatC1_3 = `C${col}`;
+        const seatB2_3 = `B${col + 1}`;
+        const seatC2 = `C${col + 1}`;
+        if (
+          isAvailable(seatB1_4) &&
+          isAvailable(seatC1_3) &&
+          isAvailable(seatB2_3) &&
+          isAvailable(seatC2)
+        ) {
+          selectedSeatIds = [seatB1_4, seatC1_3, seatB2_3, seatC2];
+          break;
+        }
+
+        // C1 D1 C2 D2 형태
+        const seatC1_4 = `C${col}`;
+        const seatD1_2 = `D${col}`;
+        const seatC2_2 = `C${col + 1}`;
+        const seatD2 = `D${col + 1}`;
+        if (
+          isAvailable(seatC1_4) &&
+          isAvailable(seatD1_2) &&
+          isAvailable(seatC2_2) &&
+          isAvailable(seatD2)
+        ) {
+          selectedSeatIds = [seatC1_4, seatD1_2, seatC2_2, seatD2];
+          break;
+        }
+      }
+    }
+    // 5인 이상: 최대한 붙어있는 형태로 선택 (우선순위: 2x2 + 추가 좌석)
+    else {
+      // 먼저 4개를 ㅁ자 형태로 찾고, 나머지를 최대한 가까운 곳에 배치
+      for (const col of columns) {
+        if (col >= 6) continue;
+
+        const seatA1 = `A${col}`;
+        const seatB1 = `B${col}`;
+        const seatA2 = `A${col + 1}`;
+        const seatB2 = `B${col + 1}`;
+
+        if (
+          isAvailable(seatA1) &&
+          isAvailable(seatB1) &&
+          isAvailable(seatA2) &&
+          isAvailable(seatB2)
+        ) {
+          selectedSeatIds = [seatA1, seatB1, seatA2, seatB2];
+
+          // 나머지 좌석을 최대한 가까운 곳에 배치
+          const remaining = isAllSelectedCount - 4;
+          if (remaining > 0) {
+            // 같은 행의 다음 열이나 이전 열 시도
+            const candidates = [
+              `A${col + 2}`,
+              `B${col + 2}`,
+              `A${col - 1}`,
+              `B${col - 1}`,
+              `C${col}`,
+              `C${col + 1}`,
+            ].filter((id) => {
+              const match = id.match(/^([A-D])(\d+)$/);
+              if (!match) return false;
+              const row = match[1];
+              const colNum = parseInt(match[2]);
+              return (
+                rows.includes(row) &&
+                colNum >= 1 &&
+                colNum <= 6 &&
+                isAvailable(id) &&
+                !selectedSeatIds.includes(id)
+              );
+            });
+
+            for (let i = 0; i < remaining && i < candidates.length; i++) {
+              selectedSeatIds.push(candidates[i]);
+            }
+          }
+
+          if (selectedSeatIds.length === isAllSelectedCount) break;
+        }
+      }
+    }
+
+    // 패턴으로 찾지 못한 경우, 기존 랜덤 방식으로 fallback
+    if (selectedSeatIds.length < isAllSelectedCount) {
+      selectedSeatIds = [];
+      const allRows = ['A', 'B', 'C', 'D'];
+      const allColumns = [1, 2, 3, 4, 5, 6];
+
+      // 모든 사용 가능한 좌석 목록 생성
+      const availableSeats: string[] = [];
+      for (const row of allRows) {
+        for (const col of allColumns) {
+          const seatId = `${row}${col}`;
+          if (isAvailable(seatId)) {
+            availableSeats.push(seatId);
+          }
+        }
+      }
+
+      // 필요한 만큼 랜덤 선택
+      while (
+        selectedSeatIds.length < isAllSelectedCount &&
+        availableSeats.length > 0
+      ) {
+        const randomIndex = Math.floor(Math.random() * availableSeats.length);
+        selectedSeatIds.push(availableSeats[randomIndex]);
+        availableSeats.splice(randomIndex, 1);
+      }
     }
 
     // 순회한 좌석들을 newState에 저장 및 잠금

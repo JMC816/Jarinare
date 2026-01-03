@@ -7,6 +7,7 @@ import useModalStore from '@/widgets/model/AuthStore';
 import { FormProvider } from 'react-hook-form';
 import { useEmailCheck } from '@/features/Auth/SignUp/hooks/useEmailCheck';
 import { EmailErrorStore } from '@/features/Auth/SignUp/model/SignUpStore';
+import { useEffect, useCallback } from 'react';
 
 const SignUpPage = () => {
   const { isShow, modalType, openModal } = useModalStore();
@@ -14,7 +15,7 @@ const SignUpPage = () => {
   const { checkEmailExists, isChecking } = useEmailCheck();
   const { setEmailError } = EmailErrorStore();
 
-  const handleNextClick = async () => {
+  const handleNextClick = useCallback(async () => {
     // 이메일 유효성 검사
     const email = method.getValues('email');
     if (method.formState.errors.email || email === '') {
@@ -27,7 +28,21 @@ const SignUpPage = () => {
       setEmailError('');
       openModal('NameModal');
     }
-  };
+  }, [method, checkEmailExists, setEmailError, openModal]);
+
+  // 엔터키 이벤트 핸들러
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !isChecking) {
+        handleNextClick();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isChecking, handleNextClick]);
 
   return (
     <FormProvider {...method}>

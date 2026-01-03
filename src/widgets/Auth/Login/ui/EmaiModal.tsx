@@ -5,6 +5,7 @@ import LoginStageLine from './LoginStageLine';
 import { useFormContext } from 'react-hook-form';
 import { useEmailCheck } from '@/features/Auth/Login/hooks/useEmailCheck';
 import { EmailErrorStore } from '@/features/Auth/Login/model/useLoginStore';
+import { useCallback, useEffect } from 'react';
 
 const EmailModal = () => {
   const { closeModal, openModal } = useModalStore();
@@ -15,7 +16,7 @@ const EmailModal = () => {
   const { checkEmailExists, isChecking } = useEmailCheck();
   const { setEmailError } = EmailErrorStore();
 
-  const handleNextClick = async () => {
+  const handleNextClick = useCallback(async () => {
     // 이메일 유효성 검사
     const email = getValues('email');
     if (errors.email || email === '') {
@@ -28,7 +29,21 @@ const EmailModal = () => {
       setEmailError('');
       openModal('PasswordModal');
     }
-  };
+  }, [getValues, errors.email, checkEmailExists, setEmailError, openModal]);
+
+  // 엔터키 이벤트 핸들러
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !isChecking) {
+        handleNextClick();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isChecking, handleNextClick]);
 
   return (
     <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">

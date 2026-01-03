@@ -23,12 +23,15 @@ const LoginPage = () => {
             또는
           </div>
           <SocialLoginList />
-          <Link
-            className="mt-[30px] text-md font-bold text-blue"
-            to={'/auth/signup'}
-          >
-            회원가입
-          </Link>
+          <div className="mt-[30px] flex w-full flex-col items-center gap-y-2">
+            <span className="text-sm text-mediumGray">회원이 아니신가요?</span>
+            <Link
+              className="relative flex h-12 w-[300px] items-center justify-center rounded-md border border-lightGray bg-white text-base font-bold text-blue shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
+              to={'/auth/signup'}
+            >
+              회원가입
+            </Link>
+          </div>
           {isShow == false || modalType == undefined ? null : <Modal />}
         </div>
       </div>

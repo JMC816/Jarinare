@@ -27,6 +27,7 @@ import {
   off,
   DataSnapshot,
   runTransaction,
+  get,
 } from 'firebase/database';
 
 export const useSeatQueryData = () => {
@@ -578,20 +579,44 @@ export const useSeatQueryData = () => {
     setIsMutating(false);
   };
 
+  const prevTrainNoRef = useRef<string | undefined>(trainNo);
+
   useEffect(() => {
-    // 호차 변경 시 좌석 잠금 해제
-    const resetLocksChangedTrainNoId = async () => {
-      const filtered = Object.entries(seatsState)
-        .filter(([, value]) => value === true)
-        .map(([key]) => key);
-      await Promise.all(
-        filtered.map((seatId) =>
-          remove(ref(realtimeDb, `locks/${docIds}/${trainNo}/${seatId}`)),
-        ),
-      );
-    };
-    resetLocksChangedTrainNoId();
-  }, [trainNo]);
+    const previousTrainNo = prevTrainNoRef.current;
+
+    if (previousTrainNo !== undefined && previousTrainNo !== trainNo) {
+      const unlockPreviousTrainNo = async () => {
+        if (!user) return;
+
+        try {
+          const locksPath = `locks/${docIds}/${previousTrainNo}`;
+          const locksRef = ref(realtimeDb, locksPath);
+          const snapshot = await get(locksRef);
+
+          if (snapshot.exists()) {
+            const locks = snapshot.val() as Record<string, string>;
+            const myLockedSeats = Object.entries(locks)
+              .filter(([, userId]) => userId === user.uid)
+              .map(([seatId]) => seatId);
+
+            if (myLockedSeats.length > 0) {
+              await Promise.all(
+                myLockedSeats.map((seatId) =>
+                  remove(ref(realtimeDb, `${locksPath}/${seatId}`)),
+                ),
+              );
+            }
+          }
+        } catch (error) {
+          console.error('호차 변경 시 lock 해제 오류:', error);
+        }
+      };
+
+      unlockPreviousTrainNo();
+    }
+
+    prevTrainNoRef.current = trainNo;
+  }, [trainNo, docIds, user]);
 
   useEffect(() => {
     // 선택한 좌석 즉시 반영
@@ -632,12 +657,9 @@ export const useSeatQueryData = () => {
 
       await setDoc(doc(db, 'train', docIds), { id: docIds });
 
-      // 좌석 예매 후 잠금 해제 및 좌석 상태 초기화
-      await Promise.all(
-        filtered.map((seatId) =>
-          remove(ref(realtimeDb, `locks/${docIds}/${trainNo}/${seatId}`)),
-        ),
-      );
+      // 좌석 상태 초기화
+      // lock은 해제하지 않음 - seatsInfo에 데이터가 있으면 isOther가 true가 되어 회색으로 표시되므로 lock이 없어도 문제없음
+      // lock을 해제하면 상대방 화면에서 seatsInfo가 업데이트되기 전에 lock이 사라져 흰색으로 보일 수 있음
       setSeatsState({});
 
       navigate('/');

@@ -25,7 +25,10 @@ const UserInfo = () => {
         <span>회원번호</span>
         <span>20251234</span>
       </div> */}
-      <span onClick={handleLogout} className="w-full text-center underline">
+      <span
+        onClick={handleLogout}
+        className="w-full cursor-pointer text-center underline"
+      >
         로그아웃
       </span>
     </div>

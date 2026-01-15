@@ -82,11 +82,12 @@ const PayModal = () => {
               <button
                 onClick={onClick}
                 disabled={!checked}
-                className="rounded-xs border border-lightGray bg-white px-2 text-sm active:brightness-50"
+                className="active:brightness-95disabled:opacity-50 rounded-xs border border-lightGray bg-white px-2 text-sm shadow-sm transition-all hover:border-mediumGray hover:shadow-md"
               >
                 모두 사용
               </button>
             </div>
+
             <span className="flex h-[20px] w-full justify-end text-base text-darkGray">
               보유 포인트&nbsp;
               <span className="text-blue">{point.toLocaleString('ko-KR')}</span>

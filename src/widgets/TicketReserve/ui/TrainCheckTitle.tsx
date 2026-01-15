@@ -9,7 +9,7 @@ const TrainCheckTitle = () => {
     <div className="mt-[30px] flex w-full justify-between">
       <div
         onClick={handleYesterday}
-        className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-xs bg-lightGray active:brightness-50"
+        className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-xs bg-lightGray shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
       >
         <img src={black_prev} width={7} height={11} />
       </div>
@@ -18,7 +18,7 @@ const TrainCheckTitle = () => {
       </span>
       <div
         onClick={handleTomorrow}
-        className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-xs bg-lightGray active:brightness-50"
+        className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center rounded-xs bg-lightGray shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
       >
         <img src={black_next} width={7} height={11} />
       </div>

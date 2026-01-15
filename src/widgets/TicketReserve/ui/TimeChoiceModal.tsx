@@ -29,7 +29,7 @@ const TimeChoiceModal = () => {
                 setStartTime(time);
                 setStartTimeForView(timeView);
               }}
-              className={`${startDay === formatDate(new Date()) && time <= formatTime() ? 'pointer-events-none brightness-50' : ''} flex h-[35px] w-[60px] cursor-pointer items-center justify-center rounded-md border border-lightGray bg-lightestGray text-tiny text-darkGray active:brightness-50`}
+              className={`${startDay === formatDate(new Date()) && time <= formatTime() ? 'pointer-events-none brightness-50' : ''} flex h-[35px] w-[60px] cursor-pointer items-center justify-center rounded-md border border-lightGray bg-lightestGray text-tiny text-darkGray shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:opacity-50`}
             >
               {timeView}
             </div>

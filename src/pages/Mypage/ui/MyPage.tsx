@@ -21,16 +21,14 @@ const MyPage = () => {
       </div>
       <div className="mt-[30px] h-5 w-full bg-lightestGray" />
       <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
-        <span className="mt-5 w-full text-base text-darkGray underline">
-          내 포인트
-        </span>
+        <span className="mt-5 w-full text-base text-darkGray">내 포인트</span>
         <div className="mt-5 flex w-full items-center justify-between gap-y-5">
           <span className="text-2xl font-semibold">
             {point.toLocaleString('ko-KR')} 원
           </span>
           <button
             onClick={() => navigate('/mypage/point')}
-            className="h-[35px] w-[55px] rounded-xs bg-blue text-sm font-bold text-white active:brightness-50"
+            className="h-[35px] w-[55px] rounded-xs border border-lightGray bg-blue text-sm font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
           >
             더보기
           </button>

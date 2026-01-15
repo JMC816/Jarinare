@@ -18,7 +18,7 @@ const SeatChangeMenu = () => {
         onClick={() => {
           openModal('TrainNumberChoiceModal');
         }}
-        className="shadow-black/4 flex h-[30px] w-[150px] cursor-pointer items-center justify-center gap-[6px] rounded-xs bg-white drop-shadow-[0_0_5px_rgba(0,0,0,0.25)] active:brightness-50"
+        className="flex h-[30px] w-[150px] cursor-pointer items-center justify-center gap-[6px] rounded-xs border border-lightGray bg-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
       >
         <span className="text-xs font-bold">
           {trainNo}호차 잔여{' '}

@@ -56,7 +56,7 @@ const SignUpPage = () => {
               type="button"
               onClick={handleNextClick}
               disabled={isChecking}
-              className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm bg-blue text-base font-bold text-white active:brightness-50 disabled:bg-blue/30`}
+              className={`relative flex h-12 w-[300px] items-center justify-center rounded-md border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:bg-lightBlueImpossible disabled:opacity-50`}
             >
               {isChecking ? '확인 중...' : '다음'}
             </button>

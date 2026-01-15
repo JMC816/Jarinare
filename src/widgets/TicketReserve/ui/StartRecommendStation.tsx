@@ -19,7 +19,7 @@ const StartRecommendStationList = ({ modalType }: PlaceModalProp) => {
               setStartStationForView(text);
             }}
             key={idx}
-            className="flex h-[35px] w-[60px] cursor-pointer items-center justify-center rounded-md border border-lightGray bg-lightestGray text-tiny text-darkGray active:brightness-50"
+            className="flex h-[35px] w-[60px] cursor-pointer items-center justify-center rounded-md border border-lightGray bg-lightestGray text-tiny text-darkGray shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
           >
             {text}
           </div>

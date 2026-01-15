@@ -34,7 +34,7 @@ const ResponseModal = () => {
               await refuseRequest(response);
               await deleteRequsetAndResponse(response);
             }}
-            className="flex h-12 w-[100px] items-center justify-center rounded-xs bg-lightBlue text-blue active:brightness-50"
+            className="flex h-12 w-[100px] items-center justify-center rounded-xs border border-lightGray bg-lightBlue text-blue shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
           >
             거절
           </button>
@@ -49,7 +49,7 @@ const ResponseModal = () => {
                 closeModal('AcceptModal');
               }, 1500);
             }}
-            className="flex h-12 w-[100px] items-center justify-center rounded-xs bg-blue text-white active:brightness-50"
+            className="flex h-12 w-[100px] items-center justify-center rounded-xs border border-lightGray bg-blue text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
           >
             수락
           </button>

@@ -9,7 +9,7 @@ const ChocieResultButton = ({
   return (
     <button
       onClick={onClick}
-      className={`h-12 w-[140px] rounded-sm active:brightness-50 bg-${bgColor} text-${textColor}`}
+      className={`h-12 w-[140px] rounded-sm bg-${bgColor} text-${textColor} border border-lightGray shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95`}
     >
       {text}
     </button>

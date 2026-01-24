@@ -40,7 +40,7 @@ const NotificationPage = () => {
       </div>
       <span
         onClick={async () => await updateAllResponse()}
-        className="mt-[20px] flex w-full justify-end pr-[10px] text-base text-darkGray underline"
+        className="mt-[20px] flex w-full cursor-pointer justify-end pr-[10px] text-base text-darkGray underline"
       >
         모두 읽음
       </span>

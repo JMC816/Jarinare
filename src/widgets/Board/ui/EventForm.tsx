@@ -1,25 +1,23 @@
 import cross from '@/assets/icons/cross.png';
-import { useBaordHandler } from '@/features/Board/hooks/useBoardHandler';
 import { useNavigate } from 'react-router-dom';
 import picture from '@/assets/icons/picture.png';
+import { BoardType } from '@/features/Board/types/boardType';
 
-const EvnetForm = () => {
+const EvnetForm = ({
+  onAuthorChange,
+  onContentChange,
+  onTitleChange,
+  onFileChange,
+  onSubmit,
+  setFile,
+  setPreviewImg,
+  fileInputRef,
+  author,
+  title,
+  content,
+  previewImg,
+}: BoardType) => {
   const navigate = useNavigate();
-  const {
-    onAuthorChange,
-    onContentChange,
-    onTitleChange,
-    onFileChange,
-    onSubmit,
-    setFile,
-    setPreviewImg,
-    fileInputRef,
-    author,
-    title,
-    content,
-    previewImg,
-  } = useBaordHandler();
-
   return (
     <form onSubmit={onSubmit} className="mt-10 flex flex-col gap-10">
       <input

@@ -21,17 +21,6 @@ export const useDaySelect = () => {
   return { value, onChange };
 };
 
-export const useDayCount = () => {
-  const [countAdult, setCountAdult] = useState<number>(0);
-  const [countKid, setCountKid] = useState<number>(0);
-  const { setKid, setAdult } = trainDataStore();
-  useEffect(() => {
-    setKid(countKid);
-    setAdult(countAdult);
-  }, [countKid, countAdult]);
-  return { countAdult, countKid, setCountAdult, setCountKid };
-};
-
 export const useNavigation = () => {
   const navigate = useNavigate();
   return { navigate };

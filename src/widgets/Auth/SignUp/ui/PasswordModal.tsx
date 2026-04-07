@@ -17,16 +17,17 @@ const PasswordModal = () => {
         await onSubmit(data);
         closeModal('EmailModal');
         closeModal('NameModal');
+        closeModal('AgeModal');
         closeModal('PasswordModal');
       })}
       className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]"
     >
       <BackWardModalButton
         closeModal={() => closeModal('PasswordModal')}
-        openModal={() => openModal('NameModal')}
+        openModal={() => openModal('AgeModal')}
       />
       <PasswordForm />
-      <SignUpStageLine stage={3} width={300} borderRadius="xl" />
+      <SignUpStageLine stage={4} width={300} borderRadius="xl" />
       <SignUpButton text="회원가입" bgColor="blue" textColor="white" />
     </form>
   );

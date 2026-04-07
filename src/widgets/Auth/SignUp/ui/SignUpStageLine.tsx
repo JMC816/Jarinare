@@ -5,7 +5,7 @@ const SignUpStageLine = ({ stage, width, borderRadius }: AuthStageProps) => {
   return (
     <div className="mb-[20px] flex w-full flex-col gap-y-[10px]">
       <span className="flex w-full justify-end text-base font-bold">
-        3단계중 {stage}단계
+        4단계중 {stage}단계
       </span>
       <div className="h-[10px] w-[300px] rounded-xl bg-lightGray">
         <motion.div

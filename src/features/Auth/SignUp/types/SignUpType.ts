@@ -12,3 +12,8 @@ export type EmailErrorType = {
   emailError: string;
   setEmailError: (error: string) => void;
 };
+
+export type SelectedAgeType = {
+  selectedAge: string;
+  setSelectedAge: (selectedAge: string) => void;
+};

@@ -1,7 +1,11 @@
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '@/shared/firebase/firebase';
 import { useNavigate } from 'react-router-dom';
-import { LoadingStore, SignUpMessageStore } from '../model/SignUpStore';
+import {
+  LoadingStore,
+  SelectedAgeStore,
+  SignUpMessageStore,
+} from '../model/SignUpStore';
 import { FieldValues } from 'react-hook-form';
 import { FirebaseError } from 'firebase/app';
 import { doc, setDoc } from 'firebase/firestore';
@@ -10,6 +14,8 @@ export const useSignUpState = () => {
   const navigate = useNavigate();
   const { isLoading, setIsLoading } = LoadingStore();
   const { message, setMessage } = SignUpMessageStore();
+  const { selectedAge, setSelectedAge } = SelectedAgeStore();
+
   const onSubmit = async (data: FieldValues) => {
     try {
       setIsLoading(true);
@@ -23,6 +29,7 @@ export const useSignUpState = () => {
         userId: credentials.user.uid,
         changeCount: 0,
         point: 0,
+        age: selectedAge,
         change: true,
         response: true,
       });
@@ -31,6 +38,7 @@ export const useSignUpState = () => {
         displayName: data.name,
       });
 
+      setSelectedAge('');
       navigate('/');
     } catch (e) {
       if (e instanceof FirebaseError) {

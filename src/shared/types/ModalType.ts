@@ -1,4 +1,8 @@
-export type AuthModalTypes = 'EmailModal' | 'NameModal' | 'PasswordModal';
+export type AuthModalTypes =
+  | 'EmailModal'
+  | 'NameModal'
+  | 'PasswordModal'
+  | 'AgeModal';
 
 export type ReserveModalTypes =
   | 'StartPlaceModal'

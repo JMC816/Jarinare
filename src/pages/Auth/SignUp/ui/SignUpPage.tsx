@@ -50,7 +50,7 @@ const SignUpPage = () => {
         <div className="flex h-[667px] w-[375px] flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
           <BackWardPageButton />
           <EmailForm />
-          <SignUpStageLine stage={1} width={100} borderRadius="xl" />
+          <SignUpStageLine stage={1} width={75} borderRadius="xl" />
           <div className="mb-[45px] flex flex-col">
             <button
               type="button"

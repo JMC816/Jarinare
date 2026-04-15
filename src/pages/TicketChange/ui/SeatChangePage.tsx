@@ -5,7 +5,6 @@ import { seatsTargetStore } from '@/features/TicketChange/models/seatsTargetStor
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/TicketChangeStore';
 import Modal from '@/widgets/TicketChange/ui/Modal';
-import SeatChangeButton from '@/widgets/TicketChange/ui/SeatChangeButton';
 import SeatChangeList from '@/widgets/TicketChange/ui/SeatChangeList';
 import SeatChangeMenu from '@/widgets/TicketChange/ui/SeatChangeMenu';
 import SeatChangeState from '@/widgets/TicketChange/ui/SeatChangeState';
@@ -56,7 +55,9 @@ const SeatChangePage = () => {
               : 'bg-gray-300'
           }`}
         >
-          {isBlocked ? '요청 기다리는 중..' : `${seatsTarget.length} / ${mySeats.length} 선택`}
+          {isBlocked
+            ? '요청 기다리는 중..'
+            : `${seatsTarget.length} / ${mySeats.length} 선택`}
         </button>
       </div>
       {isShow == false || modalType == undefined ? null : <Modal />}

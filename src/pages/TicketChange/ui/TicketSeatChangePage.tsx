@@ -1,6 +1,4 @@
 import Ticket from '@/shared/ui/Ticket';
-import arrow from '@/assets/icons/arrow.png';
-import TicketButton from '@/shared/ui/TicketButton';
 import { useNaviation } from '../hooks/TicketChangeHook';
 import { useTicketLocation } from '../hooks/useTicketLocation';
 import { SeatType } from '@/entities/Seat/types/seatType';

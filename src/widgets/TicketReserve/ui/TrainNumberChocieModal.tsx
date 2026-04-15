@@ -1,7 +1,6 @@
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '../../model/ReserveStore';
 import { reserveConstants } from '../constants/ReserveConstants';
-import CrossModalButton from '@/widgets/layouts/ui/CrossModalButton';
 
 const TrainNumberChoiceModal = () => {
   const { closeModal } = useModalStore();

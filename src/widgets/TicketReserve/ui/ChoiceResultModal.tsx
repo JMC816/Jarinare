@@ -1,9 +1,7 @@
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '../../model/ReserveStore';
-import ChocieResultButton from './ChocieResultButton';
-import ChoiceResultList from './ChoiceResultList';
 import { useNavigation } from '../hooks/ReserveHook';
-import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
+import { formatTimeView } from '@/shared/lib/formatDate';
 
 const ChoiceResultModal = () => {
   const { closeModal } = useModalStore();

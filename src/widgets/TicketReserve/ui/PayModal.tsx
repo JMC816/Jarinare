@@ -4,7 +4,6 @@ import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryDat
 import { useState } from 'react';
 import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
 import { useUpdatePoint } from '@/features/Point/hooks/useUpdatePoint';
-import PaymentButton from './PaymentButton';
 import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateCountStore';
 import { useSaveReserveStat } from '@/features/TicketReserve/hooks/useSaveReserveStat';
 

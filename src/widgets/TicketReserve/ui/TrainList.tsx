@@ -5,7 +5,6 @@ import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import SkeletonScreen from '@/widgets/layouts/ui/SkeletonScreen';
 import TrainTimeChocieButton from './TrainTimeChoiceButton';
 import {
-  formatAM_PM,
   formatTime,
   formatTimeView,
   formatTodayDate,

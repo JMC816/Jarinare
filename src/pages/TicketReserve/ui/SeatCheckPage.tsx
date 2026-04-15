@@ -3,7 +3,6 @@ import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/ReserveStore';
 import Modal from '@/widgets/TicketReserve/ui/Modal';
-import SeatCheckButton from '@/widgets/TicketReserve/ui/SeatCheckButton';
 import SeatCheckList from '@/widgets/TicketReserve/ui/SeatCheckList';
 import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';
 import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';

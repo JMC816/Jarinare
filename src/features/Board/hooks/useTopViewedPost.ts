@@ -5,7 +5,6 @@ import {
   onSnapshot,
   collection,
   query,
-  Timestamp,
 } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
@@ -17,12 +16,6 @@ export interface TopPost {
   category: 'board' | 'event';
   viewCount: number;
 }
-
-const toSeconds = (ts: Timestamp): number => {
-  if (typeof ts?.seconds === 'number') return ts.seconds;
-  if (typeof ts?.toMillis === 'function') return Math.floor(ts.toMillis() / 1000);
-  return 0;
-};
 
 export const useTopViewedPost = () => {
   const [topPost, setTopPost] = useState<TopPost | null>(null);
@@ -64,25 +57,22 @@ export const useTopViewedPost = () => {
       if (Object.keys(postMap).length === 0) return;
 
       // boardViews 실시간 구독
-      const unsubscribe = onSnapshot(
-        collection(db, 'boardViews'),
-        (snap) => {
-          let maxCount = -1;
-          let topDocId = '';
+      const unsubscribe = onSnapshot(collection(db, 'boardViews'), (snap) => {
+        let maxCount = -1;
+        let topDocId = '';
 
-          snap.docs.forEach((d) => {
-            const count = d.data()?.count ?? 0;
-            if (count > maxCount && postMap[d.id]) {
-              maxCount = count;
-              topDocId = d.id;
-            }
-          });
-
-          if (topDocId && postMap[topDocId]) {
-            setTopPost({ ...postMap[topDocId], viewCount: maxCount });
+        snap.docs.forEach((d) => {
+          const count = d.data()?.count ?? 0;
+          if (count > maxCount && postMap[d.id]) {
+            maxCount = count;
+            topDocId = d.id;
           }
-        },
-      );
+        });
+
+        if (topDocId && postMap[topDocId]) {
+          setTopPost({ ...postMap[topDocId], viewCount: maxCount });
+        }
+      });
 
       return unsubscribe;
     };

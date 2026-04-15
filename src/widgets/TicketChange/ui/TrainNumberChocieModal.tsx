@@ -1,5 +1,4 @@
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
-import CrossModalButton from '@/widgets/layouts/ui/CrossModalButton';
 import useModalStore from '@/widgets/model/TicketChangeStore';
 import { reserveConstants } from '@/widgets/TicketReserve/constants/ReserveConstants';
 

@@ -25,6 +25,8 @@ const PasswordModal = () => {
       <BackWardModalButton
         closeModal={() => closeModal('PasswordModal')}
         openModal={() => openModal('AgeModal')}
+        title="회원가입"
+        step="Step 4 of 4"
       />
       <PasswordForm />
       <SignUpStageLine stage={4} width={300} borderRadius="xl" />

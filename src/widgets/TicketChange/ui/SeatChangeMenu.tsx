@@ -13,14 +13,13 @@ const SeatChangeMenu = () => {
   ).length;
 
   return (
-    <div className="mt-[15px] flex w-full justify-end">
+    <div className="mb-3 flex w-full items-center justify-between">
+      <span className="text-base font-bold text-gray-900">호차 선택</span>
       <div
-        onClick={() => {
-          openModal('TrainNumberChoiceModal');
-        }}
-        className="flex h-[30px] w-[150px] cursor-pointer items-center justify-center gap-[6px] rounded-xs border border-lightGray bg-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
+        onClick={() => openModal('TrainNumberChoiceModal')}
+        className="flex h-[32px] cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-gray-100 px-3 active:brightness-95"
       >
-        <span className="text-xs font-bold">
+        <span className="text-xs font-bold text-gray-700">
           {trainNo}호차 잔여{' '}
           <span className="text-blue">{trainNoSeatsCount}</span>석/24석
         </span>

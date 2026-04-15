@@ -4,6 +4,7 @@ import {
   SignUpMessageType,
   EmailErrorType,
   SelectedAgeType,
+  SelectedGenderType,
 } from '../types/SignUpType';
 
 export const LoadingStore = create<LoadingStoreType>((set) => ({
@@ -24,4 +25,10 @@ export const EmailErrorStore = create<EmailErrorType>((set) => ({
 export const SelectedAgeStore = create<SelectedAgeType>((set) => ({
   selectedAge: '',
   setSelectedAge: (selectedAge: string) => set(() => ({ selectedAge })),
+}));
+
+export const SelectedGenderStore = create<SelectedGenderType>((set) => ({
+  selectedGender: '',
+  setSelectedGender: (selectedGender: string) =>
+    set(() => ({ selectedGender })),
 }));

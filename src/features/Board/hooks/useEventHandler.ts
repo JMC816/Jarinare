@@ -8,6 +8,8 @@ export const useEventHandler = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const [views, setViews] = useState<number>(0);
+  const [likes, setLikes] = useState<number>(0);
   const [previewImg, setPreviewImg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
@@ -30,16 +32,29 @@ export const useEventHandler = () => {
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onloadend = () => {
+        setPreviewImg(reader.result as string);
+      };
     }
+  };
+
+  const onViewsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setViews(Number(e.target.value));
+  };
+
+  const onLikesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLikes(Number(e.target.value));
   };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const eventId = await createEvent(author, title, content);
+      const eventId = await createEvent(author, title, content, views, likes);
       if (file) {
-        const filePath = `eoard/${eventId}/${file.name}`;
+        const filePath = `event/${eventId}/${file.name}`;
         const { error } = await supabase.storage
           .from('jarinare-images')
           .upload(filePath, file);
@@ -62,6 +77,8 @@ export const useEventHandler = () => {
     onTitleChange,
     onContentChange,
     onFileChange,
+    onViewsChange,
+    onLikesChange,
     onSubmit,
     setFile,
     setPreviewImg,

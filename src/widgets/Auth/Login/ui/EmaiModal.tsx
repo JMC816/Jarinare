@@ -47,7 +47,11 @@ const EmailModal = () => {
 
   return (
     <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
-      <BackWardModalButton closeModal={() => closeModal('EmailModal')} />
+      <BackWardModalButton
+        closeModal={() => closeModal('EmailModal')}
+        title="로그인"
+        step="Step 1 of 2"
+      />
       <EmailForm />
       <LoginStageLine stage={1} width={150} borderRadius="xl" />
       <div className="mb-[45px] flex flex-col">

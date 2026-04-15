@@ -10,22 +10,29 @@ const NavBar = () => {
   const isNotifiShow = useNotifiModalStore((state) => state.isShow);
   return (
     <div
-      className={`fixed ${isReserveShow || isNotifiShow === true ? 'hidden' : null} bottom-0 left-1/2 flex h-20 w-[376px] -translate-x-1/2 items-center justify-around border-t-[1px] border-lightGray bg-white`}
+      className={`fixed ${isReserveShow || isNotifiShow === true ? 'hidden' : null} bottom-0 left-1/2 flex h-20 w-[376px] -translate-x-1/2 items-center justify-around rounded-t-3xl border-t border-lightGray border-l-0 border-r-0 bg-white shadow-lg`}
     >
-      {NavBarConstants().map(({ on_icon, off_icon, text, path }, idx) => (
-        <Link to={path} className="flex flex-col items-center" key={idx}>
-          <img
-            width={24}
-            height={24}
-            src={location.pathname === path ? on_icon : off_icon}
-          />
-          <span
-            className={`${location.pathname === path ? 'text-black' : 'text-mediumGray'} font-bold`}
-          >
-            {text}
-          </span>
-        </Link>
-      ))}
+      {NavBarConstants().map(({ on_icon, off_icon, text, path }, idx) => {
+        const isActive = location.pathname === path;
+        return (
+          <Link to={path} className="flex flex-col items-center gap-y-1" key={idx}>
+            <div
+              className={`flex h-[40px] w-[40px] items-center justify-center rounded-full transition-all ${isActive ? 'bg-lightBlue' : ''}`}
+            >
+              <img
+                width={24}
+                height={24}
+                src={isActive ? on_icon : off_icon}
+              />
+            </div>
+            <span
+              className={`${isActive ? 'text-black' : 'text-mediumGray'} text-xs font-bold`}
+            >
+              {text}
+            </span>
+          </Link>
+        );
+      })}
     </div>
   );
 };

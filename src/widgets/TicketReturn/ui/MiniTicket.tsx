@@ -1,87 +1,105 @@
-import miniarrow from '@/assets/icons/miniarrow.png';
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
 import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
 import { useNavigation } from '../hooks/useNavigation';
+
+const calcDuration = (start: number, end: number) => {
+  const sh = parseInt(String(start).substring(8, 10));
+  const sm = parseInt(String(start).substring(10, 12));
+  const eh = parseInt(String(end).substring(8, 10));
+  const em = parseInt(String(end).substring(10, 12));
+  const diff = eh * 60 + em - (sh * 60 + sm);
+  if (diff >= 60) return `${Math.floor(diff / 60)}시간 ${diff % 60}분`;
+  return `${diff}분`;
+};
 
 const MiniTicket = () => {
   const { groupedArray } = useTicketLists() ?? {};
   const { navigate } = useNavigation();
 
-  return groupedArray?.map((groups, idx) => (
-    <div
-      key={idx}
-      onClick={() => {
-        navigate('/return', { state: { groups } });
-      }}
-      className="flex h-[100px] w-[320px]"
-    >
-      <div className="flex h-[100px] w-[230px] flex-col items-center justify-between rounded-lg bg-lightestGray py-[15px]">
-        <div className="flex h-5 w-[200px] items-center justify-center rounded-xs bg-white">
-          <span className="text-xs font-bold text-blue">
-            {groups[0].startDayForView}
-          </span>
-        </div>
-        <div className="flex h-[45px] w-[200px] flex-col justify-center rounded-xs bg-white">
-          <div className="flex items-center justify-around px-[10px] text-black">
-            <div className="flex flex-col items-center">
-              <span className="text-base font-bold">
-                {groups[0].startStationForView}
-              </span>
-              <span className="text-sm">
-                {formatAM_PM(String(groups[0].startTime)) < 12
-                  ? '오전'
-                  : '오후'}{' '}
-                {formatTimeView(String(groups[0].startTime))}
-              </span>
+  if (!groupedArray || groupedArray.length === 0) {
+    return (
+      <div className="flex h-[100px] w-full flex-col items-center justify-center rounded-lg bg-white shadow-sm">
+        <span>🗒️</span>
+        <span className="text-tiny font-bold">아직 예매한 승차권이 없어요</span>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {groupedArray.map((groups, idx) => {
+        const ticket = groups[0];
+        const passengerCount = groups.length;
+
+        const trainTypeName = (() => {
+          const parts = ticket.trainType.split('-');
+          const first = parts[0];
+          const namePart = parts[1]?.split('(')[0] ?? '';
+          return namePart ? `${first} ${namePart}` : first;
+        })();
+
+        const startLabel =
+          formatAM_PM(String(ticket.startTime)) < 12
+            ? `오전 ${formatTimeView(String(ticket.startTime))}`
+            : `오후 ${formatTimeView(String(ticket.startTime))}`;
+
+        const endLabel =
+          formatAM_PM(String(ticket.endTime)) < 12
+            ? `오전 ${formatTimeView(String(ticket.endTime))}`
+            : `오후 ${formatTimeView(String(ticket.endTime))}`;
+
+        const duration = calcDuration(ticket.startTime, ticket.endTime);
+
+        return (
+          <div key={idx} className="w-full overflow-hidden rounded-lg bg-white shadow-md">
+            {/* 상단 */}
+            <div className="flex flex-col gap-4 px-5 py-4">
+              <div className="flex items-center justify-between">
+                <span className="rounded bg-lightBlue px-2 py-0.5 text-xs font-semibold text-blue">
+                  {trainTypeName}
+                </span>
+                <span className="text-xs text-gray-400">{ticket.startDayForView}</span>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col items-center gap-0.5">
+                  <span className="text-xl font-black text-black">{ticket.startStationForView}</span>
+                  <span className="text-xs text-darkGray">{startLabel}</span>
+                </div>
+
+                <div className="flex flex-1 flex-col items-center gap-1 px-3">
+                  <div className="flex w-full items-center">
+                    <div className="flex-1 border-t-2 border-dashed border-gray-300" />
+                    <span className="mx-2 inline-block -scale-x-100 text-xl">🚄</span>
+                    <div className="flex-1 border-t-2 border-dashed border-gray-300" />
+                  </div>
+                  <span className="text-[10px] text-darkGray">{duration}</span>
+                </div>
+
+                <div className="flex flex-col items-center gap-0.5">
+                  <span className="text-xl font-black text-black">{ticket.endStationForView}</span>
+                  <span className="text-xs text-darkGray">{endLabel}</span>
+                </div>
+              </div>
             </div>
-            <img src={miniarrow} className="h-[10px] w-[15px]" />
-            <div className="flex flex-col items-center">
-              <span className="text-base font-bold">
-                {groups[0].endStationForView}
+
+            {/* 하단 회색 */}
+            <div className="flex items-center justify-between bg-gray-100 px-5 py-3">
+              <span className="text-sm font-semibold text-darkGray">
+                {passengerCount}명 · {trainTypeName}
               </span>
-              <span className="text-sm">
-                {formatAM_PM(String(groups[0].endTime)) < 12 ? '오전' : '오후'}{' '}
-                {formatTimeView(String(groups[0].endTime))}
-              </span>
+              <button
+                onClick={() => navigate('/return', { state: { groups } })}
+                className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-bold text-blue"
+              >
+                반환하기
+              </button>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="flex h-[100px] w-[90px] items-center justify-center rounded-lg bg-lightBlue text-center text-base font-bold text-blue">
-        {(() => {
-          const trainType = groups[0].trainType;
-          const parts = trainType.split('-');
-          const firstPart = parts[0]; // "KTX"
-          const rest = parts.slice(1).join('-'); // "산천(A-type)-241"
-
-          // "(A-type)" 패턴에서 "A" 추출
-          const typeMatch = rest.match(/\(([A-Z])-type\)/);
-          const type = typeMatch ? typeMatch[1] : '';
-
-          // "산천" 추출 (괄호 전까지)
-          const name = rest.split('(')[0];
-
-          // 마지막 숫자 추출
-          const numberMatch = rest.match(/-(\d+)$/);
-          const number = numberMatch ? numberMatch[1] : '';
-
-          return (
-            <>
-              {firstPart}
-              <br />
-              {name} {type}
-              {number && (
-                <>
-                  <br />
-                  {number}
-                </>
-              )}
-            </>
-          );
-        })()}
-      </div>
-    </div>
-  ));
+        );
+      })}
+    </>
+  );
 };
 
 export default MiniTicket;

@@ -12,12 +12,13 @@ const TrainTimeChocieButton = ({
       onClick={() => {
         onModalClick(modalTypes!);
       }}
-      className={`flex h-[30px] w-[50px] items-center justify-center rounded-sm border border-lightGray ${disabled ? 'bg-lightestGray opacity-50' : 'bg-lightBlue'} ${disabled ? 'active:brightness-100' : 'active:brightness-50'} shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95`}
+      className={`flex h-[30px] w-[50px] items-center justify-center rounded-sm border ${disabled ? 'border-gray-300 bg-gray-200' : 'border-blue bg-blue active:brightness-95'} shadow-sm transition-all`}
     >
       <span
-        className={`text-sm font-bold ${disabled ? 'text-lightBlueImpossible' : 'text-blue'} `}
+        className={`text-sm font-bold ${disabled ? '' : 'text-white'}`}
+        style={disabled ? { color: '#EA433580' } : undefined}
       >
-        {text}
+        {disabled ? '매진' : text}
       </span>
     </button>
   );

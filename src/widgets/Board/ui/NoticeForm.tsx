@@ -19,14 +19,14 @@ const NoticeForm = ({
 }: BoardType) => {
   const navigate = useNavigate();
   return (
-    <form onSubmit={onSubmit} className="mt-10 flex flex-col gap-10">
+    <form onSubmit={onSubmit} className="mt-10 flex flex-col gap-4">
       <input
         value={author}
         onChange={onAuthorChange}
         type="text"
         required
         placeholder="작성자"
-        className="border-b border-lightGray text-base placeholder:text-lightGray focus:outline-none"
+        className="rounded-xl bg-white px-4 py-3 text-base shadow-sm placeholder:text-lightGray focus:outline-none"
       />
       <input
         value={title}
@@ -34,14 +34,14 @@ const NoticeForm = ({
         type="text"
         required
         placeholder="제목"
-        className="border-b border-lightGray text-base placeholder:text-lightGray focus:outline-none"
+        className="rounded-xl bg-white px-4 py-3 text-base shadow-sm placeholder:text-lightGray focus:outline-none"
       />
       <textarea
         value={content}
         onChange={onContentChange}
         required
         placeholder="내용"
-        className="h-[120px] resize-none border-b border-lightGray text-base placeholder:text-lightGray focus:outline-none"
+        className="h-[120px] resize-none rounded-xl bg-white px-4 py-3 text-base shadow-sm placeholder:text-lightGray focus:outline-none"
       />
       <div>
         <div className="flex justify-end">
@@ -88,11 +88,11 @@ const NoticeForm = ({
         <button
           type="button"
           onClick={() => navigate('/board')}
-          className="h-12 w-[200px] rounded-xs border border-lightGray bg-lightBlue text-base font-bold text-blue shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
+          className="h-12 w-[200px] rounded-xl border border-lightGray bg-lightBlue text-base font-bold text-blue shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
         >
           취소
         </button>
-        <button className="h-12 w-[200px] rounded-xs border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95">
+        <button className="h-12 w-[200px] rounded-xl border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95">
           작성 완료
         </button>
       </div>

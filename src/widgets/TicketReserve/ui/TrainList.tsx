@@ -52,7 +52,7 @@ const TrainList = () => {
     );
 
   return (
-    <div className="mt-[40px] flex w-full flex-col gap-y-[30px] overflow-y-auto">
+    <div className="mt-5 flex w-full flex-col gap-y-3 overflow-y-auto pb-24">
       {filtered.length === 0 ? (
         <span className="flex justify-center text-tiny font-bold">
           조회된 열차 목록이 없어요.
@@ -68,45 +68,77 @@ const TrainList = () => {
               trainno,
             },
             idx,
-          ) => (
-            <div key={idx} className="flex w-full items-center justify-between">
-              <div>
-                <span className="text-lg font-bold">
-                  {formatAM_PM(String(depplandtime)) < 12 ? '오전' : '오후'}{' '}
-                  {/* 출발 시간 */}
-                  {formatTimeView(String(depplandtime))} -{' '}
-                  {formatAM_PM(String(arrplandtime)) < 12 ? '오전' : '오후'}{' '}
-                  {/* 도착 시간 */}
-                  {formatTimeView(String(arrplandtime))}
-                </span>
-                <div className="flex justify-between text-tiny">
-                  <span className="font-bold text-blue">
+          ) => {
+            const depH = Number(String(depplandtime).substring(8, 10));
+            const depM = Number(String(depplandtime).substring(10, 12));
+            const arrH = Number(String(arrplandtime).substring(8, 10));
+            const arrM = Number(String(arrplandtime).substring(10, 12));
+            let durationMin = (arrH * 60 + arrM) - (depH * 60 + depM);
+            if (durationMin < 0) durationMin += 24 * 60;
+            const durationText = durationMin >= 60
+              ? `${Math.floor(durationMin / 60)}시간 ${durationMin % 60 > 0 ? `${durationMin % 60}분` : ''}`
+              : `${durationMin}분`;
+
+            return (
+              <div
+                key={idx}
+                className={`flex w-full items-center justify-between rounded-2xl px-5 py-4 shadow-sm ${
+                  adultcharge === 0 ? 'bg-gray-100' : 'bg-white'
+                }`}
+              >
+                {/* 왼쪽: 기차종류 → 시간대 → 요금 */}
+                <div className="flex flex-col gap-y-1.5">
+                  <span
+                    className={`rounded-md self-start px-2 py-0.5 text-xs font-bold ${adultcharge === 0 ? 'bg-gray-200 text-gray-400' : 'bg-lightBlue text-blue'}`}
+                  >
                     {traingradename}-{trainno}
                   </span>
-                  <span className="text-darkGray">
+                  <span
+                    className={`text-lg font-bold ${adultcharge === 0 ? 'text-gray-400' : 'text-gray-900'}`}
+                  >
+                    {formatTimeView(String(depplandtime))}
+                    <span className="mx-1.5 text-base font-normal text-gray-400">→</span>
+                    {formatTimeView(String(arrplandtime))}
+                  </span>
+                  <span
+                    className="text-xs font-semibold"
+                    style={adultcharge === 0 ? { color: '#EA433580' } : undefined}
+                  >
                     {adultcharge === 0 ? (
-                      <span className="text-red">매진</span>
+                      <span>매진</span>
                     ) : (
-                      adultcharge.toLocaleString('ko-KR') + '원'
+                      <span className="text-gray-400">
+                        {adultcharge.toLocaleString('ko-KR')}원
+                      </span>
                     )}
                   </span>
                 </div>
+
+                {/* 오른쪽: 소요시간(위) + 선택버튼(아래) */}
+                <div className="flex flex-col items-end justify-between gap-y-3">
+                  <div className="flex flex-col items-end gap-y-0.5">
+                    <span className="text-[10px] text-gray-400">소요시간</span>
+                    <span className={`text-xs font-semibold ${adultcharge === 0 ? 'text-gray-300' : 'text-gray-800'}`}>
+                      {durationText}
+                    </span>
+                  </div>
+                  <TrainTimeChocieButton
+                    disabled={adultcharge === 0}
+                    text="선택"
+                    onModalClick={() => {
+                      openModal('ChoiceResultModal');
+                      setSelectStartTime(depplandtime);
+                      setSelectEndTime(arrplandtime);
+                      setSelectTrainType(traingradename + '-' + trainno);
+                      setSelectKid(kid);
+                      setSelectAdult(adult);
+                      setSelectPay(adultcharge);
+                    }}
+                  />
+                </div>
               </div>
-              <TrainTimeChocieButton
-                disabled={adultcharge === 0 ? true : false}
-                text="선택"
-                onModalClick={() => {
-                  openModal('ChoiceResultModal');
-                  setSelectStartTime(depplandtime);
-                  setSelectEndTime(arrplandtime);
-                  setSelectTrainType(traingradename + '-' + trainno);
-                  setSelectKid(kid);
-                  setSelectAdult(adult);
-                  setSelectPay(adultcharge);
-                }}
-              />
-            </div>
-          ),
+            );
+          },
         )
       )}
     </div>

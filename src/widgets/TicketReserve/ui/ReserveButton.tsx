@@ -40,7 +40,7 @@ const ReserveButton = ({
       disabled={disabled}
       type="button"
       onClick={onClick}
-      className={`relative flex h-12 w-[300px] items-center justify-center rounded-sm border border-lightGray bg-${bgColor} text-base font-bold text-${textColor} shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:bg-lightBlueImpossible disabled:opacity-50`}
+      className={`relative flex h-12 w-full items-center justify-center rounded-xl border-0 bg-${bgColor} text-base font-bold text-${textColor} shadow-sm transition-all active:brightness-95 disabled:bg-lightBlueImpossible disabled:opacity-50`}
     >
       {text}
     </button>

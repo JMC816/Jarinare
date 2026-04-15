@@ -3,21 +3,19 @@ import { MenuConstants } from '../constants/MenuConstants';
 
 const MenuPage = () => {
   return (
-    <div className="flex w-full flex-col items-center">
-      <span className="mt-[60px] w-full pl-[28px] pr-[27px] text-lg font-bold">
+    <div className="flex min-h-screen w-full flex-col bg-gray-100 px-[28px]">
+      <span className="mt-[60px] w-full text-lg font-bold">
         메뉴
       </span>
-      <div className="mt-[45px] flex w-full flex-col gap-y-[20px] px-[10px]">
+      <div className="mt-[20px] flex w-full flex-col gap-y-3">
         {MenuConstants().map(({ text, link, icon }, idx) => (
           <Link
             to={link!}
-            className="flex gap-x-[10px] px-[17px] py-[9px] hover:rounded-md hover:bg-lightestGray"
+            className="flex items-center gap-x-3 rounded-xl bg-white px-4 py-4 shadow-sm active:brightness-95"
             key={idx}
           >
-            <img width={25} height={25} src={icon} />
-            <span className="flex items-center text-base font-bold">
-              {text}
-            </span>
+            <img width={22} height={22} src={icon} />
+            <span className="text-base font-bold">{text}</span>
           </Link>
         ))}
       </div>

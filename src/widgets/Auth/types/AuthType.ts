@@ -9,7 +9,7 @@ export type Store = {
 };
 
 export type AuthStageProps = {
-  stage: number;
+  stage?: number;
   width: number;
-  borderRadius: string;
+  borderRadius?: string;
 };

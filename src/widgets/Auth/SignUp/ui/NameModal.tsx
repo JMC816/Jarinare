@@ -13,7 +13,11 @@ const NameModal = () => {
   } = useFormContext();
   return (
     <div className="flex h-full w-full flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
-      <BackWardModalButton closeModal={() => closeModal('NameModal')} />
+      <BackWardModalButton
+        closeModal={() => closeModal('NameModal')}
+        title="회원가입"
+        step="Step 2 of 4"
+      />
       <NameForm />
       <SignUpStageLine stage={2} width={150} borderRadius="xl" />
       <NextButton

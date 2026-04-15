@@ -82,6 +82,10 @@ export default {
           opacity: '0',
         },
       },
+      'slide-up': {
+        '0%': { transform: 'translateY(100%)' },
+        '100%': { transform: 'translateY(0)' },
+      },
     },
     animation: {
       pulse: 'pulse 2s ease-in-out infinite',
@@ -91,6 +95,7 @@ export default {
       fadeout: 'fadeout 1s',
       intro_fadein: 'intro_fadein 0.5s',
       intro_fadeout: 'intro_fadeout 1s',
+      'slide-up': 'slide-up 0.3s ease-out',
     },
   },
   plugins: [],

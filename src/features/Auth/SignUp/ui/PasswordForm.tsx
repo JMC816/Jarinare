@@ -12,17 +12,14 @@ const PasswordForm = () => {
   const { message, setMessage } = SignUpMessageStore();
   const [isCapsLockOn, setIsCapsLockOn] = useState(false);
 
-  // 비밀번호 입력 값을 감시
   const passwordValue = watch('password');
 
-  // 비밀번호 입력이 변경되면 회원가입 에러 메시지 초기화
   useEffect(() => {
     if (message) {
       setMessage('');
     }
   }, [passwordValue]);
 
-  // Caps Lock 상태 감지
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     setIsCapsLockOn(e.getModifierState('CapsLock'));
   };
@@ -32,30 +29,41 @@ const PasswordForm = () => {
   };
 
   return (
-    <div className="flex h-full flex-col gap-y-3">
+    <div className="flex h-full flex-col">
       <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
         <AuthContent
           type="password"
-          title="회원가입"
           subtitle="비밀번호"
           placeholder="비밀번호"
           name={register('password')}
         />
-      </div>
-      <div className="flex flex-col gap-y-3 text-base font-bold">
-        <span className="animate-bounce text-red">
-          {/* 비밀번호 에러 발생 시에만 에러 메세지 생성 */}
-          {errors.password == undefined
-            ? null
-            : String(errors.password?.message)}
-        </span>
-        <span className="animate-bounce text-red">
-          {/* 이미 존재하는 이메일로 가입 시 에러 메세지 생성 */}
-          {message}
-        </span>
+        {errors.password && (
+          <span className="mt-1 block animate-bounce text-base font-bold text-red">
+            {String(errors.password.message)}
+          </span>
+        )}
         {isCapsLockOn && (
-          <span className="animate-bounce text-orange-500">
+          <span className="mt-1 block animate-bounce text-base font-bold text-orange-500">
             ⚠️ Caps Lock이 켜져 있습니다.
+          </span>
+        )}
+      </div>
+
+      <div onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+        <AuthContent
+          type="password"
+          subtitle="비밀번호 확인"
+          placeholder="비밀번호 확인"
+          name={register('confirmPassword')}
+        />
+        {errors.confirmPassword && (
+          <span className="mt-1 block animate-bounce text-base font-bold text-red">
+            {String(errors.confirmPassword.message)}
+          </span>
+        )}
+        {message && (
+          <span className="mt-1 block animate-bounce text-base font-bold text-red">
+            {message}
           </span>
         )}
       </div>

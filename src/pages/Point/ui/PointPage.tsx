@@ -6,7 +6,7 @@ const PointPage = () => {
   const { payment } = useGetPayment();
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex min-h-screen w-full flex-col bg-gray-100">
       <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
         <BackWardPageButton />
         <span className="mt-5 w-full text-lg font-bold">포인트 내역</span>

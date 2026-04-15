@@ -2,8 +2,14 @@ import KakaoRedirect from '@/features/Auth/SocialLogin/ui/KakaoRedirect';
 import LoginPage from '@/pages/Auth/Login/ui/LoginPage';
 import SignUpPage from '@/pages/Auth/SignUp/ui/SignUpPage';
 import BoardPage from '@/pages/Board/ui/BoardPage';
+import BoardDetailPage from '@/pages/Board/ui/BoardDetailPage';
+import BoardListPage from '@/pages/Board/ui/BoardListPage';
 import BoardWirtePage from '@/pages/Board/ui/BoardWritePage';
+import EventDetailPage from '@/pages/Board/ui/EventDetailPage';
+import EventListPage from '@/pages/Board/ui/EventListPage';
 import EventWirtePage from '@/pages/Board/ui/EventWritePage';
+import NoticeDetailPage from '@/pages/Board/ui/NoticeDetailPage';
+import NoticeListPage from '@/pages/Board/ui/NoticeListPage';
 import NoticeWirtePage from '@/pages/Board/ui/NoticeWritePage';
 import MenuPage from '@/pages/Menu/ui/MenuPage';
 import MyPage from '@/pages/Mypage/ui/MyPage';
@@ -36,7 +42,13 @@ const Router = () => {
           <Route element={<PublicHomeLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/menu" element={<MenuPage />} />
-            <Route path="/board" element={<BoardPage />} />{' '}
+            <Route path="/board" element={<BoardPage />} />
+            <Route path="/board/noticelist" element={<NoticeListPage />} />
+            <Route path="/board/eventlist" element={<EventListPage />} />
+            <Route path="/board/boardlist" element={<BoardListPage />} />
+            <Route path="/board/notice/detail" element={<NoticeDetailPage />} />
+            <Route path="/board/event/detail" element={<EventDetailPage />} />
+            <Route path="/board/board/detail" element={<BoardDetailPage />} />
           </Route>
           {/* 로그인 필수 페이지들 */}
           <Route element={<HomeLayout />}>

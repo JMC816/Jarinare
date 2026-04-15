@@ -8,36 +8,35 @@ const TrainNumberChoiceModal = () => {
   const { trainNoArray } = reserveConstants();
   const { setTrainNo } = trainDataStore();
   return (
-    <div className="flex h-full w-full flex-col items-center justify-end bg-darkGray/50">
-      <div className="mb-[15px] flex h-[350px] w-[345px] flex-col items-center rounded-2xl bg-white pl-[40px] pr-[40px] font-bold">
-        <div className="flex w-full justify-between pb-[20px] pt-[25px]">
-          <span className="w-full text-base">기차 선택</span>
-          <div>
-            <CrossModalButton
-              closeModal={() => closeModal('TrainNumberChoiceModal')}
-            />
-          </div>
+    <div
+      className="flex h-full w-full flex-col items-center justify-end bg-black/40"
+      onClick={() => closeModal('TrainNumberChoiceModal')}
+    >
+      <div
+        className="mb-4 w-[343px] animate-slide-up rounded-3xl bg-white px-6 pb-8 pt-5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-5 flex justify-center">
+          <div className="h-1 w-10 rounded-full bg-gray-300" />
         </div>
-        <div className="flex w-full flex-col items-center gap-y-[20px] text-tiny">
+
+        <p className="mb-4 text-base font-bold text-gray-800">호차 선택</p>
+
+        <div className="flex flex-col overflow-y-auto" style={{ maxHeight: '320px' }}>
           {trainNoArray.map(({ trainNoView, trainNo, icon }, idx) => (
             <div
+              key={idx}
               onClick={async () => {
                 setTrainNo(trainNo);
                 closeModal('TrainNumberChoiceModal');
               }}
-              key={idx}
-              className="group flex h-12 w-[300px] cursor-pointer items-center justify-between p-[20px] hover:rounded-md hover:bg-lightestGray"
+              className="flex cursor-pointer items-center justify-between rounded-xl px-4 py-3 active:bg-gray-50"
             >
-              <span>
+              <span className="text-sm font-semibold text-gray-700">
                 {trainNo}호차 잔여&nbsp;
                 <span className="text-blue">{trainNoView}</span>석/24석
               </span>
-              <img
-                className="hidden group-active:flex"
-                src={icon}
-                width={15}
-                height={11}
-              />
+              <img className="opacity-0 active:opacity-100" src={icon} width={15} height={11} />
             </div>
           ))}
         </div>

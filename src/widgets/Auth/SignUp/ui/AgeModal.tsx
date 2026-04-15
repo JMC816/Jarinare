@@ -16,6 +16,8 @@ const AgeModal = () => {
       <BackWardModalButton
         openModal={() => openModal('NameModal')}
         closeModal={() => closeModal('AgeModal')}
+        title="회원가입"
+        step="Step 3 of 4"
       />
       <SelectAge />
       <SignUpStageLine stage={3} width={225} borderRadius="xl" />

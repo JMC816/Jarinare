@@ -1,164 +1,319 @@
+import { BoardPost } from '@/entities/Board/types/boardType';
+import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
+import { useBoardPagination } from '@/features/Board/hooks/useBoardPagination';
+import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
+import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
+import { useViewCounts } from '@/features/Board/hooks/useViewCounts';
+import { auth } from '@/shared/firebase/firebase';
+import { formatBoardTime } from '@/shared/lib/formatDate';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PostEditModal } from './PostEditModal';
 
-const boardData = [
-  {
-    id: '1',
-    title: '승차권 예약 문의드립니다',
-    author: '김철수',
-    date: '2024.01.12',
-    views: 15,
-    likes: 3,
-  },
-  {
-    id: '2',
-    title: '좌석 변경 방법이 궁금합니다',
-    author: '이영희',
-    date: '2024.01.11',
-    views: 8,
-    likes: 1,
-  },
-  {
-    id: '3',
-    title: '환불 정책에 대해 문의',
-    author: '박민수',
-    date: '2024.01.10',
-    views: 22,
-    likes: 5,
-  },
-  {
-    id: '4',
-    title: '앱 사용법 가이드',
-    author: '정수진',
-    date: '2024.01.09',
-    views: 45,
-    likes: 12,
-  },
-  {
-    id: '5',
-    title: '기차 시간표 변경 안내',
-    author: '최민호',
-    date: '2024.01.08',
-    views: 33,
-    likes: 7,
-  },
-  {
-    id: '6',
-    title: '할인 혜택 문의',
-    author: '강지영',
-    date: '2024.01.07',
-    views: 19,
-    likes: 4,
-  },
-  {
-    id: '7',
-    title: '모바일 앱 오류 신고',
-    author: '윤서준',
-    date: '2024.01.06',
-    views: 28,
-    likes: 6,
-  },
-  {
-    id: '8',
-    title: '승차권 양도 가능한가요?',
-    author: '임하늘',
-    date: '2024.01.05',
-    views: 41,
-    likes: 9,
-  },
-  {
-    id: '9',
-    title: '대기열 시스템 개선 제안',
-    author: '송민지',
-    date: '2024.01.04',
-    views: 52,
-    likes: 15,
-  },
-  {
-    id: '10',
-    title: '결제 오류 해결 방법',
-    author: '정현우',
-    date: '2024.01.03',
-    views: 37,
-    likes: 8,
-  },
-  {
-    id: '11',
-    title: '예매 취소 수수료 문의',
-    author: '김나연',
-    date: '2024.01.02',
-    views: 24,
-    likes: 3,
-  },
-  {
-    id: '12',
-    title: '회원가입 인증 문제',
-    author: '박준혁',
-    date: '2024.01.01',
-    views: 31,
-    likes: 5,
-  },
+type SortOrder = 'newest' | 'oldest' | 'views' | 'likes';
+
+const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
+  { value: 'newest', label: '최신순' },
+  { value: 'oldest', label: '오래된순' },
+  { value: 'views', label: '조회수' },
+  { value: 'likes', label: '좋아요' },
 ];
 
-export const Board = () => {
-  const [boardPage, setBoardPage] = useState(1);
+const FilterIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <line x1="4" y1="6" x2="20" y2="6" />
+    <line x1="8" y1="12" x2="16" y2="12" />
+    <line x1="11" y1="18" x2="13" y2="18" />
+  </svg>
+);
 
-  const boardItemsPerPage = 8; // 자유게시판 페이지당 아이템 수
+const BoardImage = ({ src, alt }: { src: string; alt: string }) => {
+  const [loaded, setLoaded] = useState(false);
 
-  // 자유게시판 페이징 계산
-  const boardTotalPages = Math.ceil(boardData.length / boardItemsPerPage);
-  const boardStartIndex = (boardPage - 1) * boardItemsPerPage;
-  const boardEndIndex = boardStartIndex + boardItemsPerPage;
-  const currentBoardPosts = boardData.slice(boardStartIndex, boardEndIndex);
   return (
-    <div className="space-y-2">
-      {currentBoardPosts.map((post) => (
-        <div key={post.id} className="rounded-lg bg-white p-4 shadow-sm">
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm text-gray-500">{post.author}</span>
-            <span className="text-sm text-gray-500">{post.date}</span>
-          </div>
-          <h3 className="mb-2 text-base font-bold text-gray-900">
-            {post.title}
-          </h3>
-          <div className="flex items-center gap-4 text-sm text-gray-500">
-            <span>조회 {post.views}</span>
-            <span>좋아요 {post.likes}</span>
-          </div>
-        </div>
-      ))}
+    <div className="w-full">
+      <img
+        src={src}
+        alt={alt}
+        className={`w-full object-contain transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+};
 
-      {/* 자유게시판 페이징 버튼 */}
-      <div className="flex justify-center space-x-2 pt-4">
-        <button
-          onClick={() => setBoardPage(Math.max(1, boardPage - 1))}
-          disabled={boardPage === 1}
-          className="rounded bg-gray-300 px-4 py-2 text-base disabled:bg-gray-200 disabled:text-gray-400"
-        >
-          이전
-        </button>
-        {Array.from({ length: boardTotalPages }, (_, i) => i + 1).map(
-          (page) => (
-            <button
-              key={page}
-              onClick={() => setBoardPage(page)}
-              className={`rounded px-4 py-2 text-base ${
-                boardPage === page
-                  ? 'bg-teal-500 text-white'
-                  : 'bg-gray-300 text-gray-700'
-              }`}
-            >
-              {page}
-            </button>
-          ),
-        )}
-        <button
-          onClick={() => setBoardPage(Math.min(boardTotalPages, boardPage + 1))}
-          disabled={boardPage === boardTotalPages}
-          className="rounded bg-gray-300 px-4 py-2 text-base disabled:bg-gray-200 disabled:text-gray-400"
-        >
-          다음
-        </button>
+const BoardSkeleton = () => (
+  <div className="overflow-hidden rounded-xl bg-white shadow-sm">
+    <div className="flex items-center gap-x-4 px-4 py-3">
+      <div className="h-[36px] w-[36px] animate-pulse rounded-lg bg-gray-200" />
+      <div className="flex flex-1 flex-col gap-y-2">
+        <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
+        <div className="h-2.5 w-16 animate-pulse rounded bg-gray-200" />
       </div>
+    </div>
+    <div className="space-y-2 px-4 pb-4">
+      <div className="h-3 w-3/4 animate-pulse rounded bg-gray-200" />
+      <div className="h-3 w-full animate-pulse rounded bg-gray-200" />
+    </div>
+  </div>
+);
+
+const HamburgerIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="15"
+    height="15"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+  >
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <line x1="3" y1="12" x2="21" y2="12" />
+    <line x1="3" y1="18" x2="21" y2="18" />
+  </svg>
+);
+
+
+export const Board = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
+  const [editingPost, setEditingPost] = useState<BoardPost | null>(null);
+  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
+  const [updatedItems, setUpdatedItems] = useState<
+    Record<string, Partial<BoardPost>>
+  >({});
+
+  const { ref, items, isFetching } = useBoardPagination(searchQuery, sortOrder);
+  const { likesMap } = useLikeBoard(items);
+  const { viewsMap } = useViewCounts(items);
+  const { deletePost } = useDeletePost();
+  const { updatePost } = useUpdatePost();
+  const navigate = useNavigate();
+
+  const currentUid = auth.currentUser?.uid;
+
+  const displayedItems = items
+    .filter((p) => !deletedIds.has(p.id))
+    .map((p) => ({ ...p, ...updatedItems[p.id] }) as BoardPost)
+    .sort((a, b) => {
+      if (sortOrder === 'views') {
+        return (viewsMap[b.id] ?? 0) - (viewsMap[a.id] ?? 0);
+      }
+      if (sortOrder === 'likes') {
+        return (likesMap[b.id] ?? 0) - (likesMap[a.id] ?? 0);
+      }
+      return 0;
+    });
+
+  const handleDelete = async (post: BoardPost) => {
+    await deletePost(post.id);
+    setDeletedIds((prev) => new Set(prev).add(post.id));
+    setMenuOpenId(null);
+  };
+
+  const handleUpdate = async (title: string, content: string) => {
+    if (!editingPost) return;
+    await updatePost(editingPost.id, { title, content });
+    setUpdatedItems((prev) => ({
+      ...prev,
+      [editingPost.id]: { title, content },
+    }));
+    setEditingPost(null);
+  };
+
+  const currentLabel = SORT_OPTIONS.find((o) => o.value === sortOrder)?.label;
+
+  return (
+    <div className="mb-[100px]">
+      {/* 검색 + 필터 */}
+      <div className="flex items-center gap-2 px-4 pt-3">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="제목, 내용, 작성자 검색"
+          className="flex-1 rounded-xl bg-white px-4 py-2.5 text-sm shadow-sm outline-none placeholder:text-gray-400"
+        />
+        <div className="relative">
+          <button
+            onClick={() => setFilterOpen((v) => !v)}
+            className="flex items-center gap-1 rounded-xl bg-white px-3 py-2.5 text-xs font-semibold text-gray-600 shadow-sm"
+          >
+            <FilterIcon />
+            <span>{currentLabel}</span>
+          </button>
+          {filterOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setFilterOpen(false)}
+              />
+              <div className="absolute right-0 top-10 z-20 overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
+                <div className="flex flex-nowrap gap-2 p-2">
+                  {SORT_OPTIONS.map(({ value, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => {
+                        setSortOrder(value);
+                        setFilterOpen(false);
+                      }}
+                      className={`whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
+                        sortOrder === value
+                          ? 'bg-blue text-white'
+                          : 'bg-gray-200 text-gray-600'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* 게시물 목록 */}
+      <div className="mt-3 space-y-3 px-4">
+        {items.length === 0 && isFetching ? (
+          [...Array(3)].map((_, idx) => <BoardSkeleton key={idx} />)
+        ) : displayedItems.length === 0 ? (
+          <div className="flex h-[200px] w-full flex-col items-center justify-center gap-2">
+            <span className="text-2xl">📭</span>
+            <span className="text-sm font-semibold text-gray-400">
+              {searchQuery
+                ? '검색 결과가 없습니다'
+                : '등록된 게시글이 없습니다'}
+            </span>
+          </div>
+        ) : (
+          displayedItems.map((post) => {
+            const likesCount = likesMap[post.id] ?? post.likes ?? 0;
+            const isOwner = currentUid === post.id.split('/')[1];
+
+            return (
+              <div
+                key={post.id}
+                className="relative cursor-pointer rounded-xl bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
+                onClick={() =>
+                  navigate('/board/board/detail', { state: { post } })
+                }
+              >
+                <div className="flex items-center gap-x-4 px-4 py-3">
+                  <div className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-lg bg-gray-300">
+                    <span className="text-sm font-bold text-white">
+                      {post.author?.charAt(0) ?? '?'}
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-y-[2px]">
+                    <span className="text-base font-bold text-black">
+                      {post.author}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      {formatBoardTime(post.createdAt)}
+                    </span>
+                  </div>
+                  <div className="bg-blue-500 rounded px-2 py-0.5 text-xs font-bold text-white">
+                    자유
+                  </div>
+                  {isOwner && (
+                    <div className="relative">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setMenuOpenId(
+                            menuOpenId === post.id ? null : post.id,
+                          );
+                        }}
+                        className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100"
+                      >
+                        <HamburgerIcon />
+                      </button>
+                      {menuOpenId === post.id && (
+                        <>
+                          <div
+                            className="fixed inset-0 z-10"
+                            onClick={() => setMenuOpenId(null)}
+                          />
+                          <div className="absolute right-0 top-8 z-20 min-w-[80px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingPost({ ...post });
+                                setMenuOpenId(null);
+                              }}
+                              className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
+                            >
+                              수정
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(post);
+                              }}
+                              className="text-red-500 hover:bg-red-50 block w-full px-4 py-2.5 text-left text-sm"
+                            >
+                              삭제
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {post.imageUrl && (
+                  <BoardImage src={post.imageUrl} alt={post.title} />
+                )}
+
+                <div className="px-4 pb-1 pt-1 text-sm font-semibold">
+                  {post.title}
+                </div>
+                <div className="line-clamp-2 px-4 pb-2 text-sm text-gray-600">
+                  {post.content}
+                </div>
+                <div className="flex items-center justify-between px-4 pb-3">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base text-gray-400">🤍</span>
+                    <span className="text-xs font-semibold text-gray-700">
+                      {likesCount}명이 좋아합니다
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-gray-400">
+                    <span>조회수</span>
+                    <span>{viewsMap[post.id] ?? 0}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+
+        <div ref={ref} className="h-10" />
+      </div>
+
+      {editingPost && (
+        <PostEditModal
+          post={editingPost}
+          onSave={handleUpdate}
+          onClose={() => setEditingPost(null)}
+        />
+      )}
+
     </div>
   );
 };

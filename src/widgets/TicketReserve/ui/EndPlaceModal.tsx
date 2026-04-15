@@ -10,16 +10,16 @@ const EndPlaceModal = () => {
   const { isShow } = usePlaceInputStore();
   const { closeModal } = useModalStore();
   return (
-    <div className="flex h-full w-full flex-col items-center bg-white">
-      <div className="pl-[28px] pr-[27px]">
+    <div className="flex h-full w-full flex-col items-center bg-gray-100">
+      <div className="w-full pl-[28px] pr-[27px]">
         <BackWardModalButton closeModal={() => closeModal('EndPlaceModal')} />
         <PlaceTitle text="도착지 선택해주세요" />
         <PlaceInput placeholder="도착역 선택" />
         {isShow ? null : (
           <EndRecommendStationList modalType={'EndPlaceModal'} />
         )}
+        {isShow ? null : <div className="mt-5 w-full border border-lightGray" />}
       </div>
-      {isShow ? null : <div className="mt-5 w-full border border-lightGray" />}
       <EndStationList />
     </div>
   );

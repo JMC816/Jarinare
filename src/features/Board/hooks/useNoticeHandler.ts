@@ -2,18 +2,22 @@ import { useRef, useState } from 'react';
 import { useCreateNotice } from './useCreateNotice';
 import { useNavigate } from 'react-router-dom';
 import supabase from '@/shared/supabase/supabase';
+import { useDeleteNotice } from './useDeleteNotice';
 
 export const useNoticeHandler = () => {
   const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const [views, setViews] = useState<number>(0);
+  const [likes, setLikes] = useState<number>(0);
   const [previewImg, setPreviewImg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { createNotice } = useCreateNotice();
+  const { deleteNotice } = useDeleteNotice();
 
   const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuthor(e.target.value);
@@ -25,6 +29,14 @@ export const useNoticeHandler = () => {
 
   const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
+  };
+
+  const onViewsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setViews(Number(e.target.value));
+  };
+
+  const onLikesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLikes(Number(e.target.value));
   };
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,13 +54,16 @@ export const useNoticeHandler = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const noticeId = await createNotice(author, title, content);
+      const noticeId = await createNotice(author, title, content, views, likes);
       if (file) {
         const filePath = `notice/${noticeId}/${file.name}`;
         const { error } = await supabase.storage
           .from('jarinare-images')
           .upload(filePath, file);
         if (error) {
+          if (noticeId) {
+            await deleteNotice(noticeId);
+          }
           console.error('업로드 오류:', error);
           alert('이미지 업로드 실패. 콘솔을 확인하세요.');
           return;
@@ -67,6 +82,8 @@ export const useNoticeHandler = () => {
     onTitleChange,
     onContentChange,
     onFileChange,
+    onViewsChange,
+    onLikesChange,
     onSubmit,
     setFile,
     setPreviewImg,

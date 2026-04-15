@@ -1,7 +1,8 @@
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
 import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptResponse';
-import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
+import backward from '@/assets/icons/backward.png';
+import { useBackButton } from '@/widgets/layouts/hooks/BackWardHook';
 import useModalStore from '@/widgets/model/Notification';
 import { AcceptResponse } from '@/widgets/Notification/ui/acceptResponse';
 import Modal from '@/widgets/Notification/ui/Modal';
@@ -16,6 +17,7 @@ import { useIsReadNotification } from '@/features/Notification/hooks/useIsReadNo
 
 const NotificationPage = () => {
   const { isShow, modalType } = useModalStore();
+  const { onClick: goBack } = useBackButton();
   const { response } = useChangeResponse();
   const { refuseResponse, acceptResponse } = useIsAcceptResponse();
   const { readStartTime } = useReadStartTime();
@@ -28,15 +30,15 @@ const NotificationPage = () => {
   } = useIsReadNotification();
 
   return (
-    <div className="flex w-full flex-col items-center">
-      <div className="flex w-full flex-col pl-[28px] pr-[27px] text-lg font-bold">
-        <BackWardPageButton />
-        <div className="mt-5 flex w-full justify-between">
-          <span>알림</span>
-          <Link to={'/reserve/notification/setting'}>
-            <img width={27} height={27} src={setting} />
-          </Link>
+    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100">
+      <div className="flex w-full items-center justify-between px-[28px] pt-[20px]">
+        <div className="flex items-center gap-3">
+          <img onClick={goBack} src={backward} className="h-[20px] w-[12px] cursor-pointer" />
+          <span className="text-lg font-bold">알림</span>
         </div>
+        <Link to={'/reserve/notification/setting'}>
+          <img width={27} height={27} src={setting} />
+        </Link>
       </div>
       <span
         onClick={async () => await updateAllResponse()}

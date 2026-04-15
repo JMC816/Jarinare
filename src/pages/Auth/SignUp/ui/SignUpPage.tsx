@@ -48,7 +48,7 @@ const SignUpPage = () => {
     <FormProvider {...method}>
       <div className="flex h-screen w-full items-center justify-center">
         <div className="flex h-[667px] w-[375px] flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
-          <BackWardPageButton />
+          <BackWardPageButton title="회원가입" step="Step 1 of 4" />
           <EmailForm />
           <SignUpStageLine stage={1} width={75} borderRadius="xl" />
           <div className="mb-[45px] flex flex-col">

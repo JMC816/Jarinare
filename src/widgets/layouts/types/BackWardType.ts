@@ -5,4 +5,6 @@ export type BackWardProps = {
   openModal?: (type: AuthModalTypes | ReserveModalTypes) => void;
   closeModal?: (type: AuthModalTypes | ReserveModalTypes) => void;
   backPage?: () => void;
+  title?: string;
+  step?: string;
 };

@@ -1,47 +1,138 @@
 import useModalStore from '@/widgets/model/ReserveStore';
 import Modal from '@/widgets/TicketReserve/ui/Modal';
-import ReserveButton from '@/widgets/TicketReserve/ui/ReserveButton';
-import ReserveTicket from '@/widgets/TicketReserve/ui/ReserveTicket';
-import ReserveTitle from '@/widgets/TicketReserve/ui/ReserveTitle';
-import ReserveWay from '@/widgets/TicketReserve/ui/ReserveWay';
 import { useResetTrainType } from '../hooks/homeHook';
-import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import { useRef, useState } from 'react';
+import { Static } from '@/widgets/TicketReserve/ui/Static';
+import { Reserve } from '@/widgets/TicketReserve/ui/Reserve';
+import { Ticket } from '@/widgets/TicketReserve/ui/Ticket';
+import notification from '@/assets/icons/notification.png';
+import { Link } from 'react-router-dom';
+import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
+import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptResponse';
+import { useIsNotificationResponse } from '@/features/Notification/hooks/useIsNotificationResponse';
+import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
 
 const HomePage = () => {
   const { isShow, modalType } = useModalStore();
-  const {
-    startStationForView,
-    endStationForView,
-    startDayForView,
-    adult,
-    kid,
-  } = trainDataStore();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  // home 페이지 렌더링 시 기차 종류 초기화
+  const { response } = useChangeResponse();
+  const { acceptResponse, refuseResponse } = useIsAcceptResponse();
+  const { isNotification } = useIsNotificationResponse();
+  const { readStartTime } = useReadStartTime();
+
+  const isStartTimeResponse =
+    readStartTime && Object.entries(readStartTime.val()).length;
+  const isRefuseResponse =
+    refuseResponse && Object.entries(refuseResponse.val()).length;
+  const isAcceptResponse =
+    acceptResponse && Object.entries(acceptResponse.val()).length;
+  const isChangeResponse = response && Object.entries(response.val()).length;
+
+  const isChangeRefuseOrAcceptResponse = ((isRefuseResponse! > 0 ||
+    isAcceptResponse! > 0) &&
+    isNotification?.data()!.response) as boolean;
+  const isSeatsChangeResponse = (isChangeResponse! > 0 &&
+    isNotification?.data()!.change) as boolean;
+  const isExistNotification =
+    isChangeRefuseOrAcceptResponse ||
+    isSeatsChangeResponse ||
+    isStartTimeResponse;
+
+  const changeResponseKeys = response && Object.keys(response.val());
+  const acceptResponseKeys =
+    acceptResponse && Object.keys(acceptResponse.val());
+  const refuseResponseKeys =
+    refuseResponse && Object.keys(refuseResponse.val());
+  const startTimeResponseKeys =
+    readStartTime && Object.keys(readStartTime.val());
+
+  const isReadNotification =
+    (changeResponseKeys
+      ?.map((k) => response?.val()[k].isRead as boolean)
+      .includes(false) ??
+      false) ||
+    (acceptResponseKeys
+      ?.map((k) => acceptResponse?.val()[k].isRead as boolean)
+      .includes(false) ??
+      false) ||
+    (refuseResponseKeys
+      ?.map((k) => refuseResponse?.val()[k].isRead as boolean)
+      .includes(false) ??
+      false) ||
+    (startTimeResponseKeys
+      ?.map((k) => readStartTime?.val()[k].isRead as boolean)
+      .includes(false) ??
+      false);
+
   useResetTrainType();
 
-  const disabled =
-    startStationForView === '' ||
-    endStationForView === '' ||
-    startDayForView === '' ||
-    adult + kid === 0;
+  const onScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    const index = Math.round(scrollLeft / clientWidth);
+    setActiveIndex(index);
+  };
 
   return (
     <div
-      className={`mb-[40px] flex flex-col items-center pl-[28px] pr-[27px] ${isShow === true ? 'overflow-hidden' : null}`}
+      className={`flex h-screen w-full flex-col bg-gray-100 ${isShow === true ? 'overflow-hidden' : ''}`}
     >
-      <ReserveTitle text="어디로 갈까요?" />
-      <ReserveWay />
-      <div className="mt-5">
-        <ReserveButton
-          disabled={disabled}
-          text="조회"
-          textColor="white"
-          bgColor="blue"
-        />
+      {/* 상단 헤더 */}
+      <div className="flex w-full items-center justify-between px-[28px] pb-[4px] pt-[20px]">
+        <span className="text-lg font-black tracking-widest text-blue">
+          JARINARE
+        </span>
+        <Link to={'/reserve/notification'} className="relative">
+          <img width={19} height={24} src={notification} />
+          {isReadNotification && isExistNotification ? (
+            <span className="absolute bottom-6 left-4 size-1.5 animate-ping rounded-full bg-blue" />
+          ) : null}
+        </Link>
       </div>
-      <ReserveTitle text="내 승차권" />
-      <ReserveTicket />
+      <div className="mt-2 w-full border-b border-gray-200" />
+
+      {/* 슬라이드 컨테이너 */}
+      <div
+        ref={scrollRef}
+        onScroll={onScroll}
+        className="flex flex-1 overflow-y-hidden overflow-x-scroll"
+        style={{
+          scrollSnapType: 'x mandatory',
+          scrollbarWidth: 'none',
+        }}
+      >
+        {/* 예매 페이지 */}
+        <div
+          className="flex h-full w-full shrink-0 flex-col items-center overflow-y-auto px-[28px] pb-[100px]"
+          style={{ scrollSnapAlign: 'start' }}
+        >
+          <Reserve />
+          <Ticket />
+        </div>
+
+        {/* 통계 페이지 */}
+        <div
+          className="flex h-full w-full shrink-0 flex-col items-center overflow-y-auto px-[28px] pb-[100px]"
+          style={{ scrollSnapAlign: 'start' }}
+        >
+          <Static />
+        </div>
+      </div>
+
+      {/* 페이지 인디케이터 */}
+      <div className="absolute bottom-[100px] flex w-full items-center justify-center gap-2">
+        {[0, 1].map((i) => (
+          <div
+            key={i}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              activeIndex === i ? 'w-5 bg-blue' : 'w-1.5 bg-gray-300'
+            }`}
+          />
+        ))}
+      </div>
+
       {isShow == false || modalType == undefined ? null : <Modal />}
     </div>
   );

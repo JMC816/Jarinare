@@ -7,6 +7,8 @@ export const useCreateEvent = () => {
     author: string,
     title: string,
     content: string,
+    views: number,
+    likes: number,
   ) => {
     const eventCollectionRef = collection(
       db,
@@ -19,6 +21,8 @@ export const useCreateEvent = () => {
         author,
         title,
         content,
+        views,
+        likes,
         createdAt: serverTimestamp(),
       });
       return docRef.id;

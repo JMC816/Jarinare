@@ -7,6 +7,8 @@ export const useCreateBoard = () => {
     author: string,
     title: string,
     content: string,
+    views: number,
+    likes: number,
   ) => {
     const boardCollectionRef = collection(
       db,
@@ -19,6 +21,8 @@ export const useCreateBoard = () => {
         author,
         title,
         content,
+        views,
+        likes,
         createdAt: serverTimestamp(),
       });
       return docRef.id;

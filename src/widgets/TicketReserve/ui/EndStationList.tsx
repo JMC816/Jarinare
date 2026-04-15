@@ -10,7 +10,6 @@ const EndStationList = () => {
   const { setEndStation, setEndStationForView } = trainDataStore();
   const { stations, isLoading } = trainQueryData();
 
-  // 기차역 검색할 시 글자가 포함된 역을 보여주거나 없다면 전체 기차역을 보여줌.
   const filtered = isValue
     ? stations.filter(
         (station) => station && station.nodename.includes(isValue),
@@ -20,7 +19,8 @@ const EndStationList = () => {
   if (isLoading) return <LoadingScreen />;
 
   return (
-    <div className="w-full overflow-y-scroll px-[10px] pt-[10px]">
+    <div className="w-full overflow-y-scroll px-[28px] pt-2">
+      <span className="mb-2 block px-2 text-xs font-semibold text-gray-400">전체역</span>
       {filtered.map((station) => {
         if (!station || !station.nodename) return null;
         return (
@@ -31,9 +31,14 @@ const EndStationList = () => {
               setEndStation(station.nodeid);
               setEndStationForView(station.nodename);
             }}
-            className="flex h-[50px] w-full cursor-pointer items-center px-[17px] py-[9px] text-base font-bold text-darkGray hover:rounded-md hover:bg-lightestGray active:brightness-50"
+            className="mb-2 flex cursor-pointer items-center gap-3 rounded-xl bg-white px-3 py-3 shadow-sm transition-all active:brightness-75"
           >
-            {station.nodename}
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lightBlue text-xs font-bold text-blue">
+              {station.nodename[0]}
+            </div>
+            <span className="text-sm font-semibold text-darkGray">
+              {station.nodename}
+            </span>
           </div>
         );
       })}

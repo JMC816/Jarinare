@@ -14,8 +14,7 @@ const LoginPage = () => {
     <FormProvider {...method}>
       <div className="flex h-screen w-full items-center justify-center">
         <div className="flex h-[667px] w-[375px] flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
-          <BackWardPageButton />
-          <span className="mt-5 w-full text-lg font-bold">로그인</span>
+          <BackWardPageButton title="로그인" step="Step 1 of 2" />
           <div className="mt-[35px]">
             <LoginList />
           </div>

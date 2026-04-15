@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import supabase from '@/shared/supabase/supabase';
 
 export const useBaordHandler = () => {
-  const [author, setAuthor] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const [author, setAuthor] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
+  const [views, setViews] = useState<number>(0);
+  const [likes, setLikes] = useState<number>(0);
   const [previewImg, setPreviewImg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
@@ -27,6 +29,14 @@ export const useBaordHandler = () => {
     setContent(e.target.value);
   };
 
+  const onViewsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setViews(Number(e.target.value));
+  };
+
+  const onLikesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLikes(Number(e.target.value));
+  };
+
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -42,7 +52,7 @@ export const useBaordHandler = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const boardId = await createBoard(author, title, content);
+      const boardId = await createBoard(author, title, content, views, likes);
       if (file) {
         const filePath = `board/${boardId}/${file.name}`;
         const { error } = await supabase.storage
@@ -67,6 +77,8 @@ export const useBaordHandler = () => {
     onTitleChange,
     onContentChange,
     onFileChange,
+    onViewsChange,
+    onLikesChange,
     onSubmit,
     setFile,
     setPreviewImg,

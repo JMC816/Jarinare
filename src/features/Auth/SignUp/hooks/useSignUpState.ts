@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   LoadingStore,
   SelectedAgeStore,
+  SelectedGenderStore,
   SignUpMessageStore,
 } from '../model/SignUpStore';
 import { FieldValues } from 'react-hook-form';
@@ -15,6 +16,7 @@ export const useSignUpState = () => {
   const { isLoading, setIsLoading } = LoadingStore();
   const { message, setMessage } = SignUpMessageStore();
   const { selectedAge, setSelectedAge } = SelectedAgeStore();
+  const { selectedGender, setSelectedGender } = SelectedGenderStore();
 
   const onSubmit = async (data: FieldValues) => {
     try {
@@ -30,6 +32,7 @@ export const useSignUpState = () => {
         changeCount: 0,
         point: 0,
         age: selectedAge,
+        gender: selectedGender,
         change: true,
         response: true,
       });
@@ -38,6 +41,7 @@ export const useSignUpState = () => {
         displayName: data.name,
       });
 
+      setSelectedGender('');
       setSelectedAge('');
       navigate('/');
     } catch (e) {

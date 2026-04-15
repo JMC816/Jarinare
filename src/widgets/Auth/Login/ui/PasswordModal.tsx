@@ -19,6 +19,8 @@ const PasswordModal = () => {
       <BackWardModalButton
         openModal={() => openModal('EmailModal')}
         closeModal={() => closeModal('PasswordModal')}
+        title="로그인"
+        step="Step 2 of 2"
       />
       <PasswordForm />
       <LoginStageLine stage={2} width={300} borderRadius="xl" />

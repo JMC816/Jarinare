@@ -30,7 +30,7 @@ const SeatChangeList = () => {
     );
 
   return (
-    <div className="mt-[15px] h-[420px] w-[320px] rounded-lg bg-lightestGray px-5">
+    <div className="mt-[15px] h-[420px] w-full rounded-lg bg-lightestGray px-5">
       <div className="flex justify-between text-lg font-bold text-black">
         <div className="flex gap-x-2">
           <span className="flex h-[40px] w-[40px] items-center justify-center">

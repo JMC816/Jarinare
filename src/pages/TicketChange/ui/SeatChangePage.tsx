@@ -31,39 +31,33 @@ const SeatChangePage = () => {
   const isAllSelected = seatsTarget.length === mySeats.length ? true : false;
 
   return (
-    <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
-      <BackWardPageButton />
-      <SeatChangeMenu />
-      <SeatChangeList />
-      <SeatChangeState />
-      <div className="mt-[10px] flex justify-between gap-x-5">
-        <span className="h-12 w-[150px] text-base font-bold text-mediumGray">
+    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px]">
+      <BackWardPageButton title="좌석 변경" />
+      <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
+        <SeatChangeMenu />
+        <SeatChangeList />
+        <SeatChangeState />
+      </div>
+      <div className="mt-4 flex w-full items-center gap-3">
+        <span className="flex-1 text-xs font-semibold text-gray-400">
           빈 좌석 또는 타 승객 좌석을 선택해주세요
         </span>
-        <SeatChangeButton
+        <button
           onClick={async () => {
-            if (isBlocked) {
-              return;
-            }
-            if (mySeatsInThisTicket) {
-              return;
-            }
+            if (isBlocked) return;
+            if (mySeatsInThisTicket) return;
             if (mySeats.length === seatsTarget.length) {
               openModal('SeatChangeModal');
             }
           }}
-          text={
-            isBlocked
-              ? '요청 기다리는 중..'
-              : `${seatsTarget.length} / ${mySeats.length} 선택`
-          }
-          textColor="white"
-          bgColor={
+          className={`flex-1 rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
             isAllSelected && !mySeatsInThisTicket && !isBlocked
-              ? 'blue'
-              : 'lightBlueImpossible'
-          }
-        />
+              ? 'bg-blue active:brightness-95'
+              : 'bg-gray-300'
+          }`}
+        >
+          {isBlocked ? '요청 기다리는 중..' : `${seatsTarget.length} / ${mySeats.length} 선택`}
+        </button>
       </div>
       {isShow == false || modalType == undefined ? null : <Modal />}
     </div>

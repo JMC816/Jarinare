@@ -6,23 +6,29 @@ const TrainCheckMenu = () => {
   const { openModal } = useModalStore();
   const { trainTypeForView, startTimeForView } = trainDataStore();
   return (
-    <div className="mt-[30px] flex w-full gap-[15px]">
+    <div className="mt-4 flex w-full gap-3">
       <div
         onClick={() => openModal('TrainChoiceModal')}
-        className="flex h-[30px] w-[80px] cursor-pointer items-center justify-center gap-[6px] rounded-xs border border-lightGray bg-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
+        className="flex flex-1 cursor-pointer items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm active:brightness-95"
       >
-        <span className="text-xs font-bold">
-          {trainTypeForView ? trainTypeForView : '기차 종류'}
-        </span>
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] text-gray-400">기차 종류</span>
+          <span className="text-sm font-bold text-gray-800">
+            {trainTypeForView ? trainTypeForView : '전체'}
+          </span>
+        </div>
         <img src={down} width={11} height={7} />
       </div>
       <div
         onClick={() => openModal('TimeChoiceModal')}
-        className="flex h-[30px] w-[80px] cursor-pointer items-center justify-center gap-[6px] rounded-xs border border-lightGray bg-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
+        className="flex flex-1 cursor-pointer items-center justify-between rounded-2xl bg-white px-4 py-3 shadow-sm active:brightness-95"
       >
-        <span className="text-xs font-bold">
-          {startTimeForView.substring(0, 2)}시 이후
-        </span>
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] text-gray-400">시간대</span>
+          <span className="text-sm font-bold text-gray-800">
+            {startTimeForView ? `${startTimeForView.substring(0, 2)}시 이후` : '전체'}
+          </span>
+        </div>
         <img src={down} width={11} height={7} />
       </div>
     </div>

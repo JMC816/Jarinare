@@ -1,84 +1,155 @@
-import { Board } from '@/widgets/Board/ui/Board';
-import { Event } from '@/widgets/Board/ui/Event';
-import { Notice } from '@/widgets/Board/ui/Notice';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import backward from '@/assets/icons/backward.png';
-import edit from '@/assets/icons/edit.png';
-import { ComingSoonModal } from '@/shared/ui/ComingSoonModal';
-// 샘플 데이터 (인스타그램 피드 형태)
+import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
+import { useLatestPosts } from '@/features/Board/hooks/useLatestPosts';
+import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
+import { useNavigate } from 'react-router-dom';
+
+const BOARDS = [
+  {
+    key: 'notice' as const,
+    label: '공지사항',
+    path: '/board/noticelist',
+  },
+  {
+    key: 'event' as const,
+    label: '이벤트',
+    path: '/board/eventlist',
+  },
+  {
+    key: 'board' as const,
+    label: '자유게시판',
+    path: '/board/boardlist',
+  },
+];
 
 const BoardPage = () => {
-  const [activeTab, setActiveTab] = useState<'notice' | 'event' | 'board'>(
-    'notice',
-  );
   const navigate = useNavigate();
+  const { latest } = useLatestPosts();
+  const { seenData } = useBoardSeen();
+  const { topPost } = useTopViewedPost();
+
+  const isNew = (createdAt: number | undefined, category: keyof typeof seenData) => {
+    if (!createdAt) return false;
+    return createdAt > (seenData[category] ?? 0);
+  };
+
   return (
-    <div className="flex h-screen w-full flex-col">
-      <div className="flex w-full flex-col px-4 pl-[28px] pr-[27px]">
-        <div className="mt-[30px] flex justify-between">
-          <img
-            onClick={() => navigate(-1)}
-            src={backward}
-            className="h-[20px] w-[12px] cursor-pointer"
-          />
-          <div
-            onClick={
-              activeTab === 'notice'
-                ? () => navigate('/board/notice')
-                : activeTab === 'event'
-                  ? () => navigate('/board/event')
-                  : () => navigate('/board/board')
-            }
-            className="relative flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full"
-          >
-            <img src={edit} className="absolute bottom-[5px]" />
-          </div>
+    <div className="flex h-screen w-full flex-col bg-gray-100">
+      {/* 헤더 */}
+      <div className="flex w-full items-center gap-4 bg-gray-100 px-[28px] py-4">
+        <img
+          onClick={() => navigate(-1)}
+          src={backward}
+          className="h-[20px] w-[12px] cursor-pointer"
+        />
+        <h1 className="text-lg font-bold">게시판</h1>
+      </div>
+
+      {/* 게시판 목록 */}
+      <div className="p-4">
+        <div className="rounded-2xl bg-white shadow-sm p-3 flex flex-col gap-2">
+          {BOARDS.map(({ key, label, path }) => {
+            const post = latest[key];
+            const hasNew = isNew(post?.createdAt, key);
+
+            return (
+              <button
+                key={key}
+                onClick={() => navigate(path)}
+                className="flex w-full items-center gap-3 rounded-lg bg-gray-100 px-4 py-3 text-left transition-colors active:bg-gray-200"
+              >
+                {/* 왼쪽: 게시판 이름 */}
+                <span className="w-[72px] shrink-0 text-sm font-bold text-blue">
+                  {label}
+                </span>
+
+                {/* 구분선 */}
+                <div className="h-3 w-[1px] shrink-0 bg-gray-300" />
+
+                {/* 가운데: 최신 게시물 내용 */}
+                <span className="flex-1 truncate text-xs text-gray-400">
+                  {post ? (post.content || post.title) : '등록된 게시물이 없습니다'}
+                </span>
+
+                {/* 오른쪽: N 배지 + 화살표 */}
+                <div className="flex shrink-0 items-center gap-2">
+                  {hasNew && (
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-blue text-[10px] font-bold text-white">
+                      N
+                    </span>
+                  )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-gray-300"
+                  >
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
-      <div className="mt-5 flex w-full border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab('notice')}
-          className={`flex-1 py-3 text-center font-medium ${
-            activeTab === 'notice'
-              ? 'border-b-2 border-blue text-blue'
-              : 'text-darkGray'
-          }`}
-        >
-          공지사항
-        </button>
-        <button
-          onClick={() => setActiveTab('event')}
-          className={`flex-1 py-3 text-center font-medium ${
-            activeTab === 'event'
-              ? 'border-b-2 border-blue text-blue'
-              : 'text-darkGray'
-          }`}
-        >
-          이벤트
-        </button>
-        <button
-          onClick={() => setActiveTab('board')}
-          className={`flex-1 py-3 text-center font-medium ${
-            activeTab === 'board'
-              ? 'border-b-2 border-blue text-blue'
-              : 'text-gray-500'
-          }`}
-        >
-          자유게시판
-        </button>
+
+      {/* 광고 배너 */}
+      <div className="px-4 py-2">
+        <div className="flex h-[72px] w-full items-center justify-center rounded-2xl bg-gray-200">
+          <span className="text-xs text-gray-400">광고 배너</span>
+        </div>
       </div>
-      <div className="flex-1 overflow-y-auto bg-gray-50">
-        {activeTab === 'notice' ? (
-          <Notice />
-        ) : activeTab === 'event' ? (
-          <Event />
-        ) : (
-          <Board />
-        )}
-      </div>
-      <div className="fixed mx-auto my-0 h-screen w-[375px]">
-        <ComingSoonModal />
+
+      {/* 실시간 조회수 1위 */}
+      <div className="px-4">
+        <div className="mb-2 flex items-center gap-1.5 px-1">
+          <span className="text-sm font-bold text-gray-800">실시간 인기 게시물</span>
+        </div>
+        <div className="rounded-2xl bg-white shadow-sm p-4">
+          {topPost ? (
+            <button
+              onClick={() =>
+                navigate(
+                  topPost.category === 'board'
+                    ? '/board/board/detail'
+                    : '/board/event/detail',
+                  {
+                    state:
+                      topPost.category === 'board'
+                        ? { post: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } }
+                        : { event: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } },
+                  },
+                )
+              }
+              className="flex w-full items-center gap-3 rounded-lg bg-gray-100 px-4 py-3 text-left"
+            >
+              <div className="flex flex-1 flex-col gap-1 overflow-hidden">
+                <span className="truncate text-sm font-semibold text-gray-800">
+                  {topPost.title}
+                </span>
+                <span className="truncate text-xs text-gray-400">
+                  {topPost.content}
+                </span>
+              </div>
+              <div className="flex shrink-0 flex-col items-end gap-1">
+                <span className="text-[10px] font-semibold text-blue">
+                  {topPost.category === 'board' ? '자유게시판' : '이벤트'}
+                </span>
+                <span className="text-[10px] text-gray-400">조회 {topPost.viewCount}</span>
+              </div>
+            </button>
+          ) : (
+            <div className="flex h-12 items-center justify-center text-xs text-gray-400">
+              조회수 데이터가 없습니다
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

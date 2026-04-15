@@ -7,31 +7,39 @@ const UserInfo = () => {
   const { navigation } = useNavigation();
   const { resetModal } = useModalStore();
 
-  if (!user) return;
+  if (!user) return null;
+
+  const displayName = user.displayName ? user.displayName : user.uid;
+  const initial = displayName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
     auth.signOut();
-    resetModal(); // 모달 상태 초기화
-    navigation('/'); // 메인페이지로 이동
+    resetModal();
+    navigation('/');
   };
 
   return (
-    <div className="flex flex-col gap-y-[25px] text-base text-darkGray">
-      <div className="flex justify-between">
-        <span>이름</span>
-        <span>{user.displayName ? user?.displayName : user.uid}</span>
+    <div className="flex w-full items-center gap-x-4 px-1 py-2">
+      {/* 이니셜 아바타 */}
+      <div className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-xl bg-gray-300">
+        <span className="text-xl font-bold text-white">{initial}</span>
       </div>
-      {/* <div className="flex justify-between">
-        <span>회원번호</span>
-        <span>20251234</span>
-      </div> */}
-      <span
+
+      {/* 이름 + 등급 */}
+      <div className="flex flex-1 flex-col gap-y-[2px]">
+        <span className="text-base font-bold text-black">{displayName}</span>
+        <span className="text-xs text-gray-400">일반회원</span>
+      </div>
+
+      {/* 로그아웃 버튼 */}
+      <button
         onClick={handleLogout}
-        className="w-full cursor-pointer text-center underline"
+        className="rounded-lg bg-lightImpossible px-3 py-2 text-xs font-bold text-red transition-all active:brightness-95"
       >
         로그아웃
-      </span>
+      </button>
     </div>
   );
 };
+
 export default UserInfo;

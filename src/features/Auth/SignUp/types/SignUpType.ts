@@ -17,3 +17,8 @@ export type SelectedAgeType = {
   selectedAge: string;
   setSelectedAge: (selectedAge: string) => void;
 };
+
+export type SelectedGenderType = {
+  selectedGender: string;
+  setSelectedGender: (gender: string) => void;
+};

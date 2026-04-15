@@ -1,15 +1,12 @@
 export interface BoardPost {
   id: string;
-  title: string;
-  content: string;
   author: string;
-  createdAt: string;
-  updatedAt: string;
+  content: string;
+  title: string;
   views: number;
   likes: number;
-  isNotice: boolean;
-  category?: string;
-  imageUrl?: string;
+  createdAt: number;
+  imageUrl: string | null;
 }
 
 export interface BoardCategory {

@@ -56,11 +56,21 @@ const TicketSeatChangePage = memo(() => {
     `<p style="margin:6px 0;font-size:13px"><span style="color:#999">요금 </span><b>${s.selectPay.toLocaleString('ko-KR')}원</b></p>` +
     `</div></body></html>`;
 
-  const utf8Bytes = new TextEncoder().encode(html);
-  const b64 = btoa(
-    Array.from(utf8Bytes, (b) => String.fromCharCode(b)).join(''),
-  );
-  const qrValue = `data:text/html;charset=utf-8;base64,${b64}`;
+  const qrValue = `${window.location.origin}/ticket/view?data=${encodeURIComponent(
+    JSON.stringify({
+      start: s.startStationForView,
+      end: s.endStationForView,
+      st: s.startTime,
+      et: s.endTime,
+      day: s.startDayForView,
+      type: s.trainType,
+      car: s.trainNoId,
+      seats: filtred,
+      adult: s.selectAdult,
+      kid: s.selectKid,
+      pay: s.selectPay,
+    }),
+  )}`;
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center overflow-y-auto bg-gray-100 pb-8 pl-[28px] pr-[27px]">

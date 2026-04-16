@@ -18,6 +18,7 @@ import { NotifiSettingPage } from '@/pages/Notification/ui/NotifiSettingPage';
 import PointPage from '@/pages/Point/ui/PointPage';
 import SeatChangePage from '@/pages/TicketChange/ui/SeatChangePage';
 import TicketSeatChangePage from '@/pages/TicketChange/ui/TicketSeatChangePage';
+import TicketViewPage from '@/pages/TicketChange/ui/TicketViewPage';
 import TicketListPage from '@/pages/TicketList/ui/TicketListPage';
 import HomePage from '@/pages/TicketReserve/ui/HomePage';
 import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
@@ -69,6 +70,7 @@ const Router = () => {
             />
             <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
           </Route>
+          <Route path="/ticket/view" element={<TicketViewPage />} />
           <Route element={<MainLayout />}>
             <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
             <Route

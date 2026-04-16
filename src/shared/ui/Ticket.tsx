@@ -16,7 +16,7 @@ const Ticket = memo(
     selectPay,
   }: TicketProps) => {
     return (
-      <div className="flex w-full flex-col gap-y-[40px]">
+      <div className="flex w-full flex-col gap-y-4">
         <TicketList
           title="시간"
           text={

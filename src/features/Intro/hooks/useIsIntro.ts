@@ -9,7 +9,7 @@ export const useIsIntro = () => {
     if (!seen) {
       setIsIntro(true);
       localStorage.setItem('intro', intro);
-      setTimeout(() => (window.location.href = '/'), 3000);
+      setTimeout(() => setIsIntro(false), 3000);
     }
   }, []);
   return { isIntro };

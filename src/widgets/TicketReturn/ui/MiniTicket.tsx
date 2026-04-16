@@ -7,8 +7,10 @@ const calcDuration = (start: number, end: number) => {
   const sm = parseInt(String(start).substring(10, 12));
   const eh = parseInt(String(end).substring(8, 10));
   const em = parseInt(String(end).substring(10, 12));
-  const diff = eh * 60 + em - (sh * 60 + sm);
-  if (diff >= 60) return `${Math.floor(diff / 60)}시간 ${diff % 60}분`;
+  let diff = eh * 60 + em - (sh * 60 + sm);
+  if (diff < 0) diff += 24 * 60;
+  if (diff >= 60)
+    return `${Math.floor(diff / 60)}시간 ${diff % 60 > 0 ? `${diff % 60}분` : ''}`;
   return `${diff}분`;
 };
 
@@ -51,33 +53,44 @@ const MiniTicket = () => {
         const duration = calcDuration(ticket.startTime, ticket.endTime);
 
         return (
-          <div key={idx} className="w-full overflow-hidden rounded-lg bg-white shadow-md">
+          <div
+            key={idx}
+            className="w-full overflow-hidden rounded-lg bg-white shadow-md"
+          >
             {/* 상단 */}
             <div className="flex flex-col gap-4 px-5 py-4">
               <div className="flex items-center justify-between">
                 <span className="rounded bg-lightBlue px-2 py-0.5 text-xs font-semibold text-blue">
                   {trainTypeName}
                 </span>
-                <span className="text-xs text-gray-400">{ticket.startDayForView}</span>
+                <span className="text-xs text-gray-400">
+                  {ticket.startDayForView}
+                </span>
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-xl font-black text-black">{ticket.startStationForView}</span>
+                  <span className="text-xl font-black text-black">
+                    {ticket.startStationForView}
+                  </span>
                   <span className="text-xs text-darkGray">{startLabel}</span>
                 </div>
 
                 <div className="flex flex-1 flex-col items-center gap-1 px-3">
                   <div className="flex w-full items-center">
                     <div className="flex-1 border-t-2 border-dashed border-gray-300" />
-                    <span className="mx-2 inline-block -scale-x-100 text-xl">🚄</span>
+                    <span className="mx-2 inline-block -scale-x-100 text-xl">
+                      🚄
+                    </span>
                     <div className="flex-1 border-t-2 border-dashed border-gray-300" />
                   </div>
                   <span className="text-[10px] text-darkGray">{duration}</span>
                 </div>
 
                 <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-xl font-black text-black">{ticket.endStationForView}</span>
+                  <span className="text-xl font-black text-black">
+                    {ticket.endStationForView}
+                  </span>
                   <span className="text-xs text-darkGray">{endLabel}</span>
                 </div>
               </div>

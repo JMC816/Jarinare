@@ -8,8 +8,9 @@ const calcDuration = (start: number, end: number) => {
   const sm = parseInt(String(start).substring(10, 12));
   const eh = parseInt(String(end).substring(8, 10));
   const em = parseInt(String(end).substring(10, 12));
-  const diff = eh * 60 + em - (sh * 60 + sm);
-  if (diff >= 60) return `${Math.floor(diff / 60)}시간 ${diff % 60}분`;
+  let diff = eh * 60 + em - (sh * 60 + sm);
+  if (diff < 0) diff += 24 * 60;
+  if (diff >= 60) return `${Math.floor(diff / 60)}시간 ${diff % 60 > 0 ? `${diff % 60}분` : ''}`;
   return `${diff}분`;
 };
 

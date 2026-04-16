@@ -8,18 +8,29 @@ const calcDuration = (start: number, end: number) => {
   const sm = parseInt(String(start).substring(10, 12));
   const eh = parseInt(String(end).substring(8, 10));
   const em = parseInt(String(end).substring(10, 12));
-  const diff = eh * 60 + em - (sh * 60 + sm);
-  if (diff >= 60) return `${Math.floor(diff / 60)}시간 ${diff % 60}분`;
+  let diff = eh * 60 + em - (sh * 60 + sm);
+  if (diff < 0) diff += 24 * 60;
+  if (diff >= 60)
+    return `${Math.floor(diff / 60)}시간 ${diff % 60 > 0 ? `${diff % 60}분` : ''}`;
   return `${diff}분`;
 };
 
 const ReserveTicket = () => {
   const ticketData = useTicketLists();
   const { navigate } = useNavigation();
-  const { setStartDay, setSelectStartTime, setSelectTrainType, setSeatsId, setTrainNo } =
-    trainDataStore();
+  const {
+    setStartDay,
+    setSelectStartTime,
+    setSelectTrainType,
+    setSeatsId,
+    setTrainNo,
+  } = trainDataStore();
 
-  if (!ticketData || !ticketData.groupedArray || ticketData.groupedArray.length === 0) {
+  if (
+    !ticketData ||
+    !ticketData.groupedArray ||
+    ticketData.groupedArray.length === 0
+  ) {
     return (
       <div className="mb-[20px] flex h-[138px] w-full shrink-0 flex-col items-center justify-center rounded-lg bg-white shadow-sm">
         <span>🗒️</span>
@@ -69,14 +80,18 @@ const ReserveTicket = () => {
           <span className="rounded bg-lightBlue px-2 py-0.5 text-xs font-semibold text-blue">
             {trainTypeName}
           </span>
-          <span className="text-xs text-gray-400">{ticket.startDayForView}</span>
+          <span className="text-xs text-gray-400">
+            {ticket.startDayForView}
+          </span>
         </div>
 
         {/* 출발 - 기차아이콘 - 도착 */}
         <div className="flex items-center justify-between">
           {/* 출발역 */}
           <div className="flex flex-col items-center gap-0.5">
-            <span className="text-xl font-black text-black">{ticket.startStationForView}</span>
+            <span className="text-xl font-black text-black">
+              {ticket.startStationForView}
+            </span>
             <span className="text-xs text-darkGray">{startLabel}</span>
           </div>
 
@@ -92,7 +107,9 @@ const ReserveTicket = () => {
 
           {/* 도착역 */}
           <div className="flex flex-col items-center gap-0.5">
-            <span className="text-xl font-black text-black">{ticket.endStationForView}</span>
+            <span className="text-xl font-black text-black">
+              {ticket.endStationForView}
+            </span>
             <span className="text-xs text-darkGray">{endLabel}</span>
           </div>
         </div>

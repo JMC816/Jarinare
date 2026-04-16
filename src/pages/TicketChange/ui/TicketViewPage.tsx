@@ -12,9 +12,6 @@ type TicketData = {
   pay: number;
 };
 
-const fmt = (time: number, start: number, len: number) =>
-  String(time).substring(start, start + len);
-
 const TicketViewPage = () => {
   const hash = window.location.hash.slice(1);
   if (!hash)
@@ -37,15 +34,14 @@ const TicketViewPage = () => {
     );
   }
 
-  const startHH = fmt(d.st, 8, 2);
-  const startMM = fmt(d.st, 10, 2);
-  const endHH = fmt(d.et, 8, 2);
-  const endMM = fmt(d.et, 10, 2);
-  const dh = Number(startHH);
-  const dm = Number(startMM);
-  const ah = Number(endHH);
-  const am = Number(endMM);
-  let dur = ah * 60 + am - (dh * 60 + dm);
+  const startHH = String(d.st).substring(8, 10);
+  const startMM = String(d.st).substring(10, 12);
+  const endHH = String(d.et).substring(8, 10);
+  const endMM = String(d.et).substring(10, 12);
+  let dur =
+    Number(endHH) * 60 +
+    Number(endMM) -
+    (Number(startHH) * 60 + Number(startMM));
   if (dur < 0) dur += 24 * 60;
   const durText =
     dur >= 60
@@ -53,37 +49,61 @@ const TicketViewPage = () => {
       : `${dur}분`;
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 p-6">
-      <div className="mt-8 w-full max-w-sm overflow-hidden rounded-2xl bg-white px-5 py-5 shadow-sm">
-        {/* 노선 헤더 */}
-        <div className="mb-4 flex w-full items-center justify-between text-base font-bold text-gray-900">
-          <span>{d.start}</span>
-          <div className="flex flex-1 flex-col items-center gap-1 px-3">
-            <div className="flex w-full items-center">
-              <div className="flex-1 border-t-2 border-dashed border-gray-300" />
-              <span className="mx-2 inline-block -scale-x-100 text-xl">🚄</span>
-              <div className="flex-1 border-t-2 border-dashed border-gray-300" />
-            </div>
-            <span className="text-[10px] font-normal text-gray-400">
-              {durText}
+    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 px-6 py-10">
+      <div className="w-full max-w-sm overflow-hidden rounded-2xl shadow-xl">
+        {/* 상단: 파란 헤더 */}
+        <div className="bg-blue px-5 pb-6 pt-5">
+          <div className="mb-4 flex items-center justify-between">
+            <span className="rounded-full bg-white/20 px-3 py-0.5 text-xs font-bold text-white">
+              {d.type}
             </span>
+            <span className="text-xs text-white/80">{d.day}</span>
           </div>
-          <span>{d.end}</span>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-2xl font-black text-white">{d.start}</span>
+              <span className="text-sm font-semibold text-white/80">
+                {startHH}:{startMM}
+              </span>
+            </div>
+            <div className="flex flex-1 flex-col items-center gap-0.5">
+              <div className="flex w-full items-center">
+                <div className="h-0 flex-1 border-t border-dashed border-white/50" />
+                <span className="mx-1 inline-block -scale-x-100 text-lg leading-none">
+                  🚄
+                </span>
+                <div className="h-0 flex-1 border-t border-dashed border-white/50" />
+              </div>
+              <span className="text-[10px] text-white/70">{durText}</span>
+            </div>
+            <div className="flex flex-col items-center gap-0.5">
+              <span className="text-2xl font-black text-white">{d.end}</span>
+              <span className="text-sm font-semibold text-white/80">
+                {endHH}:{endMM}
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* 티켓 정보 */}
-        <div className="flex w-full flex-col gap-y-4">
-          <Row
-            label="시간"
-            value={`${startHH}:${startMM} - ${endHH}:${endMM}`}
-            blue
-          />
-          <Row label="출발" value={d.day} blue />
-          <Row label="기차" value={d.type} />
-          <Row label="호차" value={`${d.car}호차 ${d.seats.join(', ')}`} />
-          <Row label="인원" value={`어른 ${d.adult}명 • 어린이 ${d.kid}명`} />
-          <div className="w-full border border-gray-100" />
-          <Row label="요금" value={`${d.pay.toLocaleString('ko-KR')}원`} />
+        {/* 절취선 */}
+        <div className="flex items-center bg-white py-3">
+          <div className="mx-5 flex-1 border-t-2 border-dashed border-gray-300" />
+        </div>
+
+        {/* 중단: 상세 정보 */}
+        <div className="bg-white px-5 pb-4">
+          <div className="flex flex-col gap-3">
+            <Row
+              label="호차 / 좌석"
+              value={`${d.car}호차  ${d.seats.join(', ')}`}
+            />
+            <Row label="인원" value={`어른 ${d.adult}명 · 어린이 ${d.kid}명`} />
+            <Row
+              label="요금"
+              value={`${d.pay.toLocaleString('ko-KR')}원`}
+              bold
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -93,15 +113,19 @@ const TicketViewPage = () => {
 const Row = ({
   label,
   value,
-  blue,
+  bold,
 }: {
   label: string;
   value: string;
-  blue?: boolean;
+  bold?: boolean;
 }) => (
-  <div className="flex justify-between text-sm font-bold">
-    <span className="text-gray-400">{label}</span>
-    <span className={blue ? 'text-blue' : 'text-black'}>{value}</span>
+  <div className="flex items-center justify-between">
+    <span className="text-xs text-gray-400">{label}</span>
+    <span
+      className={`text-sm ${bold ? 'font-bold text-blue' : 'font-semibold text-gray-800'}`}
+    >
+      {value}
+    </span>
   </div>
 );
 

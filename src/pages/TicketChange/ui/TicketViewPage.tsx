@@ -1,5 +1,3 @@
-import { useSearchParams } from 'react-router-dom';
-
 type TicketData = {
   start: string;
   end: string;
@@ -18,17 +16,21 @@ const fmt = (time: number, start: number, len: number) =>
   String(time).substring(start, start + len);
 
 const TicketViewPage = () => {
-  const [searchParams] = useSearchParams();
-
-  const raw = searchParams.get('data');
-  if (!raw)
+  const hash = window.location.hash.slice(1);
+  if (!hash)
     return (
       <div className="p-8 text-center text-gray-400">잘못된 접근입니다.</div>
     );
 
   let d: TicketData;
   try {
-    d = JSON.parse(decodeURIComponent(raw)) as TicketData;
+    const normalized = hash.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = normalized.padEnd(
+      normalized.length + ((4 - (normalized.length % 4)) % 4),
+      '=',
+    );
+    const bytes = Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
+    d = JSON.parse(new TextDecoder().decode(bytes)) as TicketData;
   } catch {
     return (
       <div className="p-8 text-center text-gray-400">잘못된 접근입니다.</div>

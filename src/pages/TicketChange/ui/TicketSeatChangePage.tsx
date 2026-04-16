@@ -18,6 +18,67 @@ const TicketSeatChangePage = memo(() => {
 
   const [showPreview, setShowPreview] = useState(false);
 
+  const htmlContent = useMemo(() => {
+    if (!seats?.[0]) return '';
+    const s = seats[0];
+    const startHHMM = `${String(s.startTime).substring(8, 10)}:${String(s.startTime).substring(10, 12)}`;
+    const endHHMM = `${String(s.endTime).substring(8, 10)}:${String(s.endTime).substring(10, 12)}`;
+    const dh = Number(String(s.startTime).substring(8, 10));
+    const dm = Number(String(s.startTime).substring(10, 12));
+    const ah = Number(String(s.endTime).substring(8, 10));
+    const am = Number(String(s.endTime).substring(10, 12));
+    let dur = ah * 60 + am - (dh * 60 + dm);
+    if (dur < 0) dur += 24 * 60;
+    const durText =
+      dur >= 60
+        ? `${Math.floor(dur / 60)}시간 ${dur % 60 > 0 ? `${dur % 60}분` : ''}`
+        : `${dur}분`;
+    const seatList = seats.map((seat) => seat.seatId).join(' ');
+    return (
+      `<!DOCTYPE html><html><head><meta charset=UTF-8><title>승차권</title></head>` +
+      `<body style="background:#f3f4f6;font-family:sans-serif;display:flex;justify-content:center;padding:24px;min-height:100vh;margin:0">` +
+      `<div style="background:#fff;border-radius:16px;padding:20px;width:320px;box-shadow:0 2px 8px rgba(0,0,0,.1)">` +
+      `<b style="background:#E7F2FD;color:#0062FF;border-radius:6px;padding:2px 8px;font-size:12px">${s.trainType}</b>` +
+      `<div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0;font-size:16px;font-weight:bold">` +
+      `<span>${s.startStationForView}</span>` +
+      `<div style="flex:1;border-top:2px dashed #ccc;margin:0 8px"></div>` +
+      `<span>🚄</span>` +
+      `<div style="flex:1;border-top:2px dashed #ccc;margin:0 8px"></div>` +
+      `<span>${s.endStationForView}</span></div>` +
+      `<p style="margin:6px 0;font-size:13px"><span style="color:#999">출발 </span><b>${s.startDayForView}</b></p>` +
+      `<p style="margin:6px 0;font-size:13px;color:#0062FF"><b>${startHHMM} → ${endHHMM}</b></p>` +
+      `<p style="margin:6px 0;font-size:13px"><span style="color:#999">소요 </span><b>${durText}</b></p>` +
+      `<p style="margin:6px 0;font-size:13px"><span style="color:#999">좌석 </span><b>${s.trainNoId}호 ${seatList}</b></p>` +
+      `<p style="margin:6px 0;font-size:13px"><span style="color:#999">인원 </span><b>어른 ${s.selectAdult} · 아이 ${s.selectKid}</b></p>` +
+      `<p style="margin:6px 0;font-size:13px"><span style="color:#999">요금 </span><b>${s.selectPay.toLocaleString('ko-KR')}원</b></p>` +
+      `</div></body></html>`
+    );
+  }, [seats]);
+
+  const qrValue = useMemo(() => {
+    if (!seats?.[0]) return '';
+    const s = seats[0];
+    const payload = JSON.stringify({
+      start: s.startStationForView,
+      end: s.endStationForView,
+      st: s.startTime,
+      et: s.endTime,
+      day: s.startDayForView,
+      type: s.trainType,
+      car: s.trainNoId,
+      seats: filtred,
+      adult: s.selectAdult,
+      kid: s.selectKid,
+      pay: s.selectPay,
+    });
+    const bytes = new TextEncoder().encode(payload);
+    const b64 = btoa(Array.from(bytes, (b) => String.fromCharCode(b)).join(''))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+    return `${window.location.origin}/ticket/view#${b64}`;
+  }, [seats, filtred]);
+
   useReset();
 
   if (!seats) return;
@@ -34,50 +95,12 @@ const TicketSeatChangePage = memo(() => {
       ? `${Math.floor(dur / 60)}시간 ${dur % 60 > 0 ? `${dur % 60}분` : ''}`
       : `${dur}분`;
 
-  const startHHMM = `${String(s.startTime).substring(8, 10)}:${String(s.startTime).substring(10, 12)}`;
-  const endHHMM = `${String(s.endTime).substring(8, 10)}:${String(s.endTime).substring(10, 12)}`;
-
-  const html =
-    `<!DOCTYPE html><html><head><meta charset=UTF-8><title>승차권</title></head>` +
-    `<body style="background:#f3f4f6;font-family:sans-serif;display:flex;justify-content:center;padding:24px;min-height:100vh;margin:0">` +
-    `<div style="background:#fff;border-radius:16px;padding:20px;width:320px;box-shadow:0 2px 8px rgba(0,0,0,.1)">` +
-    `<b style="background:#E7F2FD;color:#0062FF;border-radius:6px;padding:2px 8px;font-size:12px">${s.trainType}</b>` +
-    `<div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0;font-size:16px;font-weight:bold">` +
-    `<span>${s.startStationForView}</span>` +
-    `<div style="flex:1;border-top:2px dashed #ccc;margin:0 8px"></div>` +
-    `<span>🚄</span>` +
-    `<div style="flex:1;border-top:2px dashed #ccc;margin:0 8px"></div>` +
-    `<span>${s.endStationForView}</span></div>` +
-    `<p style="margin:6px 0;font-size:13px"><span style="color:#999">출발 </span><b>${s.startDayForView}</b></p>` +
-    `<p style="margin:6px 0;font-size:13px;color:#0062FF"><b>${startHHMM} → ${endHHMM}</b></p>` +
-    `<p style="margin:6px 0;font-size:13px"><span style="color:#999">소요 </span><b>${durText}</b></p>` +
-    `<p style="margin:6px 0;font-size:13px"><span style="color:#999">좌석 </span><b>${s.trainNoId}호 ${filtred.join(' ')}</b></p>` +
-    `<p style="margin:6px 0;font-size:13px"><span style="color:#999">인원 </span><b>어른 ${s.selectAdult} · 아이 ${s.selectKid}</b></p>` +
-    `<p style="margin:6px 0;font-size:13px"><span style="color:#999">요금 </span><b>${s.selectPay.toLocaleString('ko-KR')}원</b></p>` +
-    `</div></body></html>`;
-
-  const qrValue = `${window.location.origin}/ticket/view?data=${encodeURIComponent(
-    JSON.stringify({
-      start: s.startStationForView,
-      end: s.endStationForView,
-      st: s.startTime,
-      et: s.endTime,
-      day: s.startDayForView,
-      type: s.trainType,
-      car: s.trainNoId,
-      seats: filtred,
-      adult: s.selectAdult,
-      kid: s.selectKid,
-      pay: s.selectPay,
-    }),
-  )}`;
-
   return (
     <div className="flex min-h-screen w-full flex-col items-center overflow-y-auto bg-gray-100 pb-8 pl-[28px] pr-[27px]">
       <BackWardPageButton title="좌석 상세" />
 
       {/* 티켓 카드 */}
-      <div className="mt-8 w-full overflow-hidden rounded-2xl bg-white px-5 py-5 shadow-sm">
+      <div className="mt-8 w-full rounded-2xl bg-white px-5 py-5 shadow-sm">
         <div className="mb-4 flex w-full items-center justify-between text-base font-bold text-gray-900">
           <span>{seats[0].startStationForView}</span>
           <div className="flex flex-1 flex-col items-center gap-1 px-3">
@@ -110,11 +133,16 @@ const TicketSeatChangePage = memo(() => {
         {/* QR 코드 */}
         <div className="flex flex-col items-center gap-2">
           <div className="flex justify-center rounded-2xl bg-gray-50 p-5">
-            <QRCode value={qrValue} size={140} />
+            <QRCode value={qrValue} size={180} level="L" />
           </div>
-          <span className="text-[10px] text-gray-400">
-            {`${seats[0].startStationForView} → ${seats[0].endStationForView} · ${seats[0].startDayForView}`}
-          </span>
+          <a
+            href={qrValue}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[10px] text-blue underline"
+          >
+            링크로 열기
+          </a>
           <button
             onClick={() => setShowPreview(true)}
             className="mt-1 rounded-xl bg-blue px-4 py-2 text-xs font-bold text-white active:brightness-95"
@@ -151,7 +179,7 @@ const TicketSeatChangePage = memo(() => {
             </button>
           </div>
           <iframe
-            srcDoc={html}
+            srcDoc={htmlContent}
             className="w-full flex-1 border-none"
             title="승차권"
           />

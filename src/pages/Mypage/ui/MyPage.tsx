@@ -22,7 +22,10 @@ const MyPage = () => {
         <UserInfo />
 
         {/* 포인트 카드 */}
-        <div className="flex w-full flex-col justify-between rounded-xl bg-blue px-5 py-6 shadow-sm" style={{ minHeight: '180px' }}>
+        <div
+          className="flex w-full flex-col justify-between rounded-xl bg-blue px-5 py-6 shadow-sm"
+          style={{ minHeight: '180px' }}
+        >
           <div className="flex flex-col gap-y-4">
             <span className="text-sm font-medium text-white">내 포인트</span>
             <span className="text-3xl font-bold text-white">
@@ -35,25 +38,6 @@ const MyPage = () => {
               className="rounded-lg bg-white/20 px-4 py-2 text-sm font-bold text-white transition-all active:brightness-95"
             >
               더보기
-            </button>
-          </div>
-        </div>
-
-        {/* 계정 정보 섹션 */}
-        <div className="flex flex-col gap-y-2">
-          <span className="px-1 text-xs font-bold text-gray-400">계정 정보</span>
-          <div className="flex w-full flex-col rounded-xl bg-white shadow-sm">
-            <button
-              onClick={() => navigate('/mypage/point')}
-              className="flex w-full items-center justify-between px-5 py-4 active:brightness-95"
-            >
-              <div className="flex items-center gap-x-3">
-                <span className="flex h-[32px] w-[32px] items-center justify-center rounded-lg bg-gray-100 text-sm font-bold text-blue">
-                  ₩
-                </span>
-                <span className="text-sm font-medium text-black">포인트 내역</span>
-              </div>
-              <span className="text-gray-400">›</span>
             </button>
           </div>
         </div>

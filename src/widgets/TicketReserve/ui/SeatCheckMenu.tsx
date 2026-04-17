@@ -8,17 +8,15 @@ const SeatCheckMenu = () => {
   const { trainNo } = trainDataStore();
   const { seatsInfo } = useSeatQueryData();
 
-  const trainNoSeatsCount = seatsInfo.map(
+  const trainNoSeatsCount = seatsInfo.filter(
     (item) => item.trainNoId === trainNo,
   ).length;
 
   return (
-    <div className="mb-3 flex w-full justify-between items-center">
+    <div className="mb-3 flex w-full items-center justify-between">
       <span className="text-base font-bold text-gray-900">호차 선택</span>
       <div
-        onClick={() => {
-          openModal('TrainNumberChoiceModal');
-        }}
+        onClick={() => openModal('TrainNumberChoiceModal')}
         className="flex h-[32px] cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-gray-100 px-3 active:brightness-95"
       >
         <span className="text-xs font-bold text-gray-700">

@@ -29,6 +29,7 @@ import {
   runTransaction,
   get,
 } from 'firebase/database';
+import { getCachedAllSeats, useAllSeatsInfo } from './useAllSeatsInfo';
 
 export const useSeatQueryData = () => {
   const {
@@ -46,7 +47,8 @@ export const useSeatQueryData = () => {
 
   const { seatsState, setSeatsState } = seatsStateStore();
   const { seatsInfo, setSeatsInfo } = seatsInfoStore();
-  const [seatsAllInfo, setSeatAllInfo] = useState<SeatType[]>([]);
+  const [seatsAllInfo, setSeatAllInfo] =
+    useState<SeatType[]>(getCachedAllSeats());
 
   const { seatsStateCount, setSeatsStateCount } = seatsStateCountStore();
 
@@ -157,71 +159,8 @@ export const useSeatQueryData = () => {
     };
   }, [db, docIds, trainNo]);
 
-  // 각 사용자의 모든 호차 좌석 개수
-  useEffect(() => {
-    const getAllSeats = async () => {
-      if (!user) return;
-
-      const trainNos = ['1', '2', '3', '4'];
-
-      let allSeats: SeatType[] = [];
-
-      try {
-        const trainCol = await getDocs(collection(db, 'train'));
-
-        await Promise.all(
-          trainCol.docs.map(async (trainDoc) => {
-            for (const trainNoId of trainNos) {
-              const seatsQuery = query(
-                collection(db, 'train', trainDoc.id, 'no', trainNoId, 'seats'),
-                orderBy('createAt'),
-              );
-
-              const existSeats = await getDocs(seatsQuery);
-              const seats = existSeats.docs.map((item) => {
-                const data = item.data();
-
-                const ts: Timestamp = data.createAt;
-                const createAtSeconds =
-                  typeof ts?.seconds === 'number'
-                    ? ts.seconds
-                    : typeof ts?.toMillis === 'function'
-                      ? Math.floor(ts.toMillis() / 1000)
-                      : 0;
-
-                return {
-                  seatId: data.seatId,
-                  userId: data.userId,
-                  trainNoId: data.trainNoId,
-                  startDay: data.startDay,
-                  startTime: data.startTime,
-                  endTime: data.endTime,
-                  trainType: data.trainType,
-                  createAt: createAtSeconds,
-                  startDayForView: data.startDayForView,
-                  startStationForView: data.startStationForView,
-                  endStationForView: data.endStationForView,
-                  selectKid: data.selectKid,
-                  selectAdult: data.selectAdult,
-                  selectPay: data.selectPay,
-                  id: data.id,
-                } as SeatType;
-              });
-
-              // 각 호차들의 좌석들을 배열에 저장
-              allSeats = [...allSeats, ...seats];
-            }
-          }),
-        );
-
-        setSeatAllInfo(allSeats);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    getAllSeats();
-  }, [trainNo]);
+  // 캐시된 데이터가 업데이트되면 상태에 반영
+  useAllSeatsInfo((seats) => setSeatAllInfo(seats));
 
   // 실시간 상대방 좌석 잠금
   useEffect(() => {

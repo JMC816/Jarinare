@@ -86,6 +86,16 @@ export default {
         '0%': { transform: 'translateY(100%)' },
         '100%': { transform: 'translateY(0)' },
       },
+      'bounce-in': {
+        '0%': { transform: 'scale(0)', opacity: '0' },
+        '60%': { transform: 'scale(1.2)', opacity: '1' },
+        '80%': { transform: 'scale(0.9)' },
+        '100%': { transform: 'scale(1)' },
+      },
+      'fade-up': {
+        '0%': { opacity: '0', transform: 'translateY(8px)' },
+        '100%': { opacity: '1', transform: 'translateY(0)' },
+      },
     },
     animation: {
       pulse: 'pulse 2s ease-in-out infinite',
@@ -96,6 +106,9 @@ export default {
       intro_fadein: 'intro_fadein 0.5s',
       intro_fadeout: 'intro_fadeout 1s',
       'slide-up': 'slide-up 0.3s ease-out',
+      'bounce-in':
+        'bounce-in 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards',
+      'fade-up': 'fade-up 0.4s ease-out 0.3s both',
     },
   },
   plugins: [],

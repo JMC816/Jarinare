@@ -33,8 +33,12 @@ const NotificationPage = () => {
     <div className="flex min-h-screen w-full flex-col items-center bg-gray-100">
       <div className="flex w-full items-center justify-between px-[28px] pt-[20px]">
         <div className="flex items-center gap-3">
-          <img onClick={goBack} src={backward} className="h-[20px] w-[12px] cursor-pointer" />
-          <span className="text-lg font-bold">알림</span>
+          <img
+            onClick={goBack}
+            src={backward}
+            className="h-[20px] w-[12px] cursor-pointer"
+          />
+          <span className="text-base font-bold">알림</span>
         </div>
         <Link to={'/reserve/notification/setting'}>
           <img width={27} height={27} src={setting} />
@@ -42,11 +46,11 @@ const NotificationPage = () => {
       </div>
       <span
         onClick={async () => await updateAllResponse()}
-        className="mt-[20px] flex w-full cursor-pointer justify-end pr-[10px] text-base text-darkGray underline"
+        className="mt-[20px] flex w-full cursor-pointer justify-end pr-[10px] text-tiny text-darkGray underline"
       >
         모두 읽음
       </span>
-      <div className="mt-[5px] w-full border-t border-lightestGray">
+      <div className="mt-[5px] w-full">
         {readStartTime &&
           Object.keys(readStartTime.val()).map((key) => (
             <StartTimeNotification

@@ -33,14 +33,17 @@ const StartTimeNotification = ({
   return (
     <div
       onClick={onClick}
-      className={`flex h-[80px] flex-col border-b border-lightestGray ${isRead ? 'bg-lightestGray' : 'bg-white'} p-[10px]`}
+      className={`mx-4 my-2 rounded-2xl px-4 py-3 shadow-sm ${isRead ? 'bg-gray-100' : 'bg-white'}`}
     >
-      <div className="flex justify-between text-tiny text-darkGray">
-        <span>{elapsedTime()}</span>
+      <div className="mb-1 flex items-center justify-between">
+        <span className="rounded-full bg-blue/10 px-2 py-0.5 text-xs font-bold text-blue">
+          출발 알림
+        </span>
+        <span className="text-xs text-darkGray">{elapsedTime()}</span>
       </div>
-      <span className="mt-1 text-tiny font-bold text-blue">
+      <p className="text-tiny font-bold text-gray-800">
         {seats[0].trainType} 열차가 곧 출발합니다.
-      </span>
+      </p>
     </div>
   );
 };

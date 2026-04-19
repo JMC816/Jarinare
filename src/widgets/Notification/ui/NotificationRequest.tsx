@@ -41,28 +41,29 @@ const NotificationRequest = ({
   return (
     <div
       onClick={onClick}
-      className={`flex h-[80px] flex-col border-b border-lightestGray ${isRead ? 'bg-lightestGray' : 'bg-white'} p-[10px]`}
+      className={`mx-4 my-2 rounded-2xl px-4 py-3 shadow-sm ${isRead ? 'bg-gray-100' : 'bg-white'}`}
     >
-      <div className="flex justify-between text-tiny text-darkGray">
-        <span>{requestTitle}</span>
-        <span>{elapsedTime()}</span>
+      <div className="mb-1 flex items-center justify-between">
+        <span className="rounded-full bg-blue/10 px-2 py-0.5 text-xs font-bold text-blue">
+          {requestTitle}
+        </span>
+        <span className="text-xs text-darkGray">{elapsedTime()}</span>
       </div>
-      <span className="text-tiny font-bold">
+      <p className="text-tiny font-bold text-gray-800">
         {requsetContant.map((item) => item.seatId).join(' • ')} 자리에서 변경
         요청이 들어왔습니다.
+      </p>
+      <span
+        onClick={(e) => {
+          e.stopPropagation();
+          openModal('ResponseModal');
+          setSeatIds(requsetContant.map((item) => item.seatId));
+          setSeatIdsAndTrainNoId(requsetContant);
+        }}
+        className="mt-1 inline-block cursor-pointer text-xs font-bold text-blue underline"
+      >
+        요청보기
       </span>
-      <div>
-        <span
-          onClick={() => {
-            openModal('ResponseModal');
-            setSeatIds(requsetContant.map((item) => item.seatId));
-            setSeatIdsAndTrainNoId(requsetContant);
-          }}
-          className="text-bold cursor-pointer text-left text-xs font-bold text-blue"
-        >
-          요청보기
-        </span>
-      </div>
     </div>
   );
 };

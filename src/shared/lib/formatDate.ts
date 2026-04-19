@@ -64,6 +64,23 @@ export const formatStartTime = (startTime: string) => {
   return new Date(year, month, days, hours, minutes);
 };
 
+export const elapsedTime = (timestamp: number | null | undefined): string => {
+  const requestTime = new Date(timestamp ? Number(timestamp) : 0);
+  const diff = (new Date().getTime() - requestTime.getTime()) / 1000;
+  const times = [
+    { name: '년', milliSeconds: 60 * 60 * 24 * 365 },
+    { name: '개월', milliSeconds: 60 * 60 * 24 * 30 },
+    { name: '일', milliSeconds: 60 * 60 * 24 },
+    { name: '시간', milliSeconds: 60 * 60 },
+    { name: '분', milliSeconds: 60 },
+  ];
+  for (const value of times) {
+    const between = Math.floor(diff / value.milliSeconds);
+    if (between > 0) return `${between}${value.name} 전`;
+  }
+  return '방금 전';
+};
+
 export const formatBoardTime = (date: number) => {
   const newDate = new Date(date * 1000);
   const year = newDate.getFullYear();

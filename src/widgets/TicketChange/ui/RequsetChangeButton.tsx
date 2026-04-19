@@ -5,11 +5,12 @@ const RequestChangeButton = ({
   bgColor,
   textColor,
   onClick,
+  className = '',
 }: RequestChangeButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className={`h-12 w-[100px] rounded-xs bg-${bgColor} text-${textColor} border border-lightGray text-base shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95`}
+      className={`border border-lightGray text-base font-bold active:brightness-95 bg-${bgColor} text-${textColor} ${className}`}
     >
       {text}
     </button>

@@ -4,6 +4,7 @@ import { responesBySeatIdStore } from '../model/responseBySeatIdStore';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
 import { useHandleChange } from '@/features/TicketChange/hooks/useHandleChange';
 import { useIsAcceptRequest } from '@/features/Notification/hooks/useIsAcceptRequest';
+import RequestChangeButton from '@/widgets/TicketChange/ui/RequsetChangeButton';
 
 const ResponseModal = () => {
   const { openModal, closeModal } = useModalStore();
@@ -38,17 +39,21 @@ const ResponseModal = () => {
         </p>
 
         <div className="mt-6 flex gap-3">
-          <button
+          <RequestChangeButton
+            text="거절"
+            bgColor="lightBlue"
+            textColor="blue"
             onClick={async () => {
               closeModal('ResponseModal');
               await refuseRequest(response);
               await deleteRequsetAndResponse(response);
             }}
-            className="flex-1 rounded-2xl border border-lightGray bg-lightBlue py-3.5 text-base font-bold text-blue active:brightness-95"
-          >
-            거절
-          </button>
-          <button
+            className="flex-1 rounded-2xl py-3.5"
+          />
+          <RequestChangeButton
+            text="수락"
+            bgColor="blue"
+            textColor="white"
             onClick={async () => {
               closeModal('ResponseModal');
               openModal('AcceptModal');
@@ -59,10 +64,8 @@ const ResponseModal = () => {
                 closeModal('AcceptModal');
               }, 1500);
             }}
-            className="flex-[2] rounded-2xl bg-blue py-3.5 text-base font-bold text-white active:brightness-95"
-          >
-            수락
-          </button>
+            className="flex-[2] rounded-2xl py-3.5"
+          />
         </div>
       </div>
     </div>

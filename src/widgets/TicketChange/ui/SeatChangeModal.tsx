@@ -2,6 +2,7 @@ import { seatsTargetStore } from '@/features/TicketChange/models/seatsTargetStor
 import useModalStore from '../../model/TicketChangeStore';
 import { useChangeRequest } from '@/features/Notification/hooks/useChangeRequest';
 import { useNavigation } from '@/widgets/TicketList/hooks/useNavigation';
+import RequestChangeButton from './RequsetChangeButton';
 
 const SeatChangeModal = () => {
   const { openModal, closeModal } = useModalStore();
@@ -32,13 +33,17 @@ const SeatChangeModal = () => {
         </p>
 
         <div className="mt-6 flex gap-3">
-          <button
+          <RequestChangeButton
+            text="취소"
+            bgColor="lightBlue"
+            textColor="blue"
             onClick={() => closeModal('TrainNumberChoiceModal')}
-            className="flex-1 rounded-2xl border border-lightGray bg-lightBlue py-3.5 text-base font-bold text-blue active:brightness-95"
-          >
-            취소
-          </button>
-          <button
+            className="flex-1 rounded-2xl py-3.5"
+          />
+          <RequestChangeButton
+            text="요청"
+            bgColor="blue"
+            textColor="white"
             onClick={async () => {
               closeModal('TrainNumberChoiceModal');
               await changeRequset(target);
@@ -48,10 +53,8 @@ const SeatChangeModal = () => {
                 navigate('/');
               }, 1500);
             }}
-            className="flex-[2] rounded-2xl bg-blue py-3.5 text-base font-bold text-white active:brightness-95"
-          >
-            요청
-          </button>
+            className="flex-[2] rounded-2xl py-3.5"
+          />
         </div>
       </div>
     </div>

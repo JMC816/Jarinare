@@ -2,6 +2,7 @@ import useModalStore from '@/widgets/model/Notification';
 import { NotificationRequestProps } from '../types/NotificationType';
 import { responesBySeatIdStore } from '../model/responseBySeatIdStore';
 import { responesBySeatIdTrainNoIdStore } from '@/features/Notification/models/responseBySeatIdAndTrainNoIdStore';
+import { elapsedTime } from '@/shared/lib/formatDate';
 
 const NotificationRequest = ({
   requestTitle,
@@ -14,30 +15,6 @@ const NotificationRequest = ({
   const { setSeatIds } = responesBySeatIdStore();
   const { setSeatIdsAndTrainNoId } = responesBySeatIdTrainNoIdStore();
 
-  const elapsedTime = () => {
-    const requestTime = new Date(requstTime ? Number(requstTime) : 0);
-    const nowTime = new Date();
-
-    const diff = (nowTime.getTime() - requestTime.getTime()) / 1000;
-
-    const times = [
-      { name: '년', milliSeconds: 60 * 60 * 24 * 365 },
-      { name: '개월', milliSeconds: 60 * 60 * 24 * 30 },
-      { name: '일', milliSeconds: 60 * 60 * 24 },
-      { name: '시간', milliSeconds: 60 * 60 },
-      { name: '분', milliSeconds: 60 },
-    ];
-
-    for (const value of times) {
-      const betweenTime = Math.floor(diff / value.milliSeconds);
-
-      if (betweenTime > 0) {
-        return `${betweenTime}${value.name} 전`;
-      }
-    }
-    return '방금 전';
-  };
-
   return (
     <div
       onClick={onClick}
@@ -47,7 +24,9 @@ const NotificationRequest = ({
         <span className="rounded-full bg-blue/10 px-2 py-0.5 text-xs font-bold text-blue">
           {requestTitle}
         </span>
-        <span className="text-xs text-darkGray">{elapsedTime()}</span>
+        <span className="text-xs text-darkGray">
+          {elapsedTime(Number(requstTime))}
+        </span>
       </div>
       <p className="text-tiny font-bold text-gray-800">
         {requsetContant.map((item) => item.seatId).join(' • ')} 자리에서 변경

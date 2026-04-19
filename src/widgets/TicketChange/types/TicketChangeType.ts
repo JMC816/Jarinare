@@ -12,6 +12,7 @@ export type RequestChangeButtonProps = {
   bgColor: string;
   textColor: string;
   onClick: () => void;
+  className?: string;
 };
 
 export type SeatChangeButtonProps = {

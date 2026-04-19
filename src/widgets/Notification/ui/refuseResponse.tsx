@@ -1,36 +1,13 @@
 import { IsAcceptRepsonseProps } from '../types/isAcceptResponseType';
+import { elapsedTime } from '@/shared/lib/formatDate';
 
 export const RefuseResponse = ({
-  responseTitle,
   responseTime,
   responseContant,
   isRead,
   onClick,
+  responseTitle,
 }: IsAcceptRepsonseProps) => {
-  const elapsedTime = () => {
-    const requestTime = new Date(responseTime ? Number(responseTime) : 0);
-    const nowTime = new Date();
-
-    const diff = (nowTime.getTime() - requestTime.getTime()) / 1000;
-
-    const times = [
-      { name: '년', milliSeconds: 60 * 60 * 24 * 365 },
-      { name: '개월', milliSeconds: 60 * 60 * 24 * 30 },
-      { name: '일', milliSeconds: 60 * 60 * 24 },
-      { name: '시간', milliSeconds: 60 * 60 },
-      { name: '분', milliSeconds: 60 },
-    ];
-
-    for (const value of times) {
-      const betweenTime = Math.floor(diff / value.milliSeconds);
-
-      if (betweenTime > 0) {
-        return `${betweenTime}${value.name} 전`;
-      }
-    }
-    return '방금 전';
-  };
-
   return (
     <div
       onClick={onClick}
@@ -40,7 +17,9 @@ export const RefuseResponse = ({
         <span className="rounded-full bg-red/10 px-2 py-0.5 text-xs font-bold text-red">
           좌석 변경
         </span>
-        <span className="text-xs text-darkGray">{elapsedTime()}</span>
+        <span className="text-xs text-darkGray">
+          {elapsedTime(Number(responseTime))}
+        </span>
       </div>
       <p className="text-tiny font-bold text-gray-800">
         {responseContant?.map((item) => item.seatId).join(' • ')} 자리에서

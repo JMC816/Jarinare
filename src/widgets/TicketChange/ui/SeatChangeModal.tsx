@@ -1,6 +1,5 @@
 import { seatsTargetStore } from '@/features/TicketChange/models/seatsTargetStore';
 import useModalStore from '../../model/TicketChangeStore';
-import RequestChangeButton from './RequsetChangeButton';
 import { useChangeRequest } from '@/features/Notification/hooks/useChangeRequest';
 import { useNavigation } from '@/widgets/TicketList/hooks/useNavigation';
 
@@ -13,25 +12,33 @@ const SeatChangeModal = () => {
   const target = seatsTargetStore.getState().seatsTarget;
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center bg-darkGray/50">
-      <div className="flex h-[200px] w-[260px] flex-col items-center rounded-2xl bg-white px-[20px] pt-[55px] font-bold">
-        <span className="flex w-full justify-center text-base">
-          {target.join(' • ')}
-        </span>
-        <span className="flex w-full justify-center text-base">
-          변경 요청을 보내겠습니까?
-        </span>
-        <div className="mt-[30px] flex w-full justify-between text-base">
-          <RequestChangeButton
-            text="취소"
-            bgColor="lightBlue"
-            textColor="blue"
+    <div
+      className="flex h-full w-full flex-col items-center justify-end bg-black/40"
+      onClick={() => closeModal('TrainNumberChoiceModal')}
+    >
+      <div
+        className="mb-4 w-[343px] animate-slide-up rounded-3xl bg-white px-6 pb-8 pt-5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 핸들 바 */}
+        <div className="mb-5 flex justify-center">
+          <div className="h-1 w-10 rounded-full bg-gray-300" />
+        </div>
+
+        <p className="mb-1 text-base font-bold text-gray-800">좌석 변경 요청</p>
+        <p className="text-tiny text-darkGray">
+          <span className="font-bold text-blue">{target.join(' • ')}</span>{' '}
+          자리로 변경 요청을 보내겠습니까?
+        </p>
+
+        <div className="mt-6 flex gap-3">
+          <button
             onClick={() => closeModal('TrainNumberChoiceModal')}
-          />
-          <RequestChangeButton
-            text="요청"
-            bgColor="blue"
-            textColor="white"
+            className="flex-1 rounded-2xl border border-lightGray bg-lightBlue py-3.5 text-base font-bold text-blue active:brightness-95"
+          >
+            취소
+          </button>
+          <button
             onClick={async () => {
               closeModal('TrainNumberChoiceModal');
               await changeRequset(target);
@@ -41,7 +48,10 @@ const SeatChangeModal = () => {
                 navigate('/');
               }, 1500);
             }}
-          />
+            className="flex-[2] rounded-2xl bg-blue py-3.5 text-base font-bold text-white active:brightness-95"
+          >
+            요청
+          </button>
         </div>
       </div>
     </div>

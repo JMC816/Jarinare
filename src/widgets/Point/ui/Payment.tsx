@@ -10,22 +10,21 @@ export const Payment = ({ accruedPoint, createAt }: PaymentType) => {
   };
 
   return (
-    <div className="flex w-full py-5 pl-[28px] pr-[27px]">
-      <div className="flex w-1/3 items-center justify-start">
-        <img width={32} height={32} src={donate} />
+    <div className="mx-4 my-2 flex items-center justify-between rounded-2xl bg-white px-4 py-4 shadow-sm">
+      <div className="flex items-center gap-x-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue/10">
+          <img width={20} height={20} src={donate} />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-sm font-bold text-gray-800">포인트 지급</span>
+          <span className="text-xs text-gray-400">
+            {newCreatAt()} | 자리나레
+          </span>
+        </div>
       </div>
-      <div className="flex w-full flex-col">
-        <span className="text-base">포인트 지급</span>
-        <span className="text-tiny text-darkGray">
-          {newCreatAt()} | 자리나레
-        </span>
-      </div>
-      <div className="flex w-1/3 flex-col items-end">
-        <span className="text-base">
-          {Number('2000').toLocaleString('ko-KR')} 원
-        </span>
-        <span className="text-tiny text-darkGray">
-          {Number(accruedPoint ?? 0).toLocaleString('ko-KR')} 원
+      <div className="flex flex-col items-end">
+        <span className="text-sm font-bold text-blue">
+          +{Number(accruedPoint ?? 0).toLocaleString('ko-KR')} 원
         </span>
       </div>
     </div>

@@ -4,6 +4,7 @@ import Modal from '@/widgets/MyPage/ui/Modal';
 import UserInfo from '@/widgets/MyPage/ui/UserInfo';
 import { useNaviation } from '../hooks/useNavigation';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
+import SlotNumber from '@/shared/ui/SlotNumber';
 
 const MyPage = () => {
   const { isShow, modalType } = useModalStore();
@@ -28,9 +29,10 @@ const MyPage = () => {
         >
           <div className="flex flex-col gap-y-4">
             <span className="text-sm font-medium text-white">내 포인트</span>
-            <span className="text-3xl font-bold text-white">
-              {point.toLocaleString('ko-KR')} 원
-            </span>
+            <SlotNumber
+              value={point}
+              className="text-3xl font-bold text-white"
+            />
           </div>
           <div className="flex justify-end">
             <button

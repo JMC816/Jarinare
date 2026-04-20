@@ -3,6 +3,7 @@ import { NotificationRequestProps } from '../types/NotificationType';
 import { responesBySeatIdStore } from '../model/responseBySeatIdStore';
 import { responesBySeatIdTrainNoIdStore } from '@/features/Notification/models/responseBySeatIdAndTrainNoIdStore';
 import { elapsedTime } from '@/shared/lib/formatDate';
+import { useRequestReceiverTimer } from '@/features/Notification/hooks/useRequestTimer';
 
 const NotificationRequest = ({
   requestTitle,
@@ -10,7 +11,12 @@ const NotificationRequest = ({
   requsetContant,
   isRead,
   onClick,
+  requestPath,
 }: NotificationRequestProps) => {
+  const { remaining } = useRequestReceiverTimer(
+    Number(requstTime),
+    requestPath,
+  );
   const { openModal } = useModalStore();
   const { setSeatIds } = responesBySeatIdStore();
   const { setSeatIdsAndTrainNoId } = responesBySeatIdTrainNoIdStore();
@@ -32,17 +38,27 @@ const NotificationRequest = ({
         {requsetContant.map((item) => item.seatId).join(' • ')} 자리에서 변경
         요청이 들어왔습니다.
       </p>
-      <span
-        onClick={(e) => {
-          e.stopPropagation();
-          openModal('ResponseModal');
-          setSeatIds(requsetContant.map((item) => item.seatId));
-          setSeatIdsAndTrainNoId(requsetContant);
-        }}
-        className="mt-1 inline-block cursor-pointer text-xs font-bold text-blue underline"
-      >
-        요청보기
-      </span>
+      <div className="mt-1 flex items-center justify-between">
+        <span
+          onClick={(e) => {
+            e.stopPropagation();
+            openModal('ResponseModal');
+            setSeatIds(requsetContant.map((item) => item.seatId));
+            setSeatIdsAndTrainNoId(requsetContant);
+          }}
+          className="cursor-pointer text-xs font-bold text-blue underline"
+        >
+          요청보기
+        </span>
+        {remaining !== null && (
+          <span
+            className={`text-xs font-bold ${remaining <= 10 ? 'text-red' : 'text-darkGray'}`}
+          >
+            {String(Math.floor(remaining / 60)).padStart(2, '0')}:
+            {String(remaining % 60).padStart(2, '0')}
+          </span>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useSeatsChangeBlocked } from '@/features/Notification/hooks/useSeatsChangeBlocked';
+import { useRequestSenderTimer } from '@/features/Notification/hooks/useRequestTimer';
 import { seatsChangeTargetStore } from '@/features/TicketChange/models/seatsChangeTargetStore';
 import { seatsTargetStore } from '@/features/TicketChange/models/seatsTargetStore';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
@@ -16,6 +17,7 @@ const SeatChangePage = () => {
   const { seatsChangeTarget } = seatsChangeTargetStore();
   const { seatsTarget } = seatsTargetStore();
   const { isBlocked } = useSeatsChangeBlocked();
+  const { remaining } = useRequestSenderTimer();
   const location = useLocation();
   const mySeats: SeatType[] = location.state;
 
@@ -56,7 +58,7 @@ const SeatChangePage = () => {
           }`}
         >
           {isBlocked
-            ? '요청 기다리는 중..'
+            ? `요청 기다리는 중.. ${remaining !== null ? `(${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')})` : ''}`
             : `${seatsTarget.length} / ${mySeats.length} 선택`}
         </button>
       </div>

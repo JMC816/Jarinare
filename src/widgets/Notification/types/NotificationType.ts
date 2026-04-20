@@ -15,4 +15,5 @@ export type NotificationRequestProps = {
   requsetContant: SeatType[];
   onClick: () => void;
   isRead: boolean;
+  requestPath: string;
 };

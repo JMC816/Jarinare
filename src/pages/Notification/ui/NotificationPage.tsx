@@ -9,6 +9,7 @@ import Modal from '@/widgets/Notification/ui/Modal';
 import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
 import { RefuseResponse } from '@/widgets/Notification/ui/refuseResponse';
 import { Timestamp } from 'firebase/firestore';
+import { auth } from '@/shared/firebase/firebase';
 import setting from '@/assets/icons/setting.png';
 import { Link } from 'react-router-dom';
 import StartTimeNotification from '@/widgets/Notification/ui/StartTimeNotification';
@@ -70,6 +71,7 @@ const NotificationPage = () => {
               requsetContant={response.val()[key].mySeat as SeatType[]}
               isRead={response.val()[key].isRead as boolean}
               onClick={async () => await updateChangeResponse(key)}
+              requestPath={`${auth.currentUser?.uid}_change/${key}`}
             />
           ))}
         {acceptResponse &&

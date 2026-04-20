@@ -105,17 +105,26 @@ export const TravelStatic = ({ age }: Props) => {
                 데이터가 없습니다.
               </span>
             ) : (
-              <div className="flex items-center justify-between">
-                {top5.map((item, i) => (
-                  <div key={i} className="flex flex-col items-center gap-y-1">
-                    <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-blue text-sm text-white">
-                      {i + 1}
+              <div className="flex items-center gap-x-3">
+                {top5.map((item, i) => {
+                  const bgColor =
+                    i === 0 ? '#2563eb' : i === 1 ? '#E7F2FD' : '#e2e8f0';
+                  const textColor =
+                    i === 0 ? '#ffffff' : i === 1 ? '#2563eb' : '#94a3b8';
+                  return (
+                    <div key={i} className="flex flex-col items-center gap-y-1">
+                      <div
+                        className="flex h-[30px] w-[30px] items-center justify-center rounded-full text-sm font-bold"
+                        style={{ backgroundColor: bgColor, color: textColor }}
+                      >
+                        {i + 1}
+                      </div>
+                      <span className="text-xs font-bold">
+                        {item.destination}
+                      </span>
                     </div>
-                    <span className="text-xs font-bold">
-                      {item.destination}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

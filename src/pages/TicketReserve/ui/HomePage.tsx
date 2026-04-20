@@ -1,7 +1,11 @@
 import useModalStore from '@/widgets/model/ReserveStore';
 import Modal from '@/widgets/TicketReserve/ui/Modal';
 import { useResetTrainType } from '../hooks/homeHook';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import {
+  prefetchAllSeats,
+  clearAllSeatsCache,
+} from '@/features/TicketReserve/hooks/useAllSeatsInfo';
 import { Static } from '@/widgets/TicketReserve/ui/Static';
 import { Reserve } from '@/widgets/TicketReserve/ui/Reserve';
 import { Ticket } from '@/widgets/TicketReserve/ui/Ticket';
@@ -67,6 +71,11 @@ const HomePage = () => {
       false);
 
   useResetTrainType();
+
+  useEffect(() => {
+    clearAllSeatsCache();
+    prefetchAllSeats();
+  }, []);
 
   const onScroll = () => {
     if (!scrollRef.current) return;

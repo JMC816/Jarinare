@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ReserveTitleProp } from '../types/ReserveType';
 
-const ReserveTitle = ({ text }: ReserveTitleProp) => {
+const ReserveTitle = ({ text, showMore = true }: ReserveTitleProp) => {
   return (
     <div className="mb-[20px] mt-[24px] flex w-full items-start justify-between">
       {text === '어디로 갈까요?' ? (
@@ -16,9 +16,11 @@ const ReserveTitle = ({ text }: ReserveTitleProp) => {
       ) : (
         <>
           <span className="text-lg font-bold">{text}</span>
-          <Link className="text-sm font-bold text-blue" to={'/ticketList'}>
-            더보기
-          </Link>
+          {showMore && (
+            <Link className="text-sm font-bold text-blue" to={'/ticketList'}>
+              더보기
+            </Link>
+          )}
         </>
       )}
     </div>

@@ -9,6 +9,7 @@ import {
 import { Static } from '@/widgets/TicketReserve/ui/Static';
 import { Reserve } from '@/widgets/TicketReserve/ui/Reserve';
 import { Ticket } from '@/widgets/TicketReserve/ui/Ticket';
+import RecommendDestination from '@/widgets/TicketReserve/ui/RecommendDestination';
 import notification from '@/assets/icons/notification.png';
 import { Link } from 'react-router-dom';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
@@ -119,6 +120,7 @@ const HomePage = () => {
         >
           <Reserve />
           <Ticket />
+          <RecommendDestination />
         </div>
 
         {/* 통계 페이지 */}

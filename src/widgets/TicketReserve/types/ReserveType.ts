@@ -42,6 +42,7 @@ export type PlaceModalProp = {
 
 export type ReserveTitleProp = {
   text: string;
+  showMore?: boolean;
 };
 
 export type SeatCheckButtonProps = {

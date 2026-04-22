@@ -34,7 +34,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 const Router = () => {
   return (
     <BrowserRouter>
-      <div className="relative flex h-screen w-full justify-center">
+      <div className="relative flex h-screen w-full justify-center overflow-y-auto">
         <Routes>
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />

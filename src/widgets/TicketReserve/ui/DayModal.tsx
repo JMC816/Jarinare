@@ -86,7 +86,10 @@ const DayModal = () => {
     const targetIdx = idx === -1 ? 0 : idx;
     if (idx === -1) setSelectedDate(validDays[0]);
     const container = scrollRef.current;
-    const offset = Math.max(0, targetIdx * ITEM_STEP - (container.clientWidth - ITEM_SIZE) / 2);
+    const offset = Math.max(
+      0,
+      targetIdx * ITEM_STEP - (container.clientWidth - ITEM_SIZE) / 2,
+    );
     container.scrollLeft = offset;
     setScrollLeft(offset);
   }, [viewMonth, viewYear, viewMode]);
@@ -185,8 +188,8 @@ const DayModal = () => {
         )}
 
         {/* 일 피커 */}
-        {viewMode === 'day' && (
-          validDays.length > 0 ? (
+        {viewMode === 'day' &&
+          (validDays.length > 0 ? (
             <div className="relative" style={{ height: ITEM_SIZE }}>
               <div
                 ref={scrollRef}
@@ -212,7 +215,11 @@ const DayModal = () => {
                   return (
                     <div
                       key={date.toISOString()}
-                      style={{ minWidth: ITEM_SIZE, height: ITEM_SIZE, scrollSnapAlign: 'center' }}
+                      style={{
+                        minWidth: ITEM_SIZE,
+                        height: ITEM_SIZE,
+                        scrollSnapAlign: 'center',
+                      }}
                       className="flex shrink-0 items-center justify-center"
                     >
                       <div
@@ -226,7 +233,7 @@ const DayModal = () => {
                             isCentered
                               ? 'text-white/80'
                               : isSun
-                                ? 'text-red-400'
+                                ? 'text-red'
                                 : isSat
                                   ? 'text-blue'
                                   : 'text-gray-400'
@@ -234,7 +241,9 @@ const DayModal = () => {
                         >
                           {DAYS_KO[dow]}
                         </span>
-                        <span className={`text-base font-bold ${isCentered ? 'text-white' : 'text-gray-700'}`}>
+                        <span
+                          className={`text-base font-bold ${isCentered ? 'text-white' : 'text-gray-700'}`}
+                        >
                           {date.getDate()}
                         </span>
                       </div>
@@ -247,8 +256,7 @@ const DayModal = () => {
             <div className="flex h-16 items-center justify-center text-sm text-gray-400">
               선택 가능한 날짜가 없습니다
             </div>
-          )
-        )}
+          ))}
 
         {/* 월 선택 */}
         {viewMode === 'month' && (
@@ -279,14 +287,19 @@ const DayModal = () => {
         {/* 년 선택 */}
         {viewMode === 'year' && (
           <div className="grid grid-cols-3 gap-2">
-            {Array.from({ length: maxYear - minYear + 1 }, (_, i) => minYear + i).map((y) => {
+            {Array.from(
+              { length: maxYear - minYear + 1 },
+              (_, i) => minYear + i,
+            ).map((y) => {
               const isSelected = y === viewYear;
               return (
                 <button
                   key={y}
                   onClick={() => handleSelectYear(y)}
                   className={`rounded-md py-3 text-sm font-semibold transition-colors ${
-                    isSelected ? 'bg-blue text-white' : 'bg-gray-100 text-gray-700'
+                    isSelected
+                      ? 'bg-blue text-white'
+                      : 'bg-gray-100 text-gray-700'
                   }`}
                 >
                   {y}년

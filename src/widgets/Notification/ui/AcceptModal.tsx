@@ -29,7 +29,7 @@ const AcceptModal = () => {
           </svg>
         </div>
 
-        <span className="animate-fade-up mt-4 text-base font-bold text-gray-800">
+        <span className="mt-4 animate-fade-up text-base font-bold text-gray-800">
           자리가 변경되었습니다!
         </span>
 

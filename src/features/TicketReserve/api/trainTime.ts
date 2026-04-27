@@ -11,7 +11,7 @@ export const getTimeByStation = async (
   const { setError } = errorStateStore.getState();
 
   try {
-    const { data } = await instance.get('/getStrtpntAlocFndTrainInfo', {
+    const { data } = await instance.get('/GetStrtpntAlocFndTrainInfo', {
       params: {
         pageNo: '1',
         numOfRows: '200',

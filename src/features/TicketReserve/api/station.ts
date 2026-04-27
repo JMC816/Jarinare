@@ -5,7 +5,7 @@ import { StationProps } from '../types/stationType';
 
 // 지역별 기차역 목록
 const getStationsByCity = async (cityCode: string) => {
-  const { data } = await instance.get('/getCtyAcctoTrainSttnList', {
+  const { data } = await instance.get('/GetCtyAcctoTrainSttnList', {
     params: { cityCode: cityCode, pageNo: 1, numOfRows: 200 },
   });
   return data.response.body.items.item;

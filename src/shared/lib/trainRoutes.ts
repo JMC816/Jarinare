@@ -118,8 +118,58 @@ export const trainRoutes: Record<string, string[]> = {
   AREX직통: ['서울역', '인천공항1터미널', '인천공항2터미널'],
 };
 
-export const resolveRoute = (trainType: string): string[] => {
-  if (trainRoutes[trainType]) return trainRoutes[trainType];
-  const key = Object.keys(trainRoutes).find((k) => trainType.startsWith(k));
-  return key ? trainRoutes[key] : [];
+// API 열차 등급명 → 내부 키 매핑
+const trainTypeAliases: Record<string, string> = {
+  'KTX-산천(A-type)': 'KTX-산천A',
+  'KTX-산천(B-type)': 'KTX-산천B',
+  'ITX-새마을': 'ITX-새마을호',
+  무궁화: '무궁화호',
+  'KTX-산천 A': 'KTX-산천A',
+  'KTX-산천 B': 'KTX-산천B',
+};
+
+// 역명 별칭 (API 역명 → 노선 배열 역명)
+const stationNameAliases: Record<string, string> = {
+  '서울(수서)': '수서',
+  '수서(서울)': '수서',
+  '동탄(화성)': '동탄',
+  '평택지제(삼성)': '평택지제',
+  '천안아산(온양온천)': '천안아산',
+  '오송(세종)': '오송',
+  '김천(구미)': '김천구미',
+  '울산(통도사)': '울산',
+  인천공항T1: '인천공항1터미널',
+  인천공항T2: '인천공항2터미널',
+};
+
+// 열차 타입별 역명 오버라이드 (검색 역명 → 실제 노선 역명)
+// SRT는 서울역 검색 시 수서역으로 운행
+const trainStationOverrides: Record<string, Record<string, string>> = {
+  SRT: { 서울: '수서', 서울역: '수서' },
+};
+
+export const normalizeStation = (
+  stationName: string,
+  gradeName?: string,
+): string => {
+  if (gradeName && trainStationOverrides[gradeName]?.[stationName]) {
+    return trainStationOverrides[gradeName][stationName];
+  }
+  return stationNameAliases[stationName] ?? stationName;
+};
+
+export const resolveRoute = (
+  trainType: string,
+): { route: string[]; gradeName: string } => {
+  // 열차번호 suffix 제거 (예: "-00037", "-04031")
+  const gradeName = trainType.replace(/-\d{4,}$/, '').trim();
+  if (trainRoutes[gradeName])
+    return { route: trainRoutes[gradeName], gradeName };
+  const aliasKey = trainTypeAliases[gradeName];
+  if (aliasKey && trainRoutes[aliasKey])
+    return { route: trainRoutes[aliasKey], gradeName: aliasKey };
+  const key = Object.keys(trainRoutes).find((k) => gradeName.startsWith(k));
+  return key
+    ? { route: trainRoutes[key], gradeName: key }
+    : { route: [], gradeName };
 };

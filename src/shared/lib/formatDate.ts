@@ -81,6 +81,22 @@ export const elapsedTime = (timestamp: number | null | undefined): string => {
   return '방금 전';
 };
 
+export const parseDateTime = (
+  startTime: number,
+  dur: number,
+): { departure: Date; arrival: Date } => {
+  const s = String(startTime);
+  const departure = new Date(
+    Number(s.substring(0, 4)),
+    Number(s.substring(4, 6)) - 1,
+    Number(s.substring(6, 8)),
+    Number(s.substring(8, 10)),
+    Number(s.substring(10, 12)),
+  );
+  const arrival = new Date(departure.getTime() + dur * 60 * 1000);
+  return { departure, arrival };
+};
+
 export const formatBoardTime = (date: number) => {
   const newDate = new Date(date * 1000);
   const year = newDate.getFullYear();

@@ -1,9 +1,9 @@
+/**
+ * @role: widgets — 포인트 슬롯머신 애니메이션 UI 컴포넌트
+ * @rule: 애니메이션 상태는 내부 관리, 외부 비즈니스 로직 포함 금지
+ */
 import { useEffect, useRef, useState } from 'react';
-
-type SlotNumberProps = {
-  value: number;
-  className?: string;
-};
+import { SlotNumberProps } from '../types/SlotNumberType';
 
 const DURATION = 1200;
 const STEPS = 30;
@@ -13,6 +13,7 @@ const SlotNumber = ({ value, className = '' }: SlotNumberProps) => {
   const prevValue = useRef(-1);
   const frameRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // easeOut 기반 숫자 슬롯 애니메이션
   useEffect(() => {
     const start = prevValue.current < 0 ? 0 : prevValue.current;
     const end = value;

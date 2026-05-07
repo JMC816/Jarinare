@@ -4,7 +4,7 @@ import Modal from '@/widgets/MyPage/ui/Modal';
 import UserInfo from '@/widgets/MyPage/ui/UserInfo';
 import { useNaviation } from '../hooks/useNavigation';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
-import SlotNumber from '@/shared/ui/SlotNumber';
+import SlotNumber from '@/widgets/Point/ui/SlotNumber';
 
 const MyPage = () => {
   const { isShow, modalType } = useModalStore();

@@ -1,14 +1,12 @@
+/**
+ * @role: widgets — 포인트 내역 아이템 UI 컴포넌트
+ * @rule: 데이터 가공 금지, 전달받은 props만 렌더링
+ */
 import donate from '@/assets/icons/donate.png';
 import { PaymentType } from '@/entities/Point/types/paymentType';
+import { formatMonthDay } from '@/shared/lib/formatDate';
 
 export const Payment = ({ accruedPoint, createAt }: PaymentType) => {
-  const newCreatAt = () => {
-    const date = new Date(createAt * 1000);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    return month + '월 ' + day + '일';
-  };
-
   return (
     <div className="mx-4 my-2 flex items-center justify-between rounded-2xl bg-white px-4 py-4 shadow-sm">
       <div className="flex items-center gap-x-3">
@@ -18,7 +16,7 @@ export const Payment = ({ accruedPoint, createAt }: PaymentType) => {
         <div className="flex flex-col">
           <span className="text-sm font-bold text-gray-800">포인트 지급</span>
           <span className="text-xs text-gray-400">
-            {newCreatAt()} | 자리나레
+            {formatMonthDay(createAt)} | 자리나레
           </span>
         </div>
       </div>

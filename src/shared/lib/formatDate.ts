@@ -97,6 +97,13 @@ export const parseDateTime = (
   return { departure, arrival };
 };
 
+export const formatMonthDay = (timestamp: number): string => {
+  const date = new Date(timestamp * 1000);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}월 ${day}일`;
+};
+
 export const formatBoardTime = (date: number) => {
   const newDate = new Date(date * 1000);
   const year = newDate.getFullYear();

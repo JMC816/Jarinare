@@ -20,8 +20,8 @@ import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime
 const HomePage = () => {
   const { isShow, modalType } = useModalStore();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isScrolledBottom, setIsScrolledBottom] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-
   const { response } = useChangeResponse();
   const { acceptResponse, refuseResponse } = useIsAcceptResponse();
   const { isNotification } = useIsNotificationResponse();
@@ -85,6 +85,12 @@ const HomePage = () => {
     setActiveIndex(index);
   };
 
+  const onPageScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const isBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 10;
+    setIsScrolledBottom(isBottom);
+  };
+
   return (
     <div
       className={`flex h-screen w-full flex-col bg-gray-100 ${isShow === true ? 'overflow-hidden' : ''}`}
@@ -103,6 +109,20 @@ const HomePage = () => {
       </div>
       <div className="mt-2 w-full border-b border-gray-200" />
 
+      {/* 인디케이터 — 상단 */}
+      {!isScrolledBottom && (
+        <div className="flex w-full items-center justify-center gap-2 py-2">
+          {[0, 1].map((i) => (
+            <div
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeIndex === i ? 'w-5 bg-blue' : 'w-1.5 bg-gray-300'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+
       {/* 슬라이드 컨테이너 */}
       <div
         ref={scrollRef}
@@ -115,6 +135,7 @@ const HomePage = () => {
       >
         {/* 예매 페이지 */}
         <div
+          onScroll={onPageScroll}
           className="flex h-full w-full shrink-0 flex-col items-center overflow-y-auto px-[28px] pb-[100px]"
           style={{ scrollSnapAlign: 'start' }}
         >
@@ -125,6 +146,7 @@ const HomePage = () => {
 
         {/* 통계 페이지 */}
         <div
+          onScroll={onPageScroll}
           className="flex h-full w-full shrink-0 flex-col items-center overflow-y-auto px-[28px] pb-[100px]"
           style={{ scrollSnapAlign: 'start' }}
         >
@@ -132,17 +154,19 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* 페이지 인디케이터 */}
-      <div className="absolute bottom-[100px] flex w-full items-center justify-center gap-2">
-        {[0, 1].map((i) => (
-          <div
-            key={i}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              activeIndex === i ? 'w-5 bg-blue' : 'w-1.5 bg-gray-300'
-            }`}
-          />
-        ))}
-      </div>
+      {/* 인디케이터 — 하단 */}
+      {isScrolledBottom && (
+        <div className="absolute bottom-[100px] flex w-full items-center justify-center gap-2">
+          {[0, 1].map((i) => (
+            <div
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                activeIndex === i ? 'w-5 bg-blue' : 'w-1.5 bg-gray-300'
+              }`}
+            />
+          ))}
+        </div>
+      )}
 
       {isShow == false || modalType == undefined ? null : <Modal />}
     </div>

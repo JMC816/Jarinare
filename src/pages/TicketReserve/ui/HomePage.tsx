@@ -112,7 +112,7 @@ const HomePage = () => {
       {/* 인디케이터 — 상단 */}
       {!isScrolledBottom && (
         <div className="flex w-full items-center justify-center gap-2 py-2">
-          {[0, 1].map((i) => (
+          {[0, 1, 2].map((i) => (
             <div
               key={i}
               className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -141,6 +141,14 @@ const HomePage = () => {
         >
           <Reserve />
           <Ticket />
+        </div>
+
+        {/* 추천 여행지 페이지 */}
+        <div
+          onScroll={onPageScroll}
+          className="flex h-full w-full shrink-0 flex-col overflow-y-auto px-[28px] pb-[100px]"
+          style={{ scrollSnapAlign: 'start' }}
+        >
           <RecommendDestination />
         </div>
 
@@ -157,7 +165,7 @@ const HomePage = () => {
       {/* 인디케이터 — 하단 */}
       {isScrolledBottom && (
         <div className="absolute bottom-[100px] flex w-full items-center justify-center gap-2">
-          {[0, 1].map((i) => (
+          {[0, 1, 2].map((i) => (
             <div
               key={i}
               className={`h-1.5 rounded-full transition-all duration-300 ${

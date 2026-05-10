@@ -105,7 +105,7 @@ export const TravelStatic = ({ age }: Props) => {
                 데이터가 없습니다.
               </span>
             ) : (
-              <div className="flex items-center gap-x-3">
+              <div className="flex w-full items-center justify-between">
                 {top5.map((item, i) => {
                   const bgColor =
                     i === 0 ? '#2563eb' : i === 1 ? '#E7F2FD' : '#e2e8f0';

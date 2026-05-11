@@ -46,16 +46,24 @@ const RecommendDestination = () => {
           {filtered.map(({ city, desc, gradient, emoji }) => (
             <div
               key={city}
-              className="flex flex-col justify-between rounded-2xl p-3 shadow-sm active:brightness-90"
+              className="relative flex flex-col justify-between rounded-2xl p-3 shadow-sm active:brightness-90"
               style={{
                 background: gradient,
                 height: '120px',
                 cursor: 'pointer',
-                outline: detailCity === city ? '2px solid #2563eb' : 'none',
+                transform: detailCity === city ? 'scale(1.05)' : 'scale(1)',
+                transition: 'transform 0.2s ease',
               }}
               onClick={() => handleCardClick(city)}
             >
-              <span className="text-xl">{emoji}</span>
+              <div className="flex items-center justify-between">
+                <span className="text-xl">{emoji}</span>
+                {detailCity === city && (
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white">
+                    <span className="text-[10px] font-black text-blue">✓</span>
+                  </div>
+                )}
+              </div>
               <div className="flex flex-col gap-y-0.5">
                 <span className="text-sm font-bold text-white">{city}</span>
                 <span className="text-[10px] font-medium leading-tight text-white/80">

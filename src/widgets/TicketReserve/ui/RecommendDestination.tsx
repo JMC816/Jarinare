@@ -92,7 +92,13 @@ const RecommendDestination = () => {
                     // 남녀 인원 기준 비율 계산
                     const male = detailStat.byGender['남자'] ?? 0;
                     const female = detailStat.byGender['여자'] ?? 0;
-                    const total = male + female || 1;
+                    const total = male + female;
+                    if (total === 0)
+                      return (
+                        <p className="text-xs text-gray-400">
+                          데이터가 없습니다.
+                        </p>
+                      );
                     const malePct = Math.round((male / total) * 100);
                     const femalePct = 100 - malePct;
                     return (

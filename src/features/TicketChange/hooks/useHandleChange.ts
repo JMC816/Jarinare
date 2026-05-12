@@ -12,13 +12,11 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { auth, db } from '@/shared/firebase/firebase';
-import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
 
 export const useHandleChange = () => {
   const { occupiedSeatsChange } = useOccupiedSeats();
   const { mixSeatsChange } = useMixSeats();
   const { seatIdsAndTrainNoId } = responesBySeatIdTrainNoIdStore();
-  const { point } = useGetPoint();
 
   // keepSeats : 바꿀 좌석들(빈 좌석 선택시 이전에 선택한 기존 좌석으로 업데이트)
   // seatsChangeTarget : 바꿀 좌석들(빈 좌석도 포함된다)
@@ -73,7 +71,7 @@ export const useHandleChange = () => {
           // 카운터가 5의 배수면 포인트 누적 값 기록
           if ((data.changeCount + 1) % 5 === 0) {
             addDoc(collection(db, 'payments', user!.uid, 'detail'), {
-              addPoint: point + 2000,
+              accruedPoint: 2000,
               createAt: serverTimestamp(),
             });
           }
@@ -99,7 +97,7 @@ export const useHandleChange = () => {
           });
           if ((data.changeCount + 1) % 5 === 0) {
             addDoc(collection(db, 'payments', user!.uid, 'detail'), {
-              accruedPoint: point + 2000,
+              accruedPoint: 2000,
               createAt: serverTimestamp(),
             });
           }

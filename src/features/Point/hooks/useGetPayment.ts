@@ -33,7 +33,7 @@ export const useGetPayment = () => {
               : 0;
 
         return {
-          accruedPoint: data.accruedPoint,
+          accruedPoint: data.accruedPoint ?? data.addPoint ?? 0,
           createAt: createAtSeconds,
         } as PaymentType;
       });

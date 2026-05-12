@@ -85,21 +85,25 @@ export const useRequestReceiverTimer = (
   useEffect(() => {
     if (!createdAt || !requestPath) return;
 
+    const timerRef: { current: ReturnType<typeof setInterval> | undefined } = {
+      current: undefined,
+    };
+
     const tick = () => {
       const elapsed = Date.now() - createdAt;
       const left = Math.max(0, TIMEOUT_MS - elapsed);
       setRemaining(Math.ceil(left / 1000));
 
       if (left <= 0) {
-        clearInterval(intervalId);
+        clearInterval(timerRef.current);
         setRemaining(0);
         remove(ref(realtimeDb, requestPath));
       }
     };
 
     tick();
-    const intervalId = setInterval(tick, 1000);
-    return () => clearInterval(intervalId);
+    timerRef.current = setInterval(tick, 1000);
+    return () => clearInterval(timerRef.current);
   }, [createdAt, requestPath]);
 
   return { remaining };

@@ -118,7 +118,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </div>
 
 
-### 2. 로그인 및 회원가입
+### 3. 로그인 및 회원가입
 
 <ul>
   <li>자체 계정 생성 및 로그인</li>
@@ -136,7 +136,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 3. 좌석 예매
+### 4. 좌석 예매
 
 #### [ 좌석 조회 ]
 <ul>
@@ -159,7 +159,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 4. 좌석 변경
+### 5. 좌석 변경
 
 #### [ 좌석 교환 요청 ]
 <ul>
@@ -205,7 +205,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/0f42059b-5a1b-4dd2-bdc3-c68b26aa89ce" />
 <br>
 
-### 5. 좌석 결제
+### 6. 좌석 결제
 <ul>
   <li>예매된 좌석 결제 기능(포인트로 결제 가능)</li>
 </ul>
@@ -214,7 +214,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 6. 좌석 반환
+### 7. 좌석 반환
 <ul>
   <li>예매 취소 및 좌석 반환</li>
 </ul>
@@ -223,7 +223,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 7. 알림
+### 8. 알림
 <ul>
   <li>좌석 변경 요청에 대한 알림 및 요청 수락/거절에 대한 알림</li>
   <li>토글로 알림 활성화/비활성화 제어</li>
@@ -247,13 +247,35 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 <br>
 
-### 8. 포인트 적립 및 업데이트
+### 9. 포인트 적립 및 업데이트
 <ul>
   <li>포인트 적립</li>
   <li>결제 및 활동에 따른 포인트 업데이트</li>
 </ul>
 
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/3ed2158f-8135-42bb-87cb-d239a4cf5999" />
+
+<br>
+
+### 10. 열차 구간 및 지도
+<ul>
+  <li>
+    QR 코드
+    <ul>
+      <li>카메라로 QR 코드 접속 시 티켓 조회</li>
+      <br/>
+    </ul>
+  </li>
+  <li>
+    구간 및 지도
+    <ul>
+      <li>실시간 열차 위치 확인</li>
+      <br/>
+    </ul>
+  </li>
+</ul>
+
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/0f76109a-449d-4006-9724-16885047673e" />
 
 <br>
 

@@ -3,7 +3,7 @@
 
 <blockquote>
   <ul>
-    <li>개발기간: 2025.02.07 - 2025.09.24</li>
+    <li>개발기간: 2025.02.07 - 2025.09.24 - 추가 개발중</li>
     <li>개발인원: 1명</li>
   </ul>
 </blockquote>
@@ -84,8 +84,39 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 
 ### 1. 인트로
 <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/9df65f00-93fb-4b10-bd05-78964e5c398c" />
-
 <br/>
+
+### 2. 홈(예매 / 추천 여행지 / 여행지 통계)
+<ul>
+  <li>
+    예매
+    <ul>
+      <li>출발역, 도착역, 날짜, 인원수 선택</li>
+      <br/>
+    </ul>
+  </li>
+  <li>
+    추천 여행지
+    <ul>
+      <li>각 여행지 성별 및 연령대 방문 통계</li>
+      <br/>
+    </ul>
+  </li>
+  <li>
+    여행지 통계
+    <ul>
+      <li>성별 및 연령대 인기 여행지</li>
+      <br/>
+    </ul>
+  </li>
+</ul>
+
+<div>
+  <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/0e0bd5f4-041e-4d46-9fd8-35c4a1201450" />
+  <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/90a67e6d-d893-4e4c-ba60-c736c1e8d2e2" />
+  <img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/ebffbb9a-4c4c-4aa7-9b2b-859cd11d8432" />
+</div>
+
 
 ### 2. 로그인 및 회원가입
 
@@ -95,12 +126,12 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 #### [ 회원가입 ]
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/d9bead2f-d423-4e1e-888e-2c89b5c4720c" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/88d792b4-83d0-4e1a-bd7a-f3a592422a5d" />
 
 <br>
 
 #### [ 로그인 ]
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/84985de9-1d48-4b2b-a0d1-77e939d8a790" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/9cfd4236-ba1f-4e2f-9f14-fcbffd886c2c" />
 <br>
 
 <br>
@@ -112,7 +143,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>실제 기차 운행 스케줄을 연동하여 해당 열차 시간대 기준으로 좌석 현황 제공</li>
 </ul>
 
-<img width="273" height="557" src="https://github.com/user-attachments/assets/a61a6415-0e2f-47d0-8c13-e62962f3d42a">
+<img width="273" height="557" src="https://github.com/user-attachments/assets/1a363424-4a3f-4683-9e5e-3a23e0486cb7">
 
 #### [ 좌석 선택 ] 
 <ul>
@@ -122,8 +153,8 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 <div>
-  <img width="273" height="557" src="https://github.com/user-attachments/assets/21bf8e0e-1f31-4117-8562-6f19cacb9ae9">
-  <img width="273" height="557" src="https://github.com/user-attachments/assets/b2bd21a2-7bd1-49a4-bd3f-9b719ce13f80">
+  <img width="273" height="557" src="https://github.com/user-attachments/assets/277c4160-0238-476b-ac52-6879c36aab7e">
+  <img width="273" height="557" src="https://github.com/user-attachments/assets/2c521ec4-1d7f-4569-9e10-d0cdf54ff0d3">
 </div>
 
 <br>
@@ -153,13 +184,13 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 #### [ 빈 좌석과 변경 ]
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/6bad2ba5-ff45-497b-87d1-4464c13b4a9f" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/234926ed-426b-4c44-8c1f-0fbbaca8f98e" />
 
 #### [ 상대방의 좌석과 변경 ]
 <ul>
   <li>서로 보유한 좌석 수가 동일한 경우</li>
 </ul>
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/dd455440-560f-4322-bbb5-a93593f56243" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/78d36383-bb5d-4351-9f11-b6d0e5629edc" />
 
 #### [ 상대방의 좌석과 변경 ]
 <ul>
@@ -171,7 +202,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>변경 요청 데이터에 빈좌석 + 상대방 좌석가 존재하고 내가 선택한 좌석이 빈좌석 + 상대방 좌석이라면 변경 요청 불가</li>
   <li>빈 좌석은 변동이 있어도 상대방 좌석은 고정적이므로 변경 요청 데이터에는 포함되기 때문에 변경 요청 불가</li>
 </ul>
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/c8f9703f-7b3c-42f0-b116-0d4e9f26db33" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/0f42059b-5a1b-4dd2-bdc3-c68b26aa89ce" />
 <br>
 
 ### 5. 좌석 결제
@@ -179,7 +210,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>예매된 좌석 결제 기능(포인트로 결제 가능)</li>
 </ul>
 
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/7c356a26-de7b-403a-a7d2-70ee6a3caa20" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/54c8c501-cfe8-4697-91bc-006f0d487887" />
 
 <br>
 
@@ -200,13 +231,13 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 #### [ 좌석 변경 요청 알림 ]
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/fd1f8ceb-dda7-424d-a16c-64ee025e2ce9" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/1e325b60-dcdb-4a1b-979b-aa3af67a1c4b" />
 
 #### [ 수락/거절 알림 ]
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/7e97b346-2534-4c21-8366-931b27ec2efc" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/d9c68bf8-3fe2-4c7f-a978-664b588cf5fa" />
 
 #### [ 알림 활성화/비활성화 ]
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/6ab604bf-fdae-4f34-8c8b-6ffcb1c0a5c4" />
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/46ff6e9d-aeb8-490a-a7c0-79d59ee0eec4" />
 
 #### [ 출발 알림 ]
 <div>
@@ -222,10 +253,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>결제 및 활동에 따른 포인트 업데이트</li>
 </ul>
 
-<div>
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/bc2dd0c4-ff49-484b-a841-32c03c8ba16c" />
-<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/1a88d166-8b82-42e2-b7c0-1e8691862ca8" />
-</div>
+<img width="273" height="557" alt="Image" src="https://github.com/user-attachments/assets/3ed2158f-8135-42bb-87cb-d239a4cf5999" />
 
 <br>
 

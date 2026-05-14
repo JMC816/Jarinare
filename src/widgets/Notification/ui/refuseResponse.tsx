@@ -11,7 +11,11 @@ export const RefuseResponse = ({
   return (
     <div
       onClick={onClick}
-      className={`mx-4 my-2 rounded-2xl px-4 py-3 shadow-sm ${isRead ? 'bg-gray-100' : 'bg-white'}`}
+      className={`rounded-2xl px-4 py-3 ${isRead ? 'bg-gray-100' : 'bg-white'}`}
+      style={{
+        boxShadow:
+          '0 1px 3px rgba(0,0,0,0.05), 0 -1px 3px rgba(0,0,0,0.05), 1px 0 3px rgba(0,0,0,0.05), -1px 0 3px rgba(0,0,0,0.05)',
+      }}
     >
       <div className="mb-1 flex items-center justify-between">
         <span className="rounded-full bg-red/10 px-2 py-0.5 text-xs font-bold text-red">

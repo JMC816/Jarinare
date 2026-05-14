@@ -179,6 +179,13 @@ const RouteCard = ({
       {/* 목록 뷰 */}
       {!mapView && (
         <div className="flex flex-1 flex-col px-5 pb-4 pt-3">
+          {segmentStations.length === 0 ? (
+            <div className="flex flex-1 items-center justify-center">
+              <span className="text-sm text-gray-400">
+                구간 정보가 없습니다.
+              </span>
+            </div>
+          ) : null}
           {segmentStations.map((station, i) => {
             // 역별 진행률 비교로 통과 여부 결정
             const stationProgress = i / (segmentStations.length - 1);
@@ -275,13 +282,18 @@ const RouteCard = ({
       )}
 
       {/* 지도 뷰 */}
-      {mapView && (
-        <RouteMap
-          stations={segmentStations}
-          departureMs={departure.getTime()}
-          arrivalMs={arrival.getTime()}
-        />
-      )}
+      {mapView &&
+        (segmentStations.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center">
+            <span className="text-sm text-gray-400">지도 정보가 없습니다.</span>
+          </div>
+        ) : (
+          <RouteMap
+            stations={segmentStations}
+            departureMs={departure.getTime()}
+            arrivalMs={arrival.getTime()}
+          />
+        ))}
     </div>
   );
 };

@@ -2,25 +2,43 @@ import { useCheckStationStore } from '../model/PlaceInputStroe';
 import useModalStore from '@/widgets/model/ReserveStore';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
+import {
+  getReachableStations,
+  normalizeStation,
+} from '@/shared/lib/trainRoutes';
 import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
 
+// 출발역(StartStationList)과 달리 출발역 기준 동일 노선의 역만 필터링하여 표시
 const EndStationList = () => {
   const { isValue } = useCheckStationStore();
   const { closeModal } = useModalStore();
-  const { setEndStation, setEndStationForView } = trainDataStore();
+  const { setEndStation, setEndStationForView, startStationForView } =
+    trainDataStore();
   const { stations, isLoading } = trainQueryData();
 
-  const filtered = isValue
-    ? stations.filter(
-        (station) => station && station.nodename.includes(isValue),
-      )
-    : stations;
+  const reachable = startStationForView
+    ? getReachableStations(normalizeStation(startStationForView))
+    : null;
+
+  const filtered = stations.filter((station) => {
+    if (!station || !station.nodename) return false;
+    if (
+      reachable &&
+      reachable.length > 0 &&
+      !reachable.includes(normalizeStation(station.nodename))
+    )
+      return false;
+    if (isValue && !station.nodename.includes(isValue)) return false;
+    return true;
+  });
 
   if (isLoading) return <LoadingScreen />;
 
   return (
     <div className="w-full overflow-y-scroll px-[28px] pt-2">
-      <span className="mb-2 block px-2 text-xs font-semibold text-gray-400">전체역</span>
+      <span className="mb-2 block px-2 text-xs font-semibold text-gray-400">
+        전체역
+      </span>
       {filtered.map((station) => {
         if (!station || !station.nodename) return null;
         return (

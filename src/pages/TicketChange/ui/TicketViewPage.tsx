@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { trainRoutes } from '@/shared/lib/trainRoutes';
+import { resolveRoute, normalizeStation } from '@/shared/lib/trainRoutes';
 
 type TicketData = {
   start: string;
@@ -73,9 +73,11 @@ const TicketView = ({ d }: { d: TicketData }) => {
   const departureTime = parseDateTime(d.st);
   const arrivalTime = new Date(departureTime.getTime() + dur * 60 * 1000);
 
-  const route = trainRoutes[d.type] ?? [];
-  const startIdx = route.indexOf(d.start);
-  const endIdx = route.indexOf(d.end);
+  const startName = normalizeStation(d.start);
+  const endName = normalizeStation(d.end);
+  const { route } = resolveRoute(d.type, startName, endName);
+  const startIdx = route.indexOf(startName);
+  const endIdx = route.indexOf(endName);
   const segmentStations =
     startIdx !== -1 && endIdx !== -1 && startIdx < endIdx
       ? route.slice(startIdx, endIdx + 1)

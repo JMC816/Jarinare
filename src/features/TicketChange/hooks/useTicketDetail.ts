@@ -34,9 +34,9 @@ export const useTicketDetail = (seats: SeatType[]) => {
 
   // 열차 노선에서 출발~도착 구간 역 추출
   const segmentStations = useMemo(() => {
-    const { route, gradeName } = resolveRoute(s.trainType);
-    const startName = normalizeStation(s.startStationForView, gradeName);
-    const endName = normalizeStation(s.endStationForView, gradeName);
+    const startName = normalizeStation(s.startStationForView);
+    const endName = normalizeStation(s.endStationForView);
+    const { route } = resolveRoute(s.trainType, startName, endName);
     // 정확한 매칭 실패 시 부분 문자열로 fallback
     const findIdx = (name: string) => {
       const exact = route.indexOf(name);

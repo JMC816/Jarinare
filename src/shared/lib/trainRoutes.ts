@@ -305,6 +305,17 @@ export const TRAIN_ROUTES: Record<string, Record<string, string[]>> = {
   },
 };
 
+// 전체 노선에서 중복 없이 역 목록 반환 (가나다 정렬)
+export const getAllStations = (): string[] => {
+  const stations = new Set<string>();
+  for (const routes of Object.values(TRAIN_ROUTES)) {
+    for (const stationList of Object.values(routes)) {
+      stationList.forEach((s) => stations.add(s));
+    }
+  }
+  return Array.from(stations).sort((a, b) => a.localeCompare(b, 'ko'));
+};
+
 // 출발역 기준 도달 가능한 역 목록 반환
 export const getReachableStations = (startStation: string): string[] => {
   const reachable = new Set<string>();

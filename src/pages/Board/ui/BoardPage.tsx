@@ -2,6 +2,7 @@ import backward from '@/assets/icons/backward.png';
 import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
 import { useLatestPosts } from '@/features/Board/hooks/useLatestPosts';
 import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
+import TravelReviewTicker from '@/widgets/TravelReview/ui/TravelReviewTicker';
 import { useNavigate } from 'react-router-dom';
 
 const BOARDS = [
@@ -28,7 +29,10 @@ const BoardPage = () => {
   const { seenData } = useBoardSeen();
   const { topPost } = useTopViewedPost();
 
-  const isNew = (createdAt: number | undefined, category: keyof typeof seenData) => {
+  const isNew = (
+    createdAt: number | undefined,
+    category: keyof typeof seenData,
+  ) => {
     if (!createdAt) return false;
     return createdAt > (seenData[category] ?? 0);
   };
@@ -45,9 +49,19 @@ const BoardPage = () => {
         <h1 className="text-lg font-bold">게시판</h1>
       </div>
 
+      {/* 여행지 후기 */}
+      <TravelReviewTicker />
+
+      {/* 광고 배너 */}
+      <div className="px-4 py-2">
+        <div className="flex h-[72px] w-full items-center justify-center rounded-2xl bg-gray-200">
+          <span className="text-xs text-gray-400">광고 배너</span>
+        </div>
+      </div>
+
       {/* 게시판 목록 */}
       <div className="p-4">
-        <div className="rounded-2xl bg-white shadow-sm p-3 flex flex-col gap-2">
+        <div className="flex flex-col gap-2 rounded-2xl bg-white p-3 shadow-sm">
           {BOARDS.map(({ key, label, path }) => {
             const post = latest[key];
             const hasNew = isNew(post?.createdAt, key);
@@ -68,7 +82,9 @@ const BoardPage = () => {
 
                 {/* 가운데: 최신 게시물 내용 */}
                 <span className="flex-1 truncate text-xs text-gray-400">
-                  {post ? (post.content || post.title) : '등록된 게시물이 없습니다'}
+                  {post
+                    ? post.content || post.title
+                    : '등록된 게시물이 없습니다'}
                 </span>
 
                 {/* 오른쪽: N 배지 + 화살표 */}
@@ -99,19 +115,14 @@ const BoardPage = () => {
         </div>
       </div>
 
-      {/* 광고 배너 */}
-      <div className="px-4 py-2">
-        <div className="flex h-[72px] w-full items-center justify-center rounded-2xl bg-gray-200">
-          <span className="text-xs text-gray-400">광고 배너</span>
-        </div>
-      </div>
-
       {/* 실시간 조회수 1위 */}
       <div className="px-4">
         <div className="mb-2 flex items-center gap-1.5 px-1">
-          <span className="text-sm font-bold text-gray-800">실시간 인기 게시물</span>
+          <span className="text-sm font-bold text-gray-800">
+            실시간 인기 게시물
+          </span>
         </div>
-        <div className="rounded-2xl bg-white shadow-sm p-4">
+        <div className="rounded-2xl bg-white p-4 shadow-sm">
           {topPost ? (
             <button
               onClick={() =>
@@ -122,8 +133,30 @@ const BoardPage = () => {
                   {
                     state:
                       topPost.category === 'board'
-                        ? { post: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } }
-                        : { event: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } },
+                        ? {
+                            post: {
+                              id: topPost.id,
+                              title: topPost.title,
+                              content: topPost.content,
+                              author: topPost.author,
+                              likes: 0,
+                              views: topPost.viewCount,
+                              createdAt: 0,
+                              imageUrl: null,
+                            },
+                          }
+                        : {
+                            event: {
+                              id: topPost.id,
+                              title: topPost.title,
+                              content: topPost.content,
+                              author: topPost.author,
+                              likes: 0,
+                              views: topPost.viewCount,
+                              createdAt: 0,
+                              imageUrl: null,
+                            },
+                          },
                   },
                 )
               }
@@ -141,7 +174,9 @@ const BoardPage = () => {
                 <span className="text-[10px] font-semibold text-blue">
                   {topPost.category === 'board' ? '자유게시판' : '이벤트'}
                 </span>
-                <span className="text-[10px] text-gray-400">조회 {topPost.viewCount}</span>
+                <span className="text-[10px] text-gray-400">
+                  조회 {topPost.viewCount}
+                </span>
               </div>
             </button>
           ) : (

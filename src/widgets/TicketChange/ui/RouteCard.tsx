@@ -4,12 +4,7 @@
  */
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { stationCoords } from '@/shared/lib/stationCoords';
-import {
-  CustomOverlayMap,
-  Map,
-  MapMarker,
-  Polyline,
-} from 'react-kakao-maps-sdk';
+import { CustomOverlayMap, Map, Polyline } from 'react-kakao-maps-sdk';
 import { RouteCardProps } from '../types/RouteCardType';
 
 const TrainPing = ({
@@ -66,6 +61,74 @@ const TrainPing = ({
   );
 };
 
+const StationMarker = ({
+  coord,
+  station,
+  index,
+  total,
+  departureMs,
+  arrivalMs,
+  isStart,
+  isEnd,
+}: {
+  coord: { lat: number; lng: number };
+  station: string;
+  index: number;
+  total: number;
+  departureMs: number;
+  arrivalMs: number;
+  isStart: boolean;
+  isEnd: boolean;
+}) => {
+  const [hovered, setHovered] = useState(false);
+
+  // 역별 예상 시간 계산
+  const stationTime = new Date(
+    departureMs + (index / (total - 1)) * (arrivalMs - departureMs),
+  );
+  const hh = String(stationTime.getHours()).padStart(2, '0');
+  const mm = String(stationTime.getMinutes()).padStart(2, '0');
+  const timeLabel = isStart
+    ? `${hh}:${mm} 출발`
+    : isEnd
+      ? `${hh}:${mm} 도착`
+      : `${hh}:${mm} 경유`;
+
+  return (
+    <CustomOverlayMap position={coord} xAnchor={0.5} yAnchor={0.5}>
+      <div
+        className="relative flex flex-col items-center"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        {/* 말풍선 */}
+        {hovered && (
+          <div className="absolute bottom-full mb-1 flex min-w-max flex-col items-center">
+            <div className="rounded-lg bg-gray-800 px-2.5 py-1.5 shadow-lg">
+              <p className="text-xs font-bold text-white">{station}</p>
+              <p className="text-[10px] text-gray-300">{timeLabel}</p>
+            </div>
+            {/* 말풍선 꼬리 */}
+            <div className="h-0 w-0 border-x-4 border-t-4 border-x-transparent border-t-gray-800" />
+          </div>
+        )}
+        {/* 마커 아이콘 */}
+        <div
+          className={`flex h-5 w-5 items-center justify-center rounded-full border-2 border-white shadow-md ${
+            isStart || isEnd ? 'bg-blue' : 'bg-white'
+          }`}
+        >
+          {isStart || isEnd ? (
+            <div className="h-2 w-2 rounded-full bg-white" />
+          ) : (
+            <div className="h-1.5 w-1.5 rounded-full bg-blue" />
+          )}
+        </div>
+      </div>
+    </CustomOverlayMap>
+  );
+};
+
 const RouteMap = memo(
   ({
     stations,
@@ -106,7 +169,17 @@ const RouteMap = memo(
             strokeStyle="solid"
           />
           {coords.map((coord, i) => (
-            <MapMarker key={i} position={coord} title={stations[i]} />
+            <StationMarker
+              key={i}
+              coord={coord}
+              station={stations[i]}
+              index={i}
+              total={stations.length}
+              departureMs={departureMs}
+              arrivalMs={arrivalMs}
+              isStart={i === 0}
+              isEnd={i === stations.length - 1}
+            />
           ))}
           <TrainPing
             coords={coords}

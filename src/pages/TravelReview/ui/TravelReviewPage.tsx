@@ -9,24 +9,12 @@ import { auth } from '@/shared/firebase/firebase';
 import { useGetTravelReviews } from '@/features/TravelReview/hooks/useGetTravelReviews';
 import { useDeleteTravelReview } from '@/features/TravelReview/hooks/useDeleteTravelReview';
 import { useUpdateTravelReview } from '@/features/TravelReview/hooks/useUpdateTravelReview';
+import StarRating from '@/shared/ui/StarRating';
 
 const formatDate = (seconds: number) => {
   const d = new Date(seconds * 1000);
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
 };
-
-const StarDisplay = ({ rating }: { rating: number }) => (
-  <div className="flex items-center gap-0.5">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <span
-        key={star}
-        className={`text-sm ${star <= Math.round(rating) ? 'text-yellow-400' : 'text-gray-300'}`}
-      >
-        ★
-      </span>
-    ))}
-  </div>
-);
 
 const StarPicker = ({
   value,
@@ -107,7 +95,7 @@ const TravelReviewPage = () => {
       <div className="mx-4 mt-4 rounded-2xl bg-white p-4 shadow-sm">
         <p className="mb-1 text-xs text-gray-400">평균 별점</p>
         <div className="flex items-center gap-2">
-          <StarDisplay rating={averageRating} />
+          <StarRating rating={averageRating} />
           <span className="text-sm font-bold text-gray-800">
             {reviews.length > 0 ? averageRating.toFixed(1) : '-'}
           </span>
@@ -166,7 +154,7 @@ const TravelReviewPage = () => {
               /* 후기 카드 */
               <>
                 <div className="mb-1 flex items-center justify-between">
-                  <StarDisplay rating={review.rating} />
+                  <StarRating rating={review.rating} />
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] text-gray-400">
                       {review.author}

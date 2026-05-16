@@ -9,6 +9,7 @@ import { useDestinationRatings } from '@/features/TravelReview/hooks/useDestinat
 import { useCreateTravelReview } from '@/features/TravelReview/hooks/useCreateTravelReview';
 import { useSearchTravelReviews } from '@/features/TravelReview/hooks/useSearchTravelReviews';
 import { getAllStations } from '@/shared/lib/trainRoutes';
+import StarRating from '@/shared/ui/StarRating';
 
 const StarPicker = ({
   value,
@@ -175,16 +176,7 @@ const TravelReviewListPage = () => {
                   <span className="rounded-full bg-blue/10 px-2 py-0.5 text-xs font-bold text-blue">
                     {item.city}
                   </span>
-                  <div className="flex items-center gap-0.5">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <span
-                        key={star}
-                        className={`text-xs ${star <= item.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                      >
-                        ★
-                      </span>
-                    ))}
-                  </div>
+                  <StarRating rating={item.rating} />
                 </div>
                 <p className="text-sm font-bold text-gray-800">{item.title}</p>
                 <p className="line-clamp-2 text-xs text-gray-500">
@@ -226,19 +218,7 @@ const TravelReviewListPage = () => {
                     <span className="text-sm font-bold text-gray-800">
                       {city}
                     </span>
-                    <div className="flex items-center gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <span
-                          key={star}
-                          className={`text-xs ${star <= Math.round(averageRating) ? 'text-yellow-400' : 'text-gray-300'}`}
-                        >
-                          ★
-                        </span>
-                      ))}
-                      <span className="ml-1 text-[10px] text-gray-400">
-                        {averageRating > 0 ? averageRating.toFixed(1) : '-'}
-                      </span>
-                    </div>
+                    <StarRating rating={averageRating} showValue />
                   </div>
                   <span className="shrink-0 text-xs text-gray-400">
                     후기 {reviewCount}개

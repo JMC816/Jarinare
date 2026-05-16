@@ -5,20 +5,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useDestinationRatings } from '@/features/TravelReview/hooks/useDestinationRatings';
 import { useTravelReviewTicker } from '../hooks/useTravelReviewTicker';
-
-const StarRating = ({ rating }: { rating: number }) => (
-  <div className="flex items-center gap-0.5">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <span
-        key={star}
-        className={`text-xs ${star <= Math.round(rating) ? 'text-yellow-400' : 'text-gray-300'}`}
-      >
-        ★
-      </span>
-    ))}
-    <span className="ml-1 text-[10px] text-gray-500">{rating.toFixed(1)}</span>
-  </div>
-);
+import StarRating from '@/shared/ui/StarRating';
 
 const TravelReviewTicker = () => {
   const navigate = useNavigate();
@@ -129,7 +116,7 @@ const TravelReviewTicker = () => {
                   <span className="text-sm font-bold text-gray-800">
                     {city}
                   </span>
-                  <StarRating rating={averageRating} />
+                  <StarRating rating={averageRating} showValue />
                 </div>
               </div>
             ),

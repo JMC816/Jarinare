@@ -3,6 +3,7 @@ import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
 import { useLatestPosts } from '@/features/Board/hooks/useLatestPosts';
 import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
 import TravelReviewTicker from '@/widgets/TravelReview/ui/TravelReviewTicker';
+import SeasonBanner from '@/widgets/Season/ui/SeasonBanner';
 import { useNavigate } from 'react-router-dom';
 
 const BOARDS = [
@@ -52,11 +53,9 @@ const BoardPage = () => {
       {/* 여행지 후기 */}
       <TravelReviewTicker />
 
-      {/* 광고 배너 */}
+      {/* 계절 할인 배너 */}
       <div className="px-4 py-2">
-        <div className="flex h-[72px] w-full items-center justify-center rounded-2xl bg-gray-200">
-          <span className="text-xs text-gray-400">광고 배너</span>
-        </div>
+        <SeasonBanner />
       </div>
 
       {/* 게시판 목록 */}

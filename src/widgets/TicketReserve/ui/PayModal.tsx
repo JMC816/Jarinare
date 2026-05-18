@@ -6,6 +6,7 @@ import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
 import { useUpdatePoint } from '@/features/Point/hooks/useUpdatePoint';
 import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateCountStore';
 import { useSaveReserveStat } from '@/features/TicketReserve/hooks/useSaveReserveStat';
+import { useCurrentSeason } from '@/features/Season/hooks/useCurrentSeason';
 
 const PayModal = () => {
   const { closeModal } = useModalStore();
@@ -17,6 +18,20 @@ const PayModal = () => {
   const { point } = useGetPoint();
   const { updatePoint } = useUpdatePoint();
   const { seatsStateCount } = seatsStateCountStore();
+  const { season, style, isSeasonStation } = useCurrentSeason();
+
+  // 현재 목적지가 계절 할인 역인지 확인
+  const isDiscountEligible = isSeasonStation(endStationForView);
+  const [eventSelected, setEventSelected] = useState<'none' | 'season'>('none');
+
+  const basePrice = selectPay * seatsStateCount;
+  // 계절 이벤트 적용 시 10% 할인
+  const discountedBase =
+    eventSelected === 'season' && isDiscountEligible
+      ? Math.floor(basePrice * 0.9)
+      : basePrice;
+  const pointValue = Number(value);
+  const finalPrice = discountedBase - pointValue;
 
   const onChange = () => {
     setChekced((prev) => !prev);
@@ -41,8 +56,31 @@ const PayModal = () => {
         </div>
         <p className="mb-1 text-base font-bold text-gray-800">결제 하실 금액</p>
         <p className="mb-4 text-xl font-bold text-gray-900">
-          {(selectPay * seatsStateCount).toLocaleString('ko-KR')}원
+          {basePrice.toLocaleString('ko-KR')}원
         </p>
+
+        {/* 이벤트 드롭다운 */}
+        <div className="mb-3">
+          <p className="mb-1 text-xs font-bold text-gray-500">이벤트 선택</p>
+          <select
+            value={eventSelected}
+            onChange={(e) =>
+              setEventSelected(e.target.value as 'none' | 'season')
+            }
+            className={`w-full rounded-xl border px-3 py-2 text-sm outline-none ${
+              eventSelected === 'season'
+                ? `border-current ${style.color} font-bold`
+                : 'border-lightGray text-gray-600'
+            }`}
+          >
+            <option value="none">선택안함</option>
+            {isDiscountEligible && (
+              <option value="season">
+                {style.emoji} {season} 계절 10% 할인
+              </option>
+            )}
+          </select>
+        </div>
 
         {/* 포인트 사용 */}
         <div className="mb-3 flex items-center gap-2">
@@ -56,14 +94,18 @@ const PayModal = () => {
             className={`appearance-none rounded border border-blue p-2 ${checked ? "bg-blue bg-[url('@/assets/icons/point_check.png')] bg-center bg-no-repeat" : ''} ${point === 0 ? 'cursor-not-allowed opacity-50' : ''}`}
           />
           <label htmlFor="check" className="flex">
-            <span className={`${checked ? 'text-darkGray' : 'text-lightGray'} text-sm`}>
+            <span
+              className={`${checked ? 'text-darkGray' : 'text-lightGray'} text-sm`}
+            >
               포인트 사용
             </span>
           </label>
         </div>
 
         <div className="mb-3">
-          <div className={`flex w-full justify-between gap-1 ${checked ? 'text-black' : 'text-lightGray'} h-8`}>
+          <div
+            className={`flex w-full justify-between gap-1 ${checked ? 'text-black' : 'text-lightGray'} h-8`}
+          >
             <input
               type="text"
               disabled={!checked}
@@ -79,7 +121,7 @@ const PayModal = () => {
                 const inputValue = e.target.value.replace(/,/g, '');
                 const numValue = inputValue === '' ? 0 : Number(inputValue);
                 if (
-                  selectPay * seatsStateCount &&
+                  discountedBase &&
                   (inputValue === '' || (point >= numValue && numValue >= 0))
                 ) {
                   setValue(numValue);
@@ -105,18 +147,26 @@ const PayModal = () => {
         <div className="mb-4 rounded-2xl bg-gray-50 px-4 py-3">
           <div className="flex justify-between text-sm font-bold text-gray-800">
             <span>최종 결제금액</span>
-            <span>
-              {checked
-                ? (selectPay * seatsStateCount - Number(value)).toLocaleString('ko-KR')
-                : (selectPay * seatsStateCount).toLocaleString('ko-KR')}원
-            </span>
+            <span>{finalPrice.toLocaleString('ko-KR')}원</span>
           </div>
           <div className="my-2 w-full border border-gray-200" />
           <div className="flex flex-col gap-y-1 text-xs">
             <div className="flex justify-between">
               <span className="text-gray-400">총 결제금액</span>
-              <span className="text-gray-700">{(selectPay * seatsStateCount).toLocaleString('ko-KR')}원</span>
+              <span className="text-gray-700">
+                {basePrice.toLocaleString('ko-KR')}원
+              </span>
             </div>
+            {eventSelected === 'season' && isDiscountEligible && (
+              <div className="flex justify-between">
+                <span className="text-gray-400">
+                  {style.emoji} {season} 계절 할인 (10%)
+                </span>
+                <span className="text-orange-500">
+                  -{(basePrice - discountedBase).toLocaleString('ko-KR')}원
+                </span>
+              </div>
+            )}
             {checked && (
               <div className="flex justify-between">
                 <span className="text-gray-400">포인트 사용</span>
@@ -138,8 +188,8 @@ const PayModal = () => {
           </button>
           <button
             onClick={async () => {
-              await createSelectedSeats(selectPay * seatsStateCount - Number(value));
-              await updatePoint(point - Number(value));
+              await createSelectedSeats(finalPrice);
+              await updatePoint(point - pointValue);
               await saveStat(endStationForView);
               closeModal('PayModal');
             }}

@@ -18,7 +18,7 @@ const EventImage = ({
 
   if (!src) {
     return (
-      <div className="flex aspect-square w-full items-center justify-center bg-gradient-to-br from-blue to-lightBlue p-3">
+      <div className="flex aspect-square w-full items-center justify-center bg-blue p-3">
         <span className="line-clamp-3 text-center text-xs font-bold text-white">
           {title}
         </span>

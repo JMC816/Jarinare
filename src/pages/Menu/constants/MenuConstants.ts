@@ -5,14 +5,28 @@ import returned from '@/assets/icons/returned.png';
 import on_key from '@/assets/icons/on_key.png';
 import join from '@/assets/icons/join.png';
 
-export const MenuConstants = () => {
+export type MenuItem = {
+  text: string;
+  icon: string;
+  link?: string;
+  subItems?: { text: string; link: string }[];
+};
+
+export const BOARD_SUB_ITEMS = [
+  { text: '공지사항', link: '/board/noticelist' },
+  { text: '이벤트', link: '/board/eventlist' },
+  { text: '자유게시판', link: '/board/boardlist' },
+  { text: '여행지 후기', link: '/travel/review/list' },
+];
+
+export const MenuConstants = (): MenuItem[] => {
   const user = auth.currentUser;
   if (user) {
     return [
       {
-        text: '게시판',
-        link: '/board',
-        icon: on_board,
+        text: '마이페이지',
+        link: '/mypage',
+        icon: on_user,
       },
       {
         text: '승차권 반환',
@@ -20,9 +34,9 @@ export const MenuConstants = () => {
         icon: returned,
       },
       {
-        text: '마이페이지',
-        link: '/mypage',
-        icon: on_user,
+        text: '게시판',
+        icon: on_board,
+        subItems: BOARD_SUB_ITEMS,
       },
     ];
   } else {

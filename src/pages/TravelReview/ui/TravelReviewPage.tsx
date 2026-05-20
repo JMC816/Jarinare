@@ -217,7 +217,9 @@ const TravelReviewPage = () => {
                     <StarRating rating={review.rating} />
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] text-gray-400">
-                        {review.author}
+                        {currentUser?.displayName === review.author
+                          ? review.author
+                          : '***'}
                       </span>
                       {currentUser?.displayName === review.author && (
                         <>

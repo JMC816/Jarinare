@@ -7,10 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import backward from '@/assets/icons/backward.png';
 import { useDestinationRatings } from '@/features/TravelReview/hooks/useDestinationRatings';
 import { useCreateTravelReview } from '@/features/TravelReview/hooks/useCreateTravelReview';
-import { useSearchTravelReviews } from '@/features/TravelReview/hooks/useSearchTravelReviews';
+import { useSearchByStation } from '@/features/TravelReview/hooks/useSearchByStation';
 import { usePagination } from '@/features/TravelReview/hooks/usePagination';
 import type { DestinationReviewSummary } from '@/entities/TravelReview/types/travelReviewType';
-import type { SearchResultItem } from '@/features/TravelReview/hooks/useSearchTravelReviews';
 import { getAllStations } from '@/shared/lib/trainRoutes';
 import StarRating from '@/shared/ui/StarRating';
 
@@ -70,27 +69,20 @@ const TravelReviewListPage = () => {
 
   const { createReview } = useCreateTravelReview(selectedCity);
 
-  // 후기가 있는 역들만 검색 대상으로
-  const citiesWithReviews = useMemo(
-    () => summaries.filter((s) => s.reviewCount > 0).map((s) => s.city),
-    [summaries],
-  );
+  // 역 이름 검색 결과
+  const { results: searchResults } = useSearchByStation(searchQuery, summaries);
 
-  // 여행지 목록 페이지네이션
-  const reviewedSummaries = useMemo(
-    () => summaries.filter((s) => s.reviewCount > 0),
-    [summaries],
-  );
+  // 페이지네이션
   const {
     paged: pagedRaw,
     page,
     totalPages,
     goNext,
     goPrev,
-  } = usePagination(reviewedSummaries, pageSize);
+  } = usePagination(searchResults, pageSize);
   const paged = pagedRaw as DestinationReviewSummary[];
 
-  // 역 검색 필터
+  // 역 선택 검색 필터 (작성 폼용)
   const filteredStations = useMemo(
     () =>
       citySearch.trim()
@@ -98,21 +90,6 @@ const TravelReviewListPage = () => {
         : allStations,
     [allStations, citySearch],
   );
-
-  const { results: searchResults, isSearching } = useSearchTravelReviews(
-    searchQuery,
-    citiesWithReviews,
-  );
-
-  // 검색 결과 페이지네이션
-  const {
-    paged: pagedSearchRaw,
-    page: searchPage,
-    totalPages: searchTotalPages,
-    goNext: searchGoNext,
-    goPrev: searchGoPrev,
-  } = usePagination(searchResults, pageSize);
-  const pagedSearch = pagedSearchRaw as SearchResultItem[];
 
   const handleSubmit = async () => {
     if (!selectedCity || !title.trim() || !content.trim()) return;
@@ -128,17 +105,7 @@ const TravelReviewListPage = () => {
     navigate(0);
   };
 
-  const isSearchMode = searchQuery.trim().length > 0;
-
-  const showListPagination =
-    !isSearchMode && !showForm && isLoaded && totalPages > 1;
-  const showSearchPagination =
-    isSearchMode && !isSearching && searchTotalPages > 1;
-  const showPagination = showListPagination || showSearchPagination;
-  const currentPage = isSearchMode ? searchPage : page;
-  const totalPagesShown = isSearchMode ? searchTotalPages : totalPages;
-  const onPrev = isSearchMode ? searchGoPrev : goPrev;
-  const onNext = isSearchMode ? searchGoNext : goNext;
+  const showPagination = !showForm && isLoaded && totalPages > 1;
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-gray-100">
@@ -165,7 +132,7 @@ const TravelReviewListPage = () => {
         <div className="shrink-0 px-4 pb-3">
           <input
             className="w-full rounded-2xl bg-white px-4 py-2.5 text-sm shadow-sm outline-none placeholder:text-gray-400"
-            placeholder="역 이름 또는 게시물 내용으로 검색"
+            placeholder="역 이름으로 검색"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -252,51 +219,8 @@ const TravelReviewListPage = () => {
           </div>
         )}
 
-        {/* 검색 결과 */}
-        {isSearchMode && (
-          <div className="flex flex-col gap-3 px-4 pb-4">
-            {isSearching && (
-              <div className="flex h-16 items-center justify-center text-sm text-gray-400">
-                검색 중...
-              </div>
-            )}
-            {!isSearching && searchResults.length === 0 && (
-              <div className="flex h-40 flex-col items-center justify-center gap-2 rounded-2xl bg-white shadow-sm">
-                <span className="text-2xl">🔍</span>
-                <p className="text-sm text-gray-400">검색 결과가 없습니다.</p>
-              </div>
-            )}
-            {!isSearching &&
-              pagedSearch.map((item) => (
-                <div
-                  key={`${item.city}-${item.reviewId}`}
-                  onClick={() =>
-                    navigate('/travel/review', { state: { city: item.city } })
-                  }
-                  className="flex cursor-pointer flex-col gap-1 rounded-2xl bg-white p-4 shadow-sm active:brightness-95"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-full bg-blue/10 px-2 py-0.5 text-xs font-bold text-blue">
-                      {item.city}
-                    </span>
-                    <StarRating rating={item.rating} />
-                  </div>
-                  <p className="text-sm font-bold text-gray-800">
-                    {item.title}
-                  </p>
-                  <p className="line-clamp-2 text-xs text-gray-500">
-                    {item.content}
-                  </p>
-                  <span className="text-[10px] text-gray-400">
-                    {item.author}
-                  </span>
-                </div>
-              ))}
-          </div>
-        )}
-
-        {/* 여행지 목록 (검색 모드 아닐 때) */}
-        {!isSearchMode && !showForm && (
+        {/* 여행지 목록 */}
+        {!showForm && (
           <div className="flex flex-col gap-3 px-4 pb-4">
             {/* 로딩 스켈레톤 */}
             {!isLoaded &&
@@ -307,8 +231,16 @@ const TravelReviewListPage = () => {
                 />
               ))}
 
+            {/* 검색 결과 없음 */}
+            {isLoaded && searchQuery.trim() && searchResults.length === 0 && (
+              <div className="flex h-40 flex-col items-center justify-center gap-2 rounded-2xl bg-white shadow-sm">
+                <span className="text-2xl">🔍</span>
+                <p className="text-sm text-gray-400">검색 결과가 없습니다.</p>
+              </div>
+            )}
+
             {/* 데이터 없음 */}
-            {isLoaded && reviewedSummaries.length === 0 && (
+            {isLoaded && !searchQuery.trim() && searchResults.length === 0 && (
               <div className="flex h-48 flex-col items-center justify-center gap-3 rounded-2xl bg-white shadow-sm">
                 <span className="text-4xl">✍️</span>
                 <p className="text-sm font-bold text-gray-600">
@@ -359,18 +291,18 @@ const TravelReviewListPage = () => {
           style={{ paddingBottom: 'calc(0.75rem + 80px)' }}
         >
           <button
-            onClick={onPrev}
-            disabled={currentPage === 1}
+            onClick={goPrev}
+            disabled={page === 1}
             className="rounded-xl bg-white px-5 py-2 text-xs font-bold text-gray-500 shadow-sm disabled:opacity-30"
           >
             이전
           </button>
           <span className="text-xs text-gray-500">
-            {currentPage} / {totalPagesShown}
+            {page} / {totalPages}
           </span>
           <button
-            onClick={onNext}
-            disabled={currentPage === totalPagesShown}
+            onClick={goNext}
+            disabled={page === totalPages}
             className="rounded-xl bg-white px-5 py-2 text-xs font-bold text-gray-500 shadow-sm disabled:opacity-30"
           >
             다음

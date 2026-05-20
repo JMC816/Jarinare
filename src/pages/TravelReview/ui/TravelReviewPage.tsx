@@ -10,6 +10,7 @@ import { useGetTravelReviews } from '@/features/TravelReview/hooks/useGetTravelR
 import { useDeleteTravelReview } from '@/features/TravelReview/hooks/useDeleteTravelReview';
 import { useUpdateTravelReview } from '@/features/TravelReview/hooks/useUpdateTravelReview';
 import { usePagination } from '@/features/TravelReview/hooks/usePagination';
+import { useSearchByContent } from '@/features/TravelReview/hooks/useSearchByContent';
 import type { TravelReview } from '@/entities/TravelReview/types/travelReviewType';
 import StarRating from '@/shared/ui/StarRating';
 
@@ -56,6 +57,10 @@ const TravelReviewPage = () => {
   const [editContent, setEditContent] = useState('');
   const [editRating, setEditRating] = useState(5);
   const [saving, setSaving] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // 내용 검색 필터
+  const { results: filteredReviews } = useSearchByContent(searchQuery, reviews);
 
   // 실제 DOM 높이 기반 페이지 사이즈 계산
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -81,7 +86,7 @@ const TravelReviewPage = () => {
     totalPages,
     goNext,
     goPrev,
-  } = usePagination(reviews, pageSize);
+  } = usePagination(filteredReviews, pageSize);
   const paged = pagedRaw as TravelReview[];
   const showPagination = isLoaded && totalPages > 1;
 
@@ -137,6 +142,16 @@ const TravelReviewPage = () => {
         </div>
       </div>
 
+      {/* 검색 바 */}
+      <div className="shrink-0 px-4 pt-3">
+        <input
+          className="w-full rounded-2xl bg-white px-4 py-2.5 text-sm shadow-sm outline-none placeholder:text-gray-400"
+          placeholder="제목, 내용으로 검색"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
+
       {/* 후기 목록 — 스크롤 영역 */}
       <div
         ref={scrollAreaRef}
@@ -150,6 +165,11 @@ const TravelReviewPage = () => {
         {isLoaded && reviews.length === 0 && (
           <div className="flex h-20 items-center justify-center rounded-2xl bg-white text-sm text-gray-400 shadow-sm">
             아직 후기가 없습니다.
+          </div>
+        )}
+        {isLoaded && reviews.length > 0 && filteredReviews.length === 0 && (
+          <div className="flex h-20 items-center justify-center rounded-2xl bg-white text-sm text-gray-400 shadow-sm">
+            검색 결과가 없습니다.
           </div>
         )}
         <div className="flex flex-col gap-3">

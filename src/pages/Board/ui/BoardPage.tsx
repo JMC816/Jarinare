@@ -39,7 +39,7 @@ const BoardPage = () => {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col bg-gray-100">
+    <div className="relative flex h-screen w-full flex-col bg-gray-100">
       {/* 헤더 */}
       <div className="flex w-full items-center gap-4 bg-gray-100 px-[28px] py-4">
         <img

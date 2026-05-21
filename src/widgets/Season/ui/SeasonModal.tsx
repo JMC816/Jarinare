@@ -9,11 +9,11 @@ const SeasonModal = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6"
+      className="absolute inset-0 z-50 flex items-center justify-center bg-black/40"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm rounded-3xl bg-white px-6 pb-6 pt-5 shadow-xl"
+        className="mx-6 w-full rounded-3xl bg-white px-6 pb-6 pt-5 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}

@@ -1,17 +1,58 @@
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import { seatsStateStore } from '@/features/TicketReserve/model/seatsStateStore';
+import { auth, realtimeDb } from '@/shared/firebase/firebase';
+import { ref, get, remove } from 'firebase/database';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/ReserveStore';
 import Modal from '@/widgets/TicketReserve/ui/Modal';
 import SeatCheckList from '@/widgets/TicketReserve/ui/SeatCheckList';
 import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';
 import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
+import { useEffect } from 'react';
 
 const SeatCheckPage = () => {
   const { isShow, modalType, openModal } = useModalStore();
   const { handleAllSelect, seatsStateCount, isLocksLoaded } =
     useSeatQueryData();
-  const { selectKid, selectAdult } = trainDataStore();
+  const {
+    selectKid,
+    selectAdult,
+    startDay,
+    selectStartTime,
+    selectTrainType,
+    startStationForView,
+    endStationForView,
+    trainNo,
+  } = trainDataStore();
+  const { setSeatsState } = seatsStateStore();
+
+  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
+
+  // 페이지 떠날 때 좌석 선택 초기화 + 잠금 해제
+  useEffect(() => {
+    return () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      // 로컬 선택 상태 초기화
+      setSeatsState({});
+
+      // 실시간 DB 잠금 해제
+      const locksPath = `locks/${docIds}/${trainNo}`;
+      const locksRef = ref(realtimeDb, locksPath);
+      get(locksRef).then((snapshot) => {
+        if (!snapshot.exists()) return;
+        const locks = snapshot.val() as Record<string, string>;
+        const myLockedSeats = Object.entries(locks)
+          .filter(([, uid]) => uid === user.uid)
+          .map(([seatId]) => seatId);
+        myLockedSeats.forEach((seatId) =>
+          remove(ref(realtimeDb, `${locksPath}/${seatId}`)),
+        );
+      });
+    };
+  }, []);
 
   // 좌석 전체를 선택하지 않으면 false
   // 좌석을 전체 선택하면 true
@@ -37,7 +78,9 @@ const SeatCheckPage = () => {
         <button
           onClick={isLocksLoaded && isAllLocked ? undefined : handleAllSelect}
           className={`flex-1 rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
-            isLocksLoaded && isAllLocked ? 'bg-gray-300' : 'bg-blue active:brightness-95'
+            isLocksLoaded && isAllLocked
+              ? 'bg-gray-300'
+              : 'bg-blue active:brightness-95'
           }`}
         >
           자동 선택
@@ -48,7 +91,9 @@ const SeatCheckPage = () => {
             isAllSelected ? 'bg-blue active:brightness-95' : 'bg-gray-300'
           }`}
         >
-          {isAllSelected ? '예매' : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
+          {isAllSelected
+            ? '예매'
+            : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
         </button>
       </div>
       {isShow == false || modalType == undefined ? null : <Modal />}

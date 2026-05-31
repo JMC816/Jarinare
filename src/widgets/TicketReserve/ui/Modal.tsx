@@ -2,6 +2,7 @@ import useModalStore from '@/widgets/model/ReserveStore';
 import StartPlaceModal from './StartPlaceModal';
 import EndPlaceModal from './EndPlaceModal';
 import DayModal from './DayModal';
+import ReturnDayModal from './ReturnDayModal';
 import CountModal from './CountModal';
 import TrainChoiceModal from './TrainChoiceModal';
 import TimeChoiceModal from './TimeChoiceModal';
@@ -21,6 +22,9 @@ const Modal = () => {
         <EndPlaceModal />
       ) : null}
       {isShow == true && modalType == 'DayModal' ? <DayModal /> : null}
+      {isShow == true && modalType == 'ReturnDayModal' ? (
+        <ReturnDayModal />
+      ) : null}
       {isShow == true && modalType == 'CountModal' ? <CountModal /> : null}
       {isShow == true && modalType == 'TrainChoiceModal' ? (
         <TrainChoiceModal />

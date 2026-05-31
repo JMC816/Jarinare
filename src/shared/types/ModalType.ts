@@ -8,6 +8,7 @@ export type ReserveModalTypes =
   | 'StartPlaceModal'
   | 'EndPlaceModal'
   | 'DayModal'
+  | 'ReturnDayModal'
   | 'CountModal'
   | 'TrainChoiceModal'
   | 'TimeChoiceModal'

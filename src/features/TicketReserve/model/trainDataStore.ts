@@ -21,6 +21,7 @@ export const trainDataStore = create(
       startStationForView: '',
       endStationForView: '',
       startDayForView: '',
+      endDayForView: '',
       trainTypeForView: '',
       startTimeForView: '',
       selectStartTime: 0,
@@ -50,6 +51,8 @@ export const trainDataStore = create(
         set(() => ({ endStationForView })),
       setStartDayForView: (startDayForView: string) =>
         set(() => ({ startDayForView })),
+      setEndDayForView: (endDayForView: string) =>
+        set(() => ({ endDayForView })),
       setTrainTypeForView: (trainTypeForView: string) =>
         set(() => ({ trainTypeForView })),
       setStartTimeForView: (startTimeForView: string) =>

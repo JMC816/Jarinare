@@ -13,6 +13,7 @@ export type TrainDataStoreType = {
   startStationForView: string;
   endStationForView: string;
   startDayForView: string;
+  endDayForView: string;
   trainTypeForView: string;
   startTimeForView: string;
   selectStartTime: number;
@@ -36,6 +37,7 @@ export type TrainDataStoreType = {
   setStartStationForView: (type: string) => void;
   setEndStationForView: (type: string) => void;
   setStartDayForView: (type: string) => void;
+  setEndDayForView: (type: string) => void;
   setTrainTypeForView: (type: string) => void;
   setStartTimeForView: (type: string) => void;
   setSelectStartTime: (type: number) => void;

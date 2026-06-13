@@ -36,7 +36,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 const Router = () => {
   return (
     <BrowserRouter>
-      <div className="relative flex h-screen w-full justify-center overflow-y-auto">
+      <div className="relative w-full">
         <Routes>
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />

@@ -13,4 +13,14 @@
     flex-direction: column;
     align-items: center;
   }
+
+  @media (min-width: 1024px) {
+    html,
+    body,
+    #root {
+      width: 100%;
+      margin: 0;
+      display: block;
+    }
+  }
 }

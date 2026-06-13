@@ -14,7 +14,7 @@ import ErrorModal from './ErrorModal';
 const Modal = () => {
   const { modalType, isShow } = useModalStore();
   return (
-    <div className="fixed mx-auto my-0 h-screen w-[375px]">
+    <div className="fixed left-1/2 top-0 h-screen w-[375px] -translate-x-1/2">
       {isShow == true && modalType == 'StartPlaceModal' ? (
         <StartPlaceModal />
       ) : null}

@@ -5,7 +5,9 @@ import ProtectedRoute from './ProtectedRoute';
 const HomeLayout = () => {
   return (
     <ProtectedRoute>
-      <Outlet />
+      <div className="flex h-screen w-full justify-center overflow-y-auto lg:block lg:h-auto">
+        <Outlet />
+      </div>
       <NavBar />
     </ProtectedRoute>
   );

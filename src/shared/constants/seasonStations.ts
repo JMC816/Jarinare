@@ -69,35 +69,45 @@ export const SEASON_STYLE: Record<
     bg: string;
     badgeBg: string;
     badgeBorder: string;
+    gradient: string;
+    subText: string;
   }
 > = {
   봄: {
     emoji: '🌸',
-    color: 'text-pink-500',
-    bg: 'bg-pink-50',
+    color: 'text-pink-600',
+    bg: 'bg-pink-100',
     badgeBg: 'bg-pink-200',
     badgeBorder: 'border-pink-300',
+    gradient: 'linear-gradient(160deg, #f9a8d4 0%, #fbcfe8 40%, #e9d5ff 100%)',
+    subText: '벚꽃 만개, 봄 여행 최적기',
   },
   여름: {
     emoji: '☀️',
-    color: 'text-amber-500',
-    bg: 'bg-amber-50',
+    color: 'text-amber-600',
+    bg: 'bg-amber-100',
     badgeBg: 'bg-amber-200',
     badgeBorder: 'border-amber-300',
+    gradient: 'linear-gradient(135deg, #3b82f6 0%, #0ea5e9 50%, #22d3ee 100%)',
+    subText: '청량한 바다, 여름 특가',
   },
   가을: {
     emoji: '🍂',
-    color: 'text-orange-500',
-    bg: 'bg-orange-50',
+    color: 'text-orange-600',
+    bg: 'bg-orange-100',
     badgeBg: 'bg-orange-200',
     badgeBorder: 'border-orange-300',
+    gradient: 'linear-gradient(160deg, #ea580c 0%, #f97316 40%, #fbbf24 100%)',
+    subText: '단풍 절경, 가을 낭만 여행',
   },
   겨울: {
     emoji: '❄️',
-    color: 'text-blue-400',
-    bg: 'bg-blue-50',
+    color: 'text-blue-500',
+    bg: 'bg-blue-100',
     badgeBg: 'bg-blue-200',
     badgeBorder: 'border-blue-300',
+    gradient: 'linear-gradient(160deg, #1e3a5f 0%, #1e40af 40%, #3b82f6 100%)',
+    subText: '설경 속 힐링, 겨울 여행',
   },
 };
 

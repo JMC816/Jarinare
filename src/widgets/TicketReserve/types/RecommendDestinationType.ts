@@ -12,6 +12,6 @@ export interface DestinationItem {
   city: string;
   desc: string;
   gradient: string;
-  emoji: string;
   category: Category[];
+  image?: string;
 }

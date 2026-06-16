@@ -14,26 +14,55 @@ const SeasonBanner = () => {
     <>
       <button
         onClick={() => setOpen(true)}
-        className={`mt-4 w-full rounded-2xl ${style.bg} px-4 py-3 text-left shadow-sm active:brightness-95`}
+        className="relative mt-4 w-full overflow-hidden rounded-lg text-left shadow-md active:brightness-90"
+        style={{ background: style.gradient }}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">{style.emoji}</span>
-            <div>
-              <p className={`text-sm font-bold ${style.color}`}>
-                {season} 여행 특별 할인
-              </p>
-              <p className="text-xs text-gray-500">
-                {season} 추천 역 선택 시 10% 할인
-              </p>
-            </div>
+        {/* 별 장식 */}
+        <svg
+          className="absolute left-[28%] top-0 opacity-15"
+          width="140"
+          height="140"
+          viewBox="0 0 24 24"
+          fill="white"
+          style={{ transform: 'rotate(20deg)' }}
+        >
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+        </svg>
+        <svg
+          className="absolute bottom-0 left-[62%] opacity-10"
+          width="100"
+          height="100"
+          viewBox="0 0 24 24"
+          fill="white"
+          style={{ transform: 'rotate(-15deg)' }}
+        >
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" />
+        </svg>
+
+        {/* 콘텐츠 */}
+        <div className="relative flex items-center gap-5 px-5 py-6">
+          {/* 계절 아이콘 */}
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-4xl shadow-inner">
+            {style.emoji}
           </div>
-          <div
-            className={`flex items-center rounded-full ${style.bg} border ${style.badgeBorder} px-2.5 py-1.5`}
-          >
-            <span className={`text-xs font-bold ${style.color}`}>
-              {stations.length}개 역
-            </span>
+
+          {/* 텍스트 영역 */}
+          <div className="flex flex-1 flex-col justify-center">
+            <p className="text-2xl font-black text-white">
+              {season} 특별 기차여행 할인 이벤트
+            </p>
+            <p className="mt-0.5 text-sm text-white/80">
+              {season} 추천 역 {stations.length}곳 선택 시{' '}
+              <span className="font-bold text-yellow-300 underline">
+                10% 즉시 할인
+              </span>{' '}
+              혜택을 드립니다.
+            </p>
+          </div>
+
+          {/* 자세히 보기 버튼 */}
+          <div className="flex shrink-0 items-center justify-center rounded-2xl bg-white px-8 py-3 shadow-md">
+            <span className="text-sm font-bold text-blue">자세히 보기 ›</span>
           </div>
         </div>
       </button>

@@ -8,7 +8,7 @@ const CountModal = () => {
   const { kid, adult } = trainDataStore();
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-end bg-black/40"
+      className="flex h-full w-full flex-col items-center justify-end bg-black/40 lg:justify-center"
       onClick={() => closeModal('CountModal')}
     >
       <div
@@ -33,8 +33,8 @@ const CountModal = () => {
 
         {kid > 0 || adult > 0 ? (
           <span className="mt-5 block text-tiny font-bold text-darkGray">
-            어른 <span className="text-blue">{adult < 0 ? 0 : adult}</span>명 • 어린이{' '}
-            <span className="text-blue">{kid < 0 ? 0 : kid}</span>명
+            어른 <span className="text-blue">{adult < 0 ? 0 : adult}</span>명 •
+            어린이 <span className="text-blue">{kid < 0 ? 0 : kid}</span>명
           </span>
         ) : null}
 

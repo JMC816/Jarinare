@@ -1,5 +1,5 @@
 import { auth, db } from '@/shared/firebase/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 
 export const useIsNotification = () => {
   const user = auth.currentUser;
@@ -10,9 +10,7 @@ export const useIsNotification = () => {
       return;
     }
     const userRef = doc(db, 'users', user.uid);
-    await updateDoc(userRef, {
-      change,
-    });
+    await setDoc(userRef, { change }, { merge: true });
   };
 
   const updateIsResponse = async (response: boolean) => {
@@ -21,9 +19,7 @@ export const useIsNotification = () => {
       return;
     }
     const userRef = doc(db, 'users', user.uid);
-    await updateDoc(userRef, {
-      response,
-    });
+    await setDoc(userRef, { response }, { merge: true });
   };
 
   return { updateIsChange, updateIsResponse };

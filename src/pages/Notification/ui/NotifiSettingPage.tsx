@@ -8,31 +8,29 @@ export const NotifiSettingPage = () => {
   const { isNotification } = useIsNotificationResponse();
 
   if (!isNotification) {
-    return;
+    return null;
   }
+
+  const data = isNotification.data() ?? {};
+  const changeOn = data.change ?? false;
+  const responseOn = data.response ?? false;
+  const allOn = changeOn && responseOn;
 
   // 좌석 변경 요청 알림 활성화 유무 선택
   const handleChangeToggle = () => {
-    updateIsChange(!isNotification.data()!.change);
+    updateIsChange(!changeOn);
   };
 
   // 변경 수락/거절 알림 활성화 유무 선택
   const handleResponseToggle = () => {
-    updateIsResponse(!isNotification.data()!.response);
+    updateIsResponse(!responseOn);
   };
 
   // 전체 알림
   const handleAllToggle = () => {
-    updateIsChange(
-      !(isNotification.data()!.change && isNotification.data()!.response),
-    );
-    updateIsResponse(
-      !(isNotification.data()!.change && isNotification.data()!.response),
-    );
+    updateIsChange(!(changeOn && responseOn));
+    updateIsResponse(!(changeOn && responseOn));
   };
-
-  const allOn =
-    isNotification.data()!.change && isNotification.data()!.response;
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-100">
@@ -67,10 +65,7 @@ export const NotifiSettingPage = () => {
                 다른 사용자의 변경 요청 알림
               </span>
             </div>
-            <Toggle
-              toggle={isNotification.data()!.change}
-              handleToggle={handleChangeToggle}
-            />
+            <Toggle toggle={changeOn} handleToggle={handleChangeToggle} />
           </div>
           <div className="mx-5 border-t border-gray-100" />
           <div className="flex items-center justify-between px-5 py-4">
@@ -82,10 +77,7 @@ export const NotifiSettingPage = () => {
                 변경 요청 수락 또는 거절 알림
               </span>
             </div>
-            <Toggle
-              toggle={isNotification.data()!.response}
-              handleToggle={handleResponseToggle}
-            />
+            <Toggle toggle={responseOn} handleToggle={handleResponseToggle} />
           </div>
         </div>
       </div>

@@ -13,11 +13,17 @@ export const useGoogleLogin = () => {
       // 구글 로그인(팝업)
       await signInWithPopup(auth, provieder);
 
-      await setDoc(doc(db, 'users', auth.currentUser!.uid), {
-        userId: auth.currentUser?.uid,
-        changeCount: 0,
-        point: 0,
-      });
+      await setDoc(
+        doc(db, 'users', auth.currentUser!.uid),
+        {
+          userId: auth.currentUser?.uid,
+          changeCount: 0,
+          point: 0,
+          change: true,
+          response: true,
+        },
+        { merge: true },
+      );
       navigate('/');
     } catch (error) {
       console.error(error);

@@ -21,9 +21,7 @@ export const useIsNotificationResponse = () => {
 
     const userDoc = doc(db, 'users', user.uid);
     const unsub = onSnapshot(userDoc, (docSnap) => {
-      if (docSnap.exists()) {
-        setIsNotification(docSnap);
-      }
+      setIsNotification(docSnap);
     });
 
     return () => unsub();

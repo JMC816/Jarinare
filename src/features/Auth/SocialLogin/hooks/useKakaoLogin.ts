@@ -33,11 +33,17 @@ export const useKakaoRedirect = () => {
         // 인증 자격으로 로그인
         await signInWithCredential(auth, credential);
 
-        await setDoc(doc(db, 'users', auth.currentUser!.uid), {
-          userId: auth.currentUser?.uid,
-          changeCount: 0,
-          point: 0,
-        });
+        await setDoc(
+          doc(db, 'users', auth.currentUser!.uid),
+          {
+            userId: auth.currentUser?.uid,
+            changeCount: 0,
+            point: 0,
+            change: true,
+            response: true,
+          },
+          { merge: true },
+        );
 
         // HACK: 추후 백단 변경 예정
 

@@ -15,6 +15,7 @@ import PCDayDropdown from '@/widgets/TicketReserve/ui/PCDayDropdown';
 import PCCountDropdown from '@/widgets/TicketReserve/ui/PCCountDropdown';
 import { usePCHomePage } from '../hooks/usePCHomePage';
 import type { PCHomePageProps } from '../types/PCHomePageTypes';
+import PCDestinationModal from '@/widgets/TicketReserve/ui/PCDestinationModal';
 import start_station from '@/assets/icons/start_station.png';
 import end_station from '@/assets/icons/end_station.png';
 import calendar from '@/assets/icons/calendar.png';
@@ -36,6 +37,8 @@ const PCHomePage = ({ hasNotification }: PCHomePageProps) => {
     handleSwap,
     handleSearch,
     isSearchDisabled,
+    selectedDestination,
+    setSelectedDestination,
   } = usePCHomePage();
 
   return (
@@ -230,26 +233,33 @@ const PCHomePage = ({ hasNotification }: PCHomePageProps) => {
                     추천 여행지
                   </h2>
                   <div className="grid grid-cols-3 gap-4">
-                    {DESTINATIONS.map(({ city, desc, gradient, image }) => (
+                    {DESTINATIONS.map((destination) => (
                       <div
-                        key={city}
+                        key={destination.city}
+                        onClick={() => setSelectedDestination(destination)}
                         className="relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-lg p-4 shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
                         style={{
-                          background: image ? undefined : gradient,
-                          backgroundImage: image ? `url(${image})` : undefined,
+                          background: destination.image
+                            ? undefined
+                            : destination.gradient,
+                          backgroundImage: destination.image
+                            ? `url(${destination.image})`
+                            : undefined,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           height: '90px',
                         }}
                       >
-                        {image && (
+                        {destination.image && (
                           <div className="absolute inset-0 bg-black/30" />
                         )}
                         <div className="relative mt-auto flex flex-col gap-0.5">
                           <span className="text-base font-bold text-white">
-                            {city}
+                            {destination.city}
                           </span>
-                          <span className="text-xs text-white/80">{desc}</span>
+                          <span className="text-xs text-white/80">
+                            {destination.desc}
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -266,6 +276,12 @@ const PCHomePage = ({ hasNotification }: PCHomePageProps) => {
         </main>
       </div>
       {isShow && modalType ? <Modal /> : null}
+      {selectedDestination && (
+        <PCDestinationModal
+          destination={selectedDestination}
+          onClose={() => setSelectedDestination(null)}
+        />
+      )}
     </div>
   );
 };

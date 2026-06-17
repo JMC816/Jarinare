@@ -9,9 +9,12 @@ import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
 import { errorStateStore } from '@/features/TicketReserve/model/errorStateStore';
 import useModalStore from '@/widgets/model/ReserveStore';
 import type { DropdownType } from '../types/PCHomePageTypes';
+import type { DestinationItem } from '@/widgets/TicketReserve/types/RecommendDestinationType';
 
 export const usePCHomePage = () => {
   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
+  const [selectedDestination, setSelectedDestination] =
+    useState<DestinationItem | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const {
@@ -37,7 +40,10 @@ export const usePCHomePage = () => {
   // 드롭다운 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setOpenDropdown(null);
       }
     };
@@ -53,7 +59,8 @@ export const usePCHomePage = () => {
   };
 
   const handleSearch = () => {
-    const canSearch = startStation && endStation && startDay && startStation !== endStation;
+    const canSearch =
+      startStation && endStation && startDay && startStation !== endStation;
     const hasNetworkError = error === 'Network Error';
 
     if (canSearch && !hasNetworkError) {
@@ -65,7 +72,10 @@ export const usePCHomePage = () => {
   };
 
   const isSearchDisabled =
-    !startStationForView || !endStationForView || !startDayForView || adult + kid === 0;
+    !startStationForView ||
+    !endStationForView ||
+    !startDayForView ||
+    adult + kid === 0;
 
   return {
     openDropdown,
@@ -79,5 +89,7 @@ export const usePCHomePage = () => {
     handleSwap,
     handleSearch,
     isSearchDisabled,
+    selectedDestination,
+    setSelectedDestination,
   };
 };

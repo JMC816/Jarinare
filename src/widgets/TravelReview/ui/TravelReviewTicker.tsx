@@ -7,10 +7,10 @@ import { useDestinationRatings } from '@/features/TravelReview/hooks/useDestinat
 import { useTravelReviewTicker } from '../hooks/useTravelReviewTicker';
 import StarRating from '@/shared/ui/StarRating';
 
-const TravelReviewTicker = () => {
+const TravelReviewTicker = ({ title = '여행지 후기' }: { title?: string }) => {
   const navigate = useNavigate();
   const { summaries, isLoaded } = useDestinationRatings();
-  const { tickerItems } = useTravelReviewTicker(summaries);
+  const { tickerItems, loopItems } = useTravelReviewTicker(summaries);
 
   if (!isLoaded) {
     return (
@@ -23,7 +23,7 @@ const TravelReviewTicker = () => {
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="h-[100px] w-[140px] shrink-0 animate-pulse rounded-2xl bg-gray-200"
+              className="h-[100px] w-[220px] shrink-0 animate-pulse rounded-2xl bg-gray-200"
             />
           ))}
         </div>
@@ -35,7 +35,7 @@ const TravelReviewTicker = () => {
     return (
       <div className="px-4 py-2">
         <div className="mb-2 flex items-center justify-between px-1">
-          <p className="text-sm font-bold text-gray-800">여행지 후기</p>
+          <p className="text-sm font-bold text-gray-800">{title}</p>
           <button
             onClick={() => navigate('/travel/review/list')}
             className="text-xs text-blue underline"
@@ -55,35 +55,47 @@ const TravelReviewTicker = () => {
     );
   }
 
-  // 4개 미만이면 빈 슬롯을 "작성 유도" 카드로 채움
-  const TICKER_COUNT = 4;
-  const emptyCount = TICKER_COUNT - tickerItems.length;
-  const filledItems = [
-    ...tickerItems,
-    ...Array.from({ length: emptyCount }, (_, i) => ({
-      city: `__empty_${i}` as const,
-      averageRating: 0,
-      reviewCount: -1,
-    })),
-  ];
-
-  // 무한 반복을 위해 아이템 복제
-  const loopItems = [...filledItems, ...filledItems];
-
   return (
-    <div className="px-4 py-2">
-      <div className="mb-2 flex items-center justify-between px-1">
-        <p className="text-sm font-bold text-gray-800">여행지 후기</p>
+    <div className="py-4">
+      <div className="mb-4 flex items-center justify-between pr-2">
+        <div className="flex items-center gap-2">
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#2563eb"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <p className="text-lg font-bold text-gray-800">{title}</p>
+        </div>
         <button
           onClick={() => navigate('/travel/review/list')}
-          className="text-xs text-blue underline"
+          className="flex items-center gap-0.5 text-xs text-gray-400 hover:text-gray-600"
         >
           더보기
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </button>
       </div>
       <div className="overflow-hidden">
         <div
-          className="flex gap-3"
+          className="flex gap-4"
           style={{
             animation: `ticker ${tickerItems.length * 8}s linear infinite`,
             width: `max-content`,
@@ -94,8 +106,8 @@ const TravelReviewTicker = () => {
               <div
                 key={`${city}-${idx}`}
                 onClick={() => navigate('/travel/review/list')}
-                className="flex w-[140px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-2xl bg-white p-3 shadow-sm active:brightness-90"
-                style={{ height: '100px' }}
+                className="flex w-[220px] shrink-0 cursor-pointer flex-col items-center justify-center rounded-2xl bg-white p-3 shadow-sm active:brightness-90"
+                style={{ height: '110px' }}
               >
                 <span className="text-lg">✍️</span>
                 <span className="mt-1 text-center text-[10px] text-gray-400">
@@ -106,17 +118,34 @@ const TravelReviewTicker = () => {
               <div
                 key={`${city}-${idx}`}
                 onClick={() => navigate('/travel/review', { state: { city } })}
-                className="flex w-[140px] shrink-0 cursor-pointer flex-col justify-between rounded-2xl bg-white p-3 shadow-sm active:brightness-90"
-                style={{ height: '100px' }}
+                className="flex w-[220px] shrink-0 cursor-pointer flex-col justify-between rounded-2xl bg-white px-4 py-3.5 shadow-sm active:brightness-90"
+                style={{ height: '110px' }}
               >
-                <span className="text-[10px] font-bold text-gray-400">
-                  후기 {reviewCount}개
-                </span>
-                <div className="flex flex-col gap-y-0.5">
-                  <span className="text-sm font-bold text-gray-800">
+                <div className="flex items-center justify-between">
+                  <span className="rounded-md bg-gray-100 px-1.5 py-0.5 text-[9px] font-bold text-gray-400">
+                    후기 {reviewCount}개
+                  </span>
+                  <span className="flex items-center gap-0.5 rounded-md bg-yellow-50 px-1.5 py-0.5 text-[9px] font-bold">
+                    <svg
+                      width="9"
+                      height="9"
+                      viewBox="0 0 24 24"
+                      fill="#eab308"
+                      stroke="#eab308"
+                      strokeWidth="1"
+                    >
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    <span className="text-gray-800">
+                      {averageRating.toFixed(1)}
+                    </span>
+                  </span>
+                </div>
+                <div className="flex flex-col gap-y-1.5">
+                  <span className="text-xl font-semibold text-gray-800">
                     {city}
                   </span>
-                  <StarRating rating={averageRating} showValue />
+                  <StarRating rating={averageRating} />
                 </div>
               </div>
             ),

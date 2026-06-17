@@ -1,10 +1,23 @@
-import { DestinationItem } from '../types/RecommendDestinationType';
+/**
+ * @role: widgets — 추천 여행지 상수 정의
+ * @rule: 상수 정의만 담당
+ */
+import { Category, DestinationItem } from '../types/RecommendDestinationType';
 import busan from '@/assets/background/부산.png';
 import gyeongju from '@/assets/background/경주.png';
 import jeonju from '@/assets/background/전주.png';
 import chuncheon from '@/assets/background/춘천.png';
 import gangneung from '@/assets/background/강릉.png';
 import yeosu from '@/assets/background/여수.png';
+
+export const CATEGORIES: Category[] = [
+  '전체',
+  '바다',
+  '역사',
+  '맛집',
+  '자연',
+  '야경',
+];
 
 export const AGES = ['10대', '20대', '30대', '40대', '50대', '60대+'];
 

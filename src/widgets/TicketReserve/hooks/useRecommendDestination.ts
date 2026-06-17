@@ -4,8 +4,8 @@
  */
 import { useState } from 'react';
 import { useTravelStatic } from './useTravelStatic';
-import { CATEGORIES, Category } from '../types/RecommendDestinationType';
-import { DESTINATIONS } from '../constants/RecommendConstants';
+import { Category } from '../types/RecommendDestinationType';
+import { CATEGORIES, DESTINATIONS } from '../constants/RecommendConstants';
 
 export const useRecommendDestination = () => {
   const [selected, setSelected] = useState<Category>('전체');

@@ -1,3 +1,28 @@
+/**
+ * @role: features — 게시판 도메인 타입 정의
+ * @rule: 타입·인터페이스 정의만 담당
+ */
+export interface LatestPost {
+  title: string;
+  content: string;
+  author: string;
+  viewCount: number;
+  createdAt: number;
+}
+
+export interface LatestPosts {
+  notice: LatestPost | null;
+  event: LatestPost | null;
+  board: LatestPost | null;
+  board2: LatestPost | null;
+}
+
+export interface BoardCounts {
+  notice: number;
+  event: number;
+  board: number;
+}
+
 export type BoardType = {
   onAuthorChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

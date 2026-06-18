@@ -3,6 +3,25 @@
  * @rule: 상수 정의만 담당
  */
 
+// CITY_ROUTES에 등장하는 역 중 ID가 알려진 역 (나머지는 stations 데이터로 룩업)
+export const KNOWN_STATION_IDS: Record<string, string> = {
+  서울: 'NAT010000',
+  대전: 'NAT011668',
+  동대구: 'NAT013271',
+  부산: 'NAT014445',
+  천안아산: 'NATH10960',
+  오송: 'NAT050044',
+};
+
+export const CITY_STATION_MAP: Record<string, string> = {
+  부산: '부산',
+  경주: '신경주',
+  전주: '전주',
+  강릉: '강릉',
+  여수: '여수EXPO',
+  춘천: '춘천',
+};
+
 export const CITY_HIGHLIGHTS: Record<
   string,
   { emoji: string; title: string; desc: string }[]

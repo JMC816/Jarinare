@@ -4,10 +4,9 @@
  */
 import { createPortal } from 'react-dom';
 import type { DestinationItem } from '../types/RecommendDestinationType';
-import {
-  CITY_HIGHLIGHTS,
-  CITY_ROUTES,
-} from '../constants/PCDestinationConstants';
+import { CITY_HIGHLIGHTS } from '../constants/PCDestinationConstants';
+import { usePCDestinationModal } from '../hooks/usePCDestinationModal';
+import { formatTimeView } from '@/shared/lib/formatDate';
 
 interface Props {
   destination: DestinationItem;
@@ -17,7 +16,20 @@ interface Props {
 const PCDestinationModal = ({ destination, onClose }: Props) => {
   const { city, desc, image, gradient } = destination;
   const highlights = CITY_HIGHLIGHTS[city] ?? [];
-  const routes = CITY_ROUTES[city] ?? [];
+  const {
+    legTrains,
+    handleTrainSelect,
+    destStationName,
+    selectedDepartureName,
+    searchQuery,
+    setSearchQuery,
+    suggestions,
+    handleSelectSuggestion,
+    dateOptions,
+    selectedDate,
+    setSelectedDate,
+    selectedDateLabel,
+  } = usePCDestinationModal(city);
 
   return createPortal(
     <div
@@ -102,7 +114,7 @@ const PCDestinationModal = ({ destination, onClose }: Props) => {
             </div>
           </div>
 
-          {/* 루트 */}
+          {/* 열차 조회 */}
           <div className="px-6 py-5">
             <div className="mb-4 flex items-center gap-2">
               <div className="flex h-7 w-7 items-center justify-center rounded-md bg-lightBlue">
@@ -123,54 +135,228 @@ const PCDestinationModal = ({ destination, onClose }: Props) => {
                   <path d="M7 12h2M15 12h2" />
                 </svg>
               </div>
-              <h3 className="text-base font-bold text-gray-800">
-                {city}으로 가는 루트
-              </h3>
+              <div>
+                <h3 className="text-base font-bold text-gray-800">
+                  구간별 실시간 열차
+                </h3>
+                <p className="text-xs text-gray-400">
+                  {selectedDateLabel} 기준
+                </p>
+              </div>
             </div>
 
-            <div className="flex flex-col gap-2">
-              {routes.map(({ from, to, time, fare, train }) => (
-                <div
-                  key={`${from}-${to}`}
-                  className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3"
+            {/* 출발지 검색 */}
+            <div className="relative mb-3">
+              <p className="mb-1.5 text-xs font-bold text-gray-400">
+                출발지 검색
+              </p>
+              <div className="relative">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="rounded-md bg-lightBlue px-2 py-0.5 text-xs font-bold text-blue">
-                      {train}
-                    </span>
-                    <span className="text-sm font-bold text-gray-800">
-                      {from}
-                    </span>
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#d1d5db"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="출발역 이름 검색 (예: 서울, 대전)"
+                  className="w-full rounded-xl border border-gray-200 bg-gray-50 py-2.5 pl-9 pr-4 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue focus:bg-white"
+                />
+              </div>
+              {/* 자동완성 드롭다운 */}
+              {suggestions.length > 0 && (
+                <div className="absolute z-10 mt-1 w-full overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
+                  {suggestions.map((s) => (
+                    <button
+                      key={s.nodeid}
+                      onClick={() => handleSelectSuggestion(s.nodename)}
+                      className="flex w-full items-center px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-lightBlue"
                     >
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
-                    </svg>
-                    <span className="text-sm font-bold text-gray-800">
-                      {to}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <span className="text-xs font-semibold text-gray-700">
-                      {time}
-                    </span>
-                    <span className="text-xs text-gray-400">{fare}</span>
-                  </div>
+                      {s.nodename}
+                    </button>
+                  ))}
                 </div>
+              )}
+            </div>
+
+            {/* 날짜 선택 */}
+            <div className="mb-5 flex gap-1.5 overflow-x-auto pb-1">
+              {dateOptions.map(({ date, label, isToday }) => (
+                <button
+                  key={date}
+                  onClick={() => setSelectedDate(date)}
+                  className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors ${
+                    selectedDate === date
+                      ? 'bg-blue text-white'
+                      : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                  }`}
+                >
+                  {isToday ? '오늘' : label.slice(0, label.indexOf('(') - 1)}
+                </button>
               ))}
             </div>
 
-            <p className="mt-4 text-[11px] text-gray-400">
-              * 요금은 평일 기준 예시이며 실제 발권 시 달라질 수 있습니다.
-            </p>
+            {/* 구간별 열차 목록 */}
+            {!selectedDepartureName ? (
+              <div className="flex flex-col items-center gap-2 py-8 text-center">
+                <svg
+                  width="28"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#d1d5db"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <p className="text-sm font-bold text-gray-400">
+                  출발역을 검색해주세요
+                </p>
+              </div>
+            ) : legTrains.length === 0 ? (
+              <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#d1d5db"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="2.5" />
+                </svg>
+                <p className="text-xs font-bold text-gray-400">
+                  해당 출발역에서 {destStationName}까지의 경로가 없습니다
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-6">
+                {legTrains.map(({ leg, nextTrain, isFetching }, i) => (
+                  <div key={i}>
+                    {/* 구간 헤더 */}
+                    <div className="mb-2 flex items-center gap-1.5">
+                      <span className="text-sm font-bold text-gray-800">
+                        {leg.from}
+                      </span>
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#9ca3af"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                      <span className="text-sm font-bold text-gray-800">
+                        {leg.to}
+                      </span>
+                      <span className="rounded bg-lightBlue px-1.5 py-0.5 text-[10px] font-bold text-blue">
+                        {leg.train}
+                      </span>
+                    </div>
+
+                    {/* 다음 열차 */}
+                    {isFetching ? (
+                      <div className="h-12 animate-pulse rounded-xl bg-gray-100" />
+                    ) : nextTrain === null ? (
+                      <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#d1d5db"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line
+                            x1="12"
+                            y1="16"
+                            x2="12.01"
+                            y2="16"
+                            strokeWidth="2.5"
+                          />
+                        </svg>
+                        <p className="text-xs font-bold text-gray-400">
+                          조회된 열차가 없습니다
+                        </p>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleTrainSelect(nextTrain, leg)}
+                        disabled={nextTrain.adultcharge === 0}
+                        className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors ${
+                          nextTrain.adultcharge === 0
+                            ? 'cursor-not-allowed bg-gray-50 opacity-50'
+                            : 'bg-gray-50 hover:bg-lightBlue'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="rounded-md bg-lightBlue px-2 py-0.5 text-xs font-bold text-blue">
+                            {nextTrain.traingradename}
+                          </span>
+                          <span className="text-sm font-bold text-gray-800">
+                            {formatTimeView(String(nextTrain.depplandtime))}
+                          </span>
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#d1d5db"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
+                          </svg>
+                          <span className="text-sm font-bold text-gray-800">
+                            {formatTimeView(String(nextTrain.arrplandtime))}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs text-gray-400">
+                            {nextTrain.adultcharge === 0
+                              ? '매진'
+                              : `${nextTrain.adultcharge.toLocaleString('ko-KR')}원`}
+                          </span>
+                          {nextTrain.adultcharge > 0 && (
+                            <span className="text-xs font-bold text-blue">
+                              좌석 선택 →
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

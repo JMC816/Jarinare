@@ -45,7 +45,7 @@ const PCBoardPage = () => {
           className="relative min-w-0 flex-1 overflow-y-auto overflow-x-hidden"
           style={{ height: 'calc(100vh - 3.5rem)' }}
         >
-          <div className="px-64 pb-16 pt-10">
+          <div className="px-16 pb-16 pt-10">
             <div className="mb-6 flex items-start justify-between">
               <div>
                 <h1 className="text-2xl font-black text-gray-900">

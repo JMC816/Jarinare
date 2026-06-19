@@ -29,18 +29,21 @@ import {
   runTransaction,
   get,
 } from 'firebase/database';
-import { getCachedAllSeats, useAllSeatsInfo } from './useAllSeatsInfo';
+import {
+  getCachedAllSeats,
+  useAllSeatsInfo,
+  clearAllSeatsCache,
+  prefetchAllSeats,
+} from './useAllSeatsInfo';
 
 export const useSeatQueryData = () => {
   const {
     startDay,
     trainNo,
     selectStartTime,
-    selectEndTime,
     selectTrainType,
     selectAdult,
     selectKid,
-    startDayForView,
     startStationForView,
     endStationForView,
   } = trainDataStore();
@@ -68,6 +71,11 @@ export const useSeatQueryData = () => {
 
   // 선택된 좌석 수
   const selectedCount = Object.values(seatsState).filter(Boolean).length;
+
+  // docIds가 바뀌면 이전 구간의 잔류 좌석 데이터 초기화
+  useEffect(() => {
+    setSeatsInfo([]);
+  }, [docIds]);
 
   // 각 호차별 실시간 좌석 상태
   useEffect(() => {
@@ -567,39 +575,79 @@ export const useSeatQueryData = () => {
     if (isMutating) return;
     setIsMutating(true);
 
-    const filtered = Object.entries(seatsState)
+    // 좌석페이지 진입 후 결제 버튼 클릭 시 타이밍으로안해 빈 값이 들어올 수 있으므로 getState로 즉시 호출
+    const currentSeatsState = seatsStateStore.getState().seatsState;
+    const filtered = Object.entries(currentSeatsState)
       .filter(([, value]) => value === true)
       .map(([key]) => key);
+
+    // 선택된 좌석 없으면 저장하지 않음
+    if (filtered.length === 0) {
+      setIsMutating(false);
+      return;
+    }
+
+    const {
+      startDay: currentStartDay,
+      selectStartTime: currentSelectStartTime,
+      selectEndTime: currentSelectEndTime,
+      selectTrainType: currentSelectTrainType,
+      trainNo: currentTrainNo,
+      startDayForView: currentStartDayForView,
+      startStationForView: currentStartStationForView,
+      endStationForView: currentEndStationForView,
+      selectKid: currentSelectKid,
+      selectAdult: currentSelectAdult,
+    } = trainDataStore.getState();
+
+    const currentDocIds = `${currentStartDay}_${currentSelectStartTime}_${currentSelectTrainType}_${currentStartStationForView}_${currentEndStationForView}`;
 
     try {
       await Promise.all(
         filtered.map((seatId) =>
-          setDoc(doc(db, 'train', docIds, 'no', trainNo, 'seats', seatId), {
-            userId: user.uid,
-            seatId,
-            trainNoId: trainNo,
-            startDay,
-            startTime: selectStartTime,
-            endTime: selectEndTime,
-            trainType: selectTrainType,
-            createAt: serverTimestamp(),
-            startDayForView,
-            startStationForView,
-            endStationForView,
-            selectKid,
-            selectAdult,
-            selectPay: calculatedPay,
-            id: docIds,
-          }),
+          setDoc(
+            doc(
+              db,
+              'train',
+              currentDocIds,
+              'no',
+              currentTrainNo,
+              'seats',
+              seatId,
+            ),
+            {
+              userId: user.uid,
+              seatId,
+              trainNoId: currentTrainNo,
+              startDay: currentStartDay,
+              startTime: currentSelectStartTime,
+              endTime: currentSelectEndTime,
+              trainType: currentSelectTrainType,
+              createAt: serverTimestamp(),
+              startDayForView: currentStartDayForView,
+              startStationForView: currentStartStationForView,
+              endStationForView: currentEndStationForView,
+              selectKid: currentSelectKid,
+              selectAdult: currentSelectAdult,
+              selectPay: calculatedPay,
+              id: currentDocIds,
+            },
+          ),
         ),
       );
 
-      await setDoc(doc(db, 'train', docIds), { id: docIds });
+      await setDoc(doc(db, 'train', currentDocIds), { id: currentDocIds });
 
       // 좌석 상태 초기화
       // lock은 해제하지 않음 - seatsInfo에 데이터가 있으면 isOther가 true가 되어 회색으로 표시되므로 lock이 없어도 문제없음
       // lock을 해제하면 상대방 화면에서 seatsInfo가 업데이트되기 전에 lock이 사라져 흰색으로 보일 수 있음
       setSeatsState({});
+      // seatsStateCount도 즉시 0으로 리셋 — unmount 타이밍에 effect가 돌지 않아 잔류하는 것 방지
+      setSeatsStateCount(0);
+
+      // 예매 완료 후 캐시 갱신 — 홈·내 승차권에 새 티켓 즉시 반영
+      clearAllSeatsCache();
+      await prefetchAllSeats();
 
       navigate('/');
     } catch (e) {

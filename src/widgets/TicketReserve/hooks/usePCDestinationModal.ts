@@ -16,7 +16,6 @@ import {
 import {
   CITY_STATION_MAP,
   CITY_ROUTES,
-  KNOWN_STATION_IDS,
 } from '../constants/PCDestinationConstants';
 import type { TrainTimeProps } from '@/features/TicketReserve/types/stationType';
 
@@ -63,7 +62,6 @@ export const usePCDestinationModal = (city: string) => {
     setSelectKid,
     setSelectPay,
     setTrainNo,
-    setAdult,
   } = trainDataStore();
 
   const { data: stations = [] } = useQuery({
@@ -81,7 +79,6 @@ export const usePCDestinationModal = (city: string) => {
   }, [searchQuery, stations]);
 
   const findStationId = (name: string): string | undefined => {
-    if (KNOWN_STATION_IDS[name]) return KNOWN_STATION_IDS[name];
     return stations.find(
       (s) =>
         s.nodename === name ||
@@ -144,11 +141,10 @@ export const usePCDestinationModal = (city: string) => {
     train: TrainTimeProps[number],
     leg: { from: string; to: string },
   ) => {
+    if (adult + kid === 0) return;
     const fromId = findStationId(leg.from);
     const toId = findStationId(leg.to);
     if (!fromId || !toId) return;
-
-    const currentAdult = adult > 0 ? adult : 1;
 
     setStartStation(fromId);
     setEndStation(toId);
@@ -159,13 +155,12 @@ export const usePCDestinationModal = (city: string) => {
     setSelectStartTime(train.depplandtime);
     setSelectEndTime(train.arrplandtime);
     setSelectTrainType(`${train.traingradename}-${train.trainno}`);
-    setTrainNo(String(train.trainno));
-    setAdult(currentAdult);
-    setSelectAdult(currentAdult);
+    setTrainNo('1');
+    setSelectAdult(adult);
     setSelectKid(kid);
     setSelectPay(train.adultcharge);
 
-    navigate('/reserve/seatCheck');
+    navigate('/reserve/seatcheck');
   };
 
   const handleSelectSuggestion = (name: string) => {

@@ -84,11 +84,11 @@ export const clearAllSeatsCache = () => {
 
 export const useAllSeatsInfo = (onUpdate: (seats: SeatType[]) => void) => {
   useEffect(() => {
-    // 이미 캐시된 데이터가 있으면 즉시 반환
+    // 캐시된 데이터가 있으면 즉시 반영
     if (cachedSeatsAllInfo.length > 0) {
       onUpdate(cachedSeatsAllInfo);
-      return;
     }
+    // 항상 listener 등록 — 이후 prefetchAllSeats 완료 시 업데이트 수신
     listeners.push(onUpdate);
     return () => {
       const idx = listeners.indexOf(onUpdate);

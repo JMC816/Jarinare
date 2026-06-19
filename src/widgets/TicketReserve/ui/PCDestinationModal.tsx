@@ -7,6 +7,9 @@ import type { DestinationItem } from '../types/RecommendDestinationType';
 import { CITY_HIGHLIGHTS } from '../constants/PCDestinationConstants';
 import { usePCDestinationModal } from '../hooks/usePCDestinationModal';
 import { formatTimeView } from '@/shared/lib/formatDate';
+import { CountAdultButton } from './CountAdultButton';
+import { CountKidButton } from './CountKidButton';
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 
 interface Props {
   destination: DestinationItem;
@@ -16,6 +19,7 @@ interface Props {
 const PCDestinationModal = ({ destination, onClose }: Props) => {
   const { city, desc, image, gradient } = destination;
   const highlights = CITY_HIGHLIGHTS[city] ?? [];
+  const { adult, kid } = trainDataStore();
   const {
     legTrains,
     handleTrainSelect,
@@ -189,6 +193,31 @@ const PCDestinationModal = ({ destination, onClose }: Props) => {
               )}
             </div>
 
+            {/* 인원 선택 */}
+            <div className="mb-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+              <p className="mb-2 text-xs font-bold text-gray-400">인원</p>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-gray-700">
+                    어른
+                    {adult > 0 && (
+                      <span className="ml-1.5 text-blue">{adult}명</span>
+                    )}
+                  </span>
+                  <CountAdultButton />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold text-gray-700">
+                    어린이
+                    {kid > 0 && (
+                      <span className="ml-1.5 text-blue">{kid}명</span>
+                    )}
+                  </span>
+                  <CountKidButton />
+                </div>
+              </div>
+            </div>
+
             {/* 날짜 선택 */}
             <div className="mb-5 flex gap-1.5 overflow-x-auto pb-1">
               {dateOptions.map(({ date, label, isToday }) => (
@@ -207,7 +236,27 @@ const PCDestinationModal = ({ destination, onClose }: Props) => {
             </div>
 
             {/* 구간별 열차 목록 */}
-            {!selectedDepartureName ? (
+            {adult + kid === 0 ? (
+              <div className="flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-3">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#f59e0b"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="2.5" />
+                </svg>
+                <p className="text-xs font-bold text-amber-600">
+                  인원을 먼저 선택해주세요
+                </p>
+              </div>
+            ) : !selectedDepartureName ? (
               <div className="flex flex-col items-center gap-2 py-8 text-center">
                 <svg
                   width="28"

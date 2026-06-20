@@ -52,8 +52,8 @@ const PCTicketListPage = () => {
 
             <div className="flex flex-col gap-6">
               {/* 카드 1: 승차권 목록 */}
-              <div className="min-h-[420px] rounded-xl bg-white p-6 shadow-sm">
-                {isEmpty ? (
+              {isEmpty ? (
+                <div className="min-h-[420px] rounded-xl bg-white p-6 shadow-sm">
                   <div className="flex flex-col items-center justify-center py-16">
                     {/* 가방 + 플러스 아이콘 */}
                     <div className="mb-6 flex h-32 w-32 items-center justify-center rounded-full bg-lightBlue">
@@ -67,11 +67,8 @@ const PCTicketListPage = () => {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       >
-                        {/* 가방 손잡이 */}
                         <path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2" />
-                        {/* 가방 몸통 */}
                         <rect x="3" y="7" width="18" height="14" rx="2" />
-                        {/* 가방 안 + */}
                         <line x1="12" y1="11" x2="12" y2="17" strokeWidth="2" />
                         <line x1="9" y1="14" x2="15" y2="14" strokeWidth="2" />
                       </svg>
@@ -104,12 +101,42 @@ const PCTicketListPage = () => {
                       </svg>
                     </button>
                   </div>
-                ) : (
-                  <div className="flex flex-col gap-4">
-                    <MiniTicket />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  <MiniTicket variant="pc" />
+                  <div className="rounded-xl bg-white px-6 py-6 shadow-sm">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <p className="font-black text-gray-800">
+                        아직 예매한 승차권이 없어요
+                      </p>
+                      <p className="text-center text-sm leading-relaxed text-gray-400">
+                        다가오는 여행 계획이 있으신가요? 빠르고 편안한 JARINARE
+                        고속철도로 여행을 시작해보세요
+                      </p>
+                      <button
+                        onClick={() => navigate('/')}
+                        className="mt-2 flex items-center gap-2 rounded-full bg-blue px-6 py-2 text-sm font-bold text-white transition-colors hover:bg-blue/90"
+                      >
+                        승차권 예매하기
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="white"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* 카드 2 + 카드 3: 수평 나열 */}
               <div className="grid grid-cols-2 gap-6">

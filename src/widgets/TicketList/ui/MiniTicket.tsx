@@ -1,26 +1,99 @@
-import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
-import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
-import { useNavigation } from '../hooks/useNavigation';
-import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+/**
+ * @role: widgets/TicketList — ui
+ * @rule: 렌더링만 담당, 상태·로직 포함 금지
+ */
+import { useMiniTicket } from '../hooks/useMiniTicket';
+import { MiniTicketVariantProps } from '../types/MiniTicketType';
 
-const calcDuration = (start: number, end: number) => {
-  const sh = parseInt(String(start).substring(8, 10));
-  const sm = parseInt(String(start).substring(10, 12));
-  const eh = parseInt(String(end).substring(8, 10));
-  const em = parseInt(String(end).substring(10, 12));
-  let diff = eh * 60 + em - (sh * 60 + sm);
-  if (diff < 0) diff += 24 * 60;
-  if (diff >= 60) return `${Math.floor(diff / 60)}시간 ${diff % 60 > 0 ? `${diff % 60}분` : ''}`;
-  return `${diff}분`;
-};
+// @role: ui — QR 코드 플레이스홀더 SVG
+const QRCodePlaceholder = () => (
+  <svg
+    viewBox="0 0 25 25"
+    className="h-full w-full text-gray-900"
+    fill="currentColor"
+  >
+    <rect
+      x="1"
+      y="1"
+      width="7"
+      height="7"
+      rx="1"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+    />
+    <rect x="2.5" y="2.5" width="4" height="4" />
+    <rect
+      x="17"
+      y="1"
+      width="7"
+      height="7"
+      rx="1"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+    />
+    <rect x="18.5" y="2.5" width="4" height="4" />
+    <rect
+      x="1"
+      y="17"
+      width="7"
+      height="7"
+      rx="1"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+    />
+    <rect x="2.5" y="18.5" width="4" height="4" />
+    <rect x="9" y="6" width="1.5" height="1.5" />
+    <rect x="11" y="6" width="1.5" height="1.5" />
+    <rect x="13" y="6" width="1.5" height="1.5" />
+    <rect x="6" y="9" width="1.5" height="1.5" />
+    <rect x="6" y="11" width="1.5" height="1.5" />
+    <rect x="6" y="13" width="1.5" height="1.5" />
+    <rect x="9" y="9" width="1.5" height="1.5" />
+    <rect x="12" y="9" width="1.5" height="1.5" />
+    <rect x="14" y="9" width="3" height="1.5" />
+    <rect x="9" y="12" width="3" height="1.5" />
+    <rect x="14" y="12" width="1.5" height="1.5" />
+    <rect x="9" y="14" width="1.5" height="3" />
+    <rect x="12" y="14" width="3" height="1.5" />
+    <rect x="17" y="9" width="1.5" height="3" />
+    <rect x="20" y="9" width="3" height="1.5" />
+    <rect x="20" y="12" width="1.5" height="1.5" />
+    <rect x="17" y="14" width="3" height="1.5" />
+    <rect x="22" y="14" width="1.5" height="1.5" />
+    <rect x="9" y="17" width="3" height="1.5" />
+    <rect x="14" y="17" width="1.5" height="3" />
+    <rect x="17" y="17" width="1.5" height="1.5" />
+    <rect x="20" y="17" width="1.5" height="3" />
+    <rect x="9" y="20" width="1.5" height="3" />
+    <rect x="12" y="20" width="3" height="1.5" />
+    <rect x="17" y="22" width="3" height="1.5" />
+    <rect x="22" y="20" width="1.5" height="3" />
+  </svg>
+);
 
-const MiniTicket = () => {
-  const { groupedArray } = useTicketLists() ?? {};
-  const { navigate } = useNavigation();
-  const { setStartDay, setSelectStartTime, setSelectTrainType, setSeatsId, setTrainNo } =
-    trainDataStore();
+// @role: ui — 구간 연결 화살표 SVG
+const ArrowIcon = ({ className }: { className: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    viewBox="0 0 24 24"
+  >
+    <line x1="2" y1="12" x2="20" y2="12" />
+    <polyline points="14 6 20 12 14 18" />
+  </svg>
+);
 
-  if (!groupedArray || groupedArray.length === 0) {
+const MiniTicket = ({ variant }: MiniTicketVariantProps) => {
+  const { items, isEmpty } = useMiniTicket();
+
+  if (isEmpty) {
     return (
       <div className="flex h-[100px] w-full flex-col items-center justify-center rounded-lg bg-white shadow-sm">
         <span>🗒️</span>
@@ -31,84 +104,225 @@ const MiniTicket = () => {
 
   return (
     <>
-      {groupedArray.map((groups, idx) => {
-        const ticket = groups[0];
-        const passengerCount = groups.length;
-
-        const trainTypeName = (() => {
-          const parts = ticket.trainType.split('-');
-          const first = parts[0];
-          const namePart = parts[1]?.split('(')[0] ?? '';
-          return namePart ? `${first} ${namePart}` : first;
-        })();
-
-        const startLabel =
-          formatAM_PM(String(ticket.startTime)) < 12
-            ? `오전 ${formatTimeView(String(ticket.startTime))}`
-            : `오후 ${formatTimeView(String(ticket.startTime))}`;
-
-        const endLabel =
-          formatAM_PM(String(ticket.endTime)) < 12
-            ? `오전 ${formatTimeView(String(ticket.endTime))}`
-            : `오후 ${formatTimeView(String(ticket.endTime))}`;
-
-        const duration = calcDuration(ticket.startTime, ticket.endTime);
-
-        return (
-          <div key={idx} className="w-full overflow-hidden rounded-lg bg-white shadow-md">
-            {/* 상단 */}
-            <div className="flex flex-col gap-4 px-5 py-4">
-              <div className="flex items-center justify-between">
-                <span className="rounded bg-lightBlue px-2 py-0.5 text-xs font-semibold text-blue">
-                  {trainTypeName}
-                </span>
-                <span className="text-xs text-gray-400">{ticket.startDayForView}</span>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-xl font-black text-black">{ticket.startStationForView}</span>
-                  <span className="text-xs text-darkGray">{startLabel}</span>
-                </div>
-
-                <div className="flex flex-1 flex-col items-center gap-1 px-3">
-                  <div className="flex w-full items-center">
-                    <div className="flex-1 border-t-2 border-dashed border-gray-300" />
-                    <span className="mx-2 inline-block -scale-x-100 text-xl">🚄</span>
-                    <div className="flex-1 border-t-2 border-dashed border-gray-300" />
-                  </div>
-                  <span className="text-[10px] text-darkGray">{duration}</span>
-                </div>
-
-                <div className="flex flex-col items-center gap-0.5">
-                  <span className="text-xl font-black text-black">{ticket.endStationForView}</span>
-                  <span className="text-xs text-darkGray">{endLabel}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 하단 회색 */}
-            <div className="flex items-center justify-between bg-gray-100 px-5 py-3">
-              <span className="text-sm font-semibold text-darkGray">
-                {passengerCount}명 · {trainTypeName}
-              </span>
-              <button
-                onClick={() => {
-                  navigate('/ticket/seatchange', { state: { groups } });
-                  setStartDay(ticket.startDay);
-                  setSelectStartTime(ticket.startTime);
-                  setSelectTrainType(ticket.trainType);
-                  setTrainNo(ticket.trainNoId);
-                  setSeatsId(groups.map((item) => item.seatId));
-                }}
-                className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-bold text-blue"
+      {items.map(
+        (
+          {
+            groups,
+            ticket,
+            trainTypeName,
+            startLabel,
+            endLabel,
+            startAmPm,
+            endAmPm,
+            dotDate,
+            koreanDate,
+            ticketNo,
+          },
+          idx,
+        ) => {
+          if (variant === 'pc') {
+            return (
+              <div
+                key={idx}
+                className="flex w-full overflow-hidden rounded-xl bg-white shadow-md"
+                style={{ minHeight: '420px' }}
               >
-                상세보기
-              </button>
+                {/* 티켓 정보 — 2/3 */}
+                <div className="flex flex-[2] flex-col justify-between p-8">
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-1">
+                      <span className="w-fit rounded bg-lightBlue px-2 py-0.5 text-xs font-bold text-blue">
+                        TRAIN
+                      </span>
+                      <span className="text-base font-semibold text-gray-800">
+                        {trainTypeName}
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-end gap-1">
+                      <span className="text-sm text-gray-400">DATE</span>
+                      <span className="text-base font-semibold text-gray-800">
+                        {dotDate}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {koreanDate}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col items-center gap-1.5">
+                      <span className="text-sm text-gray-400">출발역</span>
+                      <span className="text-5xl font-black text-black">
+                        {ticket.startStationForView}
+                      </span>
+                      <span className="text-base text-gray-600">
+                        {startAmPm} {startLabel}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-1 flex-col items-center gap-2 px-6">
+                      <div className="flex items-center">
+                        <div className="w-4 border-t-2 border-dashed border-gray-200" />
+                        <ArrowIcon className="mx-4 h-7 w-7 text-gray-400" />
+                        <div className="w-4 border-t-2 border-dashed border-gray-200" />
+                      </div>
+                      <span className="text-sm font-semibold text-gray-500">
+                        DIRECT
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col items-center gap-1.5">
+                      <span className="text-sm text-gray-400">도착역</span>
+                      <span className="text-5xl font-black text-black">
+                        {ticket.endStationForView}
+                      </span>
+                      <span className="text-base text-gray-600">
+                        {endAmPm} {endLabel}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-16">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-sm text-gray-400">DEPARTURE</span>
+                        <span className="text-2xl font-bold text-black">
+                          {startLabel}
+                        </span>
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-sm text-gray-400">ARRIVAL</span>
+                        <span className="text-2xl font-bold text-black">
+                          {endLabel}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end gap-0.5">
+                      <span className="text-sm text-gray-400">SEAT</span>
+                      <span className="text-xl font-bold text-blue">
+                        {groups.map((g) => g.seatId).join(', ')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 구분선 */}
+                <div className="border-l border-dashed border-gray-200" />
+
+                {/* QR 코드 — 1/3 */}
+                <div className="flex flex-1 flex-col items-center justify-center gap-4 bg-white px-6 py-8">
+                  <span className="text-xs font-bold tracking-widest text-gray-400">
+                    BOARDING PASS
+                  </span>
+                  <div className="flex flex-col items-center rounded-2xl bg-white p-2 shadow-md">
+                    <div className="rounded-xl border-2 border-dashed border-gray-200 p-8">
+                      <div className="h-14 w-14">
+                        <QRCodePlaceholder />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs font-bold tracking-wider text-gray-400">
+                      TICKET NO.
+                    </p>
+                    <p className="mt-0.5 font-mono text-sm font-bold text-gray-800">
+                      {ticketNo}
+                    </p>
+                    <p className="mt-2 text-xs leading-relaxed text-gray-400">
+                      탑승전 QR코드를 준비해주세요.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          }
+
+          return (
+            <div
+              key={idx}
+              className="w-full overflow-hidden rounded-lg bg-white shadow-md"
+            >
+              {/* 상단 */}
+              <div className="flex flex-col gap-4 px-5 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="w-fit rounded bg-lightBlue px-2 py-0.5 text-xs font-bold text-blue">
+                      TRAIN
+                    </span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {trainTypeName}
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-end gap-0.5">
+                    <span className="text-xs text-gray-400">DATE</span>
+                    <span className="text-sm font-semibold text-gray-800">
+                      {dotDate}
+                    </span>
+                    <span className="text-xs text-gray-500">{koreanDate}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span className="text-xs text-gray-400">출발역</span>
+                    <span className="text-2xl font-black text-black">
+                      {ticket.startStationForView}
+                    </span>
+                    <span className="text-sm text-darkGray">
+                      {startAmPm} {startLabel}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-1 flex-col items-center gap-1 px-3">
+                    <div className="flex items-center">
+                      <div className="w-3 border-t-2 border-dashed border-gray-300" />
+                      <ArrowIcon className="mx-2 h-4 w-4 text-gray-400" />
+                      <div className="w-3 border-t-2 border-dashed border-gray-300" />
+                    </div>
+                    <span className="text-xs font-semibold text-gray-500">
+                      DIRECT
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span className="text-xs text-gray-400">도착역</span>
+                    <span className="text-2xl font-black text-black">
+                      {ticket.endStationForView}
+                    </span>
+                    <span className="text-sm text-darkGray">
+                      {endAmPm} {endLabel}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 하단 회색 */}
+              <div className="flex items-center justify-between bg-gray-100 px-5 py-3">
+                <div className="flex gap-10">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-xs text-gray-400">DEPARTURE</span>
+                    <span className="text-base font-bold text-black">
+                      {startLabel}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-xs text-gray-400">ARRIVAL</span>
+                    <span className="text-base font-bold text-black">
+                      {endLabel}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-0.5">
+                  <span className="text-xs text-gray-400">SEAT</span>
+                  <span className="text-base font-bold text-blue">
+                    {groups.map((g) => g.seatId).join(', ')}
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        },
+      )}
     </>
   );
 };

@@ -1,8 +1,18 @@
+import { useEffect } from 'react';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import MiniTicket from '@/widgets/TicketList/ui/MiniTicket';
 import PCTicketListPage from './PCTicketListPage';
+import {
+  clearAllSeatsCache,
+  prefetchAllSeats,
+} from '@/features/TicketReserve/hooks/useAllSeatsInfo';
 
 const TicketListPage = () => {
+  useEffect(() => {
+    clearAllSeatsCache();
+    prefetchAllSeats();
+  }, []);
+
   return (
     <>
       {/* PC 버전 */}

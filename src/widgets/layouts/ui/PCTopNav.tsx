@@ -15,9 +15,9 @@ const PCTopNav = ({ hasNotification }: PCTopNavProps) => {
     <nav className="sticky top-0 z-50 h-14 w-full border-b border-gray-200/50 bg-white/80 shadow-sm backdrop-blur-md">
       <div className="flex h-full w-full items-center justify-between px-10">
         {/* 브랜드 */}
-        <span className="text-2xl font-black tracking-tighter text-blue">
+        <Link to="/" className="text-2xl font-black tracking-tighter text-blue">
           JARINARE
-        </span>
+        </Link>
 
         {/* 아이콘 */}
         <div className="flex items-center gap-1">

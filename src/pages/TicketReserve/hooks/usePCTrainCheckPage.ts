@@ -81,7 +81,16 @@ export const usePCTrainCheckPage = () => {
     return d;
   });
 
-  const [selectedDate, setSelectedDate] = useState<Date>(today);
+  // 홈에서 선택한 날짜(startDay: "20260624")로 초기화, 없으면 오늘
+  const initialDate = startDay
+    ? new Date(
+        Number(startDay.substring(0, 4)),
+        Number(startDay.substring(4, 6)) - 1,
+        Number(startDay.substring(6, 8)),
+      )
+    : today;
+
+  const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
   const [allSeats, setAllSeats] = useState<SeatType[]>(getCachedAllSeats());
   useAllSeatsInfo((seats) => setAllSeats(seats));

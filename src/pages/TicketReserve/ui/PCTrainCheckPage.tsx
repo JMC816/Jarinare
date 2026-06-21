@@ -4,7 +4,7 @@
  */
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
-import SkeletonScreen from '@/widgets/layouts/ui/SkeletonScreen';
+import PCSkeletonScreen from '@/widgets/layouts/ui/PCSkeletonScreen';
 import { formatTimeView } from '@/shared/lib/formatDate';
 import { usePCTrainCheckPage } from '../hooks/usePCTrainCheckPage';
 import {
@@ -208,7 +208,7 @@ const PCTrainCheckPage = () => {
               {/* 하단: 열차 선택 */}
               <div className="flex flex-col bg-gray-50 px-6 py-5">
                 {isFetching ? (
-                  <SkeletonScreen />
+                  <PCSkeletonScreen />
                 ) : trains.length === 0 ? (
                   <div className="flex h-32 items-center justify-center">
                     <span className="text-sm text-gray-400">

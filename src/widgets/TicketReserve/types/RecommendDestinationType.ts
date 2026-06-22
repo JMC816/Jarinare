@@ -12,3 +12,8 @@ export interface DestinationItem {
   image?: string;
   emoji?: string;
 }
+
+export interface PCDestinationModalProps {
+  destination: DestinationItem;
+  onClose: () => void;
+}

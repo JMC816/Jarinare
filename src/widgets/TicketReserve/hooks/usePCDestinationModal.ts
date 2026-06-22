@@ -42,6 +42,10 @@ export const usePCDestinationModal = (city: string) => {
   const [selectedDate, setSelectedDate] = useState(dateOptions[0].date);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDepartureName, setSelectedDepartureName] = useState('');
+  const [pendingTrain, setPendingTrain] = useState<{
+    train: TrainTimeProps[number];
+    leg: { from: string; to: string };
+  } | null>(null);
 
   const selectedDateLabel =
     dateOptions.find((d) => d.date === selectedDate)?.label ?? '';
@@ -137,11 +141,16 @@ export const usePCDestinationModal = (city: string) => {
     return acc;
   }, []);
 
-  const handleTrainSelect = (
+  const handleTrainClick = (
     train: TrainTimeProps[number],
     leg: { from: string; to: string },
   ) => {
-    if (adult + kid === 0) return;
+    setPendingTrain((prev) => (prev?.train === train ? null : { train, leg }));
+  };
+
+  const handleConfirmPassengers = () => {
+    if (!pendingTrain || adult + kid === 0) return;
+    const { train, leg } = pendingTrain;
     const fromId = findStationId(leg.from);
     const toId = findStationId(leg.to);
     if (!fromId || !toId) return;
@@ -163,6 +172,8 @@ export const usePCDestinationModal = (city: string) => {
     navigate('/reserve/seatcheck');
   };
 
+  const handleClosePendingTrain = () => setPendingTrain(null);
+
   const handleSelectSuggestion = (name: string) => {
     setSelectedDepartureName(name);
     setSearchQuery('');
@@ -170,7 +181,10 @@ export const usePCDestinationModal = (city: string) => {
 
   return {
     legTrains,
-    handleTrainSelect,
+    handleTrainClick,
+    handleConfirmPassengers,
+    handleClosePendingTrain,
+    pendingTrain,
     destStationName,
     selectedDepartureName,
     searchQuery,
@@ -181,5 +195,7 @@ export const usePCDestinationModal = (city: string) => {
     selectedDate,
     setSelectedDate,
     selectedDateLabel,
+    adult,
+    kid,
   };
 };

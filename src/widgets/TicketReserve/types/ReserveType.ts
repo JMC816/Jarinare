@@ -64,3 +64,9 @@ export type SeatProps = {
   borderColor: string;
   onClick: (() => Promise<void>) | null;
 };
+
+export type PCSeatProps = {
+  bgColor: string;
+  onClick: (() => void) | null;
+  label: string;
+};

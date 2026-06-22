@@ -7,6 +7,8 @@ export const DAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
 
 export const TOTAL_SEATS = 24 * 4;
 
+export const SEATS_PER_CAR = 24;
+
 export const TRAIN_OPTIONS = [
   { id: '00', label: 'KTX' },
   { id: '01', label: '새마을호' },

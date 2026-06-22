@@ -9,6 +9,7 @@ import Modal from '@/widgets/TicketReserve/ui/Modal';
 import SeatCheckList from '@/widgets/TicketReserve/ui/SeatCheckList';
 import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';
 import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
+import PCSeatCheckPage from './PCSeatCheckPage';
 import { useEffect } from 'react';
 
 const SeatCheckPage = () => {
@@ -67,37 +68,47 @@ const SeatCheckPage = () => {
     seatsStateCount === 0 ? false : seatsStateCount <= selectKid + selectAdult;
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px]">
-      <BackWardPageButton title="좌석 선택" />
-      <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
-        <SeatCheckMenu />
-        <SeatCheckList />
-        <SeatCheckState />
+    <>
+      {/* PC 버전 */}
+      <div className="hidden w-full lg:block">
+        <PCSeatCheckPage />
       </div>
-      <div className="mt-4 flex w-full gap-3">
-        <button
-          onClick={isLocksLoaded && isAllLocked ? undefined : handleAllSelect}
-          className={`flex-1 rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
-            isLocksLoaded && isAllLocked
-              ? 'bg-gray-300'
-              : 'bg-blue active:brightness-95'
-          }`}
-        >
-          자동 선택
-        </button>
-        <button
-          onClick={isAllSelected ? () => openModal('PayModal') : undefined}
-          className={`flex-[2] rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
-            isAllSelected ? 'bg-blue active:brightness-95' : 'bg-gray-300'
-          }`}
-        >
-          {isAllSelected
-            ? '예매'
-            : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
-        </button>
+
+      {/* 모바일 버전 */}
+      <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
+        <BackWardPageButton title="좌석 선택" />
+        <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
+          <SeatCheckMenu />
+          <SeatCheckList />
+          <SeatCheckState />
+        </div>
+        <div className="mt-4 flex w-full gap-3">
+          <button
+            onClick={isLocksLoaded && isAllLocked ? undefined : handleAllSelect}
+            className={`flex-1 rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
+              isLocksLoaded && isAllLocked
+                ? 'bg-gray-300'
+                : 'bg-blue active:brightness-95'
+            }`}
+          >
+            자동 선택
+          </button>
+          <button
+            onClick={isAllSelected ? () => openModal('PayModal') : undefined}
+            className={`flex-[2] rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
+              isAllSelected ? 'bg-blue active:brightness-95' : 'bg-gray-300'
+            }`}
+          >
+            {isAllSelected
+              ? '예매'
+              : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
+          </button>
+        </div>
       </div>
+
+      {/* 공통 모달 */}
       {isShow == false || modalType == undefined ? null : <Modal />}
-    </div>
+    </>
   );
 };
 

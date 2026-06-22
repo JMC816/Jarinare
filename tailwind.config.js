@@ -108,7 +108,7 @@ export default {
       'slide-up': 'slide-up 0.3s ease-out',
       'bounce-in':
         'bounce-in 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards',
-      'fade-up': 'fade-up 0.4s ease-out 0.3s both',
+      'fade-up': 'fade-up 0.2s ease-out both',
     },
   },
   plugins: [],

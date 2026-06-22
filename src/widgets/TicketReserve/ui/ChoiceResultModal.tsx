@@ -1,99 +1,134 @@
-import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
-import useModalStore from '../../model/ReserveStore';
-import { useNavigation } from '../hooks/ReserveHook';
-import { formatTimeView } from '@/shared/lib/formatDate';
+/**
+ * @role: widgets/TicketReserve — ui
+ * @rule: 렌더링만 담당, 비즈니스 로직 포함 금지
+ */
+import { useChoiceResultModal } from '../hooks/useChoiceResultModal';
 
 const ChoiceResultModal = () => {
-  const { closeModal } = useModalStore();
-  const { navigate } = useNavigation();
-  // 선택한 기차 시간의 정보
   const {
-    selectStartTime,
-    selectEndTime,
+    startTimeView,
+    endTimeView,
+    durationText,
     selectTrainType,
     selectKid,
     selectAdult,
     selectPay,
-  } = trainDataStore();
-
-  const depH = Number(String(selectStartTime).substring(8, 10));
-  const depM = Number(String(selectStartTime).substring(10, 12));
-  const arrH = Number(String(selectEndTime).substring(8, 10));
-  const arrM = Number(String(selectEndTime).substring(10, 12));
-  let durationMin = (arrH * 60 + arrM) - (depH * 60 + depM);
-  if (durationMin < 0) durationMin += 24 * 60;
-  const durationText = durationMin >= 60
-    ? `${Math.floor(durationMin / 60)}시간 ${durationMin % 60 > 0 ? `${durationMin % 60}분` : ''}`
-    : `${durationMin}분`;
+    handleClose,
+    handleConfirm,
+  } = useChoiceResultModal();
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-end bg-black/40"
-      onClick={() => closeModal('ChoiceResultModal')}
+      className="flex h-full w-full flex-col items-center justify-end bg-black/40 lg:justify-center"
+      onClick={handleClose}
     >
       <div
-        className="mb-4 w-[343px] animate-slide-up rounded-3xl bg-white px-6 pb-8 pt-5"
+        className="mb-4 w-[343px] animate-slide-up rounded-3xl bg-white px-6 pb-5 pt-4 lg:mb-0 lg:w-[440px] lg:animate-fade-up lg:rounded-2xl lg:px-8 lg:pb-5 lg:pt-5"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 핸들 바 */}
-        <div className="mb-5 flex justify-center">
+        {/* 모바일 핸들 바 */}
+        <div className="mb-5 flex justify-center lg:hidden">
           <div className="h-1 w-10 rounded-full bg-gray-300" />
         </div>
 
-        <p className="mb-4 text-base font-bold text-gray-800">선택 확인</p>
-
-        {/* 시간 */}
-        <div className="mb-4 rounded-2xl bg-gray-50 px-4 py-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] text-gray-400">시간</span>
-            <span className="text-[10px] text-gray-400">소요시간</span>
-          </div>
-          <div className="mt-0.5 flex items-center justify-between">
-            <p className="text-base font-bold text-gray-900">
-              {formatTimeView(String(selectStartTime))}
-              <span className="mx-2 font-normal text-gray-400">→</span>
-              {formatTimeView(String(selectEndTime))}
+        {/* PC 헤더 */}
+        <div className="mb-6 hidden lg:flex lg:items-start lg:justify-between">
+          <div>
+            <p className="text-lg font-bold text-gray-900">선택 확인</p>
+            <p className="mt-0.5 text-xs text-gray-400">
+              예매 전 선택 내용을 확인해주세요
             </p>
-            <span className="text-xs font-semibold text-gray-800">{durationText}</span>
           </div>
-        </div>
-
-        {/* 열차 / 인원 / 요금 */}
-        <div className="flex flex-col gap-y-2">
-
-          <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
-            <span className="text-[10px] text-gray-400">열차</span>
-            <span className="text-xs font-bold text-gray-800">{selectTrainType}</span>
-          </div>
-          <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
-            <span className="text-[10px] text-gray-400">인원</span>
-            <span className="text-xs font-semibold text-gray-800">
-              어른 <span className="text-blue">{selectAdult}</span>명 • 어린이{' '}
-              <span className="text-blue">{selectKid}</span>명
-            </span>
-          </div>
-          <div className="flex items-center justify-between rounded-2xl bg-gray-50 px-4 py-3">
-            <span className="text-[10px] text-gray-400">요금</span>
-            <span className="text-xs font-bold text-gray-800">
-              {selectPay.toLocaleString('ko-KR')}원
-            </span>
-          </div>
-        </div>
-
-        {/* 버튼 */}
-        <div className="mt-5 flex gap-3">
           <button
-            onClick={() => closeModal('ChoiceResultModal')}
-            className="flex-1 rounded-2xl bg-gray-100 py-3.5 text-base font-bold text-gray-600"
+            onClick={handleClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        {/* 모바일 제목 */}
+        <p className="mb-4 text-base font-bold text-gray-800 lg:hidden">
+          선택 확인
+        </p>
+
+        {/* 1. 시간 */}
+        <div className="mb-2 rounded-xl bg-gray-50 px-4 py-2.5 lg:rounded-2xl">
+          <p className="mb-1 text-sm text-gray-400">시간</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-base font-bold text-gray-900">
+                {startTimeView}
+              </span>
+              <span className="text-gray-300">→</span>
+              <span className="text-base font-bold text-gray-900">
+                {endTimeView}
+              </span>
+            </div>
+            <div className="flex flex-col items-end gap-0.5">
+              <span className="text-sm text-gray-400">소요시간</span>
+              <span className="text-base font-semibold text-gray-800">
+                {durationText}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 2. 열차 / 요금 */}
+        <div className="mb-2 flex gap-2">
+          <div className="flex flex-1 flex-col gap-0.5 rounded-xl bg-gray-50 px-4 py-2.5 lg:rounded-2xl">
+            <span className="text-sm text-gray-400">열차</span>
+            <span className="text-base font-bold text-gray-800">
+              {selectTrainType}
+            </span>
+          </div>
+          <div className="flex flex-1 flex-col gap-0.5 rounded-xl bg-gray-50 px-4 py-2.5 lg:rounded-2xl">
+            <span className="text-sm text-gray-400">요금</span>
+            <span className="text-base font-bold text-blue">
+              {Number(selectPay).toLocaleString('ko-KR')}원
+            </span>
+          </div>
+        </div>
+
+        {/* 3. 인원 */}
+        <div className="mb-4 rounded-xl bg-gray-50 px-4 py-2.5 lg:rounded-2xl">
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-400">인원</span>
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-semibold text-gray-800">
+                어른 <span className="text-blue">{selectAdult}</span>명
+              </span>
+              <span className="text-gray-200">·</span>
+              <span className="text-sm font-semibold text-gray-800">
+                어린이 <span className="text-blue">{selectKid}</span>명
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 4. 취소 / 좌석조회 */}
+        <div className="flex gap-3">
+          <button
+            onClick={handleClose}
+            className="flex-1 rounded-2xl bg-gray-100 py-3 text-sm font-bold text-gray-600 transition-colors hover:bg-gray-200"
           >
             취소
           </button>
           <button
-            onClick={() => {
-              closeModal('ChoiceResultModal');
-              navigate('/reserve/seatcheck');
-            }}
-            className="flex-2 flex-[2] rounded-2xl bg-blue py-3.5 text-base font-bold text-white"
+            onClick={handleConfirm}
+            className="flex-[2] rounded-2xl bg-blue py-3 text-sm font-bold text-white transition-colors hover:bg-blue/90"
           >
             좌석 조회
           </button>

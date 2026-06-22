@@ -2,18 +2,19 @@
  * @role: widgets — 계절 할인 역 목록 모달 UI
  * @rule: 렌더링만 담당, 비즈니스 로직 포함 금지
  */
-import { useCurrentSeason } from '@/features/Season/hooks/useCurrentSeason';
+import { useSeasonModal } from '../hooks/useSeasonModal';
+import { SeasonModalProps } from '../types/SeasonModalType';
 
-const SeasonModal = ({ onClose }: { onClose: () => void }) => {
-  const { season, stations, style } = useCurrentSeason();
+const SeasonModal = ({ onClose }: SeasonModalProps) => {
+  const { season, stations, style } = useSeasonModal();
 
   return (
     <div
-      className="absolute inset-0 z-50 flex items-center justify-center bg-black/40"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40"
       onClick={onClose}
     >
       <div
-        className="mx-6 w-full rounded-3xl bg-white px-6 pb-6 pt-5 shadow-xl"
+        className="mx-6 w-full rounded-3xl bg-white px-6 pb-6 pt-5 shadow-xl lg:mx-0 lg:w-[400px] lg:animate-fade-up"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 헤더 */}

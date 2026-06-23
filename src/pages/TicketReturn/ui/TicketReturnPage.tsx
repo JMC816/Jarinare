@@ -2,11 +2,21 @@
  * @role: pages — 승차권 반환 페이지
  * @rule: PC/모바일 분기만 담당, 비즈니스 로직 포함 금지
  */
+import { useEffect } from 'react';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import MiniTicket from '@/widgets/TicketReturn/ui/MiniTicket';
 import PCTicketReturnPage from './PCTicketReturnPage';
+import {
+  clearAllSeatsCache,
+  prefetchAllSeats,
+} from '@/features/TicketReserve/hooks/useAllSeatsInfo';
 
 const TicketReturnPage = () => {
+  useEffect(() => {
+    clearAllSeatsCache();
+    prefetchAllSeats();
+  }, []);
+
   return (
     <>
       {/* PC 버전 */}

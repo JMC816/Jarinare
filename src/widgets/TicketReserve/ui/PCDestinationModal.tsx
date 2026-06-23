@@ -37,11 +37,11 @@ const PCDestinationModal = ({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 lg:left-[220px] lg:top-14 lg:backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="flex h-[85vh] w-[640px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="flex h-[85vh] w-[640px] animate-fade-up flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 상단 배경 이미지 */}

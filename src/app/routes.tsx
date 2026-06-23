@@ -32,10 +32,18 @@ import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
 import MainLayout from '@/widgets/layouts/ui/MainLayout';
 import PublicHomeLayout from '@/widgets/layouts/ui/PublicHomeLayout';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useModalRouteReset } from './hooks/useModalRouteReset';
+
+const ModalRouteReset = () => {
+  useModalRouteReset();
+
+  return null;
+};
 
 const Router = () => {
   return (
     <BrowserRouter>
+      <ModalRouteReset />
       <div className="relative w-full">
         <Routes>
           <Route path="/auth/login" element={<LoginPage />} />
@@ -52,7 +60,10 @@ const Router = () => {
             <Route path="/board/notice/detail" element={<NoticeDetailPage />} />
             <Route path="/board/event/detail" element={<EventDetailPage />} />
             <Route path="/board/board/detail" element={<BoardDetailPage />} />
-            <Route path="/travel/review/list" element={<TravelReviewListPage />} />
+            <Route
+              path="/travel/review/list"
+              element={<TravelReviewListPage />}
+            />
             <Route path="/travel/review" element={<TravelReviewPage />} />
           </Route>
           {/* 로그인 필수 페이지들 */}

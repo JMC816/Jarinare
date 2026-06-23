@@ -19,7 +19,7 @@ const ChoiceResultModal = () => {
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-end bg-black/40 lg:justify-center"
+      className="flex h-full w-full flex-col items-center justify-end bg-black/40 lg:justify-center lg:backdrop-blur-sm"
       onClick={handleClose}
     >
       <div

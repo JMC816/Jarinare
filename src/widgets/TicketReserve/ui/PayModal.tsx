@@ -1,60 +1,74 @@
-import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
-import useModalStore from '../../model/ReserveStore';
-import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
-import { useState } from 'react';
-import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
-import { useUpdatePoint } from '@/features/Point/hooks/useUpdatePoint';
-import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateCountStore';
-import { useSaveReserveStat } from '@/features/TicketReserve/hooks/useSaveReserveStat';
-import { useCurrentSeason } from '@/features/Season/hooks/useCurrentSeason';
+/**
+ * @role: widgets/TicketReserve — ui
+ * @rule: 렌더링만 담당, 비즈니스 로직 포함 금지
+ */
+import { usePayModal } from '../hooks/usePayModal';
 
 const PayModal = () => {
-  const { closeModal } = useModalStore();
-  const { selectPay, endStationForView } = trainDataStore();
-  const { createSelectedSeats } = useSeatQueryData();
-  const { saveStat } = useSaveReserveStat();
-  const [checked, setChekced] = useState<boolean>(false);
-  const [value, setValue] = useState<number | null>(null);
-  const { point } = useGetPoint();
-  const { updatePoint } = useUpdatePoint();
-  const { seatsStateCount } = seatsStateCountStore();
-  const { season, style, isSeasonStation } = useCurrentSeason();
-
-  // 현재 목적지가 계절 할인 역인지 확인
-  const isDiscountEligible = isSeasonStation(endStationForView);
-  const [eventSelected, setEventSelected] = useState<'none' | 'season'>('none');
-
-  const basePrice = selectPay * seatsStateCount;
-  // 계절 이벤트 적용 시 10% 할인
-  const discountedBase =
-    eventSelected === 'season' && isDiscountEligible
-      ? Math.floor(basePrice * 0.9)
-      : basePrice;
-  const pointValue = Number(value);
-  const finalPrice = discountedBase - pointValue;
-
-  const onChange = () => {
-    setChekced((prev) => !prev);
-  };
-
-  const onClick = () => {
-    setValue(point);
-  };
+  const {
+    checked,
+    value,
+    eventSelected,
+    setEventSelected,
+    isDiscountEligible,
+    basePrice,
+    discountedBase,
+    finalPrice,
+    point,
+    season,
+    style,
+    handleTogglePoint,
+    handleUseAllPoint,
+    handlePointInput,
+    handleClose,
+    handlePay,
+  } = usePayModal();
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-end bg-black/40"
-      onClick={() => closeModal('PayModal')}
+      className="flex h-full w-full flex-col items-center justify-end bg-black/40 lg:justify-center lg:backdrop-blur-sm"
+      onClick={handleClose}
     >
       <div
-        className="mb-4 w-[343px] animate-slide-up rounded-3xl bg-white px-6 pb-8 pt-5"
+        className="mb-4 w-[343px] animate-slide-up rounded-3xl bg-white px-6 pb-8 pt-5 lg:mb-0 lg:w-[440px] lg:animate-fade-up lg:rounded-2xl lg:px-8"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 핸들 바 */}
-        <div className="mb-5 flex justify-center">
+        {/* 모바일 핸들 바 */}
+        <div className="mb-5 flex justify-center lg:hidden">
           <div className="h-1 w-10 rounded-full bg-gray-300" />
         </div>
-        <p className="mb-1 text-base font-bold text-gray-800">결제 하실 금액</p>
+
+        {/* PC 헤더 */}
+        <div className="mb-5 hidden lg:flex lg:items-start lg:justify-between">
+          <div>
+            <p className="text-lg font-bold text-gray-900">결제</p>
+            <p className="mt-0.5 text-xs text-gray-400">
+              최종 금액을 확인하고 결제해주세요
+            </p>
+          </div>
+          <button
+            onClick={handleClose}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+
+        <p className="mb-1 text-base font-bold text-gray-800 lg:hidden">
+          결제 하실 금액
+        </p>
         <p className="mb-4 text-xl font-bold text-gray-900">
           {basePrice.toLocaleString('ko-KR')}원
         </p>
@@ -89,7 +103,7 @@ const PayModal = () => {
             type="checkbox"
             id="check"
             checked={checked}
-            onChange={onChange}
+            onChange={handleTogglePoint}
             disabled={point === 0}
             className={`appearance-none rounded border border-blue p-2 ${checked ? "bg-blue bg-[url('@/assets/icons/point_check.png')] bg-center bg-no-repeat" : ''} ${point === 0 ? 'cursor-not-allowed opacity-50' : ''}`}
           />
@@ -117,19 +131,10 @@ const PayModal = () => {
                     ? ''
                     : value.toLocaleString('ko-KR')
               }
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const inputValue = e.target.value.replace(/,/g, '');
-                const numValue = inputValue === '' ? 0 : Number(inputValue);
-                if (
-                  discountedBase &&
-                  (inputValue === '' || (point >= numValue && numValue >= 0))
-                ) {
-                  setValue(numValue);
-                }
-              }}
+              onChange={handlePointInput}
             />
             <button
-              onClick={onClick}
+              onClick={handleUseAllPoint}
               disabled={!checked}
               className="rounded-xl border border-lightGray bg-white px-2 text-xs shadow-sm active:brightness-95 disabled:opacity-50"
             >
@@ -181,19 +186,14 @@ const PayModal = () => {
         {/* 버튼 */}
         <div className="flex gap-3">
           <button
-            onClick={() => closeModal('PayModal')}
-            className="flex-1 rounded-2xl bg-gray-100 py-3.5 text-base font-bold text-gray-600"
+            onClick={handleClose}
+            className="flex-1 rounded-2xl bg-gray-100 py-3.5 text-base font-bold text-gray-600 transition-colors hover:bg-gray-200"
           >
             취소
           </button>
           <button
-            onClick={async () => {
-              await createSelectedSeats(finalPrice);
-              await updatePoint(point - pointValue);
-              await saveStat(endStationForView);
-              closeModal('PayModal');
-            }}
-            className="flex-[2] rounded-2xl bg-blue py-3.5 text-base font-bold text-white active:brightness-95"
+            onClick={handlePay}
+            className="flex-[2] rounded-2xl bg-blue py-3.5 text-base font-bold text-white transition-colors hover:bg-blue/90 active:brightness-95"
           >
             결제
           </button>

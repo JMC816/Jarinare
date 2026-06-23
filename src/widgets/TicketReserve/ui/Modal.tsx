@@ -1,3 +1,7 @@
+/**
+ * @role: widgets/TicketReserve — ui
+ * @rule: 모달 타입 분기 렌더링만 담당, 비즈니스 로직 포함 금지
+ */
 import useModalStore from '@/widgets/model/ReserveStore';
 import StartPlaceModal from './StartPlaceModal';
 import EndPlaceModal from './EndPlaceModal';
@@ -13,8 +17,9 @@ import ErrorModal from './ErrorModal';
 
 const Modal = () => {
   const { modalType, isShow } = useModalStore();
+
   return (
-    <div className="fixed left-1/2 top-0 z-[60] h-screen w-[375px] -translate-x-1/2 lg:left-0 lg:w-full lg:translate-x-0">
+    <div className="fixed left-1/2 top-0 z-[60] h-screen w-[375px] -translate-x-1/2 lg:left-[220px] lg:top-14 lg:h-[calc(100vh-3.5rem)] lg:w-[calc(100%-220px)] lg:translate-x-0">
       {isShow == true && modalType == 'StartPlaceModal' ? (
         <StartPlaceModal />
       ) : null}

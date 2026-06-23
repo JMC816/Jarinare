@@ -66,23 +66,23 @@ const ChoiceResultModal = () => {
 
         {/* 1. 시간 */}
         <div className="mb-2 rounded-xl bg-gray-50 px-4 py-2.5 lg:rounded-2xl">
-          <p className="mb-1 text-sm text-gray-400">시간</p>
+          <div className="mb-1 flex items-center justify-between">
+            <span className="text-sm text-gray-400">시간</span>
+            <span className="text-sm text-gray-400">소요시간</span>
+          </div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-base font-bold text-gray-900">
+            <div className="flex items-center gap-3">
+              <span className="text-base font-bold text-gray-900 lg:text-xl">
                 {startTimeView}
               </span>
-              <span className="text-gray-300">→</span>
-              <span className="text-base font-bold text-gray-900">
+              <span className="text-gray-300 lg:text-lg">→</span>
+              <span className="text-base font-bold text-gray-900 lg:text-xl">
                 {endTimeView}
               </span>
             </div>
-            <div className="flex flex-col items-end gap-0.5">
-              <span className="text-sm text-gray-400">소요시간</span>
-              <span className="text-base font-semibold text-gray-800">
-                {durationText}
-              </span>
-            </div>
+            <span className="text-base font-semibold text-gray-800">
+              {durationText}
+            </span>
           </div>
         </div>
 

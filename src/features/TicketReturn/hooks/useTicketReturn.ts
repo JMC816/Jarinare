@@ -1,4 +1,4 @@
-import { seatsReturnDataStore } from '@/pages/TicketReturn/models/seatsReturnDataStore';
+import { seatsReturnDataStore } from '@/features/TicketReturn/model/seatsReturnDataStore';
 import {
   clearAllSeatsCache,
   prefetchAllSeats,

@@ -1,4 +1,9 @@
 import { TicketReturnModalTypes } from '@/shared/types/ModalType';
+import { SeatType } from '@/entities/Seat/types/seatType';
+
+export type MiniTicketProps = {
+  onReturnPC?: (groups: SeatType[]) => void;
+};
 
 export type Store = {
   modalType: TicketReturnModalTypes | null;

@@ -3,8 +3,9 @@
  * @rule: 렌더링만 담당, 비즈니스 로직 포함 금지
  */
 import { useMiniTicket } from '../hooks/useMiniTicket';
+import type { MiniTicketProps } from '../types/TicketReturnType';
 
-const MiniTicket = () => {
+const MiniTicket = ({ onReturnPC }: MiniTicketProps = {}) => {
   const { tickets } = useMiniTicket();
 
   if (tickets.length === 0) {
@@ -22,6 +23,7 @@ const MiniTicket = () => {
         (
           {
             ticket,
+            groups,
             trainTypeName,
             startLabel,
             endLabel,
@@ -121,7 +123,7 @@ const MiniTicket = () => {
                 JARINARE
               </span>
               <button
-                onClick={handleReturn}
+                onClick={onReturnPC ? () => onReturnPC(groups) : handleReturn}
                 className="rounded-lg bg-blue px-10 py-2 text-xs font-bold text-white transition-colors hover:bg-blue/90"
               >
                 반환하기

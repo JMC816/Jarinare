@@ -5,8 +5,12 @@
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import MiniTicket from '@/widgets/TicketReturn/ui/MiniTicket';
+import Modal from '@/widgets/TicketReturn/ui/Modal';
+import { usePCTicketReturnPage } from '../hooks/usePCTicketReturnPage';
 
 const PCTicketReturnPage = () => {
+  const { handleReturnPC, isShow, modalType } = usePCTicketReturnPage();
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
       <PCTopNav hasNotification={false} />
@@ -31,11 +35,13 @@ const PCTicketReturnPage = () => {
 
             {/* 승차권 목록 */}
             <div className="flex flex-col gap-4">
-              <MiniTicket />
+              <MiniTicket onReturnPC={handleReturnPC} />
             </div>
           </div>
         </main>
       </div>
+
+      {isShow && modalType === 'ReturnModal' && <Modal />}
     </div>
   );
 };

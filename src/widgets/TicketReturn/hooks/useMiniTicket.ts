@@ -34,6 +34,7 @@ export const useMiniTicket = () => {
 
     return {
       ticket,
+      groups,
       trainTypeName,
       startLabel: formatTimeView(String(ticket.startTime)),
       endLabel: formatTimeView(String(ticket.endTime)),

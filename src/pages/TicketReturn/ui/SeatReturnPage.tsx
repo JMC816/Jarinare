@@ -5,7 +5,7 @@ import { useTicketLocation } from '../hooks/useTicketLocation';
 import useModalStore from '@/widgets/model/TicketReturnStore';
 import Modal from '@/widgets/TicketReturn/ui/Modal';
 import TicketButton from '@/shared/ui/TicketButton';
-import { seatsReturnDataStore } from '../models/seatsReturnDataStore';
+import { seatsReturnDataStore } from '@/features/TicketReturn/model/seatsReturnDataStore';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 
 const SeatReturnPage = () => {

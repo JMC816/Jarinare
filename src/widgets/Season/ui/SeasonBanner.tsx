@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import { useCurrentSeason } from '@/features/Season/hooks/useCurrentSeason';
 import SeasonModal from './SeasonModal';
+import PCSeasonModal from './PCSeasonModal';
 
 const SeasonBanner = () => {
   const { season, stations, style } = useCurrentSeason();
@@ -68,6 +69,7 @@ const SeasonBanner = () => {
       </button>
 
       {open && <SeasonModal onClose={() => setOpen(false)} />}
+      {open && <PCSeasonModal onClose={() => setOpen(false)} />}
     </>
   );
 };

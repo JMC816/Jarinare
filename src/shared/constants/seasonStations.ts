@@ -70,6 +70,10 @@ export const SEASON_STYLE: Record<
     badgeBg: string;
     badgeBorder: string;
     gradient: string;
+    overlayColor: string;
+    primaryHex: string;
+    lightHex: string;
+    midHex: string;
     subText: string;
   }
 > = {
@@ -80,15 +84,23 @@ export const SEASON_STYLE: Record<
     badgeBg: 'bg-pink-200',
     badgeBorder: 'border-pink-300',
     gradient: 'linear-gradient(160deg, #f9a8d4 0%, #fbcfe8 40%, #e9d5ff 100%)',
+    overlayColor: 'rgba(236, 72, 153, 0.88)',
+    primaryHex: '#ec4899',
+    lightHex: '#fce7f3',
+    midHex: '#fbcfe8',
     subText: '벚꽃 만개, 봄 여행 최적기',
   },
   여름: {
     emoji: '☀️',
-    color: 'text-amber-600',
-    bg: 'bg-amber-100',
-    badgeBg: 'bg-amber-200',
-    badgeBorder: 'border-amber-300',
-    gradient: 'linear-gradient(135deg, #3b82f6 0%, #0ea5e9 50%, #22d3ee 100%)',
+    color: 'text-blue',
+    bg: 'bg-lightBlue',
+    badgeBg: 'bg-blue',
+    badgeBorder: 'border-blue',
+    gradient: 'linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%)',
+    overlayColor: 'rgba(37, 99, 235, 0.88)',
+    primaryHex: '#0062FF',
+    lightHex: '#E7F2FD',
+    midHex: '#B2D0FF',
     subText: '청량한 바다, 여름 특가',
   },
   가을: {
@@ -98,15 +110,23 @@ export const SEASON_STYLE: Record<
     badgeBg: 'bg-orange-200',
     badgeBorder: 'border-orange-300',
     gradient: 'linear-gradient(160deg, #ea580c 0%, #f97316 40%, #fbbf24 100%)',
+    overlayColor: 'rgba(234, 88, 12, 0.88)',
+    primaryHex: '#ea580c',
+    lightHex: '#ffedd5',
+    midHex: '#fed7aa',
     subText: '단풍 절경, 가을 낭만 여행',
   },
   겨울: {
     emoji: '❄️',
-    color: 'text-blue-500',
-    bg: 'bg-blue-100',
-    badgeBg: 'bg-blue-200',
-    badgeBorder: 'border-blue-300',
+    color: 'text-blue',
+    bg: 'bg-lightBlue',
+    badgeBg: 'bg-lightBlueImpossible',
+    badgeBorder: 'border-blue',
     gradient: 'linear-gradient(160deg, #1e3a5f 0%, #1e40af 40%, #3b82f6 100%)',
+    overlayColor: 'rgba(30, 58, 95, 0.88)',
+    primaryHex: '#1e40af',
+    lightHex: '#E7F2FD',
+    midHex: '#B2D0FF',
     subText: '설경 속 힐링, 겨울 여행',
   },
 };

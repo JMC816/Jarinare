@@ -6,3 +6,7 @@
 export type SeasonModalProps = {
   onClose: () => void;
 };
+
+export type PCSeasonModalProps = {
+  onClose: () => void;
+};

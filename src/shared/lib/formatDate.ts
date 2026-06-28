@@ -104,6 +104,11 @@ export const formatMonthDay = (timestamp: number): string => {
   return `${month}월 ${day}일`;
 };
 
+export const formatReviewDate = (seconds: number): string => {
+  const d = new Date(seconds * 1000);
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+};
+
 export const formatBoardTime = (date: number) => {
   const newDate = new Date(date * 1000);
   const year = newDate.getFullYear();

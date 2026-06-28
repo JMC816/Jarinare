@@ -6,18 +6,28 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUpdateTravelReview } from '@/features/TravelReview/hooks/useUpdateTravelReview';
 import { useDeleteTravelReview } from '@/features/TravelReview/hooks/useDeleteTravelReview';
+import { useCreateTravelReview } from '@/features/TravelReview/hooks/useCreateTravelReview';
 import type { TravelReview } from '@/entities/TravelReview/types/travelReviewType';
 import type { SortOption } from '../types/travelReviewPageType';
 
 export type { SortOption };
 
-export const usePCTravelReviewPage = (city: string) => {
+export const usePCTravelReviewPage = (
+  city: string,
+  reviews: TravelReview[],
+) => {
   const navigate = useNavigate();
   const { updateReview } = useUpdateTravelReview(city);
   const { deleteReview } = useDeleteTravelReview(city);
+  const { createReview } = useCreateTravelReview(city);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOption, setSortOption] = useState<SortOption>('최신순');
+  const [showWriteForm, setShowWriteForm] = useState(false);
+  const [writeTitle, setWriteTitle] = useState('');
+  const [writeContent, setWriteContent] = useState('');
+  const [writeRating, setWriteRating] = useState(5);
+  const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
@@ -55,6 +65,18 @@ export const usePCTravelReviewPage = (city: string) => {
     navigate(0);
   };
 
+  const handleWriteSubmit = async () => {
+    if (!writeTitle.trim() || !writeContent.trim()) return;
+    setSubmitting(true);
+    await createReview(writeTitle.trim(), writeContent.trim(), writeRating);
+    setSubmitting(false);
+    setShowWriteForm(false);
+    setWriteTitle('');
+    setWriteContent('');
+    setWriteRating(5);
+    navigate(0);
+  };
+
   const sortReviews = (reviews: TravelReview[]) => {
     if (sortOption === '별점순')
       return [...reviews].sort((a, b) => b.rating - a.rating);
@@ -71,24 +93,16 @@ export const usePCTravelReviewPage = (city: string) => {
     );
   };
 
-  const formatDate = (seconds: number) => {
-    const d = new Date(seconds * 1000);
-    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
-  };
+  const processedReviews = sortReviews(filterReviews(reviews));
 
-  const getProcessedReviews = (reviews: TravelReview[]) =>
-    sortReviews(filterReviews(reviews));
-
-  const getRatingCounts = (reviews: TravelReview[]) =>
-    [5, 4, 3, 2, 1].map((n) => ({
-      star: n,
-      count: reviews.filter((r) => r.rating === n).length,
-      pct:
-        reviews.length > 0
-          ? (reviews.filter((r) => r.rating === n).length / reviews.length) *
-            100
-          : 0,
-    }));
+  const ratingCounts = [5, 4, 3, 2, 1].map((n) => ({
+    star: n,
+    count: reviews.filter((r) => r.rating === n).length,
+    pct:
+      reviews.length > 0
+        ? (reviews.filter((r) => r.rating === n).length / reviews.length) * 100
+        : 0,
+  }));
 
   return {
     searchQuery,
@@ -107,8 +121,17 @@ export const usePCTravelReviewPage = (city: string) => {
     handleEditStart,
     handleEditSave,
     handleDelete,
-    getProcessedReviews,
-    getRatingCounts,
-    formatDate,
+    showWriteForm,
+    setShowWriteForm,
+    writeTitle,
+    setWriteTitle,
+    writeContent,
+    setWriteContent,
+    writeRating,
+    setWriteRating,
+    submitting,
+    handleWriteSubmit,
+    processedReviews,
+    ratingCounts,
   };
 };

@@ -11,6 +11,7 @@ import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import { usePCTravelReviewPage } from '../hooks/usePCTravelReviewPage';
 import { useMoreMenu } from '../hooks/useMoreMenu';
 import { getProfileColor } from '../constants/travelReviewPageConstants';
+import { formatReviewDate } from '@/shared/lib/formatDate';
 
 const MoreMenu = ({
   onEdit,
@@ -104,13 +105,19 @@ const PCTravelReviewPage = () => {
     handleEditStart,
     handleEditSave,
     handleDelete,
-    getProcessedReviews,
-    getRatingCounts,
-    formatDate,
-  } = usePCTravelReviewPage(city);
-
-  const processedReviews = getProcessedReviews(reviews);
-  const ratingCounts = getRatingCounts(reviews);
+    showWriteForm,
+    setShowWriteForm,
+    writeTitle,
+    setWriteTitle,
+    writeContent,
+    setWriteContent,
+    writeRating,
+    setWriteRating,
+    submitting,
+    handleWriteSubmit,
+    processedReviews,
+    ratingCounts,
+  } = usePCTravelReviewPage(city, reviews);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
@@ -176,28 +183,68 @@ const PCTravelReviewPage = () => {
                     여행지들이 남긴 생생한 후기를 확인하세요
                   </p>
                 </div>
-                {/* 후기 작성 버튼 */}
-                <button
-                  onClick={() =>
-                    navigate('/travel/review/list', { state: { city } })
-                  }
-                  className="flex items-center gap-2 rounded-sm bg-blue px-4 py-2.5 text-sm font-bold text-white hover:bg-blue/90"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                {/* 후기 작성 / 취소 버튼 */}
+                {showWriteForm ? (
+                  <button
+                    onClick={() => setShowWriteForm(false)}
+                    className="flex items-center gap-2 rounded-sm bg-blue px-4 py-2.5 text-sm font-bold text-white hover:bg-blue/90"
                   >
-                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                  </svg>
-                  후기 작성
-                </button>
+                    취소
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowWriteForm(true)}
+                    className="flex items-center gap-2 rounded-sm bg-blue px-4 py-2.5 text-sm font-bold text-white hover:bg-blue/90"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                    </svg>
+                    후기 작성
+                  </button>
+                )}
               </div>
+
+              {/* 후기 작성 카드 */}
+              {showWriteForm && (
+                <div className="flex flex-col gap-4 rounded-sm bg-white p-6 shadow-sm">
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-xs font-bold text-gray-400">별점</p>
+                    <StarPicker value={writeRating} onChange={setWriteRating} />
+                  </div>
+                  <input
+                    type="text"
+                    value={writeTitle}
+                    onChange={(e) => setWriteTitle(e.target.value)}
+                    placeholder="제목을 입력하세요"
+                    className="rounded-sm border border-gray-200 px-4 py-2.5 text-sm text-gray-700 outline-none placeholder:text-gray-300 focus:border-blue"
+                  />
+                  <textarea
+                    value={writeContent}
+                    onChange={(e) => setWriteContent(e.target.value)}
+                    placeholder="내용을 입력하세요"
+                    rows={4}
+                    className="rounded-sm border border-gray-200 px-4 py-2.5 text-sm text-gray-700 outline-none placeholder:text-gray-300 focus:border-blue"
+                  />
+                  <button
+                    onClick={handleWriteSubmit}
+                    disabled={
+                      !writeTitle.trim() || !writeContent.trim() || submitting
+                    }
+                    className="rounded-sm bg-blue py-2.5 text-sm font-bold text-white transition-opacity disabled:opacity-30"
+                  >
+                    {submitting ? '등록 중...' : '등록'}
+                  </button>
+                </div>
+              )}
 
               {/* 별점 카드 칸 */}
               <div className="grid grid-cols-[1fr_3fr] gap-6 overflow-hidden rounded-sm bg-white p-6 shadow-sm">
@@ -380,7 +427,7 @@ const PCTravelReviewPage = () => {
                                     : review.author?.charAt(0) + '**'}
                                 </span>
                                 <span className="text-xs text-gray-400">
-                                  {formatDate(review.createdAt)}
+                                  {formatReviewDate(review.createdAt)}
                                   {review.updatedAt && ' · 수정됨'}
                                 </span>
                               </div>

@@ -46,8 +46,11 @@ const PCBoardPage = () => {
           <div className="px-32 pb-16 pt-10">
             <div className="mb-6 flex items-start justify-between">
               <div>
-                <h1 className="text-2xl font-black text-gray-900">
-                  게시판 종합
+                <p className="text-xs font-bold tracking-widest text-gray-400">
+                  COMMUNITY
+                </p>
+                <h1 className="mt-1 text-2xl font-black text-gray-900">
+                  게시판
                 </h1>
                 <p className="mt-1 text-sm text-gray-400">
                   다양한 여행 정보와 소식을 확인하세요
@@ -74,12 +77,12 @@ const PCBoardPage = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="게시물 검색"
-                    className="rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue"
+                    className="rounded-md border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue"
                   />
                 </form>
                 <button
                   onClick={() => navigate('/board/board')}
-                  className="flex items-center gap-2 rounded-lg bg-blue px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue/90"
+                  className="flex items-center gap-2 rounded-md bg-blue px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue/90"
                 >
                   <svg
                     width="14"

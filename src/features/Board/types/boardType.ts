@@ -3,11 +3,13 @@
  * @rule: 타입·인터페이스 정의만 담당
  */
 export interface LatestPost {
+  id: string;
   title: string;
   content: string;
   author: string;
   viewCount: number;
   createdAt: number;
+  commentCount: number;
 }
 
 export interface LatestPosts {

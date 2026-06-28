@@ -29,7 +29,8 @@ const BoardPage = () => {
   const navigate = useNavigate();
   const { latest } = useLatestPosts();
   const { seenData } = useBoardSeen();
-  const { topPost } = useTopViewedPost();
+  const { topPosts } = useTopViewedPost();
+  const topPost = topPosts[0] ?? null;
 
   const isNew = (
     createdAt: number | undefined,

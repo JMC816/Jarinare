@@ -2,6 +2,14 @@
  * @role: pages — PC 게시판 페이지 상수
  * @rule: 상수 정의만 담당
  */
+import { BoardFilter } from '../types/boardPageType';
+
+export const FILTER_TABS: { label: BoardFilter }[] = [
+  { label: '전체' },
+  { label: '공지' },
+  { label: '자유' },
+  { label: '후기' },
+];
 export const BOARD_DROPDOWN_ITEMS = [
   { label: '전체', path: '/board/boardlist' },
   { label: '공지사항', path: '/board/noticelist' },

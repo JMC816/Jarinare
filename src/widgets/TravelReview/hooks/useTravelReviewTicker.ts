@@ -4,7 +4,7 @@
  */
 import { DestinationReviewSummary } from '@/entities/TravelReview/types/travelReviewType';
 
-const TICKER_COUNT = 4;
+const TICKER_COUNT = 5;
 
 export const useTravelReviewTicker = (
   summaries: DestinationReviewSummary[],

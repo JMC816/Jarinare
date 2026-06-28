@@ -41,18 +41,18 @@ const SeasonBanner = () => {
         </svg>
 
         {/* 콘텐츠 */}
-        <div className="relative flex items-center gap-5 px-5 py-6">
+        <div className="relative flex items-center gap-4 px-5 py-3">
           {/* 계절 아이콘 */}
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-4xl shadow-inner">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/20 text-2xl shadow-inner">
             {style.emoji}
           </div>
 
           {/* 텍스트 영역 */}
           <div className="flex flex-1 flex-col justify-center">
-            <p className="text-2xl font-black text-white">
+            <p className="text-lg font-black text-white">
               {season} 특별 기차여행 할인 이벤트
             </p>
-            <p className="mt-0.5 text-sm text-white/80">
+            <p className="mt-0.5 text-xs text-white/80">
               {season} 추천 역 {stations.length}곳 선택 시{' '}
               <span className="font-bold text-yellow-300 underline">
                 10% 즉시 할인
@@ -62,7 +62,7 @@ const SeasonBanner = () => {
           </div>
 
           {/* 자세히 보기 버튼 */}
-          <div className="flex shrink-0 items-center justify-center rounded-2xl bg-white px-8 py-3 shadow-md">
+          <div className="flex shrink-0 items-center justify-center rounded-xl bg-white px-6 py-2 shadow-md">
             <span className="text-sm font-bold text-blue">자세히 보기 ›</span>
           </div>
         </div>

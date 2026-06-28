@@ -17,11 +17,12 @@ export interface TopPost {
   viewCount: number;
 }
 
+const TOP_COUNT = 5;
+
 export const useTopViewedPost = () => {
-  const [topPost, setTopPost] = useState<TopPost | null>(null);
+  const [topPosts, setTopPosts] = useState<TopPost[]>([]);
 
   useEffect(() => {
-    // 모든 board, event 게시물 먼저 로드
     const loadPosts = async () => {
       const [boardSnap, eventSnap] = await Promise.all([
         getDocs(query(collectionGroup(db, 'board'))),
@@ -56,22 +57,15 @@ export const useTopViewedPost = () => {
 
       if (Object.keys(postMap).length === 0) return;
 
-      // boardViews 실시간 구독
+      // boardViews 실시간 구독 — 조회수 상위 TOP_COUNT개 추출
       const unsubscribe = onSnapshot(collection(db, 'boardViews'), (snap) => {
-        let maxCount = -1;
-        let topDocId = '';
+        const ranked = snap.docs
+          .filter((d) => postMap[d.id])
+          .map((d) => ({ ...postMap[d.id], viewCount: d.data()?.count ?? 0 }))
+          .sort((a, b) => b.viewCount - a.viewCount)
+          .slice(0, TOP_COUNT);
 
-        snap.docs.forEach((d) => {
-          const count = d.data()?.count ?? 0;
-          if (count > maxCount && postMap[d.id]) {
-            maxCount = count;
-            topDocId = d.id;
-          }
-        });
-
-        if (topDocId && postMap[topDocId]) {
-          setTopPost({ ...postMap[topDocId], viewCount: maxCount });
-        }
+        setTopPosts(ranked);
       });
 
       return unsubscribe;
@@ -87,5 +81,5 @@ export const useTopViewedPost = () => {
     };
   }, []);
 
-  return { topPost };
+  return { topPosts };
 };

@@ -3,7 +3,13 @@
  * @rule: 상태·사이드이펙트만 담당, UI 로직 포함 금지
  */
 import { db } from '@/shared/firebase/firebase';
-import { collectionGroup, getDocs, query, Timestamp } from 'firebase/firestore';
+import {
+  collection,
+  collectionGroup,
+  getDocs,
+  query,
+  Timestamp,
+} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { LatestPost, LatestPosts } from '../types/boardType';
 
@@ -25,6 +31,7 @@ const fetchLatestN = async (
     .map((d) => {
       const data = d.data();
       return {
+        id: d.id,
         title: data.title ?? '',
         content: data.content ?? '',
         author: data.author ?? '',
@@ -33,9 +40,19 @@ const fetchLatestN = async (
       };
     })
     .filter((d) => d.title)
-    .sort((a, b) => b.createdAt - a.createdAt);
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .slice(0, n);
 
-  return Array.from({ length: n }, (_, i) => docs[i] ?? null);
+  const withComments = await Promise.all(
+    docs.map(async (post) => {
+      const commentsSnap = await getDocs(
+        collection(db, 'boardComments', post.id, 'items'),
+      );
+      return { ...post, commentCount: commentsSnap.size };
+    }),
+  );
+
+  return Array.from({ length: n }, (_, i) => withComments[i] ?? null);
 };
 
 export const useLatestPosts = () => {
@@ -45,6 +62,7 @@ export const useLatestPosts = () => {
     board: null,
     board2: null,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
@@ -54,9 +72,10 @@ export const useLatestPosts = () => {
         fetchLatestN('board', 2),
       ]);
       setLatest({ notice, event, board, board2 });
+      setIsLoading(false);
     };
     load();
   }, []);
 
-  return { latest };
+  return { latest, isLoading };
 };

@@ -25,8 +25,8 @@ import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
 import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
 import SeatReturnPage from '@/pages/TicketReturn/ui/SeatReturnPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
-import TravelReviewPage from '@/pages/TravelReview/ui/TravelReviewPage';
 import TravelReviewListPage from '@/pages/TravelReview/ui/TravelReviewListPage';
+import PCTravelReviewPage from '@/pages/TravelReview/ui/PCTravelReviewPage';
 import Modal from '@/shared/ui/Modal';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
 import MainLayout from '@/widgets/layouts/ui/MainLayout';
@@ -64,7 +64,7 @@ const Router = () => {
               path="/travel/review/list"
               element={<TravelReviewListPage />}
             />
-            <Route path="/travel/review" element={<TravelReviewPage />} />
+            <Route path="/travel/review" element={<PCTravelReviewPage />} />
           </Route>
           {/* 로그인 필수 페이지들 */}
           <Route element={<HomeLayout />}>

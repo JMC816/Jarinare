@@ -12,29 +12,9 @@ import { usePagination } from '@/features/TravelReview/hooks/usePagination';
 import type { DestinationReviewSummary } from '@/entities/TravelReview/types/travelReviewType';
 import { getAllStations } from '@/shared/lib/trainRoutes';
 import StarRating from '@/shared/ui/StarRating';
+import StarPicker from '@/shared/ui/StarPicker';
 
 const GAP = 12; // gap-3 = 12px
-
-const StarPicker = ({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: (v: number) => void;
-}) => (
-  <div className="flex items-center gap-1">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <button
-        key={star}
-        type="button"
-        onClick={() => onChange(star)}
-        className={`text-2xl ${star <= value ? 'text-yellow-400' : 'text-gray-300'}`}
-      >
-        ★
-      </button>
-    ))}
-  </div>
-);
 
 const TravelReviewListPage = () => {
   const navigate = useNavigate();

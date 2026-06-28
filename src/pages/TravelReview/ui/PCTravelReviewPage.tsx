@@ -12,6 +12,7 @@ import { usePCTravelReviewPage } from '../hooks/usePCTravelReviewPage';
 import { useMoreMenu } from '../hooks/useMoreMenu';
 import { getProfileColor } from '../constants/travelReviewPageConstants';
 import { formatReviewDate } from '@/shared/lib/formatDate';
+import StarPicker from '@/shared/ui/StarPicker';
 
 const MoreMenu = ({
   onEdit,
@@ -59,27 +60,6 @@ const MoreMenu = ({
     </div>
   );
 };
-
-const StarPicker = ({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: (v: number) => void;
-}) => (
-  <div className="flex items-center gap-1">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <button
-        key={star}
-        type="button"
-        onClick={() => onChange(star)}
-        className={`text-xl ${star <= value ? 'text-yellow-400' : 'text-gray-300'}`}
-      >
-        ★
-      </button>
-    ))}
-  </div>
-);
 
 const PCTravelReviewPage = () => {
   const navigate = useNavigate();

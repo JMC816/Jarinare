@@ -13,6 +13,7 @@ import { usePagination } from '@/features/TravelReview/hooks/usePagination';
 import { useSearchByContent } from '@/features/TravelReview/hooks/useSearchByContent';
 import type { TravelReview } from '@/entities/TravelReview/types/travelReviewType';
 import StarRating from '@/shared/ui/StarRating';
+import StarPicker from '@/shared/ui/StarPicker';
 
 const GAP = 12; // gap-3 = 12px
 
@@ -20,27 +21,6 @@ const formatDate = (seconds: number) => {
   const d = new Date(seconds * 1000);
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
 };
-
-const StarPicker = ({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: (v: number) => void;
-}) => (
-  <div className="flex items-center gap-1">
-    {[1, 2, 3, 4, 5].map((star) => (
-      <button
-        key={star}
-        type="button"
-        onClick={() => onChange(star)}
-        className={`text-xl ${star <= value ? 'text-yellow-400' : 'text-gray-300'}`}
-      >
-        ★
-      </button>
-    ))}
-  </div>
-);
 
 const TravelReviewPage = () => {
   const navigate = useNavigate();

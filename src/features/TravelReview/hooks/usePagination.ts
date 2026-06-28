@@ -14,7 +14,8 @@ export const usePagination = (items: PaginationItem[], pageSize: number) => {
 
   const goNext = () => setPage((p) => Math.min(p + 1, totalPages));
   const goPrev = () => setPage((p) => Math.max(p - 1, 1));
+  const goToPage = (n: number) => setPage(Math.min(Math.max(n, 1), totalPages));
   const reset = () => setPage(1);
 
-  return { paged, page: safePage, totalPages, goNext, goPrev, reset };
+  return { paged, page: safePage, totalPages, goNext, goPrev, goToPage, reset };
 };

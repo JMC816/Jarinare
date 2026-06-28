@@ -25,8 +25,8 @@ import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
 import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
 import SeatReturnPage from '@/pages/TicketReturn/ui/SeatReturnPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
-import TravelReviewListPage from '@/pages/TravelReview/ui/TravelReviewListPage';
 import PCTravelReviewPage from '@/pages/TravelReview/ui/PCTravelReviewPage';
+import PCTravelReviewListPage from '@/pages/TravelReview/ui/PCTravelReviewListPage';
 import Modal from '@/shared/ui/Modal';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
 import MainLayout from '@/widgets/layouts/ui/MainLayout';
@@ -62,7 +62,7 @@ const Router = () => {
             <Route path="/board/board/detail" element={<BoardDetailPage />} />
             <Route
               path="/travel/review/list"
-              element={<TravelReviewListPage />}
+              element={<PCTravelReviewListPage />}
             />
             <Route path="/travel/review" element={<PCTravelReviewPage />} />
           </Route>

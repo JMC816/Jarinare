@@ -2,6 +2,7 @@
  * @role: pages — PC 게시판 페이지 상수
  * @rule: 상수 정의만 담당
  */
+export const MOCK_HASHTAGS = ['#여행', '#자유', '#기차', '#자리나래'];
 import { BoardFilter } from '../types/boardPageType';
 
 export const FILTER_TABS: { label: BoardFilter }[] = [

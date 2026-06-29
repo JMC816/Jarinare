@@ -3,19 +3,38 @@ import { useComments } from '@/features/Board/hooks/useComments';
 import { useCreateComment } from '@/features/Board/hooks/useCreateComment';
 import { useDeleteComment } from '@/features/Board/hooks/useDeleteComment';
 import { useUpdateComment } from '@/features/Board/hooks/useUpdateComment';
+import { useLikeComment } from '@/features/Board/hooks/useLikeComment';
 import { auth } from '@/shared/firebase/firebase';
 import { formatBoardTime } from '@/shared/lib/formatDate';
+import { getProfileColor } from '@/shared/lib/profileColor';
 import { useRef, useState } from 'react';
+
+const HeartIcon = ({ filled }: { filled: boolean }) => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill={filled ? 'currentColor' : 'none'}
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+  </svg>
+);
 
 interface Props {
   postDocId: string;
+  isPC?: boolean;
 }
 
 const Avatar = ({ name }: { name: string }) => (
-  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-300">
-    <span className="text-xs font-bold text-white">
-      {name?.charAt(0) ?? '?'}
-    </span>
+  <div
+    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+    style={{ backgroundColor: getProfileColor(name) }}
+  >
+    {name?.charAt(0) ?? '?'}
   </div>
 );
 
@@ -23,10 +42,16 @@ const CommentItem = ({
   comment,
   allComments,
   postDocId,
+  isLiked,
+  likesCount,
+  onLike,
 }: {
   comment: Comment;
   allComments: Comment[];
   postDocId: string;
+  isLiked: boolean;
+  likesCount: number;
+  onLike: () => void;
 }) => {
   const currentUid = auth.currentUser?.uid;
   const isOwner = currentUid === comment.uid;
@@ -139,12 +164,21 @@ const CommentItem = ({
             <p className="mt-0.5 text-sm text-gray-800">{comment.content}</p>
           )}
 
-          <button
-            onClick={() => setShowReplyInput((v) => !v)}
-            className="mt-1 text-xs font-semibold text-gray-400"
-          >
-            답글 달기
-          </button>
+          <div className="mt-1 flex items-center gap-3">
+            <button
+              onClick={onLike}
+              className={`flex items-center gap-1 text-xs font-semibold transition-colors ${isLiked ? 'text-blue' : 'text-gray-400 hover:text-blue'}`}
+            >
+              <HeartIcon filled={isLiked} />
+              <span>{likesCount > 0 ? likesCount : '좋아요'}</span>
+            </button>
+            <button
+              onClick={() => setShowReplyInput((v) => !v)}
+              className="text-xs font-semibold text-gray-400 hover:text-gray-600"
+            >
+              답글 달기
+            </button>
+          </div>
         </div>
       </div>
 
@@ -288,7 +322,7 @@ const ReplyItem = ({
   );
 };
 
-export const CommentSection = ({ postDocId }: Props) => {
+export const CommentSection = ({ postDocId, isPC = false }: Props) => {
   const { comments } = useComments(postDocId);
   const { createComment } = useCreateComment(postDocId);
   const [input, setInput] = useState('');
@@ -296,6 +330,9 @@ export const CommentSection = ({ postDocId }: Props) => {
   const submittingRef = useRef(false);
 
   const topLevelComments = comments.filter((c) => c.parentId === null);
+  const { likedMap, likesMap, handleClickLike } = useLikeComment(
+    topLevelComments.map((c) => c.id),
+  );
 
   const handleSubmit = async () => {
     if (!input.trim() || submittingRef.current) return;
@@ -309,14 +346,14 @@ export const CommentSection = ({ postDocId }: Props) => {
   return (
     <div className="flex flex-col">
       {/* 댓글 헤더 */}
-      <div className="border-t border-gray-200 bg-white px-4 py-3">
-        <span className="text-sm font-bold text-gray-900">
-          댓글 {topLevelComments.length}
+      <div className="bg-white px-4 py-3">
+        <span className="text-md font-bold text-gray-900">
+          댓글 <span className="text-blue">{topLevelComments.length}</span>
         </span>
       </div>
 
       {/* 댓글 목록 */}
-      <div className="bg-white pb-[140px]">
+      <div className={`bg-white ${isPC ? '' : 'pb-[140px]'}`}>
         {topLevelComments.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-gray-400">
             <span className="text-2xl">💬</span>
@@ -326,19 +363,24 @@ export const CommentSection = ({ postDocId }: Props) => {
           </div>
         ) : (
           topLevelComments.map((comment) => (
-            <div key={comment.id} className="border-b border-gray-50">
+            <div key={comment.id}>
               <CommentItem
                 comment={comment}
                 allComments={comments}
                 postDocId={postDocId}
+                isLiked={likedMap[comment.id] ?? false}
+                likesCount={likesMap[comment.id] ?? 0}
+                onLike={() => handleClickLike(comment.id)}
               />
             </div>
           ))
         )}
       </div>
 
-      {/* 댓글 입력 — NavBar(80px) 위에 위치 */}
-      <div className="fixed bottom-20 left-1/2 flex w-[375px] -translate-x-1/2 items-center gap-3 border-t border-gray-200 bg-white px-4 py-3">
+      {/* 댓글 입력 */}
+      <div
+        className={`flex items-center gap-3 bg-white px-4 py-3 ${isPC ? '' : 'fixed bottom-20 left-1/2 w-[375px] -translate-x-1/2'}`}
+      >
         <Avatar name={auth.currentUser?.displayName ?? '?'} />
         <input
           ref={inputRef}
@@ -351,11 +393,11 @@ export const CommentSection = ({ postDocId }: Props) => {
             }
           }}
           placeholder="댓글을 입력하세요"
-          className="flex-1 rounded-xl bg-gray-100 px-4 py-2.5 text-sm outline-none"
+          className="flex-1 rounded-md bg-gray-100 px-4 py-2.5 text-sm outline-none"
         />
         <button
           onClick={handleSubmit}
-          className="shrink-0 text-sm font-bold text-blue disabled:opacity-40"
+          className="shrink-0 rounded-md bg-blue px-6 py-2 text-sm font-bold text-white disabled:opacity-40"
           disabled={!input.trim()}
         >
           등록

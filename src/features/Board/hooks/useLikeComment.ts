@@ -1,17 +1,20 @@
-import { BoardPost } from '@/entities/Board/types/boardType';
+/**
+ * @role: features — 댓글 좋아요 상태·토글 훅
+ * @rule: 상태·사이드이펙트만 담당, UI 로직 포함 금지
+ */
 import { auth, db } from '@/shared/firebase/firebase';
 import {
+  collection,
   doc,
   getDocs,
-  collection,
   increment,
-  runTransaction,
   onSnapshot,
+  runTransaction,
 } from 'firebase/firestore';
-import { useEffect, useRef, useState } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import { useEffect, useRef, useState } from 'react';
 
-export const useLikeBoard = (items: BoardPost[]) => {
+export const useLikeComment = (commentIds: string[]) => {
   const [user, setUser] = useState<User | null>(auth.currentUser);
   const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
   const [likesMap, setLikesMap] = useState<Record<string, number>>({});
@@ -23,24 +26,19 @@ export const useLikeBoard = (items: BoardPost[]) => {
     return () => unsubscribe();
   }, []);
 
-  // items 로드 시 boardLikes/{docId} 실시간 구독
+  // commentIds 변경 시 commentLikes/{commentId} 실시간 구독
   useEffect(() => {
-    if (items.length === 0) return;
+    if (commentIds.length === 0) return;
 
     listenersRef.current.forEach((unsub) => unsub());
     listenersRef.current = [];
 
-    items.forEach((item) => {
-      const docId = item.id.split('/').pop()!;
-      const countRef = doc(db, 'boardLikes', docId);
-
+    commentIds.forEach((id) => {
+      const countRef = doc(db, 'commentLikes', id);
       const unsub = onSnapshot(countRef, (snap) => {
-        const count = snap.exists()
-          ? (snap.data().count ?? 0)
-          : (item.likes ?? 0);
-        setLikesMap((prev) => ({ ...prev, [item.id]: count }));
+        const count = snap.exists() ? (snap.data().count ?? 0) : 0;
+        setLikesMap((prev) => ({ ...prev, [id]: count }));
       });
-
       listenersRef.current.push(unsub);
     });
 
@@ -48,47 +46,41 @@ export const useLikeBoard = (items: BoardPost[]) => {
       listenersRef.current.forEach((unsub) => unsub());
       listenersRef.current = [];
     };
-  }, [items]);
+  }, [commentIds.join(',')]);
 
   // 로그인 유저의 좋아요 상태 로드
   useEffect(() => {
-    if (!user || items.length === 0) return;
+    if (!user || commentIds.length === 0) return;
 
     const fetchLiked = async () => {
       const snap = await getDocs(
-        collection(db, 'isLiked', user.uid, 'boardVotes'),
+        collection(db, 'isLiked', user.uid, 'commentVotes'),
       );
       const likedDocIds: Record<string, boolean> = {};
       snap.forEach((d) => {
         likedDocIds[d.id] = d.data()?.liked === true;
       });
-      const likedByPath: Record<string, boolean> = {};
-      items.forEach((item) => {
-        const docId = item.id.split('/').pop()!;
-        likedByPath[item.id] = likedDocIds[docId] ?? false;
-      });
-      setLikedMap(likedByPath);
+      setLikedMap(likedDocIds);
     };
 
     fetchLiked();
-  }, [user, items.length]);
+  }, [user, commentIds.join(',')]);
 
-  const handleClickLike = async (boardId: string) => {
-    if (!user || processingRef.current.has(boardId)) return;
-    processingRef.current.add(boardId);
+  const handleClickLike = async (commentId: string) => {
+    if (!user || processingRef.current.has(commentId)) return;
+    processingRef.current.add(commentId);
 
-    const isCurrentlyLiked = likedMap[boardId] ?? false;
-    const docId = boardId.split('/').pop()!;
+    const isCurrentlyLiked = likedMap[commentId] ?? false;
 
-    setLikedMap((prev) => ({ ...prev, [boardId]: !isCurrentlyLiked }));
+    setLikedMap((prev) => ({ ...prev, [commentId]: !isCurrentlyLiked }));
     setLikesMap((prev) => ({
       ...prev,
-      [boardId]: (prev[boardId] ?? 0) + (isCurrentlyLiked ? -1 : 1),
+      [commentId]: (prev[commentId] ?? 0) + (isCurrentlyLiked ? -1 : 1),
     }));
 
     try {
-      const likeRef = doc(db, 'isLiked', user.uid, 'boardVotes', docId);
-      const countRef = doc(db, 'boardLikes', docId);
+      const likeRef = doc(db, 'isLiked', user.uid, 'commentVotes', commentId);
+      const countRef = doc(db, 'commentLikes', commentId);
 
       await runTransaction(db, async (transaction) => {
         const snap = await transaction.get(likeRef);
@@ -102,15 +94,14 @@ export const useLikeBoard = (items: BoardPost[]) => {
           transaction.set(countRef, { count: increment(1) }, { merge: true });
         }
       });
-    } catch (error) {
-      console.error('자유게시판 좋아요 오류:', error);
-      setLikedMap((prev) => ({ ...prev, [boardId]: isCurrentlyLiked }));
+    } catch {
+      setLikedMap((prev) => ({ ...prev, [commentId]: isCurrentlyLiked }));
       setLikesMap((prev) => ({
         ...prev,
-        [boardId]: (prev[boardId] ?? 0) + (isCurrentlyLiked ? 1 : -1),
+        [commentId]: (prev[commentId] ?? 0) + (isCurrentlyLiked ? 1 : -1),
       }));
     } finally {
-      processingRef.current.delete(boardId);
+      processingRef.current.delete(commentId);
     }
   };
 

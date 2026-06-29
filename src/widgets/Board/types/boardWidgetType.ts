@@ -12,7 +12,12 @@ export interface BoardProps {
   externalSortOrder?: 'newest' | 'views';
 }
 
+export type WriteCategory = 'board' | 'notice' | 'event';
+
 export interface PCWriteFormProps extends BoardType {
   categoryLabel: string;
   backLabel: string;
+  categorySelectable?: boolean;
+  selectedCategory?: WriteCategory;
+  onCategoryChange?: (cat: WriteCategory) => void;
 }

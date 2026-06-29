@@ -6,6 +6,7 @@ export interface TravelReview {
   rating: number;
   createdAt: number;
   updatedAt?: number;
+  imageUrl?: string | null;
 }
 
 export interface DestinationReviewSummary {

@@ -93,6 +93,11 @@ const PCTravelReviewPage = () => {
     setWriteContent,
     writeRating,
     setWriteRating,
+    writePreviewImg,
+    setWriteFile,
+    setWritePreviewImg,
+    writeFileInputRef,
+    onWriteFileChange,
     submitting,
     handleWriteSubmit,
     processedReviews,
@@ -214,6 +219,75 @@ const PCTravelReviewPage = () => {
                     rows={4}
                     className="rounded-sm border border-gray-200 px-4 py-2.5 text-sm text-gray-700 outline-none placeholder:text-gray-300 focus:border-blue"
                   />
+                  {/* 사진 첨부 */}
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-xs font-bold text-gray-400">사진 첨부</p>
+                    {writePreviewImg ? (
+                      <div className="relative w-fit">
+                        <img
+                          src={writePreviewImg}
+                          alt="미리보기"
+                          className="h-[100px] w-[100px] rounded-sm border border-gray-200 object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setWriteFile(null);
+                            setWritePreviewImg(null);
+                            if (writeFileInputRef.current)
+                              writeFileInputRef.current.value = '';
+                          }}
+                          className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-white text-gray-400 shadow hover:text-gray-600"
+                        >
+                          <svg
+                            width="10"
+                            height="10"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
+                      </div>
+                    ) : (
+                      <label
+                        htmlFor="review-file"
+                        className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-sm border-2 border-dashed border-gray-200 py-5 transition-colors hover:border-gray-400"
+                        style={{ backgroundColor: '#f8fbff' }}
+                      >
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#9ca3af"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                          <circle cx="12" cy="13" r="4" />
+                        </svg>
+                        <span className="text-sm font-semibold text-gray-400">
+                          클릭하여 사진을 첨부하세요
+                        </span>
+                        <span className="text-xs text-gray-300">JPG, PNG</span>
+                      </label>
+                    )}
+                    <input
+                      ref={writeFileInputRef}
+                      id="review-file"
+                      type="file"
+                      accept="image/jpeg,image/png"
+                      onChange={onWriteFileChange}
+                      className="hidden"
+                    />
+                  </div>
                   <button
                     onClick={handleWriteSubmit}
                     disabled={
@@ -438,6 +512,13 @@ const PCTravelReviewPage = () => {
                             <p className="text-sm text-gray-500">
                               {review.content}
                             </p>
+                            {review.imageUrl && (
+                              <img
+                                src={review.imageUrl}
+                                alt="후기 이미지"
+                                className="mt-2 max-h-60 w-full rounded-sm object-cover"
+                              />
+                            )}
                           </div>
                         </div>
                       )}

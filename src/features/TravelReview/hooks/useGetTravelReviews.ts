@@ -43,6 +43,7 @@ export const useGetTravelReviews = (destination: string) => {
           rating: d.rating,
           createdAt: parseTs(d.createdAt),
           updatedAt: d.updatedAt ? parseTs(d.updatedAt) : undefined,
+          imageUrl: d.imageUrl ?? null,
         };
       });
 

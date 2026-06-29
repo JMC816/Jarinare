@@ -279,7 +279,7 @@ const PCBoardDetailPage = () => {
                     </button>
                     <button className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-500 transition-colors hover:bg-yellow-50 hover:text-yellow-500">
                       <StarIcon />
-                      <span>스크랩</span>
+                      <span>즐겨찾기</span>
                     </button>
                   </div>
                 </div>

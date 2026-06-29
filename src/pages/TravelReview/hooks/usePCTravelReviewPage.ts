@@ -2,7 +2,7 @@
  * @role: pages — PC 여행지 후기 상세 페이지 상태·로직 훅
  * @rule: 상태·사이드이펙트·이벤트 핸들러만 담당
  */
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUpdateTravelReview } from '@/features/TravelReview/hooks/useUpdateTravelReview';
 import { useDeleteTravelReview } from '@/features/TravelReview/hooks/useDeleteTravelReview';
@@ -27,6 +27,9 @@ export const usePCTravelReviewPage = (
   const [writeTitle, setWriteTitle] = useState('');
   const [writeContent, setWriteContent] = useState('');
   const [writeRating, setWriteRating] = useState(5);
+  const [writeFile, setWriteFile] = useState<File | null>(null);
+  const [writePreviewImg, setWritePreviewImg] = useState<string | null>(null);
+  const writeFileInputRef = useRef<HTMLInputElement | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
@@ -65,15 +68,32 @@ export const usePCTravelReviewPage = (
     navigate(0);
   };
 
+  const onWriteFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setWriteFile(e.target.files[0]);
+      const reader = new FileReader();
+      reader.readAsDataURL(e.target.files[0]);
+      reader.onloadend = () => setWritePreviewImg(reader.result as string);
+    }
+  };
+
   const handleWriteSubmit = async () => {
     if (!writeTitle.trim() || !writeContent.trim()) return;
     setSubmitting(true);
-    await createReview(writeTitle.trim(), writeContent.trim(), writeRating);
+    await createReview(
+      writeTitle.trim(),
+      writeContent.trim(),
+      writeRating,
+      writeFile,
+    );
     setSubmitting(false);
     setShowWriteForm(false);
     setWriteTitle('');
     setWriteContent('');
     setWriteRating(5);
+    setWriteFile(null);
+    setWritePreviewImg(null);
+    if (writeFileInputRef.current) writeFileInputRef.current.value = '';
     navigate(0);
   };
 
@@ -129,6 +149,11 @@ export const usePCTravelReviewPage = (
     setWriteContent,
     writeRating,
     setWriteRating,
+    writePreviewImg,
+    setWriteFile,
+    setWritePreviewImg,
+    writeFileInputRef,
+    onWriteFileChange,
     submitting,
     handleWriteSubmit,
     processedReviews,

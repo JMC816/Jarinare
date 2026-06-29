@@ -2,35 +2,52 @@
  * @role: pages — PC 게시판 허브 페이지
  * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
  */
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
-import { useLatestPosts } from '@/features/Board/hooks/useLatestPosts';
-import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
 import SeasonBanner from '@/widgets/Season/ui/SeasonBanner';
 import TravelReviewTicker from '@/widgets/TravelReview/ui/TravelReviewTicker';
 import { usePCBoardPage } from '../hooks/usePCBoardPage';
 import { useBoardCounts } from '@/features/Board/hooks/useBoardCounts';
-import { BOARD_CATEGORIES, FILTER_TABS } from '../constants/boardPageConstants';
+import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
+import {
+  BOARD_CATEGORIES,
+  FILTER_TABS,
+  CAT_STYLE_MAP,
+} from '../constants/boardPageConstants';
 
 const PCBoardPage = () => {
   const navigate = useNavigate();
-  const { latest, isLoading: isLatestLoading } = useLatestPosts();
+  const rightColRef = useRef<HTMLDivElement>(null);
 
-  const { topPosts } = useTopViewedPost();
   const {
     searchQuery,
     setSearchQuery,
     handleSearch,
+    handleClearSearch,
+    activeSearchQuery,
+    searchResults,
     activeFilter,
     setActiveFilter,
     isNew,
     formatDate,
     totalReviewCount,
-    filteredBoards,
-    getDetailNav,
-  } = usePCBoardPage();
+    displayPosts,
+    currentPage,
+    setCurrentPage,
+    isLoading,
+    topPosts,
+    top3DocIds,
+    pagedPosts,
+    showPagination,
+    visiblePages,
+    totalPages,
+    rightColH,
+  } = usePCBoardPage(rightColRef);
+
   const { counts } = useBoardCounts();
+  const { markSeen } = useBoardSeen();
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
@@ -44,7 +61,7 @@ const PCBoardPage = () => {
           style={{ height: 'calc(100vh - 3.5rem)' }}
         >
           <div className="px-32 pb-16 pt-10">
-            <div className="mb-6 flex items-start justify-between">
+            <div className="mb-6 flex items-end justify-between">
               <div>
                 <p className="text-xs font-bold tracking-widest text-gray-400">
                   COMMUNITY
@@ -56,65 +73,48 @@ const PCBoardPage = () => {
                   다양한 여행 정보와 소식을 확인하세요
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <form onSubmit={handleSearch} className="relative">
-                  <svg
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="11" cy="11" r="8" />
-                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                  </svg>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="게시물 검색"
-                    className="rounded-md border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue"
-                  />
-                </form>
-                <button
-                  onClick={() => navigate('/board/board')}
-                  className="flex items-center gap-2 rounded-md bg-blue px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue/90"
+              <form onSubmit={handleSearch} className="relative">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                  </svg>
-                  글쓰기
-                </button>
-              </div>
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="게시물 검색"
+                  className="rounded-md border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue"
+                />
+              </form>
             </div>
 
             <div className="flex flex-col gap-6">
               {/* 이벤트 */}
               <SeasonBanner />
 
-              {/* 베스트 여행지 후기 — 가로 풀 */}
+              {/* 베스트 여행지 후기 */}
               <div className="overflow-hidden">
                 <TravelReviewTicker title="베스트 여행지 후기" />
               </div>
 
               {/* 2열 그리드 — 왼쪽 4fr(통합게시판), 오른쪽 1fr(인기게시물+카테고리) */}
-              <div className="grid grid-cols-[4fr_1fr] items-stretch gap-6">
+              <div className="grid grid-cols-[4fr_1fr] items-start gap-6">
                 {/* [col1] 통합게시판 */}
-                <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
-                  {/* 카드 내부 헤더: 제목 + 필터 탭 */}
+                <div
+                  className="flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm"
+                  style={showPagination ? { height: rightColH } : undefined}
+                >
+                  {/* 카드 헤더: 제목 + 필터 탭 + 글쓰기 버튼 */}
                   <div className="flex items-center gap-2 px-5 py-4">
                     <svg
                       width="15"
@@ -131,25 +131,104 @@ const PCBoardPage = () => {
                     <h2 className="text-lg font-bold text-gray-900">
                       통합게시판
                     </h2>
-                    <div className="ml-auto flex items-center gap-1 rounded-[3px] bg-gray-100 p-1">
-                      {FILTER_TABS.map(({ label }) => (
-                        <button
-                          key={label}
-                          onClick={() => setActiveFilter(label)}
-                          className={`rounded-[3px] px-3 py-1 text-xs font-bold transition-colors ${
-                            activeFilter === label
-                              ? 'bg-blue text-white'
-                              : 'text-gray-400 hover:text-gray-600'
-                          }`}
+                    <div className="ml-auto flex items-center gap-2">
+                      {activeSearchQuery ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-400">
+                            <span className="font-bold text-blue">
+                              &ldquo;{activeSearchQuery}&rdquo;
+                            </span>{' '}
+                            검색결과 {searchResults.length}개
+                          </span>
+                          <button
+                            onClick={handleClearSearch}
+                            className="rounded-[3px] bg-gray-100 px-2 py-1 text-xs font-bold text-gray-500 hover:bg-gray-200"
+                          >
+                            초기화
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1 rounded-sm bg-gray-100 p-1">
+                          {FILTER_TABS.map(({ label }) => (
+                            <button
+                              key={label}
+                              onClick={() => setActiveFilter(label)}
+                              className={`rounded-sm px-4 py-1.5 text-sm font-bold transition-colors ${
+                                activeFilter === label
+                                  ? 'bg-blue text-white'
+                                  : 'text-gray-400 hover:text-gray-600'
+                              }`}
+                            >
+                              {label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      <button
+                        onClick={() => navigate('/board/write')}
+                        className="flex items-center gap-1.5 rounded-sm bg-blue px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue/90"
+                      >
+                        <svg
+                          width="13"
+                          height="13"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          {label}
-                        </button>
-                      ))}
+                          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                        </svg>
+                        글쓰기
+                      </button>
                     </div>
                   </div>
+
                   {/* 게시물 행 */}
-                  <div className="flex flex-1 flex-col bg-white">
-                    {isLatestLoading ? (
+                  <div className="flex flex-1 flex-col overflow-hidden bg-white">
+                    {activeSearchQuery ? (
+                      searchResults.length === 0 ? (
+                        <div className="flex flex-1 items-center justify-center py-10 text-sm text-gray-300">
+                          검색 결과가 없습니다
+                        </div>
+                      ) : (
+                        searchResults.map((post) => {
+                          const style = CAT_STYLE_MAP[post._category];
+                          return (
+                            <button
+                              key={post.id}
+                              onClick={() =>
+                                navigate(style.path, {
+                                  state: { [style.stateKey]: post },
+                                })
+                              }
+                              className="relative flex w-full items-center gap-6 px-5 py-4 text-left transition-colors hover:bg-gray-50"
+                            >
+                              <span className="absolute inset-x-5 bottom-0 border-b border-gray-100" />
+                              <span
+                                className="w-[44px] shrink-0 rounded-[3px] px-1.5 py-0.5 text-center text-[10px] font-bold"
+                                style={{
+                                  backgroundColor: style.bgColor,
+                                  color: style.textColor,
+                                }}
+                              >
+                                {style.badge}
+                              </span>
+                              <span className="flex-1 truncate text-base font-bold text-gray-800">
+                                {post.title}
+                              </span>
+                              <span className="w-[56px] shrink-0 truncate text-right text-sm text-gray-400">
+                                {post.author}
+                              </span>
+                              <span className="w-[52px] shrink-0 text-right text-sm text-gray-400">
+                                {formatDate(post.createdAt)}
+                              </span>
+                            </button>
+                          );
+                        })
+                      )
+                    ) : isLoading ? (
                       Array.from({ length: 4 }).map((_, i) => (
                         <div
                           key={i}
@@ -167,113 +246,152 @@ const PCBoardPage = () => {
                       <div className="flex flex-1 items-center justify-center py-10 text-sm text-gray-300">
                         여행지 후기 게시물이 없습니다
                       </div>
+                    ) : displayPosts.length === 0 ? (
+                      <div className="flex flex-1 items-center justify-center py-10 text-sm text-gray-300">
+                        게시물이 없습니다
+                      </div>
                     ) : (
-                      filteredBoards.map(
-                        ({ key, badge, bgColor, textColor }) => {
-                          const post = latest[key];
-                          const hasNew = isNew(post?.createdAt, key);
-                          const dateStr = post?.createdAt
-                            ? formatDate(post.createdAt)
-                            : '-';
-                          const detailNav = post
-                            ? getDetailNav(key, post)
-                            : null;
-
-                          return (
-                            <button
-                              key={key}
-                              onClick={() =>
-                                detailNav &&
-                                navigate(detailNav.path, {
-                                  state: detailNav.state,
-                                })
-                              }
-                              className="relative flex w-full items-center gap-6 px-5 py-4 text-left transition-colors hover:bg-gray-50"
+                      pagedPosts.map((post) => {
+                        const style = CAT_STYLE_MAP[post._category];
+                        const isHot = top3DocIds.has(
+                          post.id.split('/').pop() ?? '',
+                        );
+                        const hasNew = isNew(post.createdAt, post._category);
+                        return (
+                          <button
+                            key={post.id}
+                            onClick={() => {
+                              if (hasNew)
+                                markSeen(
+                                  post._category as
+                                    | 'notice'
+                                    | 'event'
+                                    | 'board',
+                                );
+                              navigate(style.path, {
+                                state: {
+                                  [style.stateKey]: {
+                                    id: post.id,
+                                    title: post.title,
+                                    content: post.content,
+                                    author: post.author,
+                                    likes: post.likes,
+                                    views: post.views,
+                                    createdAt: post.createdAt,
+                                    imageUrl: post.imageUrl,
+                                  },
+                                },
+                              });
+                            }}
+                            className="relative flex w-full items-center gap-6 px-5 py-4 text-left transition-colors hover:bg-gray-50"
+                          >
+                            <span className="absolute inset-x-5 bottom-0 border-b border-gray-100" />
+                            <span
+                              className="w-[44px] shrink-0 rounded-[3px] px-1.5 py-0.5 text-center text-[10px] font-bold"
+                              style={{
+                                backgroundColor: style.bgColor,
+                                color: style.textColor,
+                              }}
                             >
-                              <span className="absolute inset-x-5 bottom-0 border-b border-gray-100" />
-                              <span
-                                className="w-[44px] shrink-0 rounded-[3px] px-1.5 py-0.5 text-center text-[10px] font-bold"
-                                style={{
-                                  backgroundColor: bgColor,
-                                  color: textColor,
-                                }}
-                              >
-                                {badge}
-                              </span>
-                              <span className="flex-1 truncate text-base font-bold text-gray-800">
-                                {post ? post.title : '등록된 게시물이 없습니다'}
-                                {(post?.commentCount ?? 0) > 0 && (
-                                  <span className="ml-2 inline-flex items-center justify-center align-middle text-sm font-bold text-blue">
-                                    [{post!.commentCount}]
-                                  </span>
-                                )}
-                                {hasNew && (
-                                  <span className="ml-2 inline-flex items-center justify-center rounded-[3px] bg-lightImpossible px-1.5 py-0.5 align-middle text-[10px] font-bold text-red">
-                                    NEW
-                                  </span>
-                                )}
-                              </span>
-                              <span className="w-[56px] shrink-0 truncate text-right text-sm text-gray-400">
-                                {post?.author || '-'}
-                              </span>
-                              <span className="w-[52px] shrink-0 text-right text-sm text-gray-400">
-                                {dateStr}
-                              </span>
-                              <span className="w-[28px] shrink-0 text-right text-sm text-gray-400">
-                                {post?.viewCount ?? '-'}
-                              </span>
-                            </button>
-                          );
-                        },
-                      )
+                              {style.badge}
+                            </span>
+                            <span className="flex-1 truncate text-base font-bold text-gray-800">
+                              {post.title}
+                              {(post.commentCount ?? 0) > 0 && (
+                                <span className="ml-2 inline-flex items-center justify-center align-middle text-sm font-bold text-blue">
+                                  [{post.commentCount}]
+                                </span>
+                              )}
+                              {isHot && (
+                                <span className="ml-2 inline-flex items-center justify-center rounded-[3px] bg-red px-1.5 py-0.5 align-middle text-[10px] font-bold text-white">
+                                  HOT
+                                </span>
+                              )}
+                              {hasNew && !isHot && (
+                                <span className="ml-2 inline-flex items-center justify-center rounded-[3px] bg-lightImpossible px-1.5 py-0.5 align-middle text-[10px] font-bold text-red">
+                                  NEW
+                                </span>
+                              )}
+                            </span>
+                            <span className="w-[56px] shrink-0 truncate text-right text-sm text-gray-400">
+                              {post.author}
+                            </span>
+                            <span className="w-[52px] shrink-0 text-right text-sm text-gray-400">
+                              {formatDate(post.createdAt)}
+                            </span>
+                            <span className="w-[28px] shrink-0 text-right text-sm text-gray-400">
+                              {post.views ?? '-'}
+                            </span>
+                          </button>
+                        );
+                      })
                     )}
                   </div>
-                  {/* 페이지네이션 */}
-                  <div
-                    className="flex items-center justify-center gap-1 px-5 py-3"
-                    style={{ minHeight: 'var(--header-h)' }}
-                  >
-                    <button className="flex items-center justify-center px-1 text-gray-400 hover:text-gray-600">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="15 18 9 12 15 6" />
-                      </svg>
-                    </button>
-                    {[1, 2, 3].map((page) => (
+
+                  {/* 페이지네이션 — 게시물이 많을 때만 표시 */}
+                  {showPagination && (
+                    <div className="flex items-center justify-center gap-1 px-5 py-3">
                       <button
-                        key={page}
-                        className={`flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold transition-colors ${page === 1 ? 'bg-blue text-white' : 'text-gray-400 hover:bg-gray-200'}`}
+                        onClick={() =>
+                          setCurrentPage(Math.max(0, currentPage - 1))
+                        }
+                        disabled={currentPage === 0}
+                        className="flex items-center justify-center px-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
                       >
-                        {page}
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="15 18 9 12 15 6" />
+                        </svg>
                       </button>
-                    ))}
-                    <button className="flex items-center justify-center px-1 text-gray-400 hover:text-gray-600">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                      {visiblePages.map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold transition-colors ${
+                            page === currentPage
+                              ? 'bg-blue text-white'
+                              : 'text-gray-400 hover:bg-gray-200'
+                          }`}
+                        >
+                          {page + 1}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() =>
+                          setCurrentPage(
+                            Math.min(totalPages - 1, currentPage + 1),
+                          )
+                        }
+                        disabled={currentPage === totalPages - 1}
+                        className="flex items-center justify-center px-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
                       >
-                        <polyline points="9 18 15 12 9 6" />
-                      </svg>
-                    </button>
-                  </div>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* [col2] 실시간 인기 게시물 + 카테고리 (세로 적층) */}
-                <div className="flex flex-col gap-6">
+                <div ref={rightColRef} className="flex flex-col gap-6">
                   {/* 실시간 인기 */}
                   <div className="flex flex-col overflow-hidden rounded-xl bg-white p-5 shadow-sm">
                     <div className="mb-4 flex items-center gap-2">

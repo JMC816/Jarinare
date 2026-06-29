@@ -5,6 +5,7 @@ import BoardPage from '@/pages/Board/ui/BoardPage';
 import BoardDetailPage from '@/pages/Board/ui/BoardDetailPage';
 import BoardListPage from '@/pages/Board/ui/BoardListPage';
 import BoardWirtePage from '@/pages/Board/ui/BoardWritePage';
+import PCUnifiedWritePage from '@/pages/Board/ui/PCUnifiedWritePage';
 import EventDetailPage from '@/pages/Board/ui/EventDetailPage';
 import EventListPage from '@/pages/Board/ui/EventListPage';
 import EventWirtePage from '@/pages/Board/ui/EventWritePage';
@@ -71,6 +72,7 @@ const Router = () => {
             <Route path="/board/notice" element={<NoticeWirtePage />} />
             <Route path="/board/event" element={<EventWirtePage />} />
             <Route path="/board/board" element={<BoardWirtePage />} />
+            <Route path="/board/write" element={<PCUnifiedWritePage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypage/point" element={<PointPage />} />
             <Route path="/returnlist" element={<TicketReturnPage />} />

@@ -8,6 +8,15 @@ import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import cross from '@/assets/icons/cross.png';
 import { PCWriteFormProps } from '../types/boardWidgetType';
 
+const CATEGORY_OPTIONS: {
+  value: import('../types/boardWidgetType').WriteCategory;
+  label: string;
+}[] = [
+  { value: 'board', label: '자유' },
+  { value: 'notice', label: '공지' },
+  { value: 'event', label: '이벤트' },
+];
+
 const PCWriteForm = ({
   categoryLabel,
   backLabel,
@@ -23,6 +32,9 @@ const PCWriteForm = ({
   setFile,
   setPreviewImg,
   onSubmit,
+  categorySelectable = false,
+  selectedCategory,
+  onCategoryChange,
 }: PCWriteFormProps) => {
   const navigate = useNavigate();
 
@@ -70,9 +82,43 @@ const PCWriteForm = ({
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <span className="text-xs font-bold text-gray-400">분류</span>
-                  <div className="rounded-sm border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400">
-                    {categoryLabel}
-                  </div>
+                  {categorySelectable ? (
+                    <div className="relative">
+                      <select
+                        value={selectedCategory}
+                        onChange={(e) =>
+                          onCategoryChange?.(
+                            e.target
+                              .value as import('../types/boardWidgetType').WriteCategory,
+                          )
+                        }
+                        className="w-full appearance-none rounded-sm border border-gray-200 py-2 pl-3 pr-8 text-sm text-gray-700 outline-none focus:border-blue"
+                      >
+                        {CATEGORY_OPTIONS.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                      <svg
+                        className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </div>
+                  ) : (
+                    <div className="rounded-sm border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-400">
+                      {categoryLabel}
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <span className="text-xs font-bold text-gray-400">
@@ -146,7 +192,19 @@ const PCWriteForm = ({
                     className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-sm border-2 border-dashed border-gray-200 py-6 transition-colors hover:border-gray-400"
                     style={{ backgroundColor: '#f8fbff' }}
                   >
-                    <span className="text-3xl">📷</span>
+                    <svg
+                      width="28"
+                      height="28"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#9ca3af"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                      <circle cx="12" cy="13" r="4" />
+                    </svg>
                     <span className="text-sm font-semibold text-gray-400">
                       클릭하여 사진을 첨부하세요
                     </span>

@@ -1,7 +1,13 @@
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { db } from '@/shared/firebase/firebase';
 import supabase from '@/shared/supabase/supabase';
-import { collectionGroup, getDocs, query, Timestamp } from 'firebase/firestore';
+import {
+  collection,
+  collectionGroup,
+  getDocs,
+  query,
+  Timestamp,
+} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 export const useGetBoard = () => {
@@ -42,6 +48,10 @@ export const useGetBoard = () => {
             imageUrl = urlData.publicUrl;
           }
 
+          const commentsSnap = await getDocs(
+            collection(db, 'boardComments', item.id, 'items'),
+          );
+
           return {
             id: item.ref.path,
             author: data.author,
@@ -51,6 +61,7 @@ export const useGetBoard = () => {
             likes: data.likes,
             createdAt: createdAtSeconds,
             imageUrl,
+            commentCount: commentsSnap.size,
           } as BoardPost;
         }),
       );

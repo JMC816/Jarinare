@@ -7,6 +7,7 @@ export interface BoardPost {
   likes: number;
   createdAt: number;
   imageUrl: string | null;
+  commentCount?: number;
 }
 
 export interface BoardCategory {

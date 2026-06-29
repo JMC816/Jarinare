@@ -180,29 +180,18 @@ const PCBoardDetailPage = () => {
                 {/* 제목칸 */}
                 <div className="px-8 pb-6 pt-8">
                   <div className="flex flex-col gap-3">
-                    {/* 1행: 자유 뱃지 + ··· 버튼 */}
-                    <div className="flex items-center justify-between">
-                      <span
-                        className="rounded px-2 py-0.5 text-xs font-bold"
-                        style={{ backgroundColor: '#dcfce7', color: '#16a34a' }}
-                      >
-                        자유
-                      </span>
-                      {isOwner && (
-                        <OwnerMenu
-                          menuOpen={menuOpen}
-                          onToggle={() => setMenuOpen((v) => !v)}
-                          onClose={() => setMenuOpen(false)}
-                          onEdit={() => setEditingPost({ ...currentPost })}
-                          onDelete={handleDelete}
-                        />
-                      )}
-                    </div>
+                    {/* 1행: 자유 뱃지 */}
+                    <span
+                      className="w-fit rounded px-2 py-0.5 text-xs font-bold"
+                      style={{ backgroundColor: '#dcfce7', color: '#16a34a' }}
+                    >
+                      자유
+                    </span>
                     {/* 2행: 제목 */}
                     <h1 className="text-2xl font-black leading-snug text-gray-900">
                       {currentPost.title}
                     </h1>
-                    {/* 3행: 프로필 + 팔로우 버튼 */}
+                    {/* 3행: 프로필 + 팔로우 + ··· 버튼 */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <div
@@ -225,9 +214,20 @@ const PCBoardDetailPage = () => {
                           </span>
                         </div>
                       </div>
-                      <button className="rounded-sm bg-lightBlue px-4 py-1.5 text-sm font-bold text-blue transition-colors hover:bg-lightBlueImpossible">
-                        팔로우
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button className="rounded-sm bg-lightBlue px-4 py-1.5 text-sm font-bold text-blue transition-colors hover:bg-lightBlueImpossible">
+                          팔로우
+                        </button>
+                        {isOwner && (
+                          <OwnerMenu
+                            menuOpen={menuOpen}
+                            onToggle={() => setMenuOpen((v) => !v)}
+                            onClose={() => setMenuOpen(false)}
+                            onEdit={() => setEditingPost({ ...currentPost })}
+                            onDelete={handleDelete}
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

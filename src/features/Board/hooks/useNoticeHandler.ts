@@ -73,7 +73,7 @@ export const useNoticeHandler = () => {
           return;
         }
       }
-      navigate('/board/noticelist');
+      navigate('/board');
     } catch (err) {
       console.error('오류:', err);
     } finally {

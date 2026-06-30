@@ -68,7 +68,7 @@ export const useBaordHandler = () => {
           return;
         }
       }
-      navigate('/board/boardlist');
+      navigate('/board');
     } catch (err) {
       console.error('오류:', err);
     } finally {

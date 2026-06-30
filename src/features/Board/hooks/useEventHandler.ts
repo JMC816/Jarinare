@@ -68,7 +68,7 @@ export const useEventHandler = () => {
           return;
         }
       }
-      navigate('/board/eventlist');
+      navigate('/board');
     } catch (err) {
       console.error('오류:', err);
     } finally {

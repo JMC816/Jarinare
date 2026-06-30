@@ -9,7 +9,7 @@ import PCUnifiedWritePage from '@/pages/Board/ui/PCUnifiedWritePage';
 import EventDetailPage from '@/pages/Board/ui/EventDetailPage';
 import EventListPage from '@/pages/Board/ui/EventListPage';
 import EventWirtePage from '@/pages/Board/ui/EventWritePage';
-import NoticeDetailPage from '@/pages/Board/ui/NoticeDetailPage';
+import PCNoticeDetailPage from '@/pages/Board/ui/PCNoticeDetailPage';
 import NoticeListPage from '@/pages/Board/ui/NoticeListPage';
 import NoticeWirtePage from '@/pages/Board/ui/NoticeWritePage';
 import MenuPage from '@/pages/Menu/ui/MenuPage';
@@ -58,7 +58,10 @@ const Router = () => {
             <Route path="/board/noticelist" element={<NoticeListPage />} />
             <Route path="/board/eventlist" element={<EventListPage />} />
             <Route path="/board/boardlist" element={<BoardListPage />} />
-            <Route path="/board/notice/detail" element={<NoticeDetailPage />} />
+            <Route
+              path="/board/notice/detail"
+              element={<PCNoticeDetailPage />}
+            />
             <Route path="/board/event/detail" element={<EventDetailPage />} />
             <Route path="/board/board/detail" element={<BoardDetailPage />} />
             <Route

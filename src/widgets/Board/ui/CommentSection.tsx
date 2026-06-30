@@ -1,3 +1,7 @@
+/**
+ * @role: widgets — 댓글 섹션 UI
+ * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
+ */
 import { Comment } from '@/entities/Board/types/commentType';
 import { useComments } from '@/features/Board/hooks/useComments';
 import { useCreateComment } from '@/features/Board/hooks/useCreateComment';
@@ -323,7 +327,7 @@ const ReplyItem = ({
 };
 
 export const CommentSection = ({ postDocId, isPC = false }: Props) => {
-  const { comments } = useComments(postDocId);
+  const { comments, isLoaded } = useComments(postDocId);
   const { createComment } = useCreateComment(postDocId);
   const [input, setInput] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -354,7 +358,18 @@ export const CommentSection = ({ postDocId, isPC = false }: Props) => {
 
       {/* 댓글 목록 */}
       <div className={`bg-white ${isPC ? '' : 'pb-[140px]'}`}>
-        {topLevelComments.length === 0 ? (
+        {!isLoaded ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex gap-3 px-4 py-4">
+              <div className="h-8 w-8 shrink-0 animate-pulse rounded-full bg-gray-200" />
+              <div className="flex flex-1 flex-col gap-2">
+                <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
+                <div className="h-3 w-full animate-pulse rounded bg-gray-100" />
+                <div className="h-3 w-3/4 animate-pulse rounded bg-gray-100" />
+              </div>
+            </div>
+          ))
+        ) : topLevelComments.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-gray-400">
             <span className="text-2xl">💬</span>
             <span className="mt-2 text-sm font-semibold">

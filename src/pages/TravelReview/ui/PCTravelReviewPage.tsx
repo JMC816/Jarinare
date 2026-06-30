@@ -2,6 +2,7 @@
  * @role: pages — PC 여행지 후기 상세 페이지
  * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
  */
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { auth } from '@/shared/firebase/firebase';
 import { useGetTravelReviews } from '@/features/TravelReview/hooks/useGetTravelReviews';
@@ -13,6 +14,23 @@ import { useMoreMenu } from '../hooks/useMoreMenu';
 import { getProfileColor } from '../constants/travelReviewPageConstants';
 import { formatReviewDate } from '@/shared/lib/formatDate';
 import StarPicker from '@/shared/ui/StarPicker';
+
+const ReviewImage = ({ src }: { src: string }) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div className="mt-2">
+      {!loaded && (
+        <div className="h-60 w-full animate-pulse rounded-sm bg-gray-100" />
+      )}
+      <img
+        src={src}
+        alt="후기 이미지"
+        className={`max-h-60 w-full rounded-sm object-cover ${loaded ? 'block' : 'hidden'}`}
+        onLoad={() => setLoaded(true)}
+      />
+    </div>
+  );
+};
 
 const MoreMenu = ({
   onEdit,
@@ -513,11 +531,7 @@ const PCTravelReviewPage = () => {
                               {review.content}
                             </p>
                             {review.imageUrl && (
-                              <img
-                                src={review.imageUrl}
-                                alt="후기 이미지"
-                                className="mt-2 max-h-60 w-full rounded-sm object-cover"
-                              />
+                              <ReviewImage src={review.imageUrl} />
                             )}
                           </div>
                         </div>

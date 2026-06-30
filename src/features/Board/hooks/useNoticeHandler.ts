@@ -1,3 +1,7 @@
+/**
+ * @role: features — 공지사항 글 작성 상태·핸들러
+ * @rule: 상태·사이드이펙트·이벤트 핸들러만 담당, UI 로직 포함 금지
+ */
 import { useRef, useState } from 'react';
 import { useCreateNotice } from './useCreateNotice';
 import { useNavigate } from 'react-router-dom';
@@ -69,7 +73,7 @@ export const useNoticeHandler = () => {
           return;
         }
       }
-      navigate('/board');
+      navigate('/board/noticelist');
     } catch (err) {
       console.error('오류:', err);
     } finally {

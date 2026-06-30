@@ -4,12 +4,7 @@
  */
 import { db, auth } from '@/shared/firebase/firebase';
 import supabase from '@/shared/supabase/supabase';
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  updateDoc,
-} from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 
 export const useCreateTravelReview = (destination: string) => {
   const createReview = async (
@@ -26,22 +21,12 @@ export const useCreateTravelReview = (destination: string) => {
       title,
       content,
       rating,
-      imageUrl: null,
       createdAt: serverTimestamp(),
     });
 
     if (file) {
-      const filePath = `travel-review/${destination}/${docRef.id}/${file.name}`;
-      const { error } = await supabase.storage
-        .from('jarinare-images')
-        .upload(filePath, file);
-
-      if (!error) {
-        const { data: urlData } = supabase.storage
-          .from('jarinare-images')
-          .getPublicUrl(filePath);
-        await updateDoc(docRef, { imageUrl: urlData.publicUrl });
-      }
+      const filePath = `travel-review/${docRef.id}/${file.name}`;
+      await supabase.storage.from('jarinare-images').upload(filePath, file);
     }
   };
 

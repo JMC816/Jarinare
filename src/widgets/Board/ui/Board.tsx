@@ -45,10 +45,11 @@ const BoardImage = ({ src, alt }: { src: string; alt: string }) => {
   const [loaded, setLoaded] = useState(false);
   return (
     <div className="w-full">
+      {!loaded && <div className="h-60 w-full animate-pulse bg-gray-100" />}
       <img
         src={src}
         alt={alt}
-        className={`w-full object-contain transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        className={`w-full object-contain ${loaded ? 'block' : 'hidden'}`}
         onLoad={() => setLoaded(true)}
       />
     </div>
@@ -305,6 +306,9 @@ export const Board = ({
                       {post.content}
                     </div>
                   </div>
+                  {post.imageUrl && (
+                    <BoardImage src={post.imageUrl} alt={post.title} />
+                  )}
 
                   {/* 하단 영역 (1fr) */}
                   <div className="flex items-center gap-4 border-t border-gray-50 px-5 py-3">

@@ -1,3 +1,7 @@
+/**
+ * @role: features — 게시물 댓글 실시간 조회
+ * @rule: Firestore 읽기만 담당, UI 로직 포함 금지
+ */
 import { Comment } from '@/entities/Board/types/commentType';
 import { db } from '@/shared/firebase/firebase';
 import {
@@ -11,6 +15,7 @@ import { useEffect, useState } from 'react';
 
 export const useComments = (postDocId: string) => {
   const [comments, setComments] = useState<Comment[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (!postDocId) return;
@@ -41,10 +46,11 @@ export const useComments = (postDocId: string) => {
         };
       });
       setComments(items);
+      setIsLoaded(true);
     });
 
     return () => unsubscribe();
   }, [postDocId]);
 
-  return { comments };
+  return { comments, isLoaded };
 };

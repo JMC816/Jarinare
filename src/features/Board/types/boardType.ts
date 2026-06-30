@@ -39,4 +39,5 @@ export type BoardType = {
   title: string;
   content: string;
   previewImg: string | null;
+  loading: boolean;
 };

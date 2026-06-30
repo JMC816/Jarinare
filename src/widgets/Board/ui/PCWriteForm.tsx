@@ -32,6 +32,7 @@ const PCWriteForm = ({
   setFile,
   setPreviewImg,
   onSubmit,
+  loading,
   categorySelectable = false,
   selectedCategory,
   onCategoryChange,
@@ -232,9 +233,10 @@ const PCWriteForm = ({
                 </button>
                 <button
                   type="submit"
-                  className="rounded-sm bg-blue px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-blue/90"
+                  disabled={loading}
+                  className="rounded-sm bg-blue px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-blue/90 disabled:opacity-50"
                 >
-                  작성 완료
+                  {loading ? '등록 중...' : '작성 완료'}
                 </button>
               </div>
             </form>

@@ -6,8 +6,16 @@ import { useRef, useState } from 'react';
 import { useCreateBoard } from './useCreateBoard';
 import { useNavigate } from 'react-router-dom';
 import supabase from '@/shared/supabase/supabase';
+import { auth } from '@/shared/firebase/firebase';
 
-export const useBaordHandler = () => {
+export const useBaordHandler = (options?: {
+  onAfterCreate?: (
+    posterUid: string,
+    posterName: string,
+    postDocId: string,
+  ) => void;
+  navigateTo?: string;
+}) => {
   const [author, setAuthor] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
@@ -20,6 +28,7 @@ export const useBaordHandler = () => {
 
   const navigate = useNavigate();
   const { createBoard } = useCreateBoard();
+  const user = auth.currentUser;
 
   const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuthor(e.target.value);
@@ -68,7 +77,14 @@ export const useBaordHandler = () => {
           return;
         }
       }
-      navigate('/board');
+      if (user && boardId) {
+        options?.onAfterCreate?.(
+          user.uid,
+          user.displayName ?? user.uid,
+          boardId,
+        );
+      }
+      navigate(options?.navigateTo ?? '/board');
     } catch (err) {
       console.error('오류:', err);
     } finally {

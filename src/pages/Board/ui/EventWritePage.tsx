@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const EventWirtePage = () => {
   const navigate = useNavigate();
-  const event = useEventHandler();
+  const event = useEventHandler({ navigateTo: '/board/eventlist' });
 
   return (
     <>

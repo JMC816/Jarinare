@@ -2,13 +2,14 @@
  * @role: pages — PC 통합 글 작성 페이지 (분류 선택 가능)
  * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
  */
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useBaordHandler } from '@/features/Board/hooks/useBoardHandler';
 import { useNoticeHandler } from '@/features/Board/hooks/useNoticeHandler';
 import { useEventHandler } from '@/features/Board/hooks/useEventHandler';
 import PCWriteForm from '@/widgets/Board/ui/PCWriteForm';
 import LoadingScreen from '@/widgets/Board/ui/LoadingScreen';
 import { WriteCategory } from '@/widgets/Board/types/boardWidgetType';
+import { sendBoardPostNotifications } from '@/features/Follow/api/boardPostNotification';
 
 const CATEGORY_LABEL: Record<WriteCategory, string> = {
   board: '자유',
@@ -19,7 +20,20 @@ const CATEGORY_LABEL: Record<WriteCategory, string> = {
 const PCUnifiedWritePage = () => {
   const [category, setCategory] = useState<WriteCategory>('board');
 
-  const board = useBaordHandler();
+  const handleAfterBoardCreate = useCallback(
+    (posterUid: string, posterName: string, postDocId: string) => {
+      sendBoardPostNotifications(posterUid, posterName, postDocId).catch(
+        console.error,
+      );
+    },
+    [],
+  );
+
+  const board = useBaordHandler(
+    category === 'board'
+      ? { onAfterCreate: handleAfterBoardCreate }
+      : undefined,
+  );
   const notice = useNoticeHandler();
   const event = useEventHandler();
 

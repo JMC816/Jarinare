@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const NoticeWirtePage = () => {
   const navigate = useNavigate();
-  const notice = useNoticeHandler();
+  const notice = useNoticeHandler({ navigateTo: '/board/noticelist' });
 
   return (
     <>

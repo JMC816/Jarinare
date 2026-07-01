@@ -129,7 +129,7 @@ const PCNoticeDetailPage = () => {
   if (!currentNotice) {
     return (
       <div className="flex min-h-screen w-full flex-col bg-gray-50">
-        <PCTopNav hasNotification={false} />
+        <PCTopNav />
         <div className="flex w-full flex-1 gap-0">
           <PCSidebar />
           <main className="flex flex-1 items-center justify-center">
@@ -142,7 +142,7 @@ const PCNoticeDetailPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
-      <PCTopNav hasNotification={false} />
+      <PCTopNav />
 
       <div className="flex w-full flex-1 gap-0">
         <PCSidebar />

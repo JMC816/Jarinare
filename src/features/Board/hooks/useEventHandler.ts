@@ -7,7 +7,7 @@ import { useCreateEvent } from './useCreateEvent';
 import { useNavigate } from 'react-router-dom';
 import supabase from '@/shared/supabase/supabase';
 
-export const useEventHandler = () => {
+export const useEventHandler = (options?: { navigateTo?: string }) => {
   const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -68,7 +68,7 @@ export const useEventHandler = () => {
           return;
         }
       }
-      navigate('/board');
+      navigate(options?.navigateTo ?? '/board');
     } catch (err) {
       console.error('오류:', err);
     } finally {

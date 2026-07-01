@@ -24,7 +24,7 @@ const NotificationRequest = ({
   return (
     <div
       onClick={onClick}
-      className={`rounded-2xl px-4 py-3 ${isRead ? 'bg-gray-100' : 'bg-white'}`}
+      className={`rounded-sm px-4 py-3 ${isRead ? 'bg-gray-100' : 'bg-white'}`}
       style={{
         boxShadow:
           '0 1px 3px rgba(0,0,0,0.05), 0 -1px 3px rgba(0,0,0,0.05), 1px 0 3px rgba(0,0,0,0.05), -1px 0 3px rgba(0,0,0,0.05)',

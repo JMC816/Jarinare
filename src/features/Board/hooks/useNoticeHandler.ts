@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import supabase from '@/shared/supabase/supabase';
 import { useDeleteNotice } from './useDeleteNotice';
 
-export const useNoticeHandler = () => {
+export const useNoticeHandler = (options?: { navigateTo?: string }) => {
   const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -73,7 +73,7 @@ export const useNoticeHandler = () => {
           return;
         }
       }
-      navigate('/board');
+      navigate(options?.navigateTo ?? '/board');
     } catch (err) {
       console.error('오류:', err);
     } finally {

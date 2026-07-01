@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const BoardWirtePage = () => {
   const navigate = useNavigate();
-  const board = useBaordHandler();
+  const board = useBaordHandler({ navigateTo: '/board/boardlist' });
 
   return (
     <>

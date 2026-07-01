@@ -14,7 +14,6 @@ import PCEndPlaceDropdown from '@/widgets/TicketReserve/ui/PCEndPlaceDropdown';
 import PCDayDropdown from '@/widgets/TicketReserve/ui/PCDayDropdown';
 import PCCountDropdown from '@/widgets/TicketReserve/ui/PCCountDropdown';
 import { usePCHomePage } from '../hooks/usePCHomePage';
-import type { PCHomePageProps } from '../types/PCHomePageTypes';
 import PCDestinationModal from '@/widgets/TicketReserve/ui/PCDestinationModal';
 import start_station from '@/assets/icons/start_station.png';
 import end_station from '@/assets/icons/end_station.png';
@@ -23,7 +22,7 @@ import on_user from '@/assets/icons/on_user.png';
 import change from '@/assets/icons/change.png';
 import homeBg from '@/assets/background/홈.png';
 
-const PCHomePage = ({ hasNotification }: PCHomePageProps) => {
+const PCHomePage = () => {
   const { isShow, modalType } = useModalStore();
   const {
     openDropdown,
@@ -43,7 +42,7 @@ const PCHomePage = ({ hasNotification }: PCHomePageProps) => {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
-      <PCTopNav hasNotification={hasNotification} />
+      <PCTopNav />
 
       <div className="flex w-full flex-1 gap-0">
         <PCSidebar />

@@ -126,12 +126,15 @@ const PCBoardDetailPage = () => {
     handleDelete,
     handleUpdate,
     handleLike,
+    isFollowing,
+    followLoading,
+    toggleFollow,
   } = usePCBoardDetailPage(post);
 
   if (!currentPost) {
     return (
       <div className="flex min-h-screen w-full flex-col bg-gray-50">
-        <PCTopNav hasNotification={false} />
+        <PCTopNav />
         <div className="flex w-full flex-1 gap-0">
           <PCSidebar />
           <main className="flex flex-1 items-center justify-center">
@@ -144,7 +147,7 @@ const PCBoardDetailPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
-      <PCTopNav hasNotification={false} />
+      <PCTopNav />
 
       <div className="flex w-full flex-1 gap-0">
         <PCSidebar />
@@ -215,9 +218,19 @@ const PCBoardDetailPage = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button className="rounded-sm bg-lightBlue px-4 py-1.5 text-sm font-bold text-blue transition-colors hover:bg-lightBlueImpossible">
-                          팔로우
-                        </button>
+                        {!isOwner && (
+                          <button
+                            onClick={toggleFollow}
+                            disabled={followLoading}
+                            className={`rounded-sm px-4 py-1.5 text-sm font-bold transition-colors disabled:opacity-50 ${
+                              isFollowing
+                                ? 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                                : 'bg-lightBlue text-blue hover:bg-lightBlueImpossible'
+                            }`}
+                          >
+                            {isFollowing ? '팔로잉' : '팔로우'}
+                          </button>
+                        )}
                         {isOwner && (
                           <OwnerMenu
                             menuOpen={menuOpen}

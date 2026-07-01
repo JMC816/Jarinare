@@ -16,7 +16,7 @@ const SwipeToDelete = ({ onDelete, children }: SwipeToDeleteProps) => {
   } = useSwipeToDelete();
 
   return (
-    <div className="relative mx-4 my-2">
+    <div className="relative mx-4 mb-1 mt-2">
       {/* 삭제 버튼 - 고정 위치, 카드 아래에 항상 렌더링 */}
       <div
         onClick={onDelete}
@@ -45,7 +45,29 @@ const SwipeToDelete = ({ onDelete, children }: SwipeToDeleteProps) => {
         onMouseUp={handleEnd}
         onMouseLeave={handleEnd}
       >
-        {children}
+        <div className="group relative">
+          {children}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="absolute -right-2 -top-2 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-gray-400/80 text-white opacity-0 transition-opacity hover:bg-gray-600 group-hover:opacity-100"
+          >
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   );

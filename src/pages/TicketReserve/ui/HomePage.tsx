@@ -96,9 +96,7 @@ const HomePage = () => {
     <>
       {/* PC 버전 */}
       <div className="hidden w-full lg:block">
-        <PCHomePage
-          hasNotification={!!(isReadNotification && isExistNotification)}
-        />
+        <PCHomePage />
       </div>
 
       {/* 모바일 버전 */}

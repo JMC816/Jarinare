@@ -9,6 +9,7 @@ import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
 import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
 import { useViewCount } from '@/features/Board/hooks/useViewCount';
+import { useFollow } from '@/features/Follow/hooks/useFollow';
 import { auth } from '@/shared/firebase/firebase';
 
 export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
@@ -30,7 +31,13 @@ export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
   const { viewCount } = useViewCount(postDocId);
 
   const currentUid = auth.currentUser?.uid;
-  const isOwner = !!currentUid && currentPost?.id.split('/')[1] === currentUid;
+  const authorUid = currentPost?.id.split('/')[1] ?? '';
+  const isOwner = !!currentUid && authorUid === currentUid;
+  const {
+    isFollowing,
+    loading: followLoading,
+    toggleFollow,
+  } = useFollow(authorUid, currentPost?.author ?? '');
   const isLiked = likedMap[currentPost?.id ?? ''] ?? false;
   const likesCount = likesMap[currentPost?.id ?? ''] ?? currentPost?.likes ?? 0;
 
@@ -66,5 +73,8 @@ export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
     handleDelete,
     handleUpdate,
     handleLike,
+    isFollowing,
+    followLoading,
+    toggleFollow,
   };
 };

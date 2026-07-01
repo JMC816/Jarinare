@@ -5,12 +5,15 @@
 import { Link } from 'react-router-dom';
 import notification from '@/assets/icons/notification.png';
 import on_user from '@/assets/icons/on_user.png';
+import useNotificationSidebarStore from '@/widgets/Notification/model/notificationSidebarStore';
+import { useHasUnreadNotification } from '@/features/Notification/hooks/useHasUnreadNotification';
 
-interface PCTopNavProps {
-  hasNotification: boolean;
-}
+const PCTopNav = () => {
+  const openNotificationSidebar = useNotificationSidebarStore(
+    (state) => state.open,
+  );
+  const { hasUnread } = useHasUnreadNotification();
 
-const PCTopNav = ({ hasNotification }: PCTopNavProps) => {
   return (
     <nav className="sticky top-0 z-50 h-14 w-full border-b border-gray-200/50 bg-white/80 shadow-sm backdrop-blur-md">
       <div className="flex h-full w-full items-center justify-between px-10">
@@ -21,15 +24,15 @@ const PCTopNav = ({ hasNotification }: PCTopNavProps) => {
 
         {/* 아이콘 */}
         <div className="flex items-center gap-1">
-          <Link
-            to="/reserve/notification"
+          <button
+            onClick={openNotificationSidebar}
             className="relative rounded-lg p-2 transition-colors hover:bg-gray-100"
           >
             <img width={20} height={24} src={notification} />
-            {hasNotification && (
+            {hasUnread && (
               <span className="absolute right-1.5 top-1.5 size-1.5 animate-ping rounded-full bg-blue" />
             )}
-          </Link>
+          </button>
           <Link
             to="/mypage"
             className="rounded-lg p-2 transition-colors hover:bg-gray-100"

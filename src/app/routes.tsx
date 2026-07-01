@@ -15,6 +15,7 @@ import NoticeWirtePage from '@/pages/Board/ui/NoticeWritePage';
 import MenuPage from '@/pages/Menu/ui/MenuPage';
 import MyPage from '@/pages/Mypage/ui/MyPage';
 import NotificationPage from '@/pages/Notification/ui/NotificationPage';
+import FollowListPage from '@/pages/Follow/ui/FollowListPage';
 import { NotifiSettingPage } from '@/pages/Notification/ui/NotifiSettingPage';
 import PointPage from '@/pages/Point/ui/PointPage';
 import SeatChangePage from '@/pages/TicketChange/ui/SeatChangePage';
@@ -29,6 +30,7 @@ import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
 import PCTravelReviewPage from '@/pages/TravelReview/ui/PCTravelReviewPage';
 import PCTravelReviewListPage from '@/pages/TravelReview/ui/PCTravelReviewListPage';
 import Modal from '@/shared/ui/Modal';
+import PCNotificationSidebar from '@/widgets/Notification/ui/PCNotificationSidebar';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
 import MainLayout from '@/widgets/layouts/ui/MainLayout';
 import PublicHomeLayout from '@/widgets/layouts/ui/PublicHomeLayout';
@@ -78,6 +80,7 @@ const Router = () => {
             <Route path="/board/write" element={<PCUnifiedWritePage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypage/point" element={<PointPage />} />
+            <Route path="/mypage/follow" element={<FollowListPage />} />
             <Route path="/returnlist" element={<TicketReturnPage />} />
             <Route path="/ticketlist" element={<TicketListPage />} />
             <Route
@@ -102,6 +105,7 @@ const Router = () => {
           </Route>
         </Routes>
         <Modal />
+        <PCNotificationSidebar />
       </div>
     </BrowserRouter>
   );

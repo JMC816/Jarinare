@@ -1,3 +1,7 @@
+/**
+ * @role: features — 승차권 관련 알림 읽음 상태 처리
+ * @rule: features/Notification 내부 훅만 사용, 타 features 참조 금지
+ */
 import { auth, realtimeDb } from '@/shared/firebase/firebase';
 import { ref, update } from 'firebase/database';
 import { useChangeResponse } from './useChangeResponse';
@@ -10,7 +14,6 @@ export const useIsReadNotification = () => {
   const { readStartTime } = useReadStartTime();
   const user = auth.currentUser;
 
-  // 각 알림 읽음 처리 및 전체 읽음 처리
   const updateChangeResponse = async (key: string) => {
     if (!user) return;
     await update(ref(realtimeDb, `${user.uid}_change/${key}`), {
@@ -41,50 +44,37 @@ export const useIsReadNotification = () => {
 
   const updateAllResponse = async () => {
     if (!user) return;
-    const changeResponseKeys = response && Object.keys(response.val());
-
-    const acceptResponseKeys =
-      acceptResponse && Object.keys(acceptResponse.val());
-
-    const refuseResponseKeys =
-      refuseResponse && Object.keys(refuseResponse.val());
-
-    const startTimeResponseKeys =
-      readStartTime && Object.keys(readStartTime.val());
 
     if (response?.exists) {
       await Promise.all(
-        changeResponseKeys!.map(async (key) =>
+        Object.keys(response.val()).map((key) =>
           update(ref(realtimeDb, `${user.uid}_change/${key}`), {
             isRead: true,
           }),
         ),
       );
     }
-
     if (acceptResponse?.exists()) {
       await Promise.all(
-        acceptResponseKeys!.map(async (key) =>
+        Object.keys(acceptResponse.val()).map((key) =>
           update(ref(realtimeDb, `${user.uid}_accept/${key}`), {
             isRead: true,
           }),
         ),
       );
     }
-
     if (refuseResponse?.exists()) {
       await Promise.all(
-        refuseResponseKeys!.map(async (key) =>
+        Object.keys(refuseResponse.val()).map((key) =>
           update(ref(realtimeDb, `${user.uid}_refuse/${key}`), {
             isRead: true,
           }),
         ),
       );
     }
-
     if (readStartTime?.exists()) {
       await Promise.all(
-        startTimeResponseKeys!.map(async (key) =>
+        Object.keys(readStartTime.val()).map((key) =>
           update(ref(realtimeDb, `${user.uid}_startTime/${key}`), {
             isRead: true,
           }),
@@ -92,6 +82,7 @@ export const useIsReadNotification = () => {
       );
     }
   };
+
   return {
     updateChangeResponse,
     updateAcceptResponse,

@@ -51,7 +51,7 @@ const PCBoardPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
-      <PCTopNav hasNotification={false} />
+      <PCTopNav />
 
       <div className="flex w-full flex-1 gap-0">
         <PCSidebar />
@@ -330,7 +330,7 @@ const PCBoardPage = () => {
 
                   {/* 페이지네이션 — 게시물이 많을 때만 표시 */}
                   {showPagination && (
-                    <div className="flex items-center justify-center gap-1 px-5 py-3">
+                    <div className="flex items-center justify-center gap-1.5 px-5 py-4">
                       <button
                         onClick={() =>
                           setCurrentPage(Math.max(0, currentPage - 1))
@@ -339,8 +339,8 @@ const PCBoardPage = () => {
                         className="flex items-center justify-center px-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
                       >
                         <svg
-                          width="12"
-                          height="12"
+                          width="16"
+                          height="16"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -355,7 +355,7 @@ const PCBoardPage = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold transition-colors ${
+                          className={`flex h-7 w-7 items-center justify-center rounded text-xs font-bold transition-colors ${
                             page === currentPage
                               ? 'bg-blue text-white'
                               : 'text-gray-400 hover:bg-gray-200'
@@ -374,8 +374,8 @@ const PCBoardPage = () => {
                         className="flex items-center justify-center px-1 text-gray-400 hover:text-gray-600 disabled:opacity-30"
                       >
                         <svg
-                          width="12"
-                          height="12"
+                          width="16"
+                          height="16"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"

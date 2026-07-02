@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import MiniTicket from '@/widgets/TicketList/ui/MiniTicket';
+import { useMiniTicket } from '@/widgets/TicketList/hooks/useMiniTicket';
 import PCTicketListPage from './PCTicketListPage';
 import {
   clearAllSeatsCache,
@@ -8,6 +9,8 @@ import {
 } from '@/features/TicketReserve/hooks/useAllSeatsInfo';
 
 const TicketListPage = () => {
+  const { items, isEmpty } = useMiniTicket();
+
   useEffect(() => {
     clearAllSeatsCache();
     prefetchAllSeats();
@@ -25,7 +28,7 @@ const TicketListPage = () => {
         <BackWardPageButton />
         <span className="mt-5 w-full text-lg font-bold">내 승차권</span>
         <div className="mt-5 flex w-full flex-col gap-y-5 pb-[100px]">
-          <MiniTicket />
+          <MiniTicket items={items} isEmpty={isEmpty} />
         </div>
       </div>
     </>

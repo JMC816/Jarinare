@@ -5,7 +5,6 @@
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
 import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
 import { useNavigation } from './ReserveHook';
-import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 
 const WEEK_DAYS = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
@@ -24,13 +23,6 @@ const calcDuration = (start: number, end: number) => {
 export const useReserveTicket = () => {
   const ticketData = useTicketLists();
   const { navigate } = useNavigation();
-  const {
-    setStartDay,
-    setSelectStartTime,
-    setSelectTrainType,
-    setSeatsId,
-    setTrainNo,
-  } = trainDataStore();
 
   if (!ticketData?.groupedArray || ticketData.groupedArray.length === 0) {
     return { isEmpty: true };
@@ -71,12 +63,7 @@ export const useReserveTicket = () => {
   const seatIds = groups.map((g) => g.seatId).join(', ');
 
   const handleDetail = () => {
-    navigate('/ticket/seatchange', { state: { groups } });
-    setStartDay(ticket.startDay);
-    setSelectStartTime(ticket.startTime);
-    setSelectTrainType(ticket.trainType);
-    setTrainNo(ticket.trainNoId);
-    setSeatsId(groups.map((item) => item.seatId));
+    navigate('/ticketlist');
   };
 
   return {

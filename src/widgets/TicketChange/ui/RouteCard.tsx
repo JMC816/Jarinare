@@ -222,16 +222,10 @@ const RouteCard = ({
   }, [departure, arrival]);
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
+    <div className="flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-md">
       {/* 파란 헤더 */}
-      <div className="rounded-t-2xl bg-blue px-5 pb-5 pt-5">
-        <div className="mb-1 flex items-center justify-between">
-          <span className="rounded-full bg-white/20 px-3 py-0.5 text-xs font-bold text-white">
-            {s.trainType}
-          </span>
-          <span className="text-xs text-white/80">{s.startDayForView}</span>
-        </div>
-        <div className="mt-3 flex items-center gap-2">
+      <div className="rounded-t-xl bg-blue px-5 pb-5 pt-5">
+        <div className="flex items-center gap-2">
           <span className="text-base font-black text-white">
             {s.startStationForView}
           </span>

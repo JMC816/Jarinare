@@ -3,10 +3,12 @@
  * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
  */
 import { useNavigate } from 'react-router-dom';
+import { useKakaoLoader } from 'react-kakao-maps-sdk';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
-import MiniTicket from '@/widgets/TicketList/ui/MiniTicket';
 import { usePCTicketListPage } from '../hooks/usePCTicketListPage';
+import { useMiniTicket } from '@/widgets/TicketList/hooks/useMiniTicket';
+import PCTicketItem from './PCTicketItem';
 
 const USAGE_GUIDE = [
   { title: '출발역·도착역 및 날짜, 인원을 선택한 후 열차를 검색하세요.' },
@@ -28,6 +30,11 @@ const FAQ = [
 const PCTicketListPage = () => {
   const { isEmpty } = usePCTicketListPage();
   const navigate = useNavigate();
+  const { items } = useMiniTicket();
+
+  useKakaoLoader({
+    appkey: import.meta.env.VITE_APP_KAKAO_JS_KEY as string,
+  });
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
@@ -103,38 +110,22 @@ const PCTicketListPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col gap-4">
-                  <MiniTicket variant="pc" />
-                  <div className="rounded-xl bg-white px-6 py-6 shadow-sm">
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <p className="font-black text-gray-800">
-                        아직 예매한 승차권이 없어요
-                      </p>
-                      <p className="text-center text-sm leading-relaxed text-gray-400">
-                        다가오는 여행 계획이 있으신가요? 빠르고 편안한 JARINARE
-                        고속철도로 여행을 시작해보세요
-                      </p>
-                      <button
-                        onClick={() => navigate('/')}
-                        className="mt-2 flex items-center gap-2 rounded-full bg-blue px-6 py-2 text-sm font-bold text-white transition-colors hover:bg-blue/90"
-                      >
-                        승차권 예매하기
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                          <polyline points="12 5 19 12 12 19" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
+                <div className="flex flex-col gap-6">
+                  {items.map((item, idx) => (
+                    <PCTicketItem
+                      key={idx}
+                      groups={item.groups}
+                      ticket={item.ticket}
+                      trainTypeName={item.trainTypeName}
+                      startLabel={item.startLabel}
+                      endLabel={item.endLabel}
+                      startAmPm={item.startAmPm}
+                      endAmPm={item.endAmPm}
+                      dotDate={item.dotDate}
+                      koreanDate={item.koreanDate}
+                      ticketNo={item.ticketNo}
+                    />
+                  ))}
                 </div>
               )}
 

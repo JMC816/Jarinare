@@ -2,7 +2,6 @@
  * @role: widgets/TicketList — ui
  * @rule: 렌더링만 담당, 상태·로직 포함 금지
  */
-import { useMiniTicket } from '../hooks/useMiniTicket';
 import { MiniTicketVariantProps } from '../types/MiniTicketType';
 
 // @role: ui — QR 코드 플레이스홀더 SVG
@@ -90,9 +89,7 @@ const ArrowIcon = ({ className }: { className: string }) => (
   </svg>
 );
 
-const MiniTicket = ({ variant }: MiniTicketVariantProps) => {
-  const { items, isEmpty } = useMiniTicket();
-
+const MiniTicket = ({ variant, items, isEmpty }: MiniTicketVariantProps) => {
   if (isEmpty) {
     return (
       <div className="flex h-[100px] w-full flex-col items-center justify-center rounded-lg bg-white shadow-sm">
@@ -103,7 +100,7 @@ const MiniTicket = ({ variant }: MiniTicketVariantProps) => {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {items.map(
         (
           {
@@ -323,7 +320,7 @@ const MiniTicket = ({ variant }: MiniTicketVariantProps) => {
           );
         },
       )}
-    </>
+    </div>
   );
 };
 

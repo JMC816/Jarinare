@@ -99,6 +99,7 @@ const PCNotificationSidebar = () => {
             onClick={async () => {
               await updateAllResponse();
               await updateAllFollowResponse();
+              close();
             }}
             className="cursor-pointer text-tiny text-darkGray underline"
           >

@@ -1,3 +1,7 @@
+/**
+ * @role: pages — 좌석변경 페이지 (PC/모바일 분기)
+ * @rule: PC/모바일 분기만 담당, 비즈니스 로직 포함 금지
+ */
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useSeatsChangeBlocked } from '@/features/Notification/hooks/useSeatsChangeBlocked';
 import { useRequestSenderTimer } from '@/features/Notification/hooks/useRequestTimer';
@@ -9,6 +13,7 @@ import Modal from '@/widgets/TicketChange/ui/Modal';
 import SeatChangeList from '@/widgets/TicketChange/ui/SeatChangeList';
 import SeatChangeMenu from '@/widgets/TicketChange/ui/SeatChangeMenu';
 import SeatChangeState from '@/widgets/TicketChange/ui/SeatChangeState';
+import PCSeatChangePage from './PCSeatChangePage';
 import { useLocation } from 'react-router-dom';
 
 const SeatChangePage = () => {
@@ -32,38 +37,46 @@ const SeatChangePage = () => {
   const isAllSelected = seatsTarget.length === mySeats.length ? true : false;
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px]">
-      <BackWardPageButton title="좌석 변경" />
-      <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
-        <SeatChangeMenu />
-        <SeatChangeList />
-        <SeatChangeState />
+    <>
+      {/* PC 버전 */}
+      <div className="hidden w-full lg:block">
+        <PCSeatChangePage />
       </div>
-      <div className="mt-4 flex w-full items-center gap-3">
-        <span className="flex-1 text-xs font-semibold text-gray-400">
-          빈 좌석 또는 타 승객 좌석을 선택해주세요
-        </span>
-        <button
-          onClick={async () => {
-            if (isBlocked) return;
-            if (mySeatsInThisTicket) return;
-            if (mySeats.length === seatsTarget.length) {
-              openModal('SeatChangeModal');
-            }
-          }}
-          className={`flex-1 rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
-            isAllSelected && !mySeatsInThisTicket && !isBlocked
-              ? 'bg-blue active:brightness-95'
-              : 'bg-gray-300'
-          }`}
-        >
-          {isBlocked
-            ? `요청 기다리는 중.. ${remaining !== null ? `(${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')})` : ''}`
-            : `${seatsTarget.length} / ${mySeats.length} 선택`}
-        </button>
+
+      {/* 모바일 버전 */}
+      <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
+        <BackWardPageButton title="좌석 변경" />
+        <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
+          <SeatChangeMenu />
+          <SeatChangeList />
+          <SeatChangeState />
+        </div>
+        <div className="mt-4 flex w-full items-center gap-3">
+          <span className="flex-1 text-xs font-semibold text-gray-400">
+            빈 좌석 또는 타 승객 좌석을 선택해주세요
+          </span>
+          <button
+            onClick={async () => {
+              if (isBlocked) return;
+              if (mySeatsInThisTicket) return;
+              if (mySeats.length === seatsTarget.length) {
+                openModal('SeatChangeModal');
+              }
+            }}
+            className={`flex-1 rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
+              isAllSelected && !mySeatsInThisTicket && !isBlocked
+                ? 'bg-blue active:brightness-95'
+                : 'bg-gray-300'
+            }`}
+          >
+            {isBlocked
+              ? `요청 기다리는 중.. ${remaining !== null ? `(${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')})` : ''}`
+              : `${seatsTarget.length} / ${mySeats.length} 선택`}
+          </button>
+        </div>
+        {isShow == false || modalType == undefined ? null : <Modal />}
       </div>
-      {isShow == false || modalType == undefined ? null : <Modal />}
-    </div>
+    </>
   );
 };
 

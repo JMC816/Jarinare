@@ -71,31 +71,31 @@ const Router = () => {
               element={<PCTravelReviewListPage />}
             />
             <Route path="/travel/review" element={<PCTravelReviewPage />} />
-          </Route>
-          {/* 로그인 필수 페이지들 */}
-          <Route element={<HomeLayout />}>
+            <Route path="/ticketlist" element={<TicketListPage />} />
+            <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
+            <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/returnlist" element={<TicketReturnPage />} />
             <Route path="/board/notice" element={<NoticeWirtePage />} />
             <Route path="/board/event" element={<EventWirtePage />} />
             <Route path="/board/board" element={<BoardWirtePage />} />
             <Route path="/board/write" element={<PCUnifiedWritePage />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/mypage/point" element={<PointPage />} />
-            <Route path="/mypage/follow" element={<FollowListPage />} />
-            <Route path="/returnlist" element={<TicketReturnPage />} />
-            <Route path="/ticketlist" element={<TicketListPage />} />
-            <Route
-              path="/reserve/notification"
-              element={<NotificationPage />}
-            />
             <Route
               path="/reserve/notification/setting"
               element={<NotifiSettingPage />}
             />
-            <Route path="/reserve/traincheck" element={<TrainCheckPage />} />
+          </Route>
+          {/* 로그인 필수 페이지들 */}
+          <Route element={<HomeLayout />}>
+            <Route path="/mypage/point" element={<PointPage />} />
+            <Route path="/mypage/follow" element={<FollowListPage />} />
+            <Route
+              path="/reserve/notification"
+              element={<NotificationPage />}
+            />
           </Route>
           <Route path="/ticket/view" element={<TicketViewPage />} />
           <Route element={<MainLayout />}>
-            <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
             <Route
               path="/ticket/seatchange"
               element={<TicketSeatChangePage />}

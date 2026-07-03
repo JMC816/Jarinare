@@ -9,6 +9,7 @@ import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import { usePCTicketListPage } from '../hooks/usePCTicketListPage';
 import { useMiniTicket } from '@/widgets/TicketList/hooks/useMiniTicket';
 import PCTicketItem from './PCTicketItem';
+import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
 
 const USAGE_GUIDE = [
   { title: '출발역·도착역 및 날짜, 인원을 선택한 후 열차를 검색하세요.' },
@@ -28,7 +29,7 @@ const FAQ = [
 ];
 
 const PCTicketListPage = () => {
-  const { isEmpty } = usePCTicketListPage();
+  const { isEmpty, isLoggedIn } = usePCTicketListPage();
   const navigate = useNavigate();
   const { items } = useMiniTicket();
 
@@ -59,7 +60,15 @@ const PCTicketListPage = () => {
 
             <div className="flex flex-col gap-6">
               {/* 카드 1: 승차권 목록 */}
-              {isEmpty ? (
+              {!isLoggedIn ? (
+                <div className="flex min-h-[420px] items-center justify-center rounded-xl bg-white shadow-sm">
+                  <LoginRequiredBlock
+                    description="로그인 후 내 승차권을 확인할 수 있어요"
+                    onLogin={() => navigate('/auth/login')}
+                    size="md"
+                  />
+                </div>
+              ) : isEmpty ? (
                 <div className="min-h-[420px] rounded-xl bg-white p-6 shadow-sm">
                   <div className="flex flex-col items-center justify-center py-16">
                     {/* 가방 + 플러스 아이콘 */}
@@ -90,7 +99,7 @@ const PCTicketListPage = () => {
                     </p>
                     <button
                       onClick={() => navigate('/')}
-                      className="mt-6 flex items-center gap-2 rounded-full bg-blue px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-blue/90"
+                      className="mt-6 flex items-center gap-2 rounded-lg bg-blue px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-blue/90"
                     >
                       승차권 예매하기
                       <svg

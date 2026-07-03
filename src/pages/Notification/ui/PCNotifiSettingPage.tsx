@@ -4,13 +4,25 @@
  */
 import { useIsNotification } from '@/features/Notification/hooks/useIsNotification';
 import { useIsNotificationResponse } from '@/features/Notification/hooks/useIsNotificationResponse';
+import PCLoginRequiredPage from '@/widgets/layouts/ui/PCLoginRequiredPage';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import { Toggle } from '@/widgets/Notification/ui/Toggle';
+import { usePCNotifiSettingPage } from '../hooks/usePCNotifiSettingPage';
 
 const PCNotifiSettingPage = () => {
   const { updateIsChange, updateIsResponse } = useIsNotification();
   const { isNotification } = useIsNotificationResponse();
+  const { isLoggedIn, handleLoginNavigate } = usePCNotifiSettingPage();
+
+  if (!isLoggedIn) {
+    return (
+      <PCLoginRequiredPage
+        description="로그인 후 알림 설정을 이용할 수 있어요"
+        onLogin={handleLoginNavigate}
+      />
+    );
+  }
 
   if (!isNotification) return null;
 

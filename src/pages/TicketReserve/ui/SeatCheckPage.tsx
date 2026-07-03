@@ -11,9 +11,11 @@ import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';
 import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
 import PCSeatCheckPage from './PCSeatCheckPage';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const SeatCheckPage = () => {
   const { isShow, modalType, openModal } = useModalStore();
+  const navigate = useNavigate();
   const { handleAllSelect, seatsStateCount, isLocksLoaded } =
     useSeatQueryData();
   const {
@@ -58,6 +60,8 @@ const SeatCheckPage = () => {
   // 좌석 전체를 선택하지 않으면 false
   // 좌석을 전체 선택하면 true
   // 전체보다 적게 선택하면 false
+  const isLoggedIn = !!auth.currentUser;
+
   const isAllSelected =
     seatsStateCount === 0 ? false : seatsStateCount === selectKid + selectAdult;
 
@@ -94,13 +98,21 @@ const SeatCheckPage = () => {
             자동 선택
           </button>
           <button
-            onClick={isAllSelected ? () => openModal('PayModal') : undefined}
+            onClick={
+              isAllSelected
+                ? isLoggedIn
+                  ? () => openModal('PayModal')
+                  : () => navigate('/auth/login')
+                : undefined
+            }
             className={`flex-[2] rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
               isAllSelected ? 'bg-blue active:brightness-95' : 'bg-gray-300'
             }`}
           >
             {isAllSelected
-              ? '예매'
+              ? isLoggedIn
+                ? '예매'
+                : '로그인하기'
               : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
           </button>
         </div>

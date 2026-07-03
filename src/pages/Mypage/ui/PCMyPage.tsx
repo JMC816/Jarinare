@@ -5,6 +5,7 @@
 import { useNavigate } from 'react-router-dom';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
+import PCLoginRequiredPage from '@/widgets/layouts/ui/PCLoginRequiredPage';
 import SlotNumber from '@/widgets/Point/ui/SlotNumber';
 import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
 import { useFollowList } from '@/features/Follow/hooks/useFollowList';
@@ -21,7 +22,14 @@ const PCMyPage = () => {
   const routerNavigate = useNavigate();
   const user = auth.currentUser;
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <PCLoginRequiredPage
+        description="로그인 후 마이페이지를 이용할 수 있어요"
+        onLogin={() => routerNavigate('/auth/login')}
+      />
+    );
+  }
 
   const displayName = user.displayName ?? user.uid;
   const initial = displayName.charAt(0).toUpperCase();

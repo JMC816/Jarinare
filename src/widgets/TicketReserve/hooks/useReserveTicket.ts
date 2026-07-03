@@ -5,6 +5,8 @@
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
 import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
 import { useNavigation } from './ReserveHook';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '@/shared/firebase/firebase';
 
 const WEEK_DAYS = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
@@ -23,9 +25,13 @@ const calcDuration = (start: number, end: number) => {
 export const useReserveTicket = () => {
   const ticketData = useTicketLists();
   const { navigate } = useNavigation();
+  const navigateTo = useNavigate();
+
+  const isLoggedIn = !!auth.currentUser;
+  const handleLoginNavigate = () => navigateTo('/auth/login');
 
   if (!ticketData?.groupedArray || ticketData.groupedArray.length === 0) {
-    return { isEmpty: true };
+    return { isEmpty: true, isLoggedIn, handleLoginNavigate };
   }
 
   const groups = ticketData.groupedArray[0];
@@ -68,6 +74,8 @@ export const useReserveTicket = () => {
 
   return {
     isEmpty: false,
+    isLoggedIn,
+    handleLoginNavigate,
     ticket,
     trainTypeName,
     startLabel,

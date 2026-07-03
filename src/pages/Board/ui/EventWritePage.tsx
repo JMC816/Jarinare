@@ -4,10 +4,33 @@ import EventForm from '@/widgets/Board/ui/EventForm';
 import LoadingScreen from '@/widgets/Board/ui/LoadingScreen';
 import PCWriteForm from '@/widgets/Board/ui/PCWriteForm';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '@/shared/firebase/firebase';
+import PCLoginRequiredPage from '@/widgets/layouts/ui/PCLoginRequiredPage';
+import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
+
+const LoginRequired = ({ onLogin }: { onLogin: () => void }) => (
+  <>
+    <div className="hidden w-full lg:block">
+      <PCLoginRequiredPage
+        description="로그인 후 글을 작성할 수 있어요"
+        onLogin={onLogin}
+      />
+    </div>
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-50 lg:hidden">
+      <LoginRequiredBlock
+        description="로그인 후 글을 작성할 수 있어요"
+        onLogin={onLogin}
+      />
+    </div>
+  </>
+);
 
 const EventWirtePage = () => {
   const navigate = useNavigate();
   const event = useEventHandler({ navigateTo: '/board/eventlist' });
+
+  if (!auth.currentUser)
+    return <LoginRequired onLogin={() => navigate('/auth/login')} />;
 
   return (
     <>

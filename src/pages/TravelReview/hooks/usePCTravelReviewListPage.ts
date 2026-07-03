@@ -4,6 +4,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '@/shared/firebase/firebase';
 import { useDestinationRatings } from '@/features/TravelReview/hooks/useDestinationRatings';
 import { useSearchByStation } from '@/features/TravelReview/hooks/useSearchByStation';
 import { usePagination } from '@/features/TravelReview/hooks/usePagination';
@@ -86,5 +87,6 @@ export const usePCTravelReviewListPage = () => {
     submitting,
     handleWriteSubmit,
     filteredStations,
+    isLoggedIn: !!auth.currentUser,
   };
 };

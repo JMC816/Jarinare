@@ -7,6 +7,7 @@ import { seatsReturnDataStore } from '@/features/TicketReturn/model/seatsReturnD
 import useModalStore from '@/widgets/model/TicketReturnStore';
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '@/shared/firebase/firebase';
 
 export const usePCTicketReturnPage = () => {
   const { setSeatsReturnData } = seatsReturnDataStore();
@@ -20,12 +21,15 @@ export const usePCTicketReturnPage = () => {
   };
 
   const handleNavigateHome = () => navigate('/');
+  const handleLoginNavigate = () => navigate('/auth/login');
 
   return {
     handleReturnPC,
     handleNavigateHome,
+    handleLoginNavigate,
     isShow,
     modalType,
     isEmpty: !groupedArray || groupedArray.length === 0,
+    isLoggedIn: !!auth.currentUser,
   };
 };

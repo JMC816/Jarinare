@@ -1,12 +1,41 @@
+/**
+ * @role: pages — 알림 설정 페이지
+ * @rule: PC/모바일 분기만 담당, 비즈니스 로직 포함 금지
+ */
 import { useIsNotification } from '@/features/Notification/hooks/useIsNotification';
 import { useIsNotificationResponse } from '@/features/Notification/hooks/useIsNotificationResponse';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import { Toggle } from '@/widgets/Notification/ui/Toggle';
 import PCNotifiSettingPage from './PCNotifiSettingPage';
+import { usePCNotifiSettingPage } from '../hooks/usePCNotifiSettingPage';
+import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
 
 export const NotifiSettingPage = () => {
   const { updateIsChange, updateIsResponse } = useIsNotification();
   const { isNotification } = useIsNotificationResponse();
+  const { isLoggedIn, handleLoginNavigate } = usePCNotifiSettingPage();
+
+  if (!isLoggedIn) {
+    return (
+      <>
+        <div className="hidden w-full lg:block">
+          <PCNotifiSettingPage />
+        </div>
+        <div className="flex min-h-screen w-full flex-col bg-gray-100 lg:hidden">
+          <div className="bg-gray-100 px-[28px]">
+            <BackWardPageButton title="알림 설정" />
+          </div>
+          <div className="flex flex-1 items-center justify-center pb-20">
+            <LoginRequiredBlock
+              description="로그인 후 알림 설정을 이용할 수 있어요"
+              onLogin={handleLoginNavigate}
+              size="md"
+            />
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (!isNotification) {
     return null;

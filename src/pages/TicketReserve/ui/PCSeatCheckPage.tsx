@@ -8,6 +8,7 @@ import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
 import PCSeat from '@/widgets/TicketReserve/ui/PCSeat';
 import { usePCSeatCheckPage } from '../hooks/usePCSeatCheckPage';
 import down from '@/assets/icons/down.png';
+import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
 
 const PCSeatCheckPage = () => {
   const {
@@ -36,9 +37,10 @@ const PCSeatCheckPage = () => {
     handleCloseTrainDropdown,
     handleSelectTrainNo,
     trainNoSeatsCount,
+    isLoggedIn,
   } = usePCSeatCheckPage();
 
-  if (!user || !seatsState) return <LoadingScreen />;
+  if (!seatsState) return <LoadingScreen />;
 
   return (
     <div
@@ -192,15 +194,15 @@ const PCSeatCheckPage = () => {
                             const seatState = seatsState[id];
                             const isMine = seatsInfo.some(
                               (item) =>
-                                item.seatId === id && item.userId === user.uid,
+                                item.seatId === id && item.userId === user?.uid,
                             );
                             const isOther = seatsInfo.some(
                               (item) =>
-                                item.seatId === id && item.userId !== user.uid,
+                                item.seatId === id && item.userId !== user?.uid,
                             );
                             const isLocked = Object.entries(locks).some(
                               ([seatId, uid]) =>
-                                seatId === id && uid !== user.uid,
+                                seatId === id && uid !== user?.uid,
                             );
                             return (
                               <PCSeat
@@ -232,15 +234,15 @@ const PCSeatCheckPage = () => {
                             const seatState = seatsState[id];
                             const isMine = seatsInfo.some(
                               (item) =>
-                                item.seatId === id && item.userId === user.uid,
+                                item.seatId === id && item.userId === user?.uid,
                             );
                             const isOther = seatsInfo.some(
                               (item) =>
-                                item.seatId === id && item.userId !== user.uid,
+                                item.seatId === id && item.userId !== user?.uid,
                             );
                             const isLocked = Object.entries(locks).some(
                               ([seatId, uid]) =>
-                                seatId === id && uid !== user.uid,
+                                seatId === id && uid !== user?.uid,
                             );
                             return (
                               <PCSeat
@@ -276,69 +278,77 @@ const PCSeatCheckPage = () => {
               className="fixed bottom-6 w-[680px] -translate-x-1/2 overflow-hidden rounded-xl bg-white shadow-xl"
               style={{ left: 'calc(110px + 50vw)' }}
             >
-              {/* 정보 칸 */}
-              <div className="flex items-center justify-between px-8 py-3">
-                {/* 인원수 칸 */}
-                <div className="flex flex-[1] flex-col items-center justify-center gap-0">
-                  <span className="text-[10px] font-bold tracking-widest text-gray-400">
-                    SELECTION
-                  </span>
-                  <span className="text-xl font-bold text-blue">
-                    {seatsStateCount}
-                    <span className="ml-1.5 text-sm font-normal text-gray-400">
-                      / {selectKid + selectAdult} Seats
-                    </span>
-                  </span>
+              {!isLoggedIn ? (
+                <div className="flex justify-center px-8 py-4">
+                  <LoginRequiredBlock
+                    description="로그인 후 예매할 수 있어요"
+                    onLogin={() => navigate('/auth/login')}
+                    size="sm"
+                    horizontal
+                  />
                 </div>
-
-                {/* 부분 구분선 */}
-                <div className="mx-6 h-10 w-px bg-gray-100" />
-
-                {/* 좌석 선택 칸 */}
-                <div className="flex flex-[10] items-center justify-between">
-                  {/* 그림 칸 */}
-                  <div className="flex flex-col gap-2">
+              ) : (
+                <div className="flex items-center justify-between px-8 py-3">
+                  {/* 인원수 칸 */}
+                  <div className="flex flex-[1] flex-col items-center justify-center gap-0">
                     <span className="text-[10px] font-bold tracking-widest text-gray-400">
-                      SELECTED SEATS
+                      SELECTION
                     </span>
+                    <span className="text-xl font-bold text-blue">
+                      {seatsStateCount}
+                      <span className="ml-1.5 text-sm font-normal text-gray-400">
+                        / {selectKid + selectAdult} Seats
+                      </span>
+                    </span>
+                  </div>
+
+                  <div className="mx-6 h-10 w-px bg-gray-100" />
+
+                  <div className="flex flex-[10] items-center justify-between">
+                    <div className="flex flex-col gap-2">
+                      <span className="text-[10px] font-bold tracking-widest text-gray-400">
+                        SELECTED SEATS
+                      </span>
+                      <div className="flex gap-2.5">
+                        {Array.from(
+                          { length: selectKid + selectAdult },
+                          (_, i) => (
+                            <div
+                              key={i}
+                              className={`h-4 w-4 rounded ${i < seatsStateCount ? 'bg-blue' : 'border border-gray-200'}`}
+                            />
+                          ),
+                        )}
+                      </div>
+                    </div>
+
                     <div className="flex gap-2.5">
-                      {Array.from(
-                        { length: selectKid + selectAdult },
-                        (_, i) => (
-                          <div
-                            key={i}
-                            className={`h-4 w-4 rounded ${i < seatsStateCount ? 'bg-blue' : 'border border-gray-200'}`}
-                          />
-                        ),
-                      )}
+                      <button
+                        onClick={
+                          isLocksLoaded && isAllLocked
+                            ? undefined
+                            : handleAllSelect
+                        }
+                        className={`rounded-lg border px-5 py-2.5 text-xs font-bold transition-colors ${isLocksLoaded && isAllLocked ? 'border-gray-200 bg-white text-gray-300' : 'border-blue bg-white text-blue hover:bg-blue/5'}`}
+                      >
+                        자동 선택
+                      </button>
+                      <button
+                        onClick={
+                          isAllSelected
+                            ? () => openModal('PayModal')
+                            : undefined
+                        }
+                        className={`rounded-lg px-7 py-2.5 text-xs font-bold text-white transition-colors ${isAllSelected ? 'bg-blue hover:bg-blue/90' : 'bg-gray-300'}`}
+                      >
+                        {isAllSelected
+                          ? '예매'
+                          : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
+                      </button>
                     </div>
                   </div>
-
-                  {/* 선택 버튼 */}
-                  <div className="flex gap-2.5">
-                    <button
-                      onClick={
-                        isLocksLoaded && isAllLocked
-                          ? undefined
-                          : handleAllSelect
-                      }
-                      className={`rounded-lg border px-5 py-2.5 text-xs font-bold transition-colors ${isLocksLoaded && isAllLocked ? 'border-gray-200 bg-white text-gray-300' : 'border-blue bg-white text-blue hover:bg-blue/5'}`}
-                    >
-                      자동 선택
-                    </button>
-                    <button
-                      onClick={
-                        isAllSelected ? () => openModal('PayModal') : undefined
-                      }
-                      className={`rounded-lg px-7 py-2.5 text-xs font-bold text-white transition-colors ${isAllSelected ? 'bg-blue hover:bg-blue/90' : 'bg-gray-300'}`}
-                    >
-                      {isAllSelected
-                        ? '예매'
-                        : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
-                    </button>
-                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </main>

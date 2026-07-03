@@ -4,6 +4,7 @@
  */
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '@/shared/firebase/firebase';
 import { useUpdateTravelReview } from '@/features/TravelReview/hooks/useUpdateTravelReview';
 import { useDeleteTravelReview } from '@/features/TravelReview/hooks/useDeleteTravelReview';
 import { useCreateTravelReview } from '@/features/TravelReview/hooks/useCreateTravelReview';
@@ -158,5 +159,6 @@ export const usePCTravelReviewPage = (
     handleWriteSubmit,
     processedReviews,
     ratingCounts,
+    isLoggedIn: !!auth.currentUser,
   };
 };

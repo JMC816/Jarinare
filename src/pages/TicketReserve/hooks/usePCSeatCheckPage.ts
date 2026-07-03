@@ -83,6 +83,8 @@ export const usePCSeatCheckPage = () => {
   const gradeRaw = trainTypeParts.slice(0, -1).join('-');
   const trainTypeDisplay = `${formatTrainGradeName(gradeRaw)}-${trainTypeNo}`;
 
+  const isLoggedIn = !!user;
+
   return {
     handleSingleSelect,
     handleAllSelect,
@@ -109,5 +111,6 @@ export const usePCSeatCheckPage = () => {
     handleCloseTrainDropdown,
     handleSelectTrainNo,
     trainNoSeatsCount,
+    isLoggedIn,
   };
 };

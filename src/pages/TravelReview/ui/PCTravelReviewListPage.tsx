@@ -9,6 +9,7 @@ import StarRating from '@/shared/ui/StarRating';
 import StarPicker from '@/shared/ui/StarPicker';
 import { usePCTravelReviewListPage } from '../hooks/usePCTravelReviewListPage';
 import { getProfileColor } from '../constants/travelReviewPageConstants';
+import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
 
 const PCTravelReviewListPage = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const PCTravelReviewListPage = () => {
     submitting,
     handleWriteSubmit,
     filteredStations,
+    isLoggedIn,
   } = usePCTravelReviewListPage();
 
   return (
@@ -112,7 +114,16 @@ const PCTravelReviewListPage = () => {
               </div>
 
               {/* 후기 작성 카드 */}
-              {showWriteForm && (
+              {showWriteForm && !isLoggedIn && (
+                <div className="flex items-center justify-center rounded-sm bg-white p-10 shadow-sm">
+                  <LoginRequiredBlock
+                    description="로그인 후 후기를 작성할 수 있어요"
+                    onLogin={() => navigate('/auth/login')}
+                    size="md"
+                  />
+                </div>
+              )}
+              {showWriteForm && isLoggedIn && (
                 <div className="flex flex-col gap-4 rounded-sm bg-white p-6 shadow-sm">
                   {/* 역 선택 */}
                   <div className="flex flex-col gap-1.5">

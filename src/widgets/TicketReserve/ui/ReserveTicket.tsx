@@ -3,10 +3,13 @@
  * @rule: 렌더링만 담당, 비즈니스 로직 포함 금지
  */
 import { useReserveTicket } from '../hooks/useReserveTicket';
+import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
 
 const ReserveTicket = () => {
   const {
     isEmpty,
+    isLoggedIn,
+    handleLoginNavigate,
     ticket,
     trainTypeName,
     startLabel,
@@ -17,6 +20,21 @@ const ReserveTicket = () => {
   } = useReserveTicket();
 
   if (isEmpty || !ticket) {
+    if (!isLoggedIn) {
+      return (
+        <div className="relative mb-[20px] h-[138px] w-full shrink-0 overflow-hidden rounded-lg bg-white shadow-sm">
+          <div className="pointer-events-none flex h-full select-none flex-col items-center justify-center gap-1 blur-sm">
+            <span>🗒️</span>
+            <span className="text-tiny font-bold">
+              아직 예매한 승차권이 없어요
+            </span>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm">
+            <LoginRequiredBlock onLogin={handleLoginNavigate} size="sm" />
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="mb-[20px] flex h-[138px] w-full shrink-0 flex-col items-center justify-center rounded-lg bg-white shadow-sm">
         <span>🗒️</span>

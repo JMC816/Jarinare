@@ -176,12 +176,14 @@ const CommentItem = ({
               <HeartIcon filled={isLiked} />
               <span>{likesCount > 0 ? likesCount : '좋아요'}</span>
             </button>
-            <button
-              onClick={() => setShowReplyInput((v) => !v)}
-              className="text-xs font-semibold text-gray-400 hover:text-gray-600"
-            >
-              답글 달기
-            </button>
+            {auth.currentUser && (
+              <button
+                onClick={() => setShowReplyInput((v) => !v)}
+                className="text-xs font-semibold text-gray-400 hover:text-gray-600"
+              >
+                답글 달기
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -393,31 +395,65 @@ export const CommentSection = ({ postDocId, isPC = false }: Props) => {
       </div>
 
       {/* 댓글 입력 */}
-      <div
-        className={`flex items-center gap-3 bg-white px-4 py-3 ${isPC ? '' : 'fixed bottom-20 left-1/2 w-[375px] -translate-x-1/2'}`}
-      >
-        <Avatar name={auth.currentUser?.displayName ?? '?'} />
-        <input
-          ref={inputRef}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              handleSubmit();
-            }
-          }}
-          placeholder="댓글을 입력하세요"
-          className="flex-1 rounded-md bg-gray-100 px-4 py-2.5 text-sm outline-none"
-        />
-        <button
-          onClick={handleSubmit}
-          className="shrink-0 rounded-md bg-blue px-6 py-2 text-sm font-bold text-white disabled:opacity-40"
-          disabled={!input.trim()}
+      {auth.currentUser ? (
+        <div
+          className={`flex items-center gap-3 bg-white px-4 py-3 ${isPC ? '' : 'fixed bottom-20 left-1/2 w-[375px] -translate-x-1/2'}`}
         >
-          등록
-        </button>
-      </div>
+          <Avatar name={auth.currentUser.displayName ?? '?'} />
+          <input
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSubmit();
+              }
+            }}
+            placeholder="댓글을 입력하세요"
+            className="flex-1 rounded-md bg-gray-100 px-4 py-2.5 text-sm outline-none"
+          />
+          <button
+            onClick={handleSubmit}
+            className="shrink-0 rounded-md bg-blue px-6 py-2 text-sm font-bold text-white disabled:opacity-40"
+            disabled={!input.trim()}
+          >
+            등록
+          </button>
+        </div>
+      ) : (
+        <div
+          className={`relative overflow-hidden bg-white px-4 py-3 ${isPC ? '' : 'fixed bottom-20 left-1/2 w-[375px] -translate-x-1/2'}`}
+        >
+          <div className="pointer-events-none flex select-none items-center gap-3 blur-sm">
+            <div className="h-8 w-8 shrink-0 rounded-full bg-gray-200" />
+            <div className="flex-1 rounded-md bg-gray-100 px-4 py-2.5 text-sm text-gray-300">
+              댓글을 입력하세요
+            </div>
+            <div className="shrink-0 rounded-md bg-gray-300 px-6 py-2 text-sm font-bold text-white">
+              등록
+            </div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center gap-3 bg-white/70 backdrop-blur-sm">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#2563eb"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+            <span className="text-xs font-bold text-gray-700">
+              로그인 후 댓글을 작성할 수 있어요
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -7,10 +7,19 @@ import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import MiniTicket from '@/widgets/TicketReturn/ui/MiniTicket';
 import Modal from '@/widgets/TicketReturn/ui/Modal';
 import { usePCTicketReturnPage } from '../hooks/usePCTicketReturnPage';
+import { useNavigate } from 'react-router-dom';
+import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
 
 const PCTicketReturnPage = () => {
-  const { handleReturnPC, handleNavigateHome, isShow, modalType, isEmpty } =
-    usePCTicketReturnPage();
+  const {
+    handleReturnPC,
+    handleNavigateHome,
+    isShow,
+    modalType,
+    isEmpty,
+    isLoggedIn,
+  } = usePCTicketReturnPage();
+  const navigate = useNavigate();
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
@@ -35,7 +44,15 @@ const PCTicketReturnPage = () => {
             </div>
 
             {/* 승차권 목록 */}
-            {isEmpty ? (
+            {!isLoggedIn ? (
+              <div className="flex min-h-[420px] items-center justify-center rounded-xl bg-white shadow-sm">
+                <LoginRequiredBlock
+                  description="로그인 후 승차권 반환을 이용할 수 있어요"
+                  onLogin={() => navigate('/auth/login')}
+                  size="md"
+                />
+              </div>
+            ) : isEmpty ? (
               <div className="min-h-[420px] rounded-xl bg-white p-6 shadow-sm">
                 <div className="flex flex-col items-center justify-center py-16">
                   <div className="mb-6 flex h-32 w-32 items-center justify-center rounded-full bg-lightBlue">
@@ -64,7 +81,7 @@ const PCTicketReturnPage = () => {
                   </p>
                   <button
                     onClick={handleNavigateHome}
-                    className="mt-6 flex items-center gap-2 rounded-full bg-blue px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-blue/90"
+                    className="mt-6 flex items-center gap-2 rounded-lg bg-blue px-8 py-3 text-sm font-bold text-white transition-colors hover:bg-blue/90"
                   >
                     승차권 예매하기
                     <svg

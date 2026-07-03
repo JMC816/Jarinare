@@ -9,7 +9,7 @@ const ChoiceResultModal = () => {
     startTimeView,
     endTimeView,
     durationText,
-    selectTrainType,
+    trainTypeDisplay,
     selectKid,
     selectAdult,
     selectPay,
@@ -91,7 +91,7 @@ const ChoiceResultModal = () => {
           <div className="flex flex-1 flex-col gap-0.5 rounded-xl bg-gray-50 px-4 py-2.5 lg:rounded-2xl">
             <span className="text-sm text-gray-400">열차</span>
             <span className="text-base font-bold text-gray-800">
-              {selectTrainType}
+              {trainTypeDisplay}
             </span>
           </div>
           <div className="flex flex-1 flex-col gap-0.5 rounded-xl bg-gray-50 px-4 py-2.5 lg:rounded-2xl">

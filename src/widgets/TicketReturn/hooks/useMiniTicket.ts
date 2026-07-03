@@ -28,8 +28,16 @@ export const useMiniTicket = () => {
     const trainTypeName = (() => {
       const parts = ticket.trainType.split('-');
       const first = parts[0];
-      const namePart = parts[1]?.split('(')[0] ?? '';
-      return namePart ? `${first} ${namePart}` : first;
+      const rawPart = parts[1] ?? '';
+      const namePart = rawPart.split('(')[0];
+      const parenContent = rawPart.split('(')[1] ?? '';
+      const suffix = parenContent.startsWith('A')
+        ? 'A'
+        : parenContent.startsWith('B')
+          ? 'B'
+          : '';
+      const fullName = namePart + suffix;
+      return fullName ? `${first} ${fullName}` : first;
     })();
 
     return {

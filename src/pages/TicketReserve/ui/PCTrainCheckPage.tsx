@@ -229,6 +229,7 @@ const PCTrainCheckPage = () => {
                           isSoldOut,
                           remainingSeats,
                           cardStyle,
+                          trainGradeDisplay,
                         },
                         idx,
                       ) => (
@@ -243,7 +244,7 @@ const PCTrainCheckPage = () => {
                               <span
                                 className={`rounded-md px-2 py-0.5 text-xs font-bold ${isSoldOut ? 'bg-gray-200 text-gray-400' : 'bg-lightBlue text-blue'}`}
                               >
-                                {traingradename}-{trainno}
+                                {trainGradeDisplay}-{trainno}
                               </span>
                               <span
                                 className={`text-xs font-semibold ${isSoldOut ? 'text-red' : 'text-gray-400'}`}

@@ -21,6 +21,7 @@ import {
 } from '@/features/TicketReserve/hooks/useAllSeatsInfo';
 import { TOTAL_SEATS } from '../constants/PCTrainCheckConstants';
 import { DropdownType } from '../types/PCTrainCheckTypes';
+import { formatTrainGradeName } from '@/shared/lib/formatTrainName';
 
 const isSameDay = (a: Date, b: Date) =>
   a.getFullYear() === b.getFullYear() &&
@@ -152,6 +153,7 @@ export const usePCTrainCheckPage = () => {
       isSoldOut,
       remainingSeats: TOTAL_SEATS - reservedCount,
       cardStyle: getCardStyle(isSoldOut),
+      trainGradeDisplay: formatTrainGradeName(t.traingradename),
     };
   });
 

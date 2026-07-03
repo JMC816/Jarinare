@@ -17,7 +17,7 @@ const PCSeatCheckPage = () => {
     locks,
     isLocksLoaded,
     seatsStateCount,
-    selectTrainType,
+    trainTypeDisplay,
     startStationForView,
     endStationForView,
     selectKid,
@@ -81,7 +81,7 @@ const PCSeatCheckPage = () => {
                   TRAIN SELECTION
                 </span>
                 <h1 className="mt-1 text-2xl font-bold text-gray-900">
-                  {selectTrainType}
+                  {trainTypeDisplay}
                 </h1>
                 <p className="mt-0.5 text-sm text-gray-400">
                   {startStationForView} → {endStationForView}

@@ -12,6 +12,7 @@ import useModalStore from '@/widgets/model/ReserveStore';
 import { auth } from '@/shared/firebase/firebase';
 import { useResetSeatsState } from '@/features/TicketReserve/hooks/useResetSeatsState';
 import { SEATS_PER_CAR } from '../constants/PCTrainCheckConstants';
+import { formatTrainGradeName } from '@/shared/lib/formatTrainName';
 
 const TOTAL_SEATS = SEATS_PER_CAR;
 
@@ -77,6 +78,11 @@ export const usePCSeatCheckPage = () => {
   const isAllLocked =
     seatsStateCount === 0 ? false : seatsStateCount <= selectKid + selectAdult;
 
+  const trainTypeParts = selectTrainType.split('-');
+  const trainTypeNo = trainTypeParts[trainTypeParts.length - 1];
+  const gradeRaw = trainTypeParts.slice(0, -1).join('-');
+  const trainTypeDisplay = `${formatTrainGradeName(gradeRaw)}-${trainTypeNo}`;
+
   return {
     handleSingleSelect,
     handleAllSelect,
@@ -84,7 +90,7 @@ export const usePCSeatCheckPage = () => {
     locks,
     isLocksLoaded,
     seatsStateCount,
-    selectTrainType,
+    trainTypeDisplay,
     startStationForView,
     endStationForView,
     selectKid,

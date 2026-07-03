@@ -252,188 +252,190 @@ const PCDestinationModal = ({
               </div>
             ) : (
               <div className="flex flex-col gap-6">
-                {legTrains.map(({ leg, nextTrain, isFetching }, i) => (
-                  <div key={i}>
-                    {/* 구간 헤더 */}
-                    <div className="mb-2 flex items-center gap-1.5">
-                      <span className="text-sm font-bold text-gray-800">
-                        {leg.from}
-                      </span>
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#9ca3af"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                        <polyline points="12 5 19 12 12 19" />
-                      </svg>
-                      <span className="text-sm font-bold text-gray-800">
-                        {leg.to}
-                      </span>
-                      <span className="rounded bg-lightBlue px-1.5 py-0.5 text-[10px] font-bold text-blue">
-                        {leg.train}
-                      </span>
-                    </div>
-
-                    {/* 다음 열차 */}
-                    {isFetching ? (
-                      <div className="h-12 animate-pulse rounded-xl bg-gray-100" />
-                    ) : nextTrain === null ? (
-                      <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3">
+                {legTrains.map(
+                  ({ leg, nextTrain, isFetching, trainGradeDisplay }, i) => (
+                    <div key={i}>
+                      {/* 구간 헤더 */}
+                      <div className="mb-2 flex items-center gap-1.5">
+                        <span className="text-sm font-bold text-gray-800">
+                          {leg.from}
+                        </span>
                         <svg
-                          width="16"
-                          height="16"
+                          width="12"
+                          height="12"
                           viewBox="0 0 24 24"
                           fill="none"
-                          stroke="#d1d5db"
-                          strokeWidth="1.5"
+                          stroke="#9ca3af"
+                          strokeWidth="2.5"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         >
-                          <circle cx="12" cy="12" r="10" />
-                          <line x1="12" y1="8" x2="12" y2="12" />
-                          <line
-                            x1="12"
-                            y1="16"
-                            x2="12.01"
-                            y2="16"
-                            strokeWidth="2.5"
-                          />
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
                         </svg>
-                        <p className="text-xs font-bold text-gray-400">
-                          조회된 열차가 없습니다
-                        </p>
+                        <span className="text-sm font-bold text-gray-800">
+                          {leg.to}
+                        </span>
+                        <span className="rounded bg-lightBlue px-1.5 py-0.5 text-[10px] font-bold text-blue">
+                          {leg.train}
+                        </span>
                       </div>
-                    ) : (
-                      <div
-                        className={`overflow-hidden rounded-xl border border-gray-100 transition-colors ${nextTrain.adultcharge === 0 ? 'opacity-50' : ''} ${pendingTrain?.train === nextTrain ? 'bg-lightBlue' : 'bg-gray-50'}`}
-                      >
-                        {/* 열차 정보 행 */}
-                        <button
-                          onClick={() => handleTrainClick(nextTrain, leg)}
-                          disabled={nextTrain.adultcharge === 0}
-                          className="flex w-full items-center justify-between px-4 py-3 text-left"
-                        >
-                          <div className="flex items-center gap-3">
-                            <span className="rounded-md bg-lightBlue px-2 py-0.5 text-xs font-bold text-blue">
-                              {nextTrain.traingradename}
-                            </span>
-                            <span className="text-sm font-bold text-gray-800">
-                              {formatTimeView(String(nextTrain.depplandtime))}
-                            </span>
-                            <svg
-                              width="14"
-                              height="14"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="#d1d5db"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <line x1="5" y1="12" x2="19" y2="12" />
-                              <polyline points="12 5 19 12 12 19" />
-                            </svg>
-                            <span className="text-sm font-bold text-gray-800">
-                              {formatTimeView(String(nextTrain.arrplandtime))}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className="text-xs text-gray-400">
-                              {nextTrain.adultcharge === 0
-                                ? '매진'
-                                : `${nextTrain.adultcharge.toLocaleString('ko-KR')}원`}
-                            </span>
-                            {nextTrain.adultcharge > 0 && (
-                              <span className="text-xs font-bold text-blue">
-                                <span className="flex items-center gap-1 text-xs font-bold text-blue">
-                                  선택
-                                  <svg
-                                    width="12"
-                                    height="12"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    {pendingTrain?.train === nextTrain ? (
-                                      <polyline points="18 15 12 9 6 15" />
-                                    ) : (
-                                      <polyline points="6 9 12 15 18 9" />
-                                    )}
-                                  </svg>
-                                </span>
-                              </span>
-                            )}
-                          </div>
-                        </button>
 
-                        {/* 펼쳐지는 인원 선택 — 동일 카드 내 */}
-                        {pendingTrain?.train === nextTrain && (
-                          <div className="border-t border-gray-100 bg-gray-50 px-4 pb-3 pt-2">
-                            <div className="flex flex-col gap-2">
-                              <div className="flex items-center justify-between">
-                                <span className="text-sm font-semibold text-gray-700">
-                                  어른
-                                  {adult > 0 && (
-                                    <span className="ml-1.5 text-blue">
-                                      {adult}명
-                                    </span>
-                                  )}
-                                </span>
-                                <CountAdultButton />
-                              </div>
-                              <div className="flex items-center justify-between">
-                                <span className="text-sm font-semibold text-gray-700">
-                                  어린이
-                                  {kid > 0 && (
-                                    <span className="ml-1.5 text-blue">
-                                      {kid}명
-                                    </span>
-                                  )}
-                                </span>
-                                <CountKidButton />
-                              </div>
+                      {/* 다음 열차 */}
+                      {isFetching ? (
+                        <div className="h-12 animate-pulse rounded-xl bg-gray-100" />
+                      ) : nextTrain === null ? (
+                        <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#d1d5db"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line
+                              x1="12"
+                              y1="16"
+                              x2="12.01"
+                              y2="16"
+                              strokeWidth="2.5"
+                            />
+                          </svg>
+                          <p className="text-xs font-bold text-gray-400">
+                            조회된 열차가 없습니다
+                          </p>
+                        </div>
+                      ) : (
+                        <div
+                          className={`overflow-hidden rounded-xl border border-gray-100 transition-colors ${nextTrain.adultcharge === 0 ? 'opacity-50' : ''} ${pendingTrain?.train === nextTrain ? 'bg-lightBlue' : 'bg-gray-50'}`}
+                        >
+                          {/* 열차 정보 행 */}
+                          <button
+                            onClick={() => handleTrainClick(nextTrain, leg)}
+                            disabled={nextTrain.adultcharge === 0}
+                            className="flex w-full items-center justify-between px-4 py-3 text-left"
+                          >
+                            <div className="flex items-center gap-3">
+                              <span className="rounded-md bg-lightBlue px-2 py-0.5 text-xs font-bold text-blue">
+                                {trainGradeDisplay}
+                              </span>
+                              <span className="text-sm font-bold text-gray-800">
+                                {formatTimeView(String(nextTrain.depplandtime))}
+                              </span>
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="#d1d5db"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                              </svg>
+                              <span className="text-sm font-bold text-gray-800">
+                                {formatTimeView(String(nextTrain.arrplandtime))}
+                              </span>
                             </div>
-                            <button
-                              onClick={handleConfirmPassengers}
-                              disabled={adult + kid === 0}
-                              className={`mt-3 w-full rounded-lg py-2 text-xs font-bold text-white transition-colors ${adult + kid === 0 ? 'bg-gray-300' : 'bg-blue hover:bg-blue/90'}`}
-                            >
-                              {adult + kid === 0 ? (
-                                '인원을 선택해주세요'
-                              ) : (
-                                <span className="flex items-center justify-center gap-1.5">
-                                  좌석 선택
-                                  <svg
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  >
-                                    <line x1="2" y1="12" x2="20" y2="12" />
-                                    <polyline points="14 6 20 12 14 18" />
-                                  </svg>
+                            <div className="flex items-center gap-3">
+                              <span className="text-xs text-gray-400">
+                                {nextTrain.adultcharge === 0
+                                  ? '매진'
+                                  : `${nextTrain.adultcharge.toLocaleString('ko-KR')}원`}
+                              </span>
+                              {nextTrain.adultcharge > 0 && (
+                                <span className="text-xs font-bold text-blue">
+                                  <span className="flex items-center gap-1 text-xs font-bold text-blue">
+                                    선택
+                                    <svg
+                                      width="12"
+                                      height="12"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      {pendingTrain?.train === nextTrain ? (
+                                        <polyline points="18 15 12 9 6 15" />
+                                      ) : (
+                                        <polyline points="6 9 12 15 18 9" />
+                                      )}
+                                    </svg>
+                                  </span>
                                 </span>
                               )}
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
+                            </div>
+                          </button>
+
+                          {/* 펼쳐지는 인원 선택 — 동일 카드 내 */}
+                          {pendingTrain?.train === nextTrain && (
+                            <div className="border-t border-gray-100 bg-gray-50 px-4 pb-3 pt-2">
+                              <div className="flex flex-col gap-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-semibold text-gray-700">
+                                    어른
+                                    {adult > 0 && (
+                                      <span className="ml-1.5 text-blue">
+                                        {adult}명
+                                      </span>
+                                    )}
+                                  </span>
+                                  <CountAdultButton />
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-semibold text-gray-700">
+                                    어린이
+                                    {kid > 0 && (
+                                      <span className="ml-1.5 text-blue">
+                                        {kid}명
+                                      </span>
+                                    )}
+                                  </span>
+                                  <CountKidButton />
+                                </div>
+                              </div>
+                              <button
+                                onClick={handleConfirmPassengers}
+                                disabled={adult + kid === 0}
+                                className={`mt-3 w-full rounded-lg py-2 text-xs font-bold text-white transition-colors ${adult + kid === 0 ? 'bg-gray-300' : 'bg-blue hover:bg-blue/90'}`}
+                              >
+                                {adult + kid === 0 ? (
+                                  '인원을 선택해주세요'
+                                ) : (
+                                  <span className="flex items-center justify-center gap-1.5">
+                                    좌석 선택
+                                    <svg
+                                      width="14"
+                                      height="14"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    >
+                                      <line x1="2" y1="12" x2="20" y2="12" />
+                                      <polyline points="14 6 20 12 14 18" />
+                                    </svg>
+                                  </span>
+                                )}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ),
+                )}
               </div>
             )}
           </div>

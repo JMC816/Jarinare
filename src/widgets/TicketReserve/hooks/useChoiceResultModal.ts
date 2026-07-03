@@ -6,6 +6,7 @@ import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '@/widgets/model/ReserveStore';
 import { useNavigation } from './ReserveHook';
 import { formatTimeView } from '@/shared/lib/formatDate';
+import { formatTrainGradeName } from '@/shared/lib/formatTrainName';
 
 const calcDuration = (start: number, end: number) => {
   const depH = Number(String(start).substring(8, 10));
@@ -31,6 +32,11 @@ export const useChoiceResultModal = () => {
     selectPay,
   } = trainDataStore();
 
+  const parts = selectTrainType.split('-');
+  const trainno = parts[parts.length - 1];
+  const gradePart = parts.slice(0, -1).join('-');
+  const trainTypeDisplay = `${formatTrainGradeName(gradePart)}-${trainno}`;
+
   const startTimeView = formatTimeView(String(selectStartTime));
   const endTimeView = formatTimeView(String(selectEndTime));
   const durationText = calcDuration(selectStartTime, selectEndTime);
@@ -45,7 +51,7 @@ export const useChoiceResultModal = () => {
     startTimeView,
     endTimeView,
     durationText,
-    selectTrainType,
+    trainTypeDisplay,
     selectKid,
     selectAdult,
     selectPay,

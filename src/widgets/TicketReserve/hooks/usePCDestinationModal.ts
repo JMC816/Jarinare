@@ -18,6 +18,7 @@ import {
   CITY_ROUTES,
 } from '../constants/PCDestinationConstants';
 import type { TrainTimeProps } from '@/features/TicketReserve/types/stationType';
+import { formatTrainGradeName } from '@/shared/lib/formatTrainName';
 
 const addDays = (n: number): Date => {
   const d = new Date();
@@ -179,8 +180,15 @@ export const usePCDestinationModal = (city: string) => {
     setSearchQuery('');
   };
 
+  const legTrainsWithDisplay = legTrains.map((item) => ({
+    ...item,
+    trainGradeDisplay: item.nextTrain
+      ? formatTrainGradeName(item.nextTrain.traingradename)
+      : null,
+  }));
+
   return {
-    legTrains,
+    legTrains: legTrainsWithDisplay,
     handleTrainClick,
     handleConfirmPassengers,
     handleClosePendingTrain,

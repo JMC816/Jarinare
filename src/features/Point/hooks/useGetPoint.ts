@@ -8,8 +8,9 @@ export const useGetPoint = () => {
 
   // 각 사용자의 포인트
   useEffect(() => {
+    if (!user) return;
     const getPoint = async () => {
-      const userRef = doc(db, 'users', user!.uid);
+      const userRef = doc(db, 'users', user.uid);
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
@@ -17,6 +18,6 @@ export const useGetPoint = () => {
       }
     };
     getPoint();
-  }, []);
+  }, [user]);
   return { point };
 };

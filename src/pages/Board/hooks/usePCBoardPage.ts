@@ -85,16 +85,16 @@ export const usePCBoardPage = (
     return [];
   }, [allPosts, activeFilter]);
 
-  // 검색어가 있을 때 전체 게시물 필터링
+  // 검색어 + 필터 동시 적용
   const searchResults = useMemo((): SearchResultPost[] => {
     const q = activeSearchQuery.toLowerCase();
     if (!q) return [];
-    return allPosts.filter(
+    return displayPosts.filter(
       (p) =>
         p.title?.toLowerCase().includes(q) ||
         p.content?.toLowerCase().includes(q),
     );
-  }, [activeSearchQuery, allPosts]);
+  }, [activeSearchQuery, displayPosts]);
 
   // 오른쪽 컬럼 높이 기반 페이지당 게시물 수
   const pageSize =

@@ -61,41 +61,14 @@ const PCBoardPage = () => {
           style={{ height: 'calc(100vh - 3.5rem)' }}
         >
           <div className="px-32 pb-16 pt-10">
-            <div className="mb-6 flex items-end justify-between">
-              <div>
-                <p className="text-xs font-bold tracking-widest text-gray-400">
-                  COMMUNITY
-                </p>
-                <h1 className="mt-1 text-2xl font-black text-gray-900">
-                  게시판
-                </h1>
-                <p className="mt-1 text-sm text-gray-400">
-                  다양한 여행 정보와 소식을 확인하세요
-                </p>
-              </div>
-              <form onSubmit={handleSearch} className="relative">
-                <svg
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="게시물 검색"
-                  className="rounded-md border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue"
-                />
-              </form>
+            <div className="mb-6">
+              <p className="text-xs font-bold tracking-widest text-gray-400">
+                COMMUNITY
+              </p>
+              <h1 className="mt-1 text-2xl font-black text-gray-900">게시판</h1>
+              <p className="mt-1 text-sm text-gray-400">
+                다양한 여행 정보와 소식을 확인하세요
+              </p>
             </div>
 
             <div className="flex flex-col gap-6">
@@ -132,38 +105,65 @@ const PCBoardPage = () => {
                       통합게시판
                     </h2>
                     <div className="ml-auto flex items-center gap-2">
-                      {activeSearchQuery ? (
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-400">
-                            <span className="font-bold text-blue">
-                              &ldquo;{activeSearchQuery}&rdquo;
-                            </span>{' '}
-                            검색결과 {searchResults.length}개
-                          </span>
+                      <form onSubmit={handleSearch} className="relative">
+                        <svg
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="11" cy="11" r="8" />
+                          <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="게시물 검색"
+                          className="rounded-md border border-gray-200 bg-white py-2 pl-9 pr-8 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue"
+                        />
+                        {searchQuery && (
                           <button
+                            type="button"
                             onClick={handleClearSearch}
-                            className="rounded-[3px] bg-gray-100 px-2 py-1 text-xs font-bold text-gray-500 hover:bg-gray-200"
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                           >
-                            초기화
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-1 rounded-sm bg-gray-100 p-1">
-                          {FILTER_TABS.map(({ label }) => (
-                            <button
-                              key={label}
-                              onClick={() => setActiveFilter(label)}
-                              className={`rounded-sm px-4 py-1.5 text-sm font-bold transition-colors ${
-                                activeFilter === label
-                                  ? 'bg-blue text-white'
-                                  : 'text-gray-400 hover:text-gray-600'
-                              }`}
+                            <svg
+                              width="13"
+                              height="13"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                             >
-                              {label}
-                            </button>
-                          ))}
-                        </div>
-                      )}
+                              <line x1="18" y1="6" x2="6" y2="18" />
+                              <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                          </button>
+                        )}
+                      </form>
+                      <div className="flex items-center gap-1 rounded-sm bg-gray-100 p-1">
+                        {FILTER_TABS.map(({ label }) => (
+                          <button
+                            key={label}
+                            onClick={() => setActiveFilter(label)}
+                            className={`rounded-sm px-4 py-1.5 text-sm font-bold transition-colors ${
+                              activeFilter === label
+                                ? 'bg-blue text-white'
+                                : 'text-gray-400 hover:text-gray-600'
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
                       <button
                         onClick={() => navigate('/board/write')}
                         className="flex items-center gap-1.5 rounded-sm bg-blue px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-blue/90"

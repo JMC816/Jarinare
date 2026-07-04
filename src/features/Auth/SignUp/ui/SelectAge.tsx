@@ -23,7 +23,7 @@ const SelectAge = () => {
   const { selectedGender, setSelectedGender } = SelectedGenderStore();
 
   return (
-    <div className="flex h-full w-[300px] flex-col">
+    <div className="flex h-full w-full flex-col">
       {/* 성별 */}
       <div className="mt-[20px]">
         <SectionTitle label="성별" />
@@ -35,10 +35,10 @@ const SelectAge = () => {
               <button
                 key={value}
                 onClick={() => setSelectedGender(value)}
-                className={`flex h-[100px] flex-1 flex-col items-center justify-center gap-1 rounded-xl border text-sm font-bold transition-all ${
+                className={`flex h-[100px] flex-1 flex-col items-center justify-center gap-1 rounded-md border text-sm font-semibold transition-all ${
                   isSelected
-                    ? 'border-blue bg-blue text-white shadow-md'
-                    : 'border-lightGray bg-gray-200 text-gray-600 hover:border-mediumGray hover:shadow-sm'
+                    ? 'border-blue bg-blue/5 text-blue'
+                    : 'border-lightGray bg-white text-black hover:border-mediumGray hover:shadow-sm'
                 }`}
               >
                 <span className="text-2xl leading-none">{symbol}</span>
@@ -64,9 +64,9 @@ const SelectAge = () => {
                 <button
                   key={age}
                   onClick={() => setSelectedAge(age)}
-                  className={`flex h-10 flex-1 items-center justify-center rounded-full border text-sm font-bold transition-all ${
+                  className={`flex h-12 flex-1 items-center justify-center rounded-md border text-sm font-semibold transition-all ${
                     isSelected
-                      ? 'border-blue bg-blue text-white shadow-md'
+                      ? 'border-blue bg-blue/5 text-blue'
                       : 'border-lightGray bg-white text-black hover:border-mediumGray hover:shadow-sm'
                   }`}
                 >

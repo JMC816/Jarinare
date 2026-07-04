@@ -10,6 +10,6 @@ export type Store = {
 
 export type AuthStageProps = {
   stage?: number;
-  width: number;
+  width?: number;
   borderRadius?: string;
 };

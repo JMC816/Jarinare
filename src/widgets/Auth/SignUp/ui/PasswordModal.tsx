@@ -1,3 +1,7 @@
+/**
+ * @role: widget
+ * @rule: 모바일 전용 — PC 레이아웃은 SignUpPage pcModalContent에서 처리
+ */
 import PasswordForm from '@/features/Auth/SignUp/ui/PasswordForm';
 import SignUpButton from './SignUpButton';
 import useModalStore from '@/widgets/model/AuthStore';
@@ -5,11 +9,9 @@ import BackWardModalButton from '@/widgets/layouts/ui/BackWardModalButton';
 import SignUpStageLine from './SignUpStageLine';
 import { useFormContext } from 'react-hook-form';
 import { useSignUpState } from '@/features/Auth/SignUp/hooks/useSignUpState';
-
 const PasswordModal = () => {
   const { openModal, closeModal } = useModalStore();
   const { handleSubmit } = useFormContext();
-  // 유효성 검사를 통과한 값을 회원가입 로직으로 전달
   const { onSubmit } = useSignUpState();
   return (
     <form
@@ -29,7 +31,7 @@ const PasswordModal = () => {
         step="Step 4 of 4"
       />
       <PasswordForm />
-      <SignUpStageLine stage={4} width={300} borderRadius="xl" />
+      <SignUpStageLine stage={4} />
       <SignUpButton text="회원가입" bgColor="blue" textColor="white" />
     </form>
   );

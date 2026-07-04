@@ -1,10 +1,13 @@
+/**
+ * @role: widget
+ * @rule: 모바일 전용 — PC 레이아웃은 SignUpPage pcModalContent에서 처리
+ */
 import NameForm from '@/features/Auth/SignUp/ui/NameForm';
 import NextButton from './NextButton';
 import useModalStore from '@/widgets/model/AuthStore';
 import BackWardModalButton from '@/widgets/layouts/ui/BackWardModalButton';
 import SignUpStageLine from './SignUpStageLine';
 import { useFormContext } from 'react-hook-form';
-
 const NameModal = () => {
   const { closeModal } = useModalStore();
   const {
@@ -19,13 +22,12 @@ const NameModal = () => {
         step="Step 2 of 4"
       />
       <NameForm />
-      <SignUpStageLine stage={2} width={150} borderRadius="xl" />
+      <SignUpStageLine stage={2} />
       <NextButton
         text="다음"
         bgColor="blue"
         textColor="white"
         modalTypes={
-          // 이름 에러나 빈 값일 시 다음 모달 제한
           errors.name || getValues('name') == '' ? 'NameModal' : 'AgeModal'
         }
       />

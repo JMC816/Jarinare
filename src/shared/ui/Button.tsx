@@ -14,7 +14,7 @@ const Button = ({
       onClick={() => {
         onModalClick!(modalTypes!);
       }}
-      className={`relative flex h-12 w-[300px] items-center justify-center rounded-md border border-lightGray text-base font-bold shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:bg-lightBlueImpossible disabled:opacity-50 text-${textColor} bg-${bgColor}`}
+      className={`relative flex h-12 w-[300px] items-center justify-center rounded-md border border-lightGray text-base font-bold shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:bg-lightBlueImpossible disabled:opacity-50 lg:w-full text-${textColor} bg-${bgColor}`}
     >
       {icon ? (
         <img

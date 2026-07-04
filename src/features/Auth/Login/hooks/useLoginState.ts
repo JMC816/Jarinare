@@ -22,6 +22,8 @@ export const useLoginState = () => {
             return setMessage('등록되지 않은 사용자 입니다.');
           case 'auth/wrong-password':
             return setMessage('비밀번호가 일치하지 않습니다.');
+          case 'auth/invalid-credential':
+            return setMessage('이메일 또는 비밀번호가 올바르지 않습니다.');
         }
       }
     } finally {

@@ -16,10 +16,12 @@ const BackWardPageButton = ({ title, step }: Props = {}) => {
         className="h-[20px] w-[12px] cursor-pointer"
       />
       {title && (
-        <span className="ml-3 text-base font-bold text-black">{title}</span>
+        <span className="ml-3 text-lg font-bold text-black">{title}</span>
       )}
       {step && (
-        <span className="ml-auto rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-darkGray">{step}</span>
+        <span className="ml-auto rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-darkGray">
+          {step}
+        </span>
       )}
     </div>
   );

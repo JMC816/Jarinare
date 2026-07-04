@@ -107,7 +107,7 @@ const FollowListPage = () => {
                   onClick={() => handleRemove(entry.uid)}
                   className="rounded-sm bg-gray-100 px-3 py-1.5 text-xs font-bold text-gray-500 transition-colors hover:bg-red/10 hover:text-red"
                 >
-                  {tab === 'followers' ? '삭제' : '언팔로우'}
+                  {tab === 'followers' ? 'x' : '팔로우 취소'}
                 </button>
               </div>
             ))

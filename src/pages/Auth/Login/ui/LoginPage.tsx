@@ -6,6 +6,7 @@ import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/AuthStore';
 import { FormProvider } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { useLoginPage } from '../hooks/useLoginPage';
 
 const LoginPage = () => {
   const { isShow, modalType } = useModalStore();
@@ -14,6 +15,8 @@ const LoginPage = () => {
 
   const formOpen =
     isShow && (modalType === 'EmailModal' || modalType === 'PasswordModal');
+
+  useLoginPage(formOpen);
 
   return (
     <>

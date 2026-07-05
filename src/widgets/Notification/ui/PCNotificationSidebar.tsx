@@ -57,8 +57,8 @@ const PCNotificationSidebar = () => {
 
       {/* 사이드바 패널 */}
       <aside
-        className={`fixed right-0 top-0 z-50 flex h-full w-[400px] flex-col bg-gray-100 shadow-2xl transition-transform duration-300 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed right-0 top-0 z-50 flex h-full w-[400px] flex-col bg-gray-100 transition-transform duration-300 ${
+          isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'
         }`}
       >
         {/* 헤더 */}

@@ -49,6 +49,10 @@ export const useReserveTicket = () => {
     navigate('/ticketlist');
   };
 
+  const handleSeatChange = () => {
+    navigateTo('/seatchange', { state: groups });
+  };
+
   return {
     isEmpty: false,
     isLoggedIn,
@@ -60,5 +64,6 @@ export const useReserveTicket = () => {
     dotDate,
     seatIds,
     handleDetail,
+    handleSeatChange,
   };
 };

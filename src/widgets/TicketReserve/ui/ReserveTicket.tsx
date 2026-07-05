@@ -17,6 +17,7 @@ const ReserveTicket = () => {
     dotDate,
     seatIds,
     handleDetail,
+    handleSeatChange,
   } = useReserveTicket();
 
   if (isEmpty || !ticket) {
@@ -130,18 +131,26 @@ const ReserveTicket = () => {
         </div>
       </div>
 
-      {/* 하단: 좌석 + 상세보기 */}
+      {/* 하단: 좌석 + 버튼 */}
       <div className="flex items-center justify-between border-t border-dashed border-gray-200 px-5 py-3">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] text-gray-400">SEAT</span>
           <span className="text-xs font-bold text-blue">{seatIds}</span>
         </div>
-        <button
-          onClick={handleDetail}
-          className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold text-blue hover:bg-gray-50"
-        >
-          상세보기
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleSeatChange}
+            className="rounded-md border border-blue bg-blue px-3 py-1.5 text-xs font-bold text-white hover:brightness-95"
+          >
+            좌석변경
+          </button>
+          <button
+            onClick={handleDetail}
+            className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold text-blue hover:bg-gray-50"
+          >
+            상세보기
+          </button>
+        </div>
       </div>
     </div>
   );

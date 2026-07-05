@@ -102,6 +102,7 @@ interface PCTicketItemProps {
   dotDate: string;
   koreanDate: string;
   ticketNo: string;
+  onSeatChange: (groups: SeatType[]) => void;
 }
 
 const PCTicketItem = ({
@@ -115,26 +116,35 @@ const PCTicketItem = ({
   dotDate,
   koreanDate,
   ticketNo,
+  onSeatChange,
 }: PCTicketItemProps) => {
   const [activeTab, setActiveTab] = useState<Tab>('ticket');
 
   return (
     <div className="flex flex-col gap-3">
-      {/* 토글 */}
-      <div className="flex w-fit gap-1 rounded-lg bg-gray-100 p-1">
-        {(['ticket', 'route'] as Tab[]).map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`w-24 rounded-md py-2 text-sm font-bold transition-colors ${
-              activeTab === tab
-                ? 'bg-white text-blue shadow-sm'
-                : 'text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            {tab === 'ticket' ? '티켓' : '구간'}
-          </button>
-        ))}
+      {/* 토글 + 좌석변경 */}
+      <div className="flex items-center justify-between">
+        <div className="flex w-fit gap-1 rounded-lg bg-gray-100 p-1">
+          {(['ticket', 'route'] as Tab[]).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`w-24 rounded-md py-2 text-sm font-bold transition-colors ${
+                activeTab === tab
+                  ? 'bg-white text-blue shadow-sm'
+                  : 'text-gray-400 hover:text-gray-600'
+              }`}
+            >
+              {tab === 'ticket' ? '티켓' : '구간'}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={() => onSeatChange(groups)}
+          className="rounded-lg border border-blue bg-blue px-8 py-3 text-sm font-bold text-white hover:brightness-95"
+        >
+          좌석변경
+        </button>
       </div>
 
       {/* 카드 전환 */}

@@ -29,7 +29,7 @@ const FAQ = [
 ];
 
 const PCTicketListPage = () => {
-  const { isEmpty, isLoggedIn } = usePCTicketListPage();
+  const { isEmpty, isLoggedIn, handleSeatChange } = usePCTicketListPage();
   const navigate = useNavigate();
   const { items } = useMiniTicket();
 
@@ -133,6 +133,7 @@ const PCTicketListPage = () => {
                       dotDate={item.dotDate}
                       koreanDate={item.koreanDate}
                       ticketNo={item.ticketNo}
+                      onSeatChange={handleSeatChange}
                     />
                   ))}
                 </div>

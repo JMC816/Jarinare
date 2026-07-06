@@ -14,7 +14,7 @@ export const useGetPoint = () => {
       const userSnap = await getDoc(userRef);
 
       if (userSnap.exists()) {
-        setPoint(userSnap.data().point);
+        setPoint(userSnap.data().point ?? 0);
       }
     };
     getPoint();

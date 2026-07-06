@@ -1,312 +1,24 @@
 import { SignUp } from '@/features/Auth/SignUp/model/SignUpSchema';
 import EmailForm from '@/features/Auth/SignUp/ui/EmailForm';
-import SelectAge from '@/features/Auth/SignUp/ui/SelectAge';
 import Modal from '@/widgets/Auth/SignUp/ui/Modal';
+import PCModal from '@/widgets/Auth/SignUp/ui/PCModal';
 import SignUpStageLine from '@/widgets/Auth/SignUp/ui/SignUpStageLine';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/AuthStore';
 import { FormProvider } from 'react-hook-form';
-import { useSignUpState } from '@/features/Auth/SignUp/hooks/useSignUpState';
 import { useSignUpPage } from '../hooks/useSignUpPage';
 import { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-
-const BackIcon = () => (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <polyline points="15 18 9 12 15 6" />
-  </svg>
-);
+import { Link } from 'react-router-dom';
 
 const SignUpPage = () => {
-  const { isShow, modalType, openModal, resetModal } = useModalStore();
+  const { isShow, modalType, resetModal } = useModalStore();
   const { method: pcMethod } = SignUp();
   const { method: mobileMethod } = SignUp();
-  const { onSubmit, isLoading } = useSignUpState();
-  const navigate = useNavigate();
-  const {
-    pcHandleNextClick,
-    mobileHandleNextClick,
-    isChecking,
-    isCapsLockOn,
-    setIsCapsLockOn,
-  } = useSignUpPage(pcMethod, mobileMethod);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter' && !isChecking) pcHandleNextClick();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isChecking, pcHandleNextClick]);
+  const { mobileHandleNextClick, isChecking } = useSignUpPage(mobileMethod);
 
   useEffect(() => {
     resetModal();
   }, []);
-
-  const pcErrors = pcMethod.formState.errors;
-
-  const pcModalContent = () => {
-    /* Step 2 — 이름 */
-    if (isShow && modalType === 'NameModal')
-      return (
-        <div
-          key="step-name"
-          className="flex h-full w-full flex-col justify-between px-10 pb-10"
-        >
-          <div>
-            <div className="mt-8 flex w-full items-center">
-              <button
-                type="button"
-                onClick={() => resetModal()}
-                className="flex items-center gap-1 text-sm font-medium text-black hover:text-gray-600"
-              >
-                <BackIcon />
-                회원가입
-              </button>
-              <span className="ml-auto rounded-full bg-blue/10 px-3 py-1 text-xs font-medium text-blue">
-                Step 2 of 4
-              </span>
-            </div>
-            <div className="mt-6 flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-gray-900">이름</h2>
-              <p className="text-sm text-gray-400">실명을 입력해주세요</p>
-            </div>
-            <div className="mt-8 flex flex-col gap-1.5">
-              <span className="text-sm font-semibold text-gray-700">이름</span>
-              <input
-                {...pcMethod.register('name')}
-                type="text"
-                placeholder="이름을 입력하세요"
-                autoComplete="off"
-                className="h-12 w-full rounded-lg border border-gray-200 px-4 text-sm text-gray-800 focus:border-blue focus:outline-none"
-              />
-              {pcErrors.name && (
-                <span className="text-xs text-red">
-                  {String(pcErrors.name.message)}
-                </span>
-              )}
-            </div>
-          </div>
-          <div>
-            <SignUpStageLine stage={2} />
-            <button
-              type="button"
-              onClick={() => {
-                if (!pcErrors.name && pcMethod.getValues('name') !== '')
-                  openModal('AgeModal');
-              }}
-              className="relative flex h-12 w-full items-center justify-center rounded-md border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
-            >
-              다음
-            </button>
-          </div>
-        </div>
-      );
-
-    /* Step 3 — 성별/나이대 */
-    if (isShow && modalType === 'AgeModal')
-      return (
-        <div
-          key="step-age"
-          className="flex h-full w-full flex-col justify-between px-10 pb-10"
-        >
-          <div>
-            <div className="mt-8 flex w-full items-center">
-              <button
-                type="button"
-                onClick={() => openModal('NameModal')}
-                className="flex items-center gap-1 text-sm font-medium text-black hover:text-gray-600"
-              >
-                <BackIcon />
-                회원가입
-              </button>
-              <span className="ml-auto rounded-full bg-blue/10 px-3 py-1 text-xs font-medium text-blue">
-                Step 3 of 4
-              </span>
-            </div>
-            <div className="mt-6 flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-gray-900">추가 정보</h2>
-              <p className="text-sm text-gray-400">
-                맞춤 서비스를 위한 정보예요
-              </p>
-            </div>
-            <div className="mt-8">
-              <SelectAge />
-            </div>
-          </div>
-          <div>
-            <SignUpStageLine stage={3} />
-            <button
-              type="button"
-              onClick={() => {
-                if (!pcErrors.name && pcMethod.getValues('name') !== '')
-                  openModal('PasswordModal');
-              }}
-              className="relative flex h-12 w-full items-center justify-center rounded-md border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
-            >
-              다음
-            </button>
-          </div>
-        </div>
-      );
-
-    /* Step 4 — 비밀번호 */
-    if (isShow && modalType === 'PasswordModal')
-      return (
-        <form
-          key="step-password"
-          onSubmit={pcMethod.handleSubmit(async (data) => {
-            await onSubmit(data);
-          })}
-          className="flex h-full w-full flex-col justify-between px-10 pb-10"
-        >
-          <div>
-            <div className="mt-8 flex w-full items-center">
-              <button
-                type="button"
-                onClick={() => openModal('AgeModal')}
-                className="flex items-center gap-1 text-sm font-medium text-black hover:text-gray-600"
-              >
-                <BackIcon />
-                회원가입
-              </button>
-              <span className="ml-auto rounded-full bg-blue/10 px-3 py-1 text-xs font-medium text-blue">
-                Step 4 of 4
-              </span>
-            </div>
-            <div className="mt-6 flex flex-col gap-1">
-              <h2 className="text-2xl font-bold text-gray-900">비밀번호</h2>
-              <p className="text-sm text-gray-400">
-                안전한 비밀번호를 설정해주세요
-              </p>
-            </div>
-            <div
-              className="mt-8 flex flex-col gap-4"
-              onKeyDown={(e) => setIsCapsLockOn(e.getModifierState('CapsLock'))}
-              onKeyUp={(e) => setIsCapsLockOn(e.getModifierState('CapsLock'))}
-            >
-              <div className="flex flex-col gap-1.5">
-                <span className="text-sm font-semibold text-gray-700">
-                  비밀번호
-                </span>
-                <input
-                  {...pcMethod.register('password')}
-                  type="password"
-                  placeholder="비밀번호를 입력하세요"
-                  autoComplete="off"
-                  className="h-12 w-full rounded-lg border border-gray-200 px-4 text-sm text-gray-800 focus:border-blue focus:outline-none"
-                />
-                {pcErrors.password && (
-                  <span className="text-xs text-red">
-                    {String(pcErrors.password.message)}
-                  </span>
-                )}
-                {isCapsLockOn && (
-                  <span className="text-xs text-orange-500">
-                    ⚠️ Caps Lock이 켜져 있습니다.
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-sm font-semibold text-gray-700">
-                  비밀번호 확인
-                </span>
-                <input
-                  {...pcMethod.register('confirmPassword')}
-                  type="password"
-                  placeholder="비밀번호를 다시 입력하세요"
-                  autoComplete="off"
-                  className="h-12 w-full rounded-lg border border-gray-200 px-4 text-sm text-gray-800 focus:border-blue focus:outline-none"
-                />
-                {pcErrors.confirmPassword && (
-                  <span className="text-xs text-red">
-                    {String(pcErrors.confirmPassword.message)}
-                  </span>
-                )}
-                <span className="text-xs text-gray-400">
-                  영문 · 숫자 · 특수문자 포함 8자 이상
-                </span>
-              </div>
-            </div>
-          </div>
-          <div>
-            <SignUpStageLine stage={4} />
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="relative flex h-12 w-full items-center justify-center rounded-md border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:opacity-60"
-            >
-              {isLoading ? '회원가입 중...' : '회원가입 완료'}
-            </button>
-          </div>
-        </form>
-      );
-
-    /* Step 1 — 이메일 (기본) */
-    return (
-      <div
-        key="step-email"
-        className="flex h-full w-full flex-col justify-between px-10 pb-10"
-      >
-        <div>
-          <div className="mt-8 flex w-full items-center">
-            <button
-              type="button"
-              onClick={() => navigate('/auth/login')}
-              className="flex items-center gap-1 text-sm font-medium text-black hover:text-gray-600"
-            >
-              <BackIcon />
-              회원가입
-            </button>
-            <span className="ml-auto rounded-full bg-blue/10 px-3 py-1 text-xs font-medium text-blue">
-              Step 1 of 4
-            </span>
-          </div>
-          <div className="mt-6 flex flex-col gap-1">
-            <h2 className="text-2xl font-bold text-gray-900">이메일</h2>
-            <p className="text-sm text-gray-400">
-              회원가입에 사용할 이메일을 입력해주세요
-            </p>
-          </div>
-          <div className="mt-8 flex flex-col gap-1.5">
-            <span className="text-sm font-semibold text-gray-700">이메일</span>
-            <input
-              {...pcMethod.register('email')}
-              type="email"
-              placeholder="이메일을 입력하세요"
-              autoComplete="off"
-              className="h-12 w-full rounded-lg border border-gray-200 px-4 text-sm text-gray-800 focus:border-blue focus:outline-none"
-            />
-            {pcErrors.email && (
-              <span className="text-xs text-red">
-                {String(pcErrors.email.message)}
-              </span>
-            )}
-          </div>
-        </div>
-        <div>
-          <SignUpStageLine stage={1} />
-          <button
-            type="button"
-            onClick={pcHandleNextClick}
-            disabled={isChecking}
-            className="relative flex h-12 w-full items-center justify-center rounded-md border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:bg-lightBlueImpossible disabled:opacity-50"
-          >
-            {isChecking ? '확인 중...' : '다음'}
-          </button>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <>
@@ -324,9 +36,7 @@ const SignUpPage = () => {
                 'linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #60a5fa 100%)',
             }}
           >
-            {/* 오른쪽 위 큰 구 */}
             <div className="absolute -right-28 -top-28 h-[420px] w-[420px] rounded-full bg-white/10" />
-            {/* 왼쪽 아래 작은 구 */}
             <div className="absolute -bottom-20 -left-20 h-[300px] w-[300px] rounded-full bg-white/10" />
             <Link
               to="/"
@@ -369,7 +79,9 @@ const SignUpPage = () => {
 
           {/* 오른쪽 패널 */}
           <div className="flex items-center justify-center bg-gray-50">
-            <div className="h-[620px] w-[520px]">{pcModalContent()}</div>
+            <div className="h-[620px] w-[520px]">
+              <PCModal />
+            </div>
           </div>
         </div>
       </FormProvider>

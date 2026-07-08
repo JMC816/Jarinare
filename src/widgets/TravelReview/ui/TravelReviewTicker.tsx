@@ -35,6 +35,10 @@ import imgDaecheon from '@/assets/background/대천.png';
 import imgDongdaegu from '@/assets/background/동대구.png';
 import imgDongtan from '@/assets/background/동탄.png';
 import imgDonghae from '@/assets/background/동해.png';
+import imgDunnae from '@/assets/background/둔내.png';
+import imgMaseok from '@/assets/background/마석.png';
+import imgManjong from '@/assets/background/만종.png';
+import imgMaehwa from '@/assets/background/매화.png';
 import imgBusan from '@/assets/background/부산.png';
 import imgSareung from '@/assets/background/사릉.png';
 import imgYeosu from '@/assets/background/여수.png';
@@ -71,6 +75,10 @@ const cityImageMap: Record<string, string> = {
   동대구: imgDongdaegu,
   동탄: imgDongtan,
   동해: imgDonghae,
+  둔내: imgDunnae,
+  마석: imgMaseok,
+  만종: imgManjong,
+  매화: imgMaehwa,
   부산: imgBusan,
   사릉: imgSareung,
   여수: imgYeosu,

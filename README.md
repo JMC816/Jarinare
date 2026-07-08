@@ -158,8 +158,8 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 <div>
-  <img width="500" height="506" alt="Image" src="https://github.com/user-attachments/assets/2e793f12-ae2d-4554-b0b0-a1aaf18dc0fe" />
-  <img width="500" height="506" alt="Image" src="https://github.com/user-attachments/assets/99a7fbc3-b02f-4662-81a5-60f4192520b3" />
+  <img width="450" height="506" alt="Image" src="https://github.com/user-attachments/assets/2e793f12-ae2d-4554-b0b0-a1aaf18dc0fe" />
+  <img width="450" height="506" alt="Image" src="https://github.com/user-attachments/assets/99a7fbc3-b02f-4662-81a5-60f4192520b3" />
 </div>
 
 <br>

@@ -8,7 +8,8 @@ import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptRe
 import { useIsReadFollowNotification } from '@/features/Follow/hooks/useIsReadFollowNotification';
 import useNotifiModalStore from '@/widgets/model/Notification';
 import { AcceptResponse } from '@/widgets/Notification/ui/acceptResponse';
-import Modal from '@/widgets/Notification/ui/Modal';
+import AcceptModal from '@/widgets/Notification/ui/AcceptModal';
+import ResponseModal from '@/widgets/Notification/ui/ResponseModal';
 import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
 import { RefuseResponse } from '@/widgets/Notification/ui/refuseResponse';
 import FollowNotification from '@/widgets/Notification/ui/FollowNotification';
@@ -294,8 +295,9 @@ const PCNotificationSidebar = () => {
       </aside>
 
       {isShow && modalType ? (
-        <div className="relative z-[60]">
-          <Modal />
+        <div className="fixed inset-0 z-[60]">
+          {modalType === 'ResponseModal' && <ResponseModal centered />}
+          {modalType === 'AcceptModal' && <AcceptModal centered />}
         </div>
       ) : null}
     </>

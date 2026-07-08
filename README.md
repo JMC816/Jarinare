@@ -109,7 +109,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 <div>
-  <img width="1907" height="958" alt="Image" src="https://github.com/user-attachments/assets/cee9d261-09fd-4b77-bcb6-3cccaa492d75" />
+  <img width="900" height="480" alt="Image" src="https://github.com/user-attachments/assets/cee9d261-09fd-4b77-bcb6-3cccaa492d75" />
 </div>
 
 
@@ -120,7 +120,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 <div>
-  <img width="1907" height="958" alt="Image" src="https://github.com/user-attachments/assets/d8f8d483-20b9-4feb-9896-f56a5db6a158" />
+  <img width="900" height="480" alt="Image" src="https://github.com/user-attachments/assets/d8f8d483-20b9-4feb-9896-f56a5db6a158" />
 </div>
 
 
@@ -132,11 +132,11 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 #### [ 회원가입 ]
-<img width="1907" height="958" alt="Image" src="https://github.com/user-attachments/assets/6d28c681-05ad-4dec-878d-0fbc2c9fbc26" />
+<img width="900" height="480" alt="Image" src="https://github.com/user-attachments/assets/6d28c681-05ad-4dec-878d-0fbc2c9fbc26" />
 <br>
 
 #### [ 로그인 ]
-<img width="1907" height="958" alt="Image" src="https://github.com/user-attachments/assets/2aaad016-f1c9-4bbf-87c8-6f8808cd26e9" />
+<img width="900" height="480" alt="Image" src="https://github.com/user-attachments/assets/2aaad016-f1c9-4bbf-87c8-6f8808cd26e9" />
 <br>
 
 <br>
@@ -148,7 +148,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>실제 기차 운행 스케줄을 연동하여 해당 열차 시간대 기준으로 좌석 현황 제공</li>
 </ul>
 
-<img width="1907" height="958" alt="Image" src="https://github.com/user-attachments/assets/a81109ce-d14c-4a99-85c3-7ae269bca1e2" />
+<img width="900" height="480" alt="Image" src="https://github.com/user-attachments/assets/a81109ce-d14c-4a99-85c3-7ae269bca1e2" />
 
 #### [ 좌석 선택 ] 
 <ul>
@@ -237,7 +237,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
   <li>예매 취소 및 좌석 반환</li>
 </ul>
 
-<img width="1907" height="958" alt="반환" src="https://github.com/user-attachments/assets/d0d26efc-e28e-44c1-b88e-295c5e216e15" />
+<img width="900" height="480" alt="반환" src="https://github.com/user-attachments/assets/d0d26efc-e28e-44c1-b88e-295c5e216e15" />
 <br>
 
 <br>
@@ -250,13 +250,13 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
 </ul>
 
 #### [ 좌석 변경 요청 알림 ]
-<img width="1907" height="958" alt="변경수락" src="https://github.com/user-attachments/assets/d4c0f05e-60c7-46ee-b30a-a6bae69020d8" />
+<img width="900" height="480" alt="변경수락" src="https://github.com/user-attachments/assets/d4c0f05e-60c7-46ee-b30a-a6bae69020d8" />
 
 #### [ 수락/거절 알림 ]
 <img width="458" height="500" alt="스크린샷 2026-07-07 오후 7 53 55" src="https://github.com/user-attachments/assets/aba233fb-5c34-41fb-aee7-26a6d49d909b" />
 
 #### [ 알림 활성화/비활성화 ]
-<img width="1907" height="958" alt="알림설정" src="https://github.com/user-attachments/assets/54057763-04e9-468d-886a-73bf57eb8d26" />
+<img width="900" height="480" alt="알림설정" src="https://github.com/user-attachments/assets/54057763-04e9-468d-886a-73bf57eb8d26" />
 
 #### [ 출발 알림 ]
 <div>
@@ -295,7 +295,7 @@ https://www.notion.so/26deaf50d3388003992cf43087c76bd1?v=26deaf50d3388138b8be000
     </ul>
   </li>
 </ul>
-<img width="1907" height="958" alt="구간" src="https://github.com/user-attachments/assets/6cf7b19c-2d73-4378-ad34-686d16606e54" />
+<img width="900" height="480" alt="구간" src="https://github.com/user-attachments/assets/6cf7b19c-2d73-4378-ad34-686d16606e54" />
 <br>
 
 <br>

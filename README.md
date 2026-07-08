@@ -13,6 +13,12 @@
 ## 🔗 배포 링크
 https://jarinare.vercel.app/
 
+#### 테스트 계정
+<ul>
+  <li>Email: test@gmail.com</li>
+  <li>PW: Test1234!</li>
+</ul>
+
 <br>
 
 ## 📚 기술 스택

@@ -44,6 +44,7 @@ const PCBoardPage = () => {
     visiblePages,
     totalPages,
     rightColH,
+    viewsMap,
   } = usePCBoardPage(rightColRef);
 
   const { counts } = useBoardCounts();
@@ -242,10 +243,6 @@ const PCBoardPage = () => {
                           <div className="h-4 w-8 animate-pulse rounded bg-gray-100" />
                         </div>
                       ))
-                    ) : activeFilter === '후기' ? (
-                      <div className="flex flex-1 items-center justify-center py-10 text-sm text-gray-300">
-                        여행지 후기 게시물이 없습니다
-                      </div>
                     ) : displayPosts.length === 0 ? (
                       <div className="flex flex-1 items-center justify-center py-10 text-sm text-gray-300">
                         게시물이 없습니다
@@ -320,7 +317,7 @@ const PCBoardPage = () => {
                               {formatDate(post.createdAt)}
                             </span>
                             <span className="w-[28px] shrink-0 text-right text-sm text-gray-400">
-                              {post.views ?? '-'}
+                              {viewsMap[post.id] ?? post.views ?? 0}
                             </span>
                           </button>
                         );

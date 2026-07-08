@@ -117,6 +117,7 @@ const PCNoticeDetailPage = () => {
     isOwner,
     isLiked,
     likesCount,
+    viewCount,
     editingPost,
     setEditingPost,
     menuOpen,
@@ -207,7 +208,8 @@ const PCNoticeDetailPage = () => {
                             {currentNotice.author}
                           </span>
                           <span className="text-xs text-gray-400">
-                            {formatBoardTime(currentNotice.createdAt)}
+                            {formatBoardTime(currentNotice.createdAt)} · 조회{' '}
+                            {viewCount}
                           </span>
                         </div>
                       </div>

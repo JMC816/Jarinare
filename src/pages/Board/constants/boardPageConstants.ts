@@ -47,8 +47,8 @@ export const BOARD_PAGINATION_H = 44;
 export const FILTER_TABS: { label: BoardFilter }[] = [
   { label: '전체' },
   { label: '공지' },
+  { label: '이벤트' },
   { label: '자유' },
-  { label: '후기' },
 ];
 export const BOARD_DROPDOWN_ITEMS = [
   { label: '전체', path: '/board/boardlist' },

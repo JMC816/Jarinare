@@ -10,6 +10,7 @@ import { useGetBoard } from '@/features/Board/hooks/useGetBoard';
 import { useGetNotice } from '@/features/Board/hooks/useGetNotice';
 import { useGetDvent } from '@/features/Board/hooks/useGetEvent';
 import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
+import { useViewCounts } from '@/features/Board/hooks/useViewCounts';
 import {
   BOARD_CARD_HEADER_H,
   BOARD_ROW_H,
@@ -29,9 +30,9 @@ export const usePCBoardPage = (
   const [rightColH, setRightColH] = useState(0);
   const { seenData } = useBoardSeen();
   const { summaries } = useDestinationRatings();
-  const { boardData, isLoaded } = useGetBoard();
-  const { noticeData } = useGetNotice();
-  const { eventDat } = useGetDvent();
+  const { boardData, isLoaded: boardLoaded } = useGetBoard();
+  const { noticeData, isLoaded: noticeLoaded } = useGetNotice();
+  const { eventDat, isLoaded: eventLoaded } = useGetDvent();
   const { topPosts } = useTopViewedPost();
 
   // 오른쪽 컬럼 높이 측정
@@ -75,11 +76,15 @@ export const usePCBoardPage = (
     ].sort((a, b) => b.createdAt - a.createdAt);
   }, [boardData, noticeData, eventDat]);
 
+  const { viewsMap } = useViewCounts(allPosts);
+
   // 필터 적용된 게시물
   const displayPosts = useMemo((): SearchResultPost[] => {
     if (activeFilter === '전체') return allPosts;
     if (activeFilter === '공지')
       return allPosts.filter((p) => p._category === 'notice');
+    if (activeFilter === '이벤트')
+      return allPosts.filter((p) => p._category === 'event');
     if (activeFilter === '자유')
       return allPosts.filter((p) => p._category === 'board');
     return [];
@@ -151,12 +156,13 @@ export const usePCBoardPage = (
     displayPosts,
     currentPage,
     setCurrentPage,
-    isLoading: !isLoaded,
+    isLoading: !boardLoaded || !noticeLoaded || !eventLoaded,
     topPosts,
     top3DocIds,
     pagedPosts,
     totalPages,
     showPagination,
+    viewsMap,
     visiblePages,
     rightColH,
   };

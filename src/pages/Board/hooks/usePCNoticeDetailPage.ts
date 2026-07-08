@@ -8,6 +8,7 @@ import { BoardPost } from '@/entities/Board/types/boardType';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useLikeNoitce } from '@/features/Board/hooks/useLikeNotice';
 import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
+import { useViewCount } from '@/features/Board/hooks/useViewCount';
 import { auth } from '@/shared/firebase/firebase';
 
 export const usePCNoticeDetailPage = (notice: BoardPost | undefined) => {
@@ -26,6 +27,7 @@ export const usePCNoticeDetailPage = (notice: BoardPost | undefined) => {
   const { likedMap, likesMap, handleClickLike } = useLikeNoitce(noticeItems);
   const { deletePost } = useDeletePost();
   const { updatePost } = useUpdatePost();
+  const { viewCount } = useViewCount(postDocId);
 
   const currentUid = auth.currentUser?.uid;
   const isOwner =
@@ -58,6 +60,7 @@ export const usePCNoticeDetailPage = (notice: BoardPost | undefined) => {
     isOwner,
     isLiked,
     likesCount,
+    viewCount,
     editingPost,
     setEditingPost,
     menuOpen,

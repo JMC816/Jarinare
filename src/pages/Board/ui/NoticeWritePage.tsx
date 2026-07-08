@@ -1,3 +1,7 @@
+/**
+ * @role: pages — 공지사항 작성 페이지
+ * @rule: 레이아웃·조합만 담당, admin 접근 가드 포함
+ */
 import backward from '@/assets/icons/backward.png';
 import { useNoticeHandler } from '@/features/Board/hooks/useNoticeHandler';
 import NoticeForm from '@/widgets/Board/ui/NoticeForm';
@@ -31,6 +35,11 @@ const NoticeWirtePage = () => {
 
   if (!auth.currentUser)
     return <LoginRequired onLogin={() => navigate('/auth/login')} />;
+
+  if (auth.currentUser.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+    navigate('/board/noticelist', { replace: true });
+    return null;
+  }
 
   return (
     <>

@@ -1,3 +1,7 @@
+/**
+ * @role: widgets — 자유게시판 모바일 글 작성 폼
+ * @rule: 렌더링만 담당, 상태·로직 포함 금지
+ */
 import cross from '@/assets/icons/cross.png';
 import { useNavigate } from 'react-router-dom';
 import picture from '@/assets/icons/picture.png';
@@ -16,6 +20,11 @@ const BoardForm = ({
   title,
   content,
   previewImg,
+  tags,
+  tagInput,
+  onTagInputChange,
+  onTagInputKeyDown,
+  onRemoveTag,
 }: BoardType) => {
   const navigate = useNavigate();
   return (
@@ -84,6 +93,38 @@ const BoardForm = ({
           ) : null}
         </div>
       </div>
+      {/* 태그 */}
+      {tags !== undefined && (
+        <div className="flex flex-col gap-2">
+          <input
+            value={tagInput}
+            onChange={onTagInputChange}
+            onKeyDown={onTagInputKeyDown}
+            placeholder="태그는 최대 5개까지 입력 가능해요 (Enter로 추가)"
+            className="rounded-xl bg-white px-4 py-3 text-base shadow-sm placeholder:text-lightGray focus:outline-none"
+          />
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
+                >
+                  #{tag}
+                  <button
+                    type="button"
+                    onClick={() => onRemoveTag?.(tag)}
+                    className="ml-0.5 text-gray-400"
+                  >
+                    ×
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="mb-[100px] flex justify-between gap-5">
         <button
           type="button"

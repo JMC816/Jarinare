@@ -25,6 +25,8 @@ export const useBaordHandler = (options?: {
   const [previewImg, setPreviewImg] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [loading, setLoading] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState<string>('');
 
   const navigate = useNavigate();
   const { createBoard } = useCreateBoard();
@@ -50,6 +52,28 @@ export const useBaordHandler = (options?: {
     setLikes(Number(e.target.value));
   };
 
+  const onTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagInput(e.target.value);
+  };
+
+  const onAddTag = () => {
+    const trimmed = tagInput.trim().replace(/^#/, '');
+    if (!trimmed || tags.includes(trimmed) || tags.length >= 5) return;
+    setTags((prev) => [...prev, trimmed]);
+    setTagInput('');
+  };
+
+  const onTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+      e.preventDefault();
+      onAddTag();
+    }
+  };
+
+  const onRemoveTag = (tag: string) => {
+    setTags((prev) => prev.filter((t) => t !== tag));
+  };
+
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -65,7 +89,14 @@ export const useBaordHandler = (options?: {
     e.preventDefault();
     setLoading(true);
     try {
-      const boardId = await createBoard(author, title, content, views, likes);
+      const boardId = await createBoard(
+        author,
+        title,
+        content,
+        views,
+        likes,
+        tags,
+      );
       if (file) {
         const filePath = `board/${boardId}/${file.name}`;
         const { error } = await supabase.storage
@@ -109,5 +140,11 @@ export const useBaordHandler = (options?: {
     content,
     previewImg,
     loading,
+    tags,
+    tagInput,
+    onTagInputChange,
+    onTagInputKeyDown,
+    onAddTag,
+    onRemoveTag,
   };
 };

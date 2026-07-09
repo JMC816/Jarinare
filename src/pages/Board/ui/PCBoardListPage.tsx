@@ -91,7 +91,7 @@ const PCBoardListPage = () => {
                   <input
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="제목, 내용, 작성자 검색"
+                    placeholder="제목, 내용, 작성자 검색 / #태그 검색"
                     className="w-full rounded-sm border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue"
                   />
                 </div>

@@ -20,4 +20,9 @@ export interface PCWriteFormProps extends BoardType {
   categorySelectable?: boolean;
   selectedCategory?: WriteCategory;
   onCategoryChange?: (cat: WriteCategory) => void;
+  tags?: string[];
+  tagInput?: string;
+  onTagInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onTagInputKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onRemoveTag?: (tag: string) => void;
 }

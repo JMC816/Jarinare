@@ -1,3 +1,7 @@
+/**
+ * @role: features — 자유게시판 목록 페이지네이션·검색·정렬 훅
+ * @rule: 상태·사이드이펙트만 담당, UI 로직 포함 금지
+ */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGetBoard } from './useGetBoard';
 import { BoardPost } from '@/entities/Board/types/boardType';
@@ -22,13 +26,21 @@ export const useBoardPagination = (
     let data = boardData;
 
     if (searchQuery.trim()) {
-      const q = searchQuery.trim().toLowerCase();
-      data = data.filter(
-        (d) =>
-          d.title?.toLowerCase().includes(q) ||
-          d.content?.toLowerCase().includes(q) ||
-          d.author?.toLowerCase().includes(q),
-      );
+      const raw = searchQuery.trim();
+      if (raw.startsWith('#')) {
+        const tagQ = raw.slice(1).toLowerCase();
+        data = data.filter((d) =>
+          d.tags?.some((t) => t.toLowerCase().includes(tagQ)),
+        );
+      } else {
+        const q = raw.toLowerCase();
+        data = data.filter(
+          (d) =>
+            d.title?.toLowerCase().includes(q) ||
+            d.content?.toLowerCase().includes(q) ||
+            d.author?.toLowerCase().includes(q),
+        );
+      }
     }
 
     return [...data].sort((a, b) =>

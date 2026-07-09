@@ -4,8 +4,6 @@
  */
 import { BoardFilter, PostCategory } from '../types/boardPageType';
 
-export const MOCK_HASHTAGS = ['#여행', '#자유', '#기차', '#자리나래'];
-
 export const CAT_STYLE_MAP: Record<
   PostCategory,
   {

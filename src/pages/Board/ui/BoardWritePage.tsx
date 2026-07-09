@@ -36,7 +36,16 @@ const BoardWirtePage = () => {
     <>
       {/* PC */}
       <div className="hidden w-full lg:block">
-        <PCWriteForm {...board} categoryLabel="자유" backLabel="자유게시판" />
+        <PCWriteForm
+          {...board}
+          categoryLabel="자유"
+          backLabel="자유게시판"
+          tags={board.tags}
+          tagInput={board.tagInput}
+          onTagInputChange={board.onTagInputChange}
+          onTagInputKeyDown={board.onTagInputKeyDown}
+          onRemoveTag={board.onRemoveTag}
+        />
       </div>
 
       {/* 모바일 */}

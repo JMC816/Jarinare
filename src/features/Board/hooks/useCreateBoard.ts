@@ -1,34 +1,22 @@
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '@/shared/firebase/firebase';
+/**
+ * @role: features — 자유게시판 게시글 생성 훅
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ */
+import { auth } from '@/shared/firebase/firebase';
+import { createBoardApi } from '../api/createBoardApi';
 
 export const useCreateBoard = () => {
-  const user = auth.currentUser;
   const createBoard = async (
     author: string,
     title: string,
     content: string,
     views: number,
     likes: number,
+    tags: string[] = [],
   ) => {
-    const boardCollectionRef = collection(
-      db,
-      'boards',
-      `${user?.uid}`,
-      'board',
-    );
-    try {
-      const docRef = await addDoc(boardCollectionRef, {
-        author,
-        title,
-        content,
-        views,
-        likes,
-        createdAt: serverTimestamp(),
-      });
-      return docRef.id;
-    } catch (error) {
-      console.log(error);
-    }
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    return createBoardApi(uid, author, title, content, views, likes, tags);
   };
   return { createBoard };
 };

@@ -36,6 +36,11 @@ const PCWriteForm = ({
   categorySelectable = false,
   selectedCategory,
   onCategoryChange,
+  tags,
+  tagInput,
+  onTagInputChange,
+  onTagInputKeyDown,
+  onRemoveTag,
 }: PCWriteFormProps) => {
   const navigate = useNavigate();
 
@@ -221,6 +226,39 @@ const PCWriteForm = ({
                   className="hidden"
                 />
               </div>
+
+              {/* 태그 (자유게시판 전용) */}
+              {tags !== undefined && (
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs font-bold text-gray-400">태그</span>
+                  <input
+                    value={tagInput}
+                    onChange={onTagInputChange}
+                    onKeyDown={onTagInputKeyDown}
+                    placeholder="태그는 최대 5개까지 입력 가능해요 (Enter로 추가)"
+                    className="rounded-sm border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none placeholder:text-gray-300 focus:border-blue"
+                  />
+                  {tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
+                        >
+                          #{tag}
+                          <button
+                            type="button"
+                            onClick={() => onRemoveTag?.(tag)}
+                            className="ml-0.5 flex h-4 w-4 items-center justify-center text-gray-400 hover:text-gray-700"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* 버튼 오른쪽 정렬 */}
               <div className="flex justify-end gap-3">

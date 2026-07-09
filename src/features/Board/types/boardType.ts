@@ -40,4 +40,9 @@ export type BoardType = {
   content: string;
   previewImg: string | null;
   loading: boolean;
+  tags?: string[];
+  tagInput?: string;
+  onTagInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onTagInputKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onRemoveTag?: (tag: string) => void;
 };

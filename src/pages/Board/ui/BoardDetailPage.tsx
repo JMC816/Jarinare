@@ -1,3 +1,7 @@
+/**
+ * @role: pages — 자유게시판 상세 페이지 (PC: PCBoardDetailPage 위임)
+ * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
+ */
 import backward from '@/assets/icons/backward.png';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
@@ -175,6 +179,20 @@ const BoardDetailPage = () => {
             <div className="px-4 py-3 text-sm leading-relaxed text-gray-800">
               {currentPost.content}
             </div>
+
+            {/* 해시태그 */}
+            {currentPost.tags && currentPost.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 px-4 pb-3">
+                {currentPost.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-500"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* 좋아요 + 조회수 */}
             <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">

@@ -2,12 +2,6 @@
  * @role: widgets — 자유게시판 게시물 목록
  * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
  */
-import { BoardPost } from '@/entities/Board/types/boardType';
-import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { useBoardPagination } from '@/features/Board/hooks/useBoardPagination';
-import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
-import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
-import { useViewCounts } from '@/features/Board/hooks/useViewCounts';
 import { auth } from '@/shared/firebase/firebase';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
@@ -15,6 +9,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PostEditModal } from './PostEditModal';
 import { SortOrder, BoardProps } from '../types/boardWidgetType';
+import { useBoard } from '../hooks/useBoard';
 
 const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
   { value: 'newest', label: '최신순' },
@@ -139,57 +134,30 @@ export const Board = ({
   externalSearchQuery,
   externalSortOrder,
 }: BoardProps) => {
-  const [internalSearchQuery, setInternalSearchQuery] = useState('');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
-  const [editingPost, setEditingPost] = useState<BoardPost | null>(null);
-  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
-  const [updatedItems, setUpdatedItems] = useState<
-    Record<string, Partial<BoardPost>>
-  >({});
-
-  const searchQuery = isPC ? (externalSearchQuery ?? '') : internalSearchQuery;
-  const activeSortOrder = isPC ? (externalSortOrder ?? 'newest') : sortOrder;
-
-  const { ref, items, isFetching } = useBoardPagination(
-    searchQuery,
-    activeSortOrder,
-  );
-  const { likesMap } = useLikeBoard(items);
-  const { viewsMap } = useViewCounts(items);
-  const { deletePost } = useDeletePost();
-  const { updatePost } = useUpdatePost();
   const navigate = useNavigate();
-
   const currentUid = auth.currentUser?.uid;
 
-  const displayedItems = items
-    .filter((p) => !deletedIds.has(p.id))
-    .map((p) => ({ ...p, ...updatedItems[p.id] }) as BoardPost)
-    .sort((a, b) => {
-      if (sortOrder === 'views')
-        return (viewsMap[b.id] ?? 0) - (viewsMap[a.id] ?? 0);
-      if (sortOrder === 'likes')
-        return (likesMap[b.id] ?? 0) - (likesMap[a.id] ?? 0);
-      return 0;
-    });
-
-  const handleDelete = async (post: BoardPost) => {
-    await deletePost(post.id);
-    setDeletedIds((prev) => new Set(prev).add(post.id));
-    setMenuOpenId(null);
-  };
-
-  const handleUpdate = async (title: string, content: string) => {
-    if (!editingPost) return;
-    await updatePost(editingPost.id, { title, content });
-    setUpdatedItems((prev) => ({
-      ...prev,
-      [editingPost.id]: { title, content },
-    }));
-    setEditingPost(null);
-  };
+  const {
+    internalSearchQuery,
+    setInternalSearchQuery,
+    sortOrder,
+    setSortOrder,
+    filterOpen,
+    setFilterOpen,
+    menuOpenId,
+    setMenuOpenId,
+    editingPost,
+    setEditingPost,
+    searchQuery,
+    ref,
+    items,
+    isFetching,
+    likesMap,
+    viewsMap,
+    displayedItems,
+    handleDelete,
+    handleUpdate,
+  } = useBoard(isPC, externalSearchQuery, externalSortOrder);
 
   const currentLabel = SORT_OPTIONS.find((o) => o.value === sortOrder)?.label;
 
@@ -349,7 +317,7 @@ export const Board = ({
           type="text"
           value={internalSearchQuery}
           onChange={(e) => setInternalSearchQuery(e.target.value)}
-          placeholder="제목, 내용, 작성자 검색"
+          placeholder="제목, 내용, 작성자 검색 / #태그 검색"
           className="flex-1 rounded-xl bg-white px-4 py-2.5 text-sm shadow-sm outline-none placeholder:text-gray-400"
         />
         <div className="relative">

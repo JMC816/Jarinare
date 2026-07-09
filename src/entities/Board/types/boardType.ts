@@ -1,3 +1,7 @@
+/**
+ * @role: entities — 게시판 도메인 타입 정의
+ * @rule: 타입 정의만 담당
+ */
 export interface BoardPost {
   id: string;
   author: string;
@@ -8,6 +12,7 @@ export interface BoardPost {
   createdAt: number;
   imageUrl: string | null;
   commentCount?: number;
+  tags?: string[];
 }
 
 export interface BoardCategory {

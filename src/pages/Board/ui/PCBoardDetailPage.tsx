@@ -11,7 +11,6 @@ import { PostEditModal } from '@/widgets/Board/ui/PostEditModal';
 import { usePCBoardDetailPage } from '../hooks/usePCBoardDetailPage';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
-import { MOCK_HASHTAGS } from '../constants/boardPageConstants';
 
 const HeartIcon = ({ filled }: { filled: boolean }) => (
   <svg
@@ -264,17 +263,19 @@ const PCBoardDetailPage = () => {
                     {currentPost.content}
                   </p>
 
-                  {/* 해시태그 목업 */}
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {MOCK_HASHTAGS.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-500"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  {/* 해시태그 */}
+                  {currentPost.tags && currentPost.tags.length > 0 && (
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {currentPost.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-500"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   {/* 액션 버튼 수평 정렬 */}
                   <div className="mt-5 flex items-center justify-center gap-3">

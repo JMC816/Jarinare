@@ -62,6 +62,7 @@ export const useGetBoard = () => {
             createdAt: createdAtSeconds,
             imageUrl,
             commentCount: commentsSnap.size,
+            tags: data.tags ?? [],
           } as BoardPost;
         }),
       );

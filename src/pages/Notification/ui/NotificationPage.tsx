@@ -43,7 +43,7 @@ const NotificationPage = () => {
           />
           <span className="text-base font-bold">알림</span>
         </div>
-        <Link to={'/reserve/notification/setting'}>
+        <Link to={'/setting'}>
           <img width={27} height={27} src={setting} />
         </Link>
       </div>

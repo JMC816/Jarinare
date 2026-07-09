@@ -124,7 +124,7 @@ const PCSidebar = () => {
       </nav>
 
       <Link
-        to="/mypage"
+        to="/setting"
         className="mt-auto flex items-center gap-3 rounded-xl px-3 py-2.5 text-gray-500 transition-colors hover:bg-gray-100"
       >
         <SettingIcon />

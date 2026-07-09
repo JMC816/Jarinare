@@ -16,8 +16,7 @@ import FollowNotification from '@/widgets/Notification/ui/FollowNotification';
 import BoardPostNotification from '@/widgets/Notification/ui/BoardPostNotification';
 import { Timestamp } from 'firebase/firestore';
 import { auth, realtimeDb } from '@/shared/firebase/firebase';
-import { Link, useNavigate } from 'react-router-dom';
-import setting from '@/assets/icons/setting.png';
+import { useNavigate } from 'react-router-dom';
 import StartTimeNotification from '@/widgets/Notification/ui/StartTimeNotification';
 import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
 import { useIsReadNotification } from '@/features/Notification/hooks/useIsReadNotification';
@@ -66,13 +65,6 @@ const PCNotificationSidebar = () => {
         <div className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
           <span className="text-base font-bold">알림</span>
           <div className="flex items-center gap-2">
-            <Link
-              to="/reserve/notification/setting"
-              onClick={close}
-              className="rounded-lg p-1.5 transition-colors hover:bg-gray-100"
-            >
-              <img width={22} height={22} src={setting} />
-            </Link>
             <button
               onClick={close}
               className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100"

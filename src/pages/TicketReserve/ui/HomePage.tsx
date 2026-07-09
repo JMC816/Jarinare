@@ -11,6 +11,7 @@ import { Reserve } from '@/widgets/TicketReserve/ui/Reserve';
 import { Ticket } from '@/widgets/TicketReserve/ui/Ticket';
 import RecommendDestination from '@/widgets/TicketReserve/ui/RecommendDestination';
 import notification from '@/assets/icons/notification.png';
+import setting from '@/assets/icons/setting.png';
 import { Link } from 'react-router-dom';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
 import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptResponse';
@@ -108,12 +109,17 @@ const HomePage = () => {
           <span className="text-lg font-black tracking-widest text-blue">
             JARINARE
           </span>
-          <Link to={'/reserve/notification'} className="relative">
-            <img width={19} height={24} src={notification} />
-            {isReadNotification && isExistNotification ? (
-              <span className="absolute bottom-6 left-4 size-1.5 animate-ping rounded-full bg-blue" />
-            ) : null}
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link to={'/reserve/notification'} className="relative">
+              <img width={19} height={24} src={notification} />
+              {isReadNotification && isExistNotification ? (
+                <span className="absolute bottom-6 left-4 size-1.5 animate-ping rounded-full bg-blue" />
+              ) : null}
+            </Link>
+            <Link to={'/setting'}>
+              <img width={22} height={22} src={setting} />
+            </Link>
+          </div>
         </div>
         <div className="mt-2 w-full border-b border-gray-200" />
 

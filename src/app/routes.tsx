@@ -16,7 +16,6 @@ import MenuPage from '@/pages/Menu/ui/MenuPage';
 import MyPage from '@/pages/Mypage/ui/MyPage';
 import NotificationPage from '@/pages/Notification/ui/NotificationPage';
 import FollowListPage from '@/pages/Follow/ui/FollowListPage';
-import { NotifiSettingPage } from '@/pages/Notification/ui/NotifiSettingPage';
 import PointPage from '@/pages/Point/ui/PointPage';
 import SeatChangePage from '@/pages/TicketChange/ui/SeatChangePage';
 import TicketSeatChangePage from '@/pages/TicketChange/ui/TicketSeatChangePage';
@@ -28,6 +27,7 @@ import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
 import SeatReturnPage from '@/pages/TicketReturn/ui/SeatReturnPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
 import PCTravelReviewPage from '@/pages/TravelReview/ui/PCTravelReviewPage';
+import SettingPage from '@/pages/Set/ui/SettingPage';
 import PCTravelReviewListPage from '@/pages/TravelReview/ui/PCTravelReviewListPage';
 import Modal from '@/shared/ui/Modal';
 import PCNotificationSidebar from '@/widgets/Notification/ui/PCNotificationSidebar';
@@ -80,10 +80,7 @@ const Router = () => {
             <Route path="/board/event" element={<EventWirtePage />} />
             <Route path="/board/board" element={<BoardWirtePage />} />
             <Route path="/board/write" element={<PCUnifiedWritePage />} />
-            <Route
-              path="/reserve/notification/setting"
-              element={<NotifiSettingPage />}
-            />
+            <Route path="/setting" element={<SettingPage />} />
           </Route>
           {/* 로그인 필수 페이지들 */}
           <Route element={<HomeLayout />}>

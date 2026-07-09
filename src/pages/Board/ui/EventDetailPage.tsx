@@ -1,14 +1,14 @@
+/**
+ * @role: pages — 이벤트 상세 페이지 (PC + 모바일)
+ * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
+ */
 import backward from '@/assets/icons/backward.png';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import PCEventDetailPage from './PCEventDetailPage';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { useLikeEvent } from '@/features/Board/hooks/useLikeEvent';
-import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
 import { auth } from '@/shared/firebase/firebase';
 import { formatBoardTime } from '@/shared/lib/formatDate';
-import { PostEditModal } from '@/widgets/Board/ui/PostEditModal';
-import { useViewCount } from '@/features/Board/hooks/useViewCount';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const HamburgerIcon = () => (
@@ -34,17 +34,10 @@ const EventDetailPage = () => {
   const event = location.state?.event as BoardPost | undefined;
 
   const [menuOpen, setMenuOpen] = useState(false);
-  const [editingPost, setEditingPost] = useState<BoardPost | null>(null);
-  const [localPost, setLocalPost] = useState<BoardPost | null>(null);
 
-  const post = localPost ?? event;
-  const postDocId = post?.id.split('/').pop() ?? '';
+  const post = event;
 
-  const eventItems = useMemo(() => (post ? [post] : []), [post?.id]);
-  const { likedMap, likesMap, handleClickLike } = useLikeEvent(eventItems);
   const { deletePost } = useDeletePost();
-  const { updatePost } = useUpdatePost();
-  const { viewCount } = useViewCount(postDocId);
 
   if (!post) {
     return (
@@ -54,20 +47,12 @@ const EventDetailPage = () => {
     );
   }
 
-  const isLiked = likedMap[post.id] ?? false;
-  const likesCount = likesMap[post.id] ?? post.likes ?? 0;
   const currentUid = auth.currentUser?.uid;
   const isOwner = currentUid === post.id.split('/')[1];
 
   const handleDelete = async () => {
     await deletePost(post.id);
     navigate(-1);
-  };
-
-  const handleUpdate = async (title: string, content: string) => {
-    await updatePost(post.id, { title, content });
-    setLocalPost({ ...post, title, content });
-    setEditingPost(null);
   };
 
   return (
@@ -104,7 +89,7 @@ const EventDetailPage = () => {
                   <div className="absolute right-0 top-9 z-20 min-w-[80px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
                     <button
                       onClick={() => {
-                        setEditingPost({ ...post });
+                        navigate('/board/event', { state: { editPost: post } });
                         setMenuOpen(false);
                       }}
                       className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
@@ -157,26 +142,6 @@ const EventDetailPage = () => {
               </div>
             )}
 
-            {/* 좋아요 + 조회수 */}
-            <div className="flex items-center justify-between px-4 pb-1 pt-3">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => handleClickLike(post.id)}
-                  className={`flex items-center justify-center rounded-full p-1.5 text-xl transition-all duration-150 ${
-                    isLiked ? 'text-red-500' : 'text-gray-400'
-                  }`}
-                >
-                  {isLiked ? '❤️' : '🤍'}
-                </button>
-                <span className="text-sm font-semibold">
-                  {likesCount}명이 좋아합니다
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-gray-400">
-                <span>조회수</span>
-                <span>{viewCount}</span>
-              </div>
-            </div>
 
             {/* 제목 & 내용 */}
             <div className="px-4 pb-2 text-sm">
@@ -189,13 +154,6 @@ const EventDetailPage = () => {
           </div>
         </div>
 
-        {editingPost && (
-          <PostEditModal
-            post={editingPost}
-            onSave={handleUpdate}
-            onClose={() => setEditingPost(null)}
-          />
-        )}
       </div>
     </>
   );

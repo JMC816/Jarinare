@@ -1,3 +1,7 @@
+/**
+ * @role: pages — 이벤트 작성·수정 페이지
+ * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
+ */
 import backward from '@/assets/icons/backward.png';
 import { useEventHandler } from '@/features/Board/hooks/useEventHandler';
 import EventForm from '@/widgets/Board/ui/EventForm';
@@ -28,15 +32,22 @@ const LoginRequired = ({ onLogin }: { onLogin: () => void }) => (
 const EventWirtePage = () => {
   const navigate = useNavigate();
   const event = useEventHandler({ navigateTo: '/board/eventlist' });
+  const { isEditMode } = event;
 
   if (!auth.currentUser)
     return <LoginRequired onLogin={() => navigate('/auth/login')} />;
+
+  const isAdmin = auth.currentUser.email === import.meta.env.VITE_ADMIN_EMAIL;
+  if (!isAdmin) {
+    navigate(-1);
+    return null;
+  }
 
   return (
     <>
       {/* PC */}
       <div className="hidden w-full lg:block">
-        <PCWriteForm {...event} categoryLabel="이벤트" backLabel="이벤트" />
+        <PCWriteForm {...event} categoryLabel={isEditMode ? '이벤트 수정' : '이벤트'} backLabel="이벤트" />
       </div>
 
       {/* 모바일 */}
@@ -48,7 +59,7 @@ const EventWirtePage = () => {
               src={backward}
               className="h-[20px] w-[12px] cursor-pointer"
             />
-            <h1 className="text-lg font-bold">이벤트 작성</h1>
+            <h1 className="text-lg font-bold">{isEditMode ? '이벤트 수정' : '이벤트 작성'}</h1>
           </div>
           <EventForm {...event} />
         </div>

@@ -10,7 +10,7 @@ import { usePCEventListPage } from '../hooks/usePCEventListPage';
 
 const PCEventListPage = () => {
   const navigate = useNavigate();
-  const { searchQuery, setSearchQuery, sortOrder, setSortOrder } =
+  const { searchQuery, setSearchQuery, sortOrder, setSortOrder, isAdmin } =
     usePCEventListPage();
 
   return (
@@ -49,24 +49,26 @@ const PCEventListPage = () => {
                   </button>
                   <h1 className="text-2xl font-black text-gray-900">이벤트</h1>
                 </div>
-                <button
-                  onClick={() => navigate('/board/event')}
-                  className="flex items-center gap-2 rounded-sm bg-blue px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-blue/90"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                {isAdmin && (
+                  <button
+                    onClick={() => navigate('/board/event')}
+                    className="flex items-center gap-2 rounded-sm bg-blue px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-blue/90"
                   >
-                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-                  </svg>
-                  글쓰기
-                </button>
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                    </svg>
+                    글쓰기
+                  </button>
+                )}
               </div>
 
               {/* 검색 칸 */}
@@ -89,7 +91,7 @@ const PCEventListPage = () => {
                   <input
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="제목, 내용, 작성자 검색"
+                    placeholder="제목, 내용 검색"
                     className="w-full rounded-sm border border-gray-200 bg-white py-2 pl-9 pr-4 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-blue"
                   />
                 </div>

@@ -6,25 +6,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
-import { PostEditModal } from '@/widgets/Board/ui/PostEditModal';
 import { usePCEventDetailPage } from '../hooks/usePCEventDetailPage';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
 
-const HeartIcon = ({ filled }: { filled: boolean }) => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill={filled ? 'currentColor' : 'none'}
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-  </svg>
-);
 
 const OwnerMenu = ({
   menuOpen,
@@ -82,19 +67,10 @@ const PCEventDetailPage = () => {
   const {
     currentPost,
     isOwner,
-    isLiked,
-    likesCount,
     viewCount,
-    editingPost,
-    setEditingPost,
     menuOpen,
     setMenuOpen,
     handleDelete,
-    handleUpdate,
-    handleLike,
-    isFollowing,
-    followLoading,
-    toggleFollow,
   } = usePCEventDetailPage(event);
 
   if (!currentPost) {
@@ -184,25 +160,12 @@ const PCEventDetailPage = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        {!isOwner && (
-                          <button
-                            onClick={toggleFollow}
-                            disabled={followLoading}
-                            className={`rounded-sm px-4 py-1.5 text-sm font-bold transition-colors disabled:opacity-50 ${
-                              isFollowing
-                                ? 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                                : 'bg-lightBlue text-blue hover:bg-lightBlueImpossible'
-                            }`}
-                          >
-                            {isFollowing ? '팔로잉' : '팔로우'}
-                          </button>
-                        )}
                         {isOwner && (
                           <OwnerMenu
                             menuOpen={menuOpen}
                             onToggle={() => setMenuOpen((v) => !v)}
                             onClose={() => setMenuOpen(false)}
-                            onEdit={() => setEditingPost({ ...currentPost })}
+                            onEdit={() => navigate('/board/event', { state: { editPost: currentPost } })}
                             onDelete={handleDelete}
                           />
                         )}
@@ -228,21 +191,6 @@ const PCEventDetailPage = () => {
                     {currentPost.content}
                   </p>
 
-                  {/* 좋아요 버튼 */}
-                  <div className="mt-5 flex items-center justify-center">
-                    <button
-                      onClick={handleLike}
-                      className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
-                        isLiked
-                          ? 'border-blue bg-blue text-white'
-                          : 'border-gray-200 bg-white text-gray-500 hover:border-blue hover:bg-lightBlue hover:text-blue'
-                      }`}
-                    >
-                      <HeartIcon filled={isLiked} />
-                      <span>좋아요</span>
-                      <span className="text-xs">{likesCount}</span>
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -250,13 +198,6 @@ const PCEventDetailPage = () => {
         </main>
       </div>
 
-      {editingPost && (
-        <PostEditModal
-          post={editingPost}
-          onSave={handleUpdate}
-          onClose={() => setEditingPost(null)}
-        />
-      )}
     </div>
   );
 };

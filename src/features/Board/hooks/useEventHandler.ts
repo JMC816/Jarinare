@@ -4,13 +4,19 @@
  */
 import { useRef, useState } from 'react';
 import { useCreateEvent } from './useCreateEvent';
-import { useNavigate } from 'react-router-dom';
+import { useUpdatePost } from './useUpdatePost';
+import { useNavigate, useLocation } from 'react-router-dom';
 import supabase from '@/shared/supabase/supabase';
+import { BoardPost } from '@/entities/Board/types/boardType';
 
 export const useEventHandler = (options?: { navigateTo?: string }) => {
-  const [author, setAuthor] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const location = useLocation();
+  const editPost = location.state?.editPost as BoardPost | undefined;
+  const isEditMode = !!editPost;
+
+  const [author, setAuthor] = useState(editPost?.author ?? '');
+  const [title, setTitle] = useState(editPost?.title ?? '');
+  const [content, setContent] = useState(editPost?.content ?? '');
   const [file, setFile] = useState<File | null>(null);
   const [views, setViews] = useState<number>(0);
   const [likes, setLikes] = useState<number>(0);
@@ -20,6 +26,7 @@ export const useEventHandler = (options?: { navigateTo?: string }) => {
 
   const navigate = useNavigate();
   const { createEvent } = useCreateEvent();
+  const { updatePost } = useUpdatePost();
 
   const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAuthor(e.target.value);
@@ -56,16 +63,20 @@ export const useEventHandler = (options?: { navigateTo?: string }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const eventId = await createEvent(author, title, content, views, likes);
-      if (file) {
-        const filePath = `event/${eventId}/${file.name}`;
-        const { error } = await supabase.storage
-          .from('jarinare-images')
-          .upload(filePath, file);
-        if (error) {
-          console.error('업로드 오류:', error);
-          alert('이미지 업로드 실패. 콘솔을 확인하세요.');
-          return;
+      if (isEditMode && editPost) {
+        await updatePost(editPost.id, { title, content });
+      } else {
+        const eventId = await createEvent(author, title, content, views, likes);
+        if (file) {
+          const filePath = `event/${eventId}/${file.name}`;
+          const { error } = await supabase.storage
+            .from('jarinare-images')
+            .upload(filePath, file);
+          if (error) {
+            console.error('업로드 오류:', error);
+            alert('이미지 업로드 실패. 콘솔을 확인하세요.');
+            return;
+          }
         }
       }
       navigate(options?.navigateTo ?? '/board');
@@ -93,5 +104,6 @@ export const useEventHandler = (options?: { navigateTo?: string }) => {
     content,
     previewImg,
     loading,
+    isEditMode,
   };
 };

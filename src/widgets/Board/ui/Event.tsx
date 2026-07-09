@@ -3,45 +3,30 @@
  * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
  */
 import { formatBoardTime } from '@/shared/lib/formatDate';
-import { getProfileColor } from '@/shared/lib/profileColor';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '@/shared/firebase/firebase';
-import { PostEditModal } from './PostEditModal';
 import { useEvent } from '../hooks/useEvent';
 
 type SortOrder = 'newest' | 'oldest';
 
-const EventImage = ({
-  src,
-  alt,
-  title,
-}: {
-  src: string | null;
-  alt: string;
-  title: string;
-}) => {
-  const [loaded, setLoaded] = useState(false);
-
-  if (!src) {
-    return (
-      <div className="flex aspect-square w-full items-center justify-center bg-blue p-3">
-        <span className="line-clamp-3 text-center text-xs font-bold text-white">{title}</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="aspect-square w-full bg-gray-100">
-      <img
-        src={src}
-        alt={alt}
-        className={`h-full w-full object-cover transition-opacity duration-500 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-        onLoad={() => setLoaded(true)}
-      />
-    </div>
-  );
-};
+const GiftIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="72"
+    height="72"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#3b82f6"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polyline points="20 12 20 22 4 22 4 12" />
+    <rect x="2" y="7" width="20" height="5" />
+    <line x1="12" y1="22" x2="12" y2="7" />
+    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+  </svg>
+);
 
 const FilterIcon = () => (
   <svg
@@ -66,6 +51,25 @@ const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
   { value: 'oldest', label: '오래된순' },
 ];
 
+const EventCardTop = () => (
+  <div className="flex w-full items-center justify-center bg-blue/10 py-10">
+    <GiftIcon />
+  </div>
+);
+
+const EventCardSkeleton = () => (
+  <div className="overflow-hidden rounded-xl bg-white shadow-sm">
+    <div className="h-[152px] w-full animate-pulse bg-gray-200" />
+    <div className="p-5">
+      <div className="mb-2 h-4 w-12 animate-pulse rounded bg-gray-200" />
+      <div className="mb-1 h-4 w-full animate-pulse rounded bg-gray-200" />
+      <div className="mb-3 h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+      <div className="mb-1.5 h-3 w-1/3 animate-pulse rounded bg-gray-200" />
+      <div className="h-3 w-1/4 animate-pulse rounded bg-gray-200" />
+    </div>
+  </div>
+);
+
 interface EventProps {
   isPC?: boolean;
   externalSearchQuery?: string;
@@ -78,7 +82,6 @@ export const Event = ({
   externalSortOrder,
 }: EventProps) => {
   const navigate = useNavigate();
-  const currentUid = auth.currentUser?.uid;
 
   const {
     internalSearchQuery,
@@ -89,15 +92,13 @@ export const Event = ({
     setFilterOpen,
     menuOpenId,
     setMenuOpenId,
-    editingPost,
-    setEditingPost,
     searchQuery,
     ref,
     items,
     isFetching,
     displayedItems,
     handleDelete,
-    handleUpdate,
+    currentUid,
   } = useEvent(isPC, externalSearchQuery, externalSortOrder);
 
   const currentLabel = SORT_OPTIONS.find((o) => o.value === sortOrder)?.label;
@@ -105,102 +106,69 @@ export const Event = ({
   if (isPC) {
     return (
       <>
-        <div className="flex flex-col gap-3">
-          {items.length === 0 && isFetching ? (
-            [...Array(3)].map((_, idx) => (
-              <div key={idx} className="overflow-hidden rounded-sm bg-white shadow-sm">
-                <div className="flex items-center gap-x-4 px-4 py-3">
-                  <div className="h-9 w-9 animate-pulse rounded-full bg-gray-200" />
-                  <div className="flex flex-1 flex-col gap-y-2">
-                    <div className="h-3 w-24 animate-pulse rounded bg-gray-200" />
-                    <div className="h-2.5 w-16 animate-pulse rounded bg-gray-200" />
-                  </div>
-                </div>
-                <div className="space-y-2 px-4 pb-4">
-                  <div className="h-3 w-3/4 animate-pulse rounded bg-gray-200" />
-                  <div className="h-3 w-full animate-pulse rounded bg-gray-200" />
-                </div>
-              </div>
-            ))
-          ) : displayedItems.length === 0 ? (
-            <div className="flex h-[200px] w-full flex-col items-center justify-center gap-2 rounded-xl bg-white shadow-sm">
-              <span className="text-2xl">📭</span>
-              <span className="text-sm font-semibold text-gray-400">
-                {searchQuery ? '검색 결과가 없습니다' : '등록된 이벤트가 없습니다'}
-              </span>
-            </div>
-          ) : (
-            displayedItems.map((event) => {
+        {items.length === 0 && isFetching ? (
+          <div className="grid grid-cols-4 gap-4">
+            {[...Array(8)].map((_, idx) => <EventCardSkeleton key={idx} />)}
+          </div>
+        ) : displayedItems.length === 0 ? (
+          <div className="flex h-[200px] w-full flex-col items-center justify-center gap-2 rounded-xl bg-white shadow-sm">
+            <span className="text-2xl">📭</span>
+            <span className="text-sm font-semibold text-gray-400">
+              {searchQuery ? '검색 결과가 없습니다' : '등록된 이벤트가 없습니다'}
+            </span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-4 gap-4">
+            {displayedItems.map((event) => {
               const isOwner = currentUid === event.id.split('/')[1];
               return (
                 <div
                   key={event.id}
-                  className="cursor-pointer overflow-hidden rounded-sm bg-white shadow-sm transition-shadow hover:shadow-md"
+                  className="relative cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition-shadow hover:shadow-md"
                   onClick={() => navigate('/board/event/detail', { state: { event } })}
                 >
-                  <div className="px-5 pb-3 pt-5">
-                    <div className="mb-3 flex items-center gap-3">
-                      <div
-                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
-                        style={{ backgroundColor: getProfileColor(event.author ?? '') }}
+                  <EventCardTop />
+                  <div className="p-5">
+                    <span className="mb-2 inline-block rounded px-2 py-0.5 text-xs font-bold" style={{ backgroundColor: '#fef9c3', color: '#ca8a04' }}>이벤트</span>
+                    <h3 className="line-clamp-2 text-base font-bold text-gray-900">{event.title}</h3>
+                    <div className="mt-3 text-sm text-gray-400">{formatBoardTime(event.createdAt)}</div>
+                    <div className="mt-1.5 text-sm text-gray-500">{event.author}</div>
+                  </div>
+                  {isOwner && (
+                    <div className="absolute right-2 top-2">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setMenuOpenId(menuOpenId === event.id ? null : event.id); }}
+                        className="flex h-6 w-6 items-center justify-center rounded-full bg-white/80 text-xs text-gray-500 hover:bg-white"
                       >
-                        {event.author?.charAt(0) ?? '?'}
-                      </div>
-                      <div className="flex flex-1 flex-col gap-0.5">
-                        <span className="text-sm font-semibold text-gray-800">{event.author}</span>
-                        <span className="text-xs text-gray-400">{formatBoardTime(event.createdAt)}</span>
-                      </div>
-                      {isOwner && (
-                        <div className="relative">
-                          <button
-                            onClick={(e) => { e.stopPropagation(); setMenuOpenId(menuOpenId === event.id ? null : event.id); }}
-                            className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100"
-                          >
-                            ···
-                          </button>
-                          {menuOpenId === event.id && (
-                            <>
-                              <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setMenuOpenId(null); }} />
-                              <div className="absolute right-0 top-8 z-20 min-w-[80px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
-                                <button
-                                  onClick={(e) => { e.stopPropagation(); setEditingPost({ ...event }); setMenuOpenId(null); }}
-                                  className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
-                                >
-                                  수정
-                                </button>
-                                <button
-                                  onClick={(e) => { e.stopPropagation(); handleDelete(event); }}
-                                  className="hover:bg-red-50 block w-full px-4 py-2.5 text-left text-sm text-red"
-                                >
-                                  삭제
-                                </button>
-                              </div>
-                            </>
-                          )}
-                        </div>
+                        ···
+                      </button>
+                      {menuOpenId === event.id && (
+                        <>
+                          <div className="fixed inset-0 z-10" onClick={(e) => { e.stopPropagation(); setMenuOpenId(null); }} />
+                          <div className="absolute right-0 top-7 z-20 min-w-[80px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigate('/board/event', { state: { editPost: event } }); setMenuOpenId(null); }}
+                              className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
+                            >
+                              수정
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleDelete(event); }}
+                              className="block w-full px-4 py-2.5 text-left text-sm text-red hover:bg-gray-50"
+                            >
+                              삭제
+                            </button>
+                          </div>
+                        </>
                       )}
                     </div>
-                    <h3 className="mb-1 line-clamp-1 text-base font-bold text-gray-900">{event.title}</h3>
-                    <p className="line-clamp-2 text-sm leading-relaxed text-gray-500">{event.content}</p>
-                    {event.imageUrl && (
-                      <div className="mt-3 overflow-hidden rounded-lg">
-                        <img src={event.imageUrl} alt={event.title} className="max-h-48 w-full object-cover" />
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
               );
-            })
-          )}
-          <div ref={ref} className="h-10" />
-        </div>
-        {editingPost && (
-          <PostEditModal
-            post={editingPost}
-            onSave={handleUpdate}
-            onClose={() => setEditingPost(null)}
-          />
+            })}
+          </div>
         )}
+        <div ref={ref} className="h-10" />
       </>
     );
   }
@@ -214,7 +182,7 @@ export const Event = ({
             type="text"
             value={internalSearchQuery}
             onChange={(e) => setInternalSearchQuery(e.target.value)}
-            placeholder="제목, 내용, 작성자 검색"
+            placeholder="제목, 내용 검색"
             className="flex-1 rounded-xl bg-white px-4 py-2.5 text-sm shadow-sm outline-none placeholder:text-gray-400"
           />
           <div className="relative">
@@ -249,16 +217,8 @@ export const Event = ({
         {/* 게시물 목록 */}
         <div className="p-4 pt-3">
           {items.length === 0 && isFetching ? (
-            <div className="grid grid-cols-3 gap-3">
-              {[...Array(6)].map((_, idx) => (
-                <div key={idx} className="overflow-hidden rounded-lg bg-white shadow-sm">
-                  <div className="aspect-square w-full animate-pulse bg-gray-200" />
-                  <div className="space-y-1.5 p-2">
-                    <div className="h-2.5 w-3/4 animate-pulse rounded bg-gray-200" />
-                    <div className="h-2 w-1/2 animate-pulse rounded bg-gray-200" />
-                  </div>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 gap-3">
+              {[...Array(4)].map((_, idx) => <EventCardSkeleton key={idx} />)}
             </div>
           ) : items.length === 0 ? (
             <div className="flex h-[200px] w-full flex-col items-center justify-center gap-2">
@@ -268,17 +228,19 @@ export const Event = ({
               </span>
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               {items.map((event) => (
                 <div
                   key={event.id}
-                  className="cursor-pointer overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
+                  className="cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
                   onClick={() => navigate('/board/event/detail', { state: { event } })}
                 >
-                  <EventImage src={event.imageUrl} alt={event.title} title={event.title} />
-                  <div className="p-2">
-                    <h3 className="line-clamp-1 text-xs font-bold text-gray-900">{event.title}</h3>
-                    <div className="mt-0.5 text-xs text-gray-400">{formatBoardTime(event.createdAt)}</div>
+                  <EventCardTop />
+                  <div className="p-5">
+                    <span className="mb-2 inline-block rounded px-2 py-0.5 text-xs font-bold" style={{ backgroundColor: '#fef9c3', color: '#ca8a04' }}>이벤트</span>
+                    <h3 className="line-clamp-2 text-xs font-bold text-gray-900">{event.title}</h3>
+                    <div className="mt-3 text-xs text-gray-400">{formatBoardTime(event.createdAt)}</div>
+                    <div className="mt-1.5 text-xs text-gray-500">{event.author}</div>
                   </div>
                 </div>
               ))}

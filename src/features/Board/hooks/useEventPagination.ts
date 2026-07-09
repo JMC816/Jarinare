@@ -30,8 +30,7 @@ export const useEventPagination = (
       data = data.filter(
         (d) =>
           d.title?.toLowerCase().includes(q) ||
-          d.content?.toLowerCase().includes(q) ||
-          d.author?.toLowerCase().includes(q),
+          d.content?.toLowerCase().includes(q),
       );
     }
 

@@ -1,3 +1,7 @@
+/**
+ * @role: pages — 이벤트 목록 페이지 (PC + 모바일)
+ * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
+ */
 import backward from '@/assets/icons/backward.png';
 import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
 import { Event } from '@/widgets/Board/ui/Event';
@@ -5,10 +9,12 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WriteButton from '@/shared/ui/WriteButton';
 import PCEventListPage from './PCEventListPage';
+import { auth } from '@/shared/firebase/firebase';
 
 const EventListPage = () => {
   const navigate = useNavigate();
   const { markSeen } = useBoardSeen();
+  const isAdmin = auth.currentUser?.email === import.meta.env.VITE_ADMIN_EMAIL;
 
   useEffect(() => {
     markSeen('event');
@@ -34,7 +40,7 @@ const EventListPage = () => {
           <Event />
         </div>
 
-        <WriteButton onClick={() => navigate('/board/event')} />
+        {isAdmin && <WriteButton onClick={() => navigate('/board/event')} />}
       </div>
     </>
   );

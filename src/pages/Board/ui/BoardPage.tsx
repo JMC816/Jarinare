@@ -1,3 +1,7 @@
+/**
+ * @role: pages — 모바일 게시판 허브 페이지
+ * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
+ */
 import backward from '@/assets/icons/backward.png';
 import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
 import { useLatestPosts } from '@/features/Board/hooks/useLatestPosts';
@@ -130,41 +134,21 @@ const BoardPage = () => {
           <div className="rounded-2xl bg-white p-4 shadow-sm">
             {topPost ? (
               <button
-                onClick={() =>
-                  navigate(
+                onClick={() => {
+                  const detailPath =
                     topPost.category === 'board'
                       ? '/board/board/detail'
-                      : '/board/event/detail',
-                    {
-                      state:
-                        topPost.category === 'board'
-                          ? {
-                              post: {
-                                id: topPost.id,
-                                title: topPost.title,
-                                content: topPost.content,
-                                author: topPost.author,
-                                likes: 0,
-                                views: topPost.viewCount,
-                                createdAt: 0,
-                                imageUrl: null,
-                              },
-                            }
-                          : {
-                              event: {
-                                id: topPost.id,
-                                title: topPost.title,
-                                content: topPost.content,
-                                author: topPost.author,
-                                likes: 0,
-                                views: topPost.viewCount,
-                                createdAt: 0,
-                                imageUrl: null,
-                              },
-                            },
-                    },
-                  )
-                }
+                      : topPost.category === 'event'
+                        ? '/board/event/detail'
+                        : '/board/notice/detail';
+                  const detailState =
+                    topPost.category === 'board'
+                      ? { post: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } }
+                      : topPost.category === 'event'
+                        ? { event: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } }
+                        : { notice: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } };
+                  navigate(detailPath, { state: detailState });
+                }}
                 className="flex w-full items-center gap-3 rounded-lg bg-gray-100 px-4 py-3 text-left"
               >
                 <div className="flex flex-1 flex-col gap-1 overflow-hidden">

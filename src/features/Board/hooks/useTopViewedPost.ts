@@ -13,7 +13,7 @@ export interface TopPost {
   title: string;
   content: string;
   author: string;
-  category: 'board' | 'event';
+  category: 'board' | 'event' | 'notice';
   viewCount: number;
 }
 

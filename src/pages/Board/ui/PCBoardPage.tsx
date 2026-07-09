@@ -388,7 +388,7 @@ const PCBoardPage = () => {
                 </div>
 
                 {/* [col2] 실시간 인기 게시물 + 카테고리 (세로 적층) */}
-                <div ref={rightColRef} className="flex flex-col gap-6">
+                <div ref={rightColRef} className="flex min-w-0 flex-col gap-6">
                   {/* 실시간 인기 */}
                   <div className="flex flex-col overflow-hidden rounded-xl bg-white p-5 shadow-sm">
                     <div className="mb-4 flex items-center gap-2">
@@ -427,46 +427,24 @@ const PCBoardPage = () => {
                           );
                         }
                         const categoryLabel =
-                          post.category === 'board' ? '자유' : '이벤트';
+                          post.category === 'board' ? '자유' : post.category === 'event' ? '이벤트' : '공지';
+                        const detailPath =
+                          post.category === 'board'
+                            ? '/board/board/detail'
+                            : post.category === 'event'
+                              ? '/board/event/detail'
+                              : '/board/notice/detail';
+                        const detailState =
+                          post.category === 'board'
+                            ? { post: { id: post.id, title: post.title, content: post.content, author: post.author, likes: 0, views: post.viewCount, createdAt: 0, imageUrl: null } }
+                            : post.category === 'event'
+                              ? { event: { id: post.id, title: post.title, content: post.content, author: post.author, likes: 0, views: post.viewCount, createdAt: 0, imageUrl: null } }
+                              : { notice: { id: post.id, title: post.title, content: post.content, author: post.author, likes: 0, views: post.viewCount, createdAt: 0, imageUrl: null } };
                         return (
                           <button
                             key={post.id}
-                            onClick={() =>
-                              navigate(
-                                post.category === 'board'
-                                  ? '/board/board/detail'
-                                  : '/board/event/detail',
-                                {
-                                  state:
-                                    post.category === 'board'
-                                      ? {
-                                          post: {
-                                            id: post.id,
-                                            title: post.title,
-                                            content: post.content,
-                                            author: post.author,
-                                            likes: 0,
-                                            views: post.viewCount,
-                                            createdAt: 0,
-                                            imageUrl: null,
-                                          },
-                                        }
-                                      : {
-                                          event: {
-                                            id: post.id,
-                                            title: post.title,
-                                            content: post.content,
-                                            author: post.author,
-                                            likes: 0,
-                                            views: post.viewCount,
-                                            createdAt: 0,
-                                            imageUrl: null,
-                                          },
-                                        },
-                                },
-                              )
-                            }
-                            className="flex items-start gap-2.5 py-3 text-left"
+                            onClick={() => navigate(detailPath, { state: detailState })}
+                            className="flex w-full items-start gap-2.5 overflow-hidden py-3 text-left"
                           >
                             <span
                               className="mt-0.5 w-4 shrink-0 text-center text-sm font-black"

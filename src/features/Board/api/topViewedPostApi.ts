@@ -15,9 +15,10 @@ import { TopPost } from '../hooks/useTopViewedPost';
 export const fetchBoardAndEventPostsApi = async (): Promise<
   Record<string, Omit<TopPost, 'viewCount'>>
 > => {
-  const [boardSnap, eventSnap] = await Promise.all([
+  const [boardSnap, eventSnap, noticeSnap] = await Promise.all([
     getDocs(query(collectionGroup(db, 'board'))),
     getDocs(query(collectionGroup(db, 'event'))),
+    getDocs(query(collectionGroup(db, 'notice'))),
   ]);
 
   const postMap: Record<string, Omit<TopPost, 'viewCount'>> = {};
@@ -43,6 +44,18 @@ export const fetchBoardAndEventPostsApi = async (): Promise<
       content: data.content ?? '',
       author: data.author ?? '',
       category: 'event',
+    };
+  });
+
+  noticeSnap.docs.forEach((d) => {
+    const data = d.data();
+    if (!data.title) return;
+    postMap[d.id] = {
+      id: d.ref.path,
+      title: data.title,
+      content: data.content ?? '',
+      author: data.author ?? '',
+      category: 'notice',
     };
   });
 

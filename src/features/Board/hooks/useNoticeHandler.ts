@@ -4,14 +4,20 @@
  */
 import { useRef, useState } from 'react';
 import { useCreateNotice } from './useCreateNotice';
-import { useNavigate } from 'react-router-dom';
+import { useUpdatePost } from './useUpdatePost';
+import { useNavigate, useLocation } from 'react-router-dom';
 import supabase from '@/shared/supabase/supabase';
 import { useDeleteNotice } from './useDeleteNotice';
+import { BoardPost } from '@/entities/Board/types/boardType';
 
 export const useNoticeHandler = (options?: { navigateTo?: string }) => {
-  const [author, setAuthor] = useState('');
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+  const location = useLocation();
+  const editPost = location.state?.editPost as BoardPost | undefined;
+  const isEditMode = !!editPost;
+
+  const [author, setAuthor] = useState(editPost?.author ?? '');
+  const [title, setTitle] = useState(editPost?.title ?? '');
+  const [content, setContent] = useState(editPost?.content ?? '');
   const [file, setFile] = useState<File | null>(null);
   const [views, setViews] = useState<number>(0);
   const [likes, setLikes] = useState<number>(0);
@@ -21,6 +27,7 @@ export const useNoticeHandler = (options?: { navigateTo?: string }) => {
 
   const navigate = useNavigate();
   const { createNotice } = useCreateNotice();
+  const { updatePost } = useUpdatePost();
   const { deleteNotice } = useDeleteNotice();
 
   const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,19 +65,27 @@ export const useNoticeHandler = (options?: { navigateTo?: string }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const noticeId = await createNotice(author, title, content, views, likes);
-      if (file) {
-        const filePath = `notice/${noticeId}/${file.name}`;
-        const { error } = await supabase.storage
-          .from('jarinare-images')
-          .upload(filePath, file);
-        if (error) {
-          if (noticeId) {
-            await deleteNotice(noticeId);
+      if (isEditMode && editPost) {
+        await updatePost(editPost.id, { title, content });
+      } else {
+        const noticeId = await createNotice(
+          author,
+          title,
+          content,
+          views,
+          likes,
+        );
+        if (file) {
+          const filePath = `notice/${noticeId}/${file.name}`;
+          const { error } = await supabase.storage
+            .from('jarinare-images')
+            .upload(filePath, file);
+          if (error) {
+            if (noticeId) await deleteNotice(noticeId);
+            console.error('업로드 오류:', error);
+            alert('이미지 업로드 실패. 콘솔을 확인하세요.');
+            return;
           }
-          console.error('업로드 오류:', error);
-          alert('이미지 업로드 실패. 콘솔을 확인하세요.');
-          return;
         }
       }
       navigate(options?.navigateTo ?? '/board');
@@ -98,5 +113,6 @@ export const useNoticeHandler = (options?: { navigateTo?: string }) => {
     content,
     previewImg,
     loading,
+    isEditMode,
   };
 };

@@ -2,12 +2,10 @@
  * @role: widgets — 자유게시판 게시물 목록
  * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
  */
-import { auth } from '@/shared/firebase/firebase';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PostEditModal } from './PostEditModal';
 import { SortOrder, BoardProps } from '../types/boardWidgetType';
 import { useBoard } from '../hooks/useBoard';
 
@@ -135,7 +133,6 @@ export const Board = ({
   externalSortOrder,
 }: BoardProps) => {
   const navigate = useNavigate();
-  const currentUid = auth.currentUser?.uid;
 
   const {
     internalSearchQuery,
@@ -146,8 +143,6 @@ export const Board = ({
     setFilterOpen,
     menuOpenId,
     setMenuOpenId,
-    editingPost,
-    setEditingPost,
     searchQuery,
     ref,
     items,
@@ -156,7 +151,7 @@ export const Board = ({
     viewsMap,
     displayedItems,
     handleDelete,
-    handleUpdate,
+    currentUid,
   } = useBoard(isPC, externalSearchQuery, externalSortOrder);
 
   const currentLabel = SORT_OPTIONS.find((o) => o.value === sortOrder)?.label;
@@ -243,8 +238,7 @@ export const Board = ({
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setEditingPost({ ...post });
-                                    setMenuOpenId(null);
+                                    navigate('/board/board', { state: { editPost: post } });
                                   }}
                                   className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
                                 >
@@ -298,13 +292,6 @@ export const Board = ({
           <div ref={ref} className="h-10" />
         </div>
 
-        {editingPost && (
-          <PostEditModal
-            post={editingPost}
-            onSave={handleUpdate}
-            onClose={() => setEditingPost(null)}
-          />
-        )}
       </div>
     );
   }
@@ -425,8 +412,7 @@ export const Board = ({
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setEditingPost({ ...post });
-                                setMenuOpenId(null);
+                                navigate('/board/board', { state: { editPost: post } });
                               }}
                               className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
                             >
@@ -476,14 +462,6 @@ export const Board = ({
         )}
         <div ref={ref} className="h-10" />
       </div>
-
-      {editingPost && (
-        <PostEditModal
-          post={editingPost}
-          onSave={handleUpdate}
-          onClose={() => setEditingPost(null)}
-        />
-      )}
     </div>
   );
 };

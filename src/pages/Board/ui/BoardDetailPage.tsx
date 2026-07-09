@@ -4,17 +4,11 @@
  */
 import backward from '@/assets/icons/backward.png';
 import { BoardPost } from '@/entities/Board/types/boardType';
-import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
-import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
-import { useViewCount } from '@/features/Board/hooks/useViewCount';
-import { auth } from '@/shared/firebase/firebase';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { CommentSection } from '@/widgets/Board/ui/CommentSection';
-import { PostEditModal } from '@/widgets/Board/ui/PostEditModal';
-import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PCBoardDetailPage from './PCBoardDetailPage';
+import { useBoardDetailPage } from '../hooks/useBoardDetailPage';
 
 const HamburgerIcon = () => (
   <svg
@@ -38,21 +32,18 @@ const BoardDetailPage = () => {
   const location = useLocation();
   const post = location.state?.post as BoardPost | undefined;
 
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [editingPost, setEditingPost] = useState<BoardPost | null>(null);
-  const [localPost, setLocalPost] = useState<BoardPost | null>(null);
-
-  const currentPost = localPost ?? post;
-  const postDocId = currentPost?.id.split('/').pop() ?? '';
-
-  const postItems = useMemo(
-    () => (currentPost ? [currentPost] : []),
-    [currentPost?.id],
-  );
-  const { likedMap, likesMap, handleClickLike } = useLikeBoard(postItems);
-  const { deletePost } = useDeletePost();
-  const { updatePost } = useUpdatePost();
-  const { viewCount } = useViewCount(postDocId);
+  const {
+    currentPost,
+    postDocId,
+    isOwner,
+    isLiked,
+    likesCount,
+    viewCount,
+    menuOpen,
+    setMenuOpen,
+    handleDelete,
+    handleLike,
+  } = useBoardDetailPage(post);
 
   if (!currentPost) {
     return (
@@ -66,22 +57,6 @@ const BoardDetailPage = () => {
       </>
     );
   }
-
-  const isLiked = likedMap[currentPost.id] ?? false;
-  const likesCount = likesMap[currentPost.id] ?? currentPost.likes ?? 0;
-  const currentUid = auth.currentUser?.uid;
-  const isOwner = currentUid === currentPost.id.split('/')[1];
-
-  const handleDelete = async () => {
-    await deletePost(currentPost.id);
-    navigate(-1);
-  };
-
-  const handleUpdate = async (title: string, content: string) => {
-    await updatePost(currentPost.id, { title, content });
-    setLocalPost({ ...currentPost, title, content });
-    setEditingPost(null);
-  };
 
   return (
     <>
@@ -114,8 +89,7 @@ const BoardDetailPage = () => {
                   <div className="absolute right-0 top-9 z-20 min-w-[80px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
                     <button
                       onClick={() => {
-                        setEditingPost({ ...currentPost });
-                        setMenuOpen(false);
+                        navigate('/board/board', { state: { editPost: currentPost } });
                       }}
                       className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
                     >
@@ -198,7 +172,7 @@ const BoardDetailPage = () => {
             <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => handleClickLike(currentPost.id)}
+                  onClick={handleLike}
                   className="transition-transform duration-150 active:scale-90"
                 >
                   <span className="text-2xl">{isLiked ? '❤️' : '🤍'}</span>
@@ -217,14 +191,6 @@ const BoardDetailPage = () => {
           {/* 댓글 */}
           <CommentSection postDocId={postDocId} />
         </div>
-
-        {editingPost && (
-          <PostEditModal
-            post={editingPost}
-            onSave={handleUpdate}
-            onClose={() => setEditingPost(null)}
-          />
-        )}
       </div>
     </>
   );

@@ -45,7 +45,7 @@ const NoticeWirtePage = () => {
     <>
       {/* PC */}
       <div className="hidden w-full lg:block">
-        <PCWriteForm {...notice} categoryLabel="공지" backLabel="공지사항" />
+        <PCWriteForm {...notice} categoryLabel={notice.isEditMode ? '공지사항 수정' : '공지'} backLabel="공지사항" />
       </div>
 
       {/* 모바일 */}
@@ -57,7 +57,7 @@ const NoticeWirtePage = () => {
               src={backward}
               className="h-[20px] w-[12px] cursor-pointer"
             />
-            <h1 className="text-lg font-bold">공지사항 작성</h1>
+            <h1 className="text-lg font-bold">{notice.isEditMode ? '공지사항 수정' : '공지사항 작성'}</h1>
           </div>
           <NoticeForm {...notice} />
         </div>

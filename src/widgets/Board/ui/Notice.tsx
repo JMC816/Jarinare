@@ -2,12 +2,10 @@
  * @role: widgets — 공지사항 게시물 목록 (모바일)
  * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
  */
-import { auth } from '@/shared/firebase/firebase';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NoticeSkeleton } from './NoticeSkeleton';
-import { PostEditModal } from './PostEditModal';
 import { useNotice } from '../hooks/useNotice';
 
 type SortOrder = 'newest' | 'oldest';
@@ -69,7 +67,6 @@ const NoticeImage = ({ src, alt }: { src: string; alt: string }) => {
 
 export const Notice = () => {
   const navigate = useNavigate();
-  const currentUid = auth.currentUser?.uid;
 
   const {
     searchQuery,
@@ -80,8 +77,6 @@ export const Notice = () => {
     setFilterOpen,
     menuOpenId,
     setMenuOpenId,
-    editingPost,
-    setEditingPost,
     ref,
     items,
     isFetching,
@@ -90,7 +85,7 @@ export const Notice = () => {
     handleClickLike,
     displayedItems,
     handleDelete,
-    handleUpdate,
+    currentUid,
   } = useNotice();
 
   const currentLabel = SORT_OPTIONS.find((o) => o.value === sortOrder)?.label;
@@ -176,7 +171,7 @@ export const Notice = () => {
                           <div className="fixed inset-0 z-10" onClick={() => setMenuOpenId(null)} />
                           <div className="absolute right-0 top-8 z-20 min-w-[80px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
                             <button
-                              onClick={(e) => { e.stopPropagation(); setEditingPost({ ...notice }); setMenuOpenId(null); }}
+                              onClick={(e) => { e.stopPropagation(); navigate('/board/notice', { state: { editPost: notice } }); }}
                               className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
                             >
                               수정
@@ -219,14 +214,6 @@ export const Notice = () => {
         )}
         <div ref={ref} className="h-10" />
       </div>
-
-      {editingPost && (
-        <PostEditModal
-          post={editingPost}
-          onSave={handleUpdate}
-          onClose={() => setEditingPost(null)}
-        />
-      )}
     </div>
   );
 };

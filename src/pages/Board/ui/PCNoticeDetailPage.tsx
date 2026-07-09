@@ -6,7 +6,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
-import { PostEditModal } from '@/widgets/Board/ui/PostEditModal';
 import { usePCNoticeDetailPage } from '../hooks/usePCNoticeDetailPage';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
@@ -69,12 +68,10 @@ const PCNoticeDetailPage = () => {
     currentNotice,
     isOwner,
     viewCount,
-    editingPost,
-    setEditingPost,
     menuOpen,
     setMenuOpen,
     handleDelete,
-    handleUpdate,
+    handleEdit,
   } = usePCNoticeDetailPage(notice);
 
   if (!currentNotice) {
@@ -168,7 +165,7 @@ const PCNoticeDetailPage = () => {
                           menuOpen={menuOpen}
                           onToggle={() => setMenuOpen((v) => !v)}
                           onClose={() => setMenuOpen(false)}
-                          onEdit={() => setEditingPost({ ...currentNotice })}
+                          onEdit={handleEdit}
                           onDelete={handleDelete}
                         />
                       )}
@@ -201,14 +198,6 @@ const PCNoticeDetailPage = () => {
           </div>
         </main>
       </div>
-
-      {editingPost && (
-        <PostEditModal
-          post={editingPost}
-          onSave={handleUpdate}
-          onClose={() => setEditingPost(null)}
-        />
-      )}
     </div>
   );
 };

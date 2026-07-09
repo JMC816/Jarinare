@@ -1,5 +1,5 @@
 /**
- * @role: pages — PC 자유게시판 상세 페이지 상태·로직 훅
+ * @role: pages — 자유게시판 상세 페이지 (모바일) 상태·로직 훅
  * @rule: 상태·사이드이펙트·이벤트 핸들러만 담당
  */
 import { useMemo, useState } from 'react';
@@ -8,10 +8,9 @@ import { BoardPost } from '@/entities/Board/types/boardType';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
 import { useViewCount } from '@/features/Board/hooks/useViewCount';
-import { useFollow } from '@/features/Follow/hooks/useFollow';
 import { auth } from '@/shared/firebase/firebase';
 
-export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
+export const useBoardDetailPage = (post: BoardPost | undefined) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -27,13 +26,7 @@ export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
   const { viewCount } = useViewCount(postDocId);
 
   const currentUid = auth.currentUser?.uid;
-  const authorUid = currentPost?.id.split('/')[1] ?? '';
-  const isOwner = !!currentUid && authorUid === currentUid;
-  const {
-    isFollowing,
-    loading: followLoading,
-    toggleFollow,
-  } = useFollow(authorUid, currentPost?.author ?? '');
+  const isOwner = !!currentUid && currentUid === currentPost?.id.split('/')[1];
   const isLiked = likedMap[currentPost?.id ?? ''] ?? false;
   const likesCount = likesMap[currentPost?.id ?? ''] ?? currentPost?.likes ?? 0;
 
@@ -41,11 +34,6 @@ export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
     if (!currentPost) return;
     await deletePost(currentPost.id);
     navigate(-1);
-  };
-
-  const handleEdit = () => {
-    if (!currentPost) return;
-    navigate('/board/board', { state: { editPost: currentPost } });
   };
 
   const handleLike = () => {
@@ -63,10 +51,6 @@ export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
     menuOpen,
     setMenuOpen,
     handleDelete,
-    handleEdit,
     handleLike,
-    isFollowing,
-    followLoading,
-    toggleFollow,
   };
 };

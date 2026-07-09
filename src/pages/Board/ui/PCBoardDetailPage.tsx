@@ -7,7 +7,6 @@ import { BoardPost } from '@/entities/Board/types/boardType';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import { CommentSection } from '@/widgets/Board/ui/CommentSection';
-import { PostEditModal } from '@/widgets/Board/ui/PostEditModal';
 import { usePCBoardDetailPage } from '../hooks/usePCBoardDetailPage';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
@@ -118,12 +117,10 @@ const PCBoardDetailPage = () => {
     isLiked,
     likesCount,
     viewCount,
-    editingPost,
-    setEditingPost,
     menuOpen,
     setMenuOpen,
     handleDelete,
-    handleUpdate,
+    handleEdit,
     handleLike,
     isFollowing,
     followLoading,
@@ -235,7 +232,7 @@ const PCBoardDetailPage = () => {
                             menuOpen={menuOpen}
                             onToggle={() => setMenuOpen((v) => !v)}
                             onClose={() => setMenuOpen(false)}
-                            onEdit={() => setEditingPost({ ...currentPost })}
+                            onEdit={handleEdit}
                             onDelete={handleDelete}
                           />
                         )}
@@ -307,14 +304,6 @@ const PCBoardDetailPage = () => {
           </div>
         </main>
       </div>
-
-      {editingPost && (
-        <PostEditModal
-          post={editingPost}
-          onSave={handleUpdate}
-          onClose={() => setEditingPost(null)}
-        />
-      )}
     </div>
   );
 };

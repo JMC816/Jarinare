@@ -5,7 +5,6 @@
 import { useNavigate } from 'react-router-dom';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
-import { PostEditModal } from '@/widgets/Board/ui/PostEditModal';
 import { usePCNoticeListPage } from '../hooks/usePCNoticeListPage';
 
 const PCNoticeListPage = () => {
@@ -25,9 +24,6 @@ const PCNoticeListPage = () => {
     isLoading,
     viewsMap,
     isAdmin,
-    editingPost,
-    setEditingPost,
-    handleUpdate,
     formatDate,
   } = usePCNoticeListPage();
 
@@ -289,13 +285,6 @@ const PCNoticeListPage = () => {
         </main>
       </div>
 
-      {editingPost && (
-        <PostEditModal
-          post={editingPost}
-          onSave={handleUpdate}
-          onClose={() => setEditingPost(null)}
-        />
-      )}
     </div>
   );
 };

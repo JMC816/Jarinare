@@ -4,9 +4,11 @@
  */
 import { useRef, useState } from 'react';
 import { useCreateBoard } from './useCreateBoard';
-import { useNavigate } from 'react-router-dom';
+import { useUpdatePost } from './useUpdatePost';
+import { useNavigate, useLocation } from 'react-router-dom';
 import supabase from '@/shared/supabase/supabase';
 import { auth } from '@/shared/firebase/firebase';
+import { BoardPost } from '@/entities/Board/types/boardType';
 
 export const useBaordHandler = (options?: {
   onAfterCreate?: (
@@ -16,9 +18,13 @@ export const useBaordHandler = (options?: {
   ) => void;
   navigateTo?: string;
 }) => {
-  const [author, setAuthor] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
+  const location = useLocation();
+  const editPost = location.state?.editPost as BoardPost | undefined;
+  const isEditMode = !!editPost;
+
+  const [author, setAuthor] = useState<string>(editPost?.author ?? '');
+  const [title, setTitle] = useState<string>(editPost?.title ?? '');
+  const [content, setContent] = useState<string>(editPost?.content ?? '');
   const [file, setFile] = useState<File | null>(null);
   const [views, setViews] = useState<number>(0);
   const [likes, setLikes] = useState<number>(0);
@@ -30,6 +36,7 @@ export const useBaordHandler = (options?: {
 
   const navigate = useNavigate();
   const { createBoard } = useCreateBoard();
+  const { updatePost } = useUpdatePost();
   const user = auth.currentUser;
 
   const onAuthorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,37 +96,41 @@ export const useBaordHandler = (options?: {
     e.preventDefault();
     setLoading(true);
     try {
-      const boardId = await createBoard(
-        author,
-        title,
-        content,
-        views,
-        likes,
-        tags,
-      );
-      if (file) {
-        const filePath = `board/${boardId}/${file.name}`;
-        const { error } = await supabase.storage
-          .from('jarinare-images')
-          .upload(filePath, file);
-        if (error) {
-          console.error('업로드 오류:', error);
-          alert('이미지 업로드 실패. 콘솔을 확인하세요.');
-          return;
-        }
-      }
-      if (user && boardId) {
-        options?.onAfterCreate?.(
-          user.uid,
-          user.displayName ?? user.uid,
-          boardId,
+      if (isEditMode && editPost) {
+        await updatePost(editPost.id, { title, content });
+      } else {
+        const boardId = await createBoard(
+          author,
+          title,
+          content,
+          views,
+          likes,
+          tags,
         );
+        if (file) {
+          const filePath = `board/${boardId}/${file.name}`;
+          const { error } = await supabase.storage
+            .from('jarinare-images')
+            .upload(filePath, file);
+          if (error) {
+            console.error('업로드 오류:', error);
+            alert('이미지 업로드 실패. 콘솔을 확인하세요.');
+            return;
+          }
+        }
+        if (user && boardId) {
+          options?.onAfterCreate?.(
+            user.uid,
+            user.displayName ?? user.uid,
+            boardId,
+          );
+        }
       }
       navigate(options?.navigateTo ?? '/board');
     } catch (err) {
       console.error('오류:', err);
     } finally {
-      setLoading(false); // 무조건 로딩 종료
+      setLoading(false);
     }
   };
 
@@ -146,5 +157,6 @@ export const useBaordHandler = (options?: {
     onTagInputKeyDown,
     onAddTag,
     onRemoveTag,
+    isEditMode,
   };
 };

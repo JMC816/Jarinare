@@ -8,7 +8,7 @@ import { useBoardPagination } from '@/features/Board/hooks/useBoardPagination';
 import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
 import { useViewCounts } from '@/features/Board/hooks/useViewCounts';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
+import { auth } from '@/shared/firebase/firebase';
 import { SortOrder } from '../types/boardWidgetType';
 
 export const useBoard = (
@@ -20,11 +20,7 @@ export const useBoard = (
   const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
   const [filterOpen, setFilterOpen] = useState(false);
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
-  const [editingPost, setEditingPost] = useState<BoardPost | null>(null);
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
-  const [updatedItems, setUpdatedItems] = useState<
-    Record<string, Partial<BoardPost>>
-  >({});
 
   const searchQuery = isPC ? (externalSearchQuery ?? '') : internalSearchQuery;
   const activeSortOrder = isPC ? (externalSortOrder ?? 'newest') : sortOrder;
@@ -36,11 +32,11 @@ export const useBoard = (
   const { likesMap } = useLikeBoard(items);
   const { viewsMap } = useViewCounts(items);
   const { deletePost } = useDeletePost();
-  const { updatePost } = useUpdatePost();
+  const currentUid = auth.currentUser?.uid;
 
   const displayedItems = items
     .filter((p) => !deletedIds.has(p.id))
-    .map((p) => ({ ...p, ...updatedItems[p.id] }) as BoardPost)
+    .map((p) => ({ ...p }) as BoardPost)
     .sort((a, b) => {
       if (sortOrder === 'views')
         return (viewsMap[b.id] ?? 0) - (viewsMap[a.id] ?? 0);
@@ -55,16 +51,6 @@ export const useBoard = (
     setMenuOpenId(null);
   };
 
-  const handleUpdate = async (title: string, content: string) => {
-    if (!editingPost) return;
-    await updatePost(editingPost.id, { title, content });
-    setUpdatedItems((prev) => ({
-      ...prev,
-      [editingPost.id]: { title, content },
-    }));
-    setEditingPost(null);
-  };
-
   return {
     internalSearchQuery,
     setInternalSearchQuery,
@@ -74,8 +60,6 @@ export const useBoard = (
     setFilterOpen,
     menuOpenId,
     setMenuOpenId,
-    editingPost,
-    setEditingPost,
     searchQuery,
     ref,
     items,
@@ -84,6 +68,6 @@ export const useBoard = (
     viewsMap,
     displayedItems,
     handleDelete,
-    handleUpdate,
+    currentUid,
   };
 };

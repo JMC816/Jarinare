@@ -1,3 +1,7 @@
+/**
+ * @role: pages — 자유게시판 글 작성/수정 페이지
+ * @rule: 레이아웃·조합만 담당, admin 접근 가드 포함
+ */
 import backward from '@/assets/icons/backward.png';
 import { useBaordHandler } from '@/features/Board/hooks/useBoardHandler';
 import BoardForm from '@/widgets/Board/ui/BoardForm';
@@ -38,7 +42,7 @@ const BoardWirtePage = () => {
       <div className="hidden w-full lg:block">
         <PCWriteForm
           {...board}
-          categoryLabel="자유"
+          categoryLabel={board.isEditMode ? '자유게시판 수정' : '자유'}
           backLabel="자유게시판"
           tags={board.tags}
           tagInput={board.tagInput}
@@ -57,7 +61,7 @@ const BoardWirtePage = () => {
               src={backward}
               className="h-[20px] w-[12px] cursor-pointer"
             />
-            <h1 className="text-lg font-bold">자유게시판 작성</h1>
+            <h1 className="text-lg font-bold">{board.isEditMode ? '자유게시판 수정' : '자유게시판 작성'}</h1>
           </div>
           <BoardForm {...board} />
         </div>

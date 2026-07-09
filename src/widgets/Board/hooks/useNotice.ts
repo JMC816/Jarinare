@@ -7,7 +7,7 @@ import { BoardPost } from '@/entities/Board/types/boardType';
 import { useNoticePageNation } from '@/features/Board/hooks/useNoticePagination';
 import { useLikeNoitce } from '@/features/Board/hooks/useLikeNotice';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
+import { auth } from '@/shared/firebase/firebase';
 
 type SortOrder = 'newest' | 'oldest';
 
@@ -16,11 +16,7 @@ export const useNotice = () => {
   const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
   const [filterOpen, setFilterOpen] = useState(false);
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
-  const [editingPost, setEditingPost] = useState<BoardPost | null>(null);
   const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
-  const [updatedItems, setUpdatedItems] = useState<
-    Record<string, Partial<BoardPost>>
-  >({});
 
   const { ref, items, isFetching } = useNoticePageNation(
     searchQuery,
@@ -28,26 +24,16 @@ export const useNotice = () => {
   );
   const { likedMap, likesMap, handleClickLike } = useLikeNoitce(items);
   const { deletePost } = useDeletePost();
-  const { updatePost } = useUpdatePost();
+  const currentUid = auth.currentUser?.uid;
 
   const displayedItems = items
     .filter((p) => !deletedIds.has(p.id))
-    .map((p) => ({ ...p, ...updatedItems[p.id] }) as BoardPost);
+    .map((p) => ({ ...p }) as BoardPost);
 
   const handleDelete = async (post: BoardPost) => {
     await deletePost(post.id);
     setDeletedIds((prev) => new Set(prev).add(post.id));
     setMenuOpenId(null);
-  };
-
-  const handleUpdate = async (title: string, content: string) => {
-    if (!editingPost) return;
-    await updatePost(editingPost.id, { title, content });
-    setUpdatedItems((prev) => ({
-      ...prev,
-      [editingPost.id]: { title, content },
-    }));
-    setEditingPost(null);
   };
 
   return {
@@ -59,8 +45,6 @@ export const useNotice = () => {
     setFilterOpen,
     menuOpenId,
     setMenuOpenId,
-    editingPost,
-    setEditingPost,
     ref,
     items,
     isFetching,
@@ -69,6 +53,6 @@ export const useNotice = () => {
     handleClickLike,
     displayedItems,
     handleDelete,
-    handleUpdate,
+    currentUid,
   };
 };

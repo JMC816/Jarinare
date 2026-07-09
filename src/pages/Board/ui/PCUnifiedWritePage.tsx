@@ -29,6 +29,7 @@ const PCUnifiedWritePage = () => {
         onLogin={() => navigate('/auth/login')}
       />
     );
+  const isAdmin = auth.currentUser.email === import.meta.env.VITE_ADMIN_EMAIL;
   const [category, setCategory] = useState<WriteCategory>('board');
 
   const handleAfterBoardCreate = useCallback(
@@ -59,9 +60,9 @@ const PCUnifiedWritePage = () => {
         {...activeHandler}
         categoryLabel={CATEGORY_LABEL[category]}
         backLabel="게시판"
-        categorySelectable
+        categorySelectable={isAdmin}
         selectedCategory={category}
-        onCategoryChange={setCategory}
+        onCategoryChange={isAdmin ? setCategory : undefined}
       />
       {isLoading && <LoadingScreen />}
     </>

@@ -1,13 +1,14 @@
-import { auth, db } from '@/shared/firebase/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+/**
+ * @role: features — 댓글 수정 훅
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ */
+import { auth } from '@/shared/firebase/firebase';
+import { updateCommentApi } from '../api/updateCommentApi';
 
 export const useUpdateComment = (postDocId: string) => {
   const updateComment = async (commentId: string, content: string) => {
-    const user = auth.currentUser;
-    if (!user || !content.trim()) return;
-    await updateDoc(doc(db, 'boardComments', postDocId, 'items', commentId), {
-      content: content.trim(),
-    });
+    if (!auth.currentUser || !content.trim()) return;
+    await updateCommentApi(postDocId, commentId, content);
   };
 
   return { updateComment };

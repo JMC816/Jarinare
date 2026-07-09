@@ -1,9 +1,11 @@
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '@/shared/firebase/firebase';
+/**
+ * @role: features — 공지사항 게시글 생성 훅
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ */
+import { auth } from '@/shared/firebase/firebase';
+import { createNoticeApi } from '../api/createNoticeApi';
 
 export const useCreateNotice = () => {
-  const user = auth.currentUser;
-
   const createNotice = async (
     author: string,
     title: string,
@@ -11,26 +13,9 @@ export const useCreateNotice = () => {
     views: number,
     likes: number,
   ) => {
-    if (!user) return;
-
-    const noticeCollectionRef = collection(db, 'boards', user.uid, 'notice');
-
-    try {
-      // 게시글 생성
-      const docRef = await addDoc(noticeCollectionRef, {
-        author,
-        title,
-        content,
-        views,
-        likes,
-        createdAt: serverTimestamp(),
-      });
-
-      return docRef.id;
-    } catch (error) {
-      console.log(error);
-    }
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    return createNoticeApi(uid, author, title, content, views, likes);
   };
-
   return { createNotice };
 };

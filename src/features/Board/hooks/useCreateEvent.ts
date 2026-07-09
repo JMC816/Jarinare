@@ -1,8 +1,11 @@
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '@/shared/firebase/firebase';
+/**
+ * @role: features — 이벤트 게시글 생성 훅
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ */
+import { auth } from '@/shared/firebase/firebase';
+import { createEventApi } from '../api/createEventApi';
 
 export const useCreateEvent = () => {
-  const user = auth.currentUser;
   const createEvent = async (
     author: string,
     title: string,
@@ -10,25 +13,9 @@ export const useCreateEvent = () => {
     views: number,
     likes: number,
   ) => {
-    const eventCollectionRef = collection(
-      db,
-      'boards',
-      `${user?.uid}`,
-      'event',
-    );
-    try {
-      const docRef = await addDoc(eventCollectionRef, {
-        author,
-        title,
-        content,
-        views,
-        likes,
-        createdAt: serverTimestamp(),
-      });
-      return docRef.id;
-    } catch (error) {
-      console.log(error);
-    }
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    return createEventApi(uid, author, title, content, views, likes);
   };
   return { createEvent };
 };

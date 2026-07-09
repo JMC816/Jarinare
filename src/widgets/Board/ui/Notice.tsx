@@ -2,17 +2,13 @@
  * @role: widgets — 공지사항 게시물 목록 (모바일)
  * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
  */
-import { BoardPost } from '@/entities/Board/types/boardType';
-import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { useLikeNoitce } from '@/features/Board/hooks/useLikeNotice';
-import { useNoticePageNation } from '@/features/Board/hooks/useNoticePagination';
-import { useUpdatePost } from '@/features/Board/hooks/useUpdatePost';
 import { auth } from '@/shared/firebase/firebase';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NoticeSkeleton } from './NoticeSkeleton';
 import { PostEditModal } from './PostEditModal';
+import { useNotice } from '../hooks/useNotice';
 
 type SortOrder = 'newest' | 'oldest';
 
@@ -72,43 +68,30 @@ const NoticeImage = ({ src, alt }: { src: string; alt: string }) => {
 };
 
 export const Notice = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
-  const [editingPost, setEditingPost] = useState<BoardPost | null>(null);
-  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
-  const [updatedItems, setUpdatedItems] = useState<
-    Record<string, Partial<BoardPost>>
-  >({});
-
-  const { ref, items, isFetching } = useNoticePageNation(searchQuery, sortOrder);
-  const { likedMap, likesMap, handleClickLike } = useLikeNoitce(items);
-  const { deletePost } = useDeletePost();
-  const { updatePost } = useUpdatePost();
   const navigate = useNavigate();
-
   const currentUid = auth.currentUser?.uid;
 
-  const displayedItems = items
-    .filter((p) => !deletedIds.has(p.id))
-    .map((p) => ({ ...p, ...updatedItems[p.id] }) as BoardPost);
-
-  const handleDelete = async (post: BoardPost) => {
-    await deletePost(post.id);
-    setDeletedIds((prev) => new Set(prev).add(post.id));
-    setMenuOpenId(null);
-  };
-
-  const handleUpdate = async (title: string, content: string) => {
-    if (!editingPost) return;
-    await updatePost(editingPost.id, { title, content });
-    setUpdatedItems((prev) => ({
-      ...prev,
-      [editingPost.id]: { title, content },
-    }));
-    setEditingPost(null);
-  };
+  const {
+    searchQuery,
+    setSearchQuery,
+    sortOrder,
+    setSortOrder,
+    filterOpen,
+    setFilterOpen,
+    menuOpenId,
+    setMenuOpenId,
+    editingPost,
+    setEditingPost,
+    ref,
+    items,
+    isFetching,
+    likedMap,
+    likesMap,
+    handleClickLike,
+    displayedItems,
+    handleDelete,
+    handleUpdate,
+  } = useNotice();
 
   const currentLabel = SORT_OPTIONS.find((o) => o.value === sortOrder)?.label;
 
@@ -133,19 +116,13 @@ export const Notice = () => {
           </button>
           {filterOpen && (
             <>
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setFilterOpen(false)}
-              />
+              <div className="fixed inset-0 z-10" onClick={() => setFilterOpen(false)} />
               <div className="absolute right-0 top-10 z-20 overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
                 <div className="flex flex-nowrap gap-2 p-2">
                   {SORT_OPTIONS.map(({ value, label }) => (
                     <button
                       key={value}
-                      onClick={() => {
-                        setSortOrder(value);
-                        setFilterOpen(false);
-                      }}
+                      onClick={() => { setSortOrder(value); setFilterOpen(false); }}
                       className={`whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${sortOrder === value ? 'bg-blue text-white' : 'bg-gray-200 text-gray-600'}`}
                     >
                       {label}
@@ -176,58 +153,36 @@ export const Notice = () => {
             const isOwner = currentUid === notice.id.split('/')[1];
 
             return (
-              <div
-                key={notice.id}
-                className="relative rounded-xl bg-white shadow-sm"
-              >
+              <div key={notice.id} className="relative rounded-xl bg-white shadow-sm">
                 <div className="flex items-center gap-x-4 px-4 py-3">
                   <div className="flex h-[36px] w-[36px] shrink-0 items-center justify-center rounded-lg bg-gray-300">
                     <span className="text-sm font-bold text-white">관</span>
                   </div>
                   <div className="flex flex-1 flex-col gap-y-[2px]">
                     <span className="text-base font-bold text-black">관리자</span>
-                    <span className="text-xs text-gray-400">
-                      {formatBoardTime(notice.createdAt)}
-                    </span>
+                    <span className="text-xs text-gray-400">{formatBoardTime(notice.createdAt)}</span>
                   </div>
-                  <div className="rounded bg-red px-2 py-0.5 text-xs font-bold text-white">
-                    공지
-                  </div>
+                  <div className="rounded bg-red px-2 py-0.5 text-xs font-bold text-white">공지</div>
                   {isOwner && (
                     <div className="relative">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setMenuOpenId(
-                            menuOpenId === notice.id ? null : notice.id,
-                          );
-                        }}
+                        onClick={(e) => { e.stopPropagation(); setMenuOpenId(menuOpenId === notice.id ? null : notice.id); }}
                         className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100"
                       >
                         <HamburgerIcon />
                       </button>
                       {menuOpenId === notice.id && (
                         <>
-                          <div
-                            className="fixed inset-0 z-10"
-                            onClick={() => setMenuOpenId(null)}
-                          />
+                          <div className="fixed inset-0 z-10" onClick={() => setMenuOpenId(null)} />
                           <div className="absolute right-0 top-8 z-20 min-w-[80px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
                             <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setEditingPost({ ...notice });
-                                setMenuOpenId(null);
-                              }}
+                              onClick={(e) => { e.stopPropagation(); setEditingPost({ ...notice }); setMenuOpenId(null); }}
                               className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
                             >
                               수정
                             </button>
                             <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDelete(notice);
-                              }}
+                              onClick={(e) => { e.stopPropagation(); handleDelete(notice); }}
                               className="block w-full px-4 py-2.5 text-left text-sm text-red hover:bg-gray-50"
                             >
                               삭제
@@ -239,36 +194,25 @@ export const Notice = () => {
                   )}
                 </div>
 
-                {notice.imageUrl && (
-                  <NoticeImage src={notice.imageUrl} alt={notice.title} />
-                )}
+                {notice.imageUrl && <NoticeImage src={notice.imageUrl} alt={notice.title} />}
 
                 <div className="flex items-center gap-3 px-4 pb-1 pt-3">
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleClickLike(notice.id);
-                    }}
+                    onClick={(e) => { e.stopPropagation(); handleClickLike(notice.id); }}
                     className={`flex items-center justify-center rounded-full p-1.5 text-xl transition-all duration-150 ${isLiked ? 'text-red' : 'text-gray-400'}`}
                   >
                     {isLiked ? '❤️' : '🤍'}
                   </button>
-                  <span className="text-sm font-semibold">
-                    {likesCount}명이 좋아합니다
-                  </span>
+                  <span className="text-sm font-semibold">{likesCount}명이 좋아합니다</span>
                 </div>
                 <div
                   className="cursor-pointer px-4 pb-2 text-sm"
-                  onClick={() =>
-                    navigate('/board/notice/detail', { state: { notice } })
-                  }
+                  onClick={() => navigate('/board/notice/detail', { state: { notice } })}
                 >
                   <span className="mr-2 font-semibold">{notice.author}</span>
                   {notice.title}
                 </div>
-                <div className="px-4 pb-2 text-sm text-gray-800">
-                  {notice.content}
-                </div>
+                <div className="px-4 pb-2 text-sm text-gray-800">{notice.content}</div>
               </div>
             );
           })

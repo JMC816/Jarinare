@@ -1,5 +1,9 @@
-import { doc, updateDoc } from 'firebase/firestore';
-import { auth, db } from '@/shared/firebase/firebase';
+/**
+ * @role: features — 게시물 수정 훅
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ */
+import { auth } from '@/shared/firebase/firebase';
+import { updatePostApi } from '../api/updatePostApi';
 
 export const useUpdatePost = () => {
   const updatePost = async (
@@ -11,7 +15,7 @@ export const useUpdatePost = () => {
     const parts = postPath.split('/');
     if (parts[1] !== uid) return;
     try {
-      await updateDoc(doc(db, parts[0], parts[1], parts[2], parts[3]), data);
+      await updatePostApi(postPath, data);
     } catch (error) {
       console.log(error);
     }

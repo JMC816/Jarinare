@@ -1,79 +1,26 @@
+/**
+ * @role: features — 자유게시판 게시글 목록 조회 훅
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ */
 import { BoardPost } from '@/entities/Board/types/boardType';
-import { db } from '@/shared/firebase/firebase';
-import supabase from '@/shared/supabase/supabase';
-import {
-  collection,
-  collectionGroup,
-  getDocs,
-  query,
-  Timestamp,
-} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import { getBoardPostsApi } from '../api/getBoardApi';
 
 export const useGetBoard = () => {
   const [boardData, setBoardData] = useState<BoardPost[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const getBoard = async () => {
-      const boardQuery = query(collectionGroup(db, 'board'));
-
-      const boardSnap = await getDocs(boardQuery);
-
-      const datas = await Promise.all(
-        boardSnap.docs.map(async (item) => {
-          const data = item.data();
-          const ts: Timestamp = data.createdAt;
-
-          const createdAtSeconds =
-            typeof ts?.seconds === 'number'
-              ? ts.seconds
-              : typeof ts?.toMillis === 'function'
-                ? Math.floor(ts.toMillis() / 1000)
-                : 0;
-
-          const { data: files } = await supabase.storage
-            .from('jarinare-images')
-            .list(`board/${item.id.split('/').pop()}`);
-
-          let imageUrl: string | null = null;
-
-          if (files && files.length > 0) {
-            const { data: urlData } = supabase.storage
-              .from('jarinare-images')
-              .getPublicUrl(
-                `board/${item.id.split('/').pop()}/${files[0].name}`,
-              );
-
-            imageUrl = urlData.publicUrl;
-          }
-
-          const commentsSnap = await getDocs(
-            collection(db, 'boardComments', item.id, 'items'),
-          );
-
-          return {
-            id: item.ref.path,
-            author: data.author,
-            content: data.content,
-            title: data.title,
-            views: data.views,
-            likes: data.likes,
-            createdAt: createdAtSeconds,
-            imageUrl,
-            commentCount: commentsSnap.size,
-            tags: data.tags ?? [],
-          } as BoardPost;
-        }),
-      );
-
-      setBoardData(
-        datas.filter((d) => d.title).sort((a, b) => a.createdAt - b.createdAt),
-      );
-      setIsLoaded(true);
-    };
-
-    getBoard();
+    getBoardPostsApi()
+      .then((datas) => {
+        setBoardData(
+          datas
+            .filter((d) => d.title)
+            .sort((a, b) => a.createdAt - b.createdAt),
+        );
+        setIsLoaded(true);
+      })
+      .catch(() => setIsLoaded(true));
   }, []);
 
   return { boardData, isLoaded };

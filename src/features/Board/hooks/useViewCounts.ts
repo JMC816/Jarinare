@@ -1,7 +1,10 @@
+/**
+ * @role: features — 게시물 목록 조회수 일괄 구독 훅
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ */
 import { BoardPost } from '@/entities/Board/types/boardType';
-import { db } from '@/shared/firebase/firebase';
-import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useRef, useState } from 'react';
+import { subscribeViewCountsApi } from '../api/viewCountsApi';
 
 export const useViewCounts = (items: BoardPost[]) => {
   const [viewsMap, setViewsMap] = useState<Record<string, number>>({});
@@ -11,16 +14,12 @@ export const useViewCounts = (items: BoardPost[]) => {
     listenersRef.current.forEach((unsub) => unsub());
     listenersRef.current = [];
 
-    const unsubscribes = items.map((item) => {
-      const docId = item.id.split('/').pop() ?? '';
-      return onSnapshot(doc(db, 'boardViews', docId), (snap) => {
-        const count = snap.data()?.count ?? 0;
-        setViewsMap((prev) => ({ ...prev, [item.id]: count }));
-      });
+    const unsubscribe = subscribeViewCountsApi(items, (id, count) => {
+      setViewsMap((prev) => ({ ...prev, [id]: count }));
     });
+    listenersRef.current = [unsubscribe];
 
-    listenersRef.current = unsubscribes;
-    return () => unsubscribes.forEach((unsub) => unsub());
+    return () => unsubscribe();
   }, [items.length]);
 
   return { viewsMap };

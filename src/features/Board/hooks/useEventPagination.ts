@@ -1,3 +1,7 @@
+/**
+ * @role: features — 이벤트 게시글 페이지네이션 훅
+ * @rule: 페이지 상태·정렬·검색 로직만 담당
+ */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useGetDvent } from './useGetEvent';
 import { BoardPost } from '@/entities/Board/types/boardType';

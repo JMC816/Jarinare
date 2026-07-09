@@ -1,5 +1,9 @@
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '@/shared/firebase/firebase';
+/**
+ * @role: features — 댓글 생성 훅
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ */
+import { auth } from '@/shared/firebase/firebase';
+import { createCommentApi } from '../api/createCommentApi';
 
 export const useCreateComment = (postDocId: string) => {
   const createComment = async (
@@ -8,14 +12,13 @@ export const useCreateComment = (postDocId: string) => {
   ) => {
     const user = auth.currentUser;
     if (!user || !content.trim()) return;
-
-    await addDoc(collection(db, 'boardComments', postDocId, 'items'), {
-      uid: user.uid,
-      author: user.displayName ?? user.email ?? '익명',
-      content: content.trim(),
+    await createCommentApi(
+      postDocId,
+      user.uid,
+      user.displayName ?? user.email ?? '익명',
+      content,
       parentId,
-      createdAt: serverTimestamp(),
-    });
+    );
   };
 
   return { createComment };

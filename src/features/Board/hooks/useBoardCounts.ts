@@ -1,16 +1,10 @@
 /**
  * @role: features — 게시판 카테고리별 게시물 수 조회 훅
- * @rule: 상태·사이드이펙트만 담당
+ * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
  */
-import { db } from '@/shared/firebase/firebase';
-import { collectionGroup, getDocs, query } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import { getBoardCountsApi } from '../api/boardCountsApi';
 import { BoardCounts } from '../types/boardType';
-
-const fetchCount = async (category: string): Promise<number> => {
-  const snap = await getDocs(query(collectionGroup(db, category)));
-  return snap.size;
-};
 
 export const useBoardCounts = () => {
   const [counts, setCounts] = useState<BoardCounts>({
@@ -20,15 +14,7 @@ export const useBoardCounts = () => {
   });
 
   useEffect(() => {
-    const load = async () => {
-      const [notice, event, board] = await Promise.all([
-        fetchCount('notice'),
-        fetchCount('event'),
-        fetchCount('board'),
-      ]);
-      setCounts({ notice, event, board });
-    };
-    load();
+    getBoardCountsApi().then(setCounts);
   }, []);
 
   return { counts };

@@ -7,3 +7,4 @@ export type PeriodFilter = '1개월' | '3개월' | '6개월';
 export type TypeFilter = '전체' | '구매' | '반환';
 export type PointTypeFilter = '전체' | '적립' | '사용';
 export type SortOrder = '최신순' | '과거순';
+export type FollowTab = 'followers' | 'following';

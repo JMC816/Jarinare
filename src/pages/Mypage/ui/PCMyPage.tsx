@@ -32,12 +32,14 @@ import {
   PROVIDER_BADGE,
 } from '../constants/myPageConstants';
 import { useMyPageFilter } from '../hooks/useMyPageFilter';
+import { useMyPageModal } from '../hooks/useMyPageModal';
+import PCFollowModal from '@/widgets/Follow/ui/PCFollowModal';
 
 const PCMyPage = () => {
   const { point } = useGetPoint();
   const { navigate } = useNaviation();
   const { resetModal } = useModalStore();
-  const { counts } = useFollowList();
+  const { followers, following, counts } = useFollowList();
   const { payment: pointHistory } = useGetPayment();
   const { orders } = useGetOrders();
   const routerNavigate = useNavigate();
@@ -46,6 +48,7 @@ const PCMyPage = () => {
   const [activeTab, setActiveTab] = useState<FilterTab>('payment');
   const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
   const [selectedPoint, setSelectedPoint] = useState<PaymentType | null>(null);
+  const { followModalOpen, followModalTab, openFollowModal, closeFollowModal } = useMyPageModal();
 
   const {
     period,
@@ -101,6 +104,7 @@ const PCMyPage = () => {
   };
 
   return (
+    <>
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
       <PCTopNav />
 
@@ -171,7 +175,7 @@ const PCMyPage = () => {
                 <div className="mx-2 h-12 w-px self-center bg-gray-100" />
 
                 <button
-                  onClick={() => routerNavigate('/mypage/follow?tab=followers')}
+                  onClick={() => openFollowModal('followers')}
                   className="flex flex-col items-center gap-0.5 transition-opacity hover:opacity-70"
                 >
                   <span className="text-2xl font-semibold text-gray-900">
@@ -183,7 +187,7 @@ const PCMyPage = () => {
                 <div className="h-12 w-px self-center bg-gray-100" />
 
                 <button
-                  onClick={() => routerNavigate('/mypage/follow?tab=following')}
+                  onClick={() => openFollowModal('following')}
                   className="flex flex-col items-center gap-0.5 transition-opacity hover:opacity-70"
                 >
                   <span className="text-2xl font-semibold text-gray-900">
@@ -589,10 +593,22 @@ const PCMyPage = () => {
               </div>
             </div>
           </div>
+
+          {followModalOpen && (
+            <PCFollowModal
+              followers={followers}
+              following={following}
+              counts={counts}
+              initialTab={followModalTab}
+              onClose={closeFollowModal}
+            />
+          )}
         </main>
       </div>
     </div>
+    </>
   );
+
 };
 
 export default PCMyPage;

@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
-import { useViewCount } from '@/features/Board/hooks/useViewCount';
 import { auth } from '@/shared/firebase/firebase';
 
 export const useBoardDetailPage = (post: BoardPost | undefined) => {
@@ -23,7 +22,6 @@ export const useBoardDetailPage = (post: BoardPost | undefined) => {
   );
   const { likedMap, likesMap, handleClickLike } = useLikeBoard(postItems);
   const { deletePost } = useDeletePost();
-  const { viewCount } = useViewCount(postDocId);
 
   const currentUid = auth.currentUser?.uid;
   const isOwner = !!currentUid && currentUid === currentPost?.id.split('/')[1];
@@ -47,7 +45,6 @@ export const useBoardDetailPage = (post: BoardPost | undefined) => {
     isOwner,
     isLiked,
     likesCount,
-    viewCount,
     menuOpen,
     setMenuOpen,
     handleDelete,

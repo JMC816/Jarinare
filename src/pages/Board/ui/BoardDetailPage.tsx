@@ -38,7 +38,6 @@ const BoardDetailPage = () => {
     isOwner,
     isLiked,
     likesCount,
-    viewCount,
     menuOpen,
     setMenuOpen,
     handleDelete,
@@ -180,10 +179,6 @@ const BoardDetailPage = () => {
                 <span className="text-sm font-semibold text-gray-700">
                   {likesCount}명이 좋아합니다
                 </span>
-              </div>
-              <div className="flex items-center gap-1 text-xs text-gray-400">
-                <span>조회수</span>
-                <span>{viewCount}</span>
               </div>
             </div>
           </div>

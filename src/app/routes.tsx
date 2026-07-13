@@ -16,7 +16,6 @@ import MenuPage from '@/pages/Menu/ui/MenuPage';
 import MyPage from '@/pages/Mypage/ui/MyPage';
 import NotificationPage from '@/pages/Notification/ui/NotificationPage';
 import FollowListPage from '@/pages/Follow/ui/FollowListPage';
-import PointPage from '@/pages/Point/ui/PointPage';
 import SeatChangePage from '@/pages/TicketChange/ui/SeatChangePage';
 import TicketSeatChangePage from '@/pages/TicketChange/ui/TicketSeatChangePage';
 import TicketViewPage from '@/pages/TicketChange/ui/TicketViewPage';
@@ -84,7 +83,6 @@ const Router = () => {
           </Route>
           {/* 로그인 필수 페이지들 */}
           <Route element={<HomeLayout />}>
-            <Route path="/mypage/point" element={<PointPage />} />
             <Route path="/mypage/follow" element={<FollowListPage />} />
             <Route
               path="/reserve/notification"

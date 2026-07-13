@@ -10,6 +10,7 @@ import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
 import { useUpdatePoint } from '@/features/Point/hooks/useUpdatePoint';
 import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateCountStore';
 import { useSaveReserveStat } from '@/features/TicketReserve/hooks/useSaveReserveStat';
+import { useCreateOrder } from '@/features/Point/hooks/useCreateOrder';
 import { useCurrentSeason } from '@/features/Season/hooks/useCurrentSeason';
 import {
   PAYMENT_METHODS,
@@ -20,9 +21,19 @@ import {
 
 export const usePayModal = () => {
   const { closeModal } = useModalStore();
-  const { selectPay, endStationForView } = trainDataStore();
+  const {
+    selectPay,
+    endStationForView,
+    startStationForView,
+    startDay,
+    startDayForView,
+    selectTrainType,
+    selectAdult,
+    selectKid,
+  } = trainDataStore();
   const { createSelectedSeats } = useSeatQueryData();
   const { saveStat } = useSaveReserveStat();
+  const { createOrder } = useCreateOrder();
   const { point } = useGetPoint();
   const { updatePoint } = useUpdatePoint();
   const { seatsStateCount } = seatsStateCountStore();
@@ -110,6 +121,20 @@ export const usePayModal = () => {
     await createSelectedSeats(finalPrice);
     await updatePoint(point - pointValue + cardPayback);
     await saveStat(endStationForView);
+    await createOrder({
+      startStationForView,
+      endStationForView,
+      startDay,
+      startDayForView,
+      trainType: selectTrainType,
+      selectAdult,
+      selectKid,
+      seatCount: seatsStateCount,
+      finalPrice,
+      paymentMethod: selectedPaymentMethod ?? '',
+      selectedCard,
+      isReturn: false,
+    });
     closeModal('PayModal');
   };
 

@@ -62,6 +62,26 @@ export class AppConfigService {
     return this.bool("STATION_SYNC_INITIAL_ENABLED", true);
   }
 
+  // ── 열차 시간표 사전 캐싱 스케줄러 ────────────────────
+  /** 매일 새벽 실행. 역 동기화(자정) 이후가 되도록 기본 04:00. */
+  get trainTimeSyncCron(): string {
+    return this.str("TRAIN_TIME_SYNC_CRON", "0 4 * * *");
+  }
+
+  get trainTimeSyncInitialEnabled(): boolean {
+    return this.bool("TRAIN_TIME_SYNC_INITIAL_ENABLED", true);
+  }
+
+  /** 스케줄 실행 시 오늘 포함 저장할 일수. */
+  get trainTimeSyncDays(): number {
+    return this.num("TRAIN_TIME_SYNC_DAYS", 7);
+  }
+
+  /** 노선×날짜 작업의 동시 실행 수 (외부 API 부하 조절). */
+  get trainTimeSyncConcurrency(): number {
+    return this.num("TRAIN_TIME_SYNC_CONCURRENCY", 4);
+  }
+
   // ── 카카오 OAuth ─────────────────────────────────────
   get kakaoClientId(): string {
     return this.str("KAKAO_CLIENT_ID");

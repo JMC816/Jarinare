@@ -36,6 +36,23 @@ export class EnvironmentVariables {
   @IsString()
   STATION_SYNC_INITIAL_ENABLED?: string;
 
+  // 열차 시간표 사전 캐싱 스케줄러
+  @IsOptional()
+  @IsString()
+  TRAIN_TIME_SYNC_CRON?: string;
+
+  @IsOptional()
+  @IsString()
+  TRAIN_TIME_SYNC_INITIAL_ENABLED?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  TRAIN_TIME_SYNC_DAYS?: string;
+
+  @IsOptional()
+  @IsNumberString()
+  TRAIN_TIME_SYNC_CONCURRENCY?: string;
+
   @IsOptional()
   @IsNumberString()
   TRAIN_API_TIMEOUT_MS?: string;

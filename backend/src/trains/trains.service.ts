@@ -69,15 +69,41 @@ export class TrainsService {
       return cached.data as unknown as TrainTimeResponseDto[];
     }
 
-    // 공공데이터 API 호출
+    // 캐시 미스: 외부 API 조회 후 저장
+    return this.fetchAndStore(where, trainGradeCode);
+  }
+
+  /**
+   * 캐시를 확인하지 않고 외부 API 에서 새로 조회해 DB(stations_times)에 저장한다.
+   * 스케줄러의 사전 캐싱/갱신에서 사용한다. (항상 최신 데이터로 덮어씀)
+   */
+  async refreshTrainTimes(params: {
+    depPlaceId: string;
+    arrPlaceId: string;
+    depPlandTime: string;
+    pageNo?: number;
+    numOfRows?: number;
+    trainGradeCode?: string;
+  }): Promise<TrainTimeResponseDto[]> {
+    const where: StationTimeWhereUnique = {
+      depPlaceId: params.depPlaceId,
+      arrPlaceId: params.arrPlaceId,
+      depPlandTime: params.depPlandTime,
+      pageNo: params.pageNo ?? 1,
+      numOfRows: params.numOfRows ?? 200,
+    };
+    return this.fetchAndStore(where, params.trainGradeCode);
+  }
+
+  /** 외부 API 호출 → 정규화 → upsert 저장. (getTrainTimes 미스 경로 / refreshTrainTimes 공용) */
+  private async fetchAndStore(
+    where: StationTimeWhereUnique,
+    trainGradeCode?: string,
+  ): Promise<TrainTimeResponseDto[]> {
     let data: unknown;
     try {
       data = await this.client.get(TRAIN_TIME_PATH, {
-        depPlaceId,
-        arrPlaceId,
-        depPlandTime,
-        pageNo,
-        numOfRows,
+        ...where,
         ...(trainGradeCode ? { trainGradeCode } : {}),
       });
     } catch {

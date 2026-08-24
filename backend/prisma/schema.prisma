@@ -33,8 +33,94 @@ model User {
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
+  boards        Board[]
+  comments      Comment[]
+  commentLikes  CommentLike[]
+  boardLikes    BoardLike[]
+  notifications Notification[]
+
   @@index([userId])
   @@map("users")
+}
+
+model Board {
+  id           BigInt    @id @default(autoincrement())
+  type         String    @db.VarChar(20)
+  title        String    @db.VarChar(255)
+  content      String    @db.Text
+  authorIdx    BigInt
+  imageUrl     String?   @db.VarChar(500)
+  tags         Json?
+  rating       Decimal?  @db.Decimal(3, 1)
+  liked        BigInt    @default(0)
+  viewCount    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  author   User        @relation(fields: [authorIdx], references: [idx])
+  comments Comment[]
+  likes    BoardLike[]
+
+  @@index([type])
+  @@index([authorIdx])
+  @@map("boards")
+}
+
+model Comment {
+  id        BigInt   @id @default(autoincrement())
+  boardId   BigInt
+  authorIdx BigInt
+  content   String   @db.Text
+  parentId  BigInt?
+  liked     BigInt   @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  board  Board         @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  author User          @relation(fields: [authorIdx], references: [idx])
+  likes  CommentLike[]
+
+  @@index([boardId])
+  @@index([parentId])
+  @@map("comments")
+}
+
+model CommentLike {
+  commentId BigInt
+  userIdx   BigInt
+  createdAt DateTime @default(now())
+
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userIdx], references: [idx])
+
+  @@unique([commentId, userIdx])
+  @@map("comment_likes")
+}
+
+model BoardLike {
+  boardId   BigInt
+  userIdx   BigInt
+  createdAt DateTime @default(now())
+
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userIdx], references: [idx])
+
+  @@unique([boardId, userIdx])
+  @@map("board_likes")
+}
+
+model Notification {
+  id        BigInt   @id @default(autoincrement())
+  userIdx   BigInt
+  type      String   @db.VarChar(20)
+  isRead    Boolean  @default(false)
+  payload   Json
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userIdx], references: [idx], onDelete: Cascade)
+
+  @@index([userIdx])
+  @@map("notifications")
 }
 
 // 역 목록 (공공데이터 GetCtyAcctoTrainSttnList 를 매일 자정에 동기화하여 저장).
@@ -78,4 +164,24 @@ model SyncLock {
   expiresAt DateTime // 이 시각 이후에는 만료된 것으로 보고 다른 인스턴스가 획득 가능
 
   @@map("sync_locks")
+}
+
+// 스케줄러 작업 큐 / 실행 로그.
+// 크론·수동 트리거가 PENDING 으로 적재하면 인메모리 단일 워커(JobQueueService)가
+// 하나씩 꺼내 RUNNING → SUCCESS/FAILED 로 갱신한다. 서버 재시작 시 남은 PENDING/RUNNING
+// 은 FAILED 로 복구된다(인메모리 큐는 휘발). 상태값: PENDING | RUNNING | SUCCESS | FAILED | CANCELLED
+model SchedulerRunLog {
+  runId        BigInt    @id @default(autoincrement())
+  jobName      String    @db.VarChar(100) // 작업 이름 (예: "station-sync", "train-time-sync")
+  status       String    @db.VarChar(20) // 실행 상태
+  startYmd     String    @db.VarChar(10) // 대상 시작일 (YYYYMMDD). 날짜 개념이 없는 작업은 실행일.
+  endYmd       String    @db.VarChar(10) // 대상 종료일 (YYYYMMDD)
+  startedAt    DateTime  @default(now()) // 적재(대기 시작) 시각
+  endedAt      DateTime? // 종료(성공/실패/취소) 시각
+  errorMessage String?   @db.Text // 실패 사유
+  metadata     Json? // 실행 결과 요약 (동기화 결과 객체)
+
+  @@index([jobName, startYmd, endYmd])
+  @@index([status])
+  @@map("scheduler_run_log")
 }

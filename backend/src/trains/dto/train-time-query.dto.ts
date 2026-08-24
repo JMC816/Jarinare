@@ -14,12 +14,12 @@ export class TrainTimeQueryDto {
   @ApiProperty({ description: "출발역 ID", example: "NAT010000" })
   @IsString()
   @IsNotEmpty()
-  depPlaceId: string;
+  depPlaceId!: string;
 
   @ApiProperty({ description: "도착역 ID", example: "NAT011668" })
   @IsString()
   @IsNotEmpty()
-  arrPlaceId: string;
+  arrPlaceId!: string;
 
   @ApiProperty({
     description: "출발 예정일 (YYYYMMDD, 선택적으로 시분 포함 8~14자리 숫자)",
@@ -30,7 +30,7 @@ export class TrainTimeQueryDto {
   @Matches(/^\d{8,14}$/, {
     message: "depPlandTime 은 YYYYMMDD 형식의 숫자여야 합니다.",
   })
-  depPlandTime: string;
+  depPlandTime!: string;
 
   @ApiPropertyOptional({ description: "페이지 번호", default: 1, minimum: 1 })
   @IsOptional()

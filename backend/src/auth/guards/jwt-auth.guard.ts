@@ -50,8 +50,12 @@ export class JwtAuthGuard implements CanActivate {
 
   private extractToken(request: Request): string | undefined {
     const authHeader = request.headers.authorization;
-    if (!authHeader) return undefined;
-    const [type, token] = authHeader.split(" ");
-    return type === "Bearer" ? token : undefined;
+    if (authHeader) {
+      const [type, token] = authHeader.split(" ");
+      return type === "Bearer" ? token : undefined;
+    }
+    // SSE는 EventSource가 커스텀 헤더를 지원하지 않으므로 쿼리 파라미터로 fallback
+    const queryToken = (request.query as Record<string, string>)?.token;
+    return typeof queryToken === "string" ? queryToken : undefined;
   }
 }

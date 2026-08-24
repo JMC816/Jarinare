@@ -6,29 +6,29 @@ import { ApiProperty } from "@nestjs/swagger";
  */
 export class TrainTimeResponseDto {
   @ApiProperty({ description: "성인 요금(원)", example: 23700 })
-  adultcharge: number;
+  adultcharge!: number;
 
   @ApiProperty({ description: "도착역 이름", example: "부산" })
-  arrplacename: string;
+  arrplacename!: string;
 
   @ApiProperty({
     description: "도착 예정시각 (YYYYMMDDHHmm)",
     example: 202607251230,
   })
-  arrplandtime: number;
+  arrplandtime!: number;
 
   @ApiProperty({ description: "출발역 이름", example: "서울" })
-  depplacename: string;
+  depplacename!: string;
 
   @ApiProperty({
     description: "출발 예정시각 (YYYYMMDDHHmm)",
     example: 202607250900,
   })
-  depplandtime: number;
+  depplandtime!: number;
 
   @ApiProperty({ description: "열차 등급명", example: "KTX" })
-  traingradename: string;
+  traingradename!: string;
 
   @ApiProperty({ description: "열차 번호", example: 101 })
-  trainno: number;
+  trainno!: number;
 }

@@ -77,8 +77,10 @@ export class NotificationService {
   }
 
   async markAllAsRead(user: AuthUser): Promise<{ message: string }> {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     await this.prisma.notification.updateMany({
-      where: { userIdx: BigInt(user.idx), isRead: false },
+      where: { userIdx: BigInt(user.idx), isRead: false, createdAt: { gte: start } },
       data: { isRead: true },
     });
     return { message: "전체 읽음 처리되었습니다." };
@@ -119,44 +121,55 @@ export class NotificationService {
     return { message: `${year}년 ${month}월 알림 파티션이 삭제되었습니다.` };
   }
 
-  // 매월 1일 00:10 — 2달 전 파티션 DROP (이전달 + 이번달만 유지)
-  @Cron("10 0 1 * *")
-  async dropOldPartition(): Promise<void> {
-    const now = new Date();
-    const target = new Date(now.getFullYear(), now.getMonth() - 2, 1);
-    const year = target.getFullYear();
-    const month = target.getMonth() + 1;
-
-    try {
-      await this.dropPartition(year, month);
-    } catch {
-      // 파티션이 없으면 무시
-    }
-  }
-
-  // 매월 1일 00:05 — 다음달 파티션을 ADD PARTITION으로 미리 생성
+  // 매월 1일 00:05 — 현재달 파티션이 없으면 새 1년치 생성 + 이전 1년치 삭제
   @Cron("5 0 1 * *")
-  async createNextMonthPartition(): Promise<void> {
+  async rotateYearlyPartitions(): Promise<boolean> {
     const now = new Date();
-    const target = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-    const year = target.getFullYear();
-    const month = target.getMonth() + 1; // 1~12
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1; // 1~12
+    const currentPName = `p_${year}_${String(month).padStart(2, "0")}`;
 
-    const nextMonth = month === 12 ? 1 : month + 1;
-    const nextYear = month === 12 ? year + 1 : year;
-    const upperBound = nextYear * 100 + nextMonth;
+    const rows = await this.prisma.$queryRawUnsafe<{ cnt: number }[]>(`
+      SELECT COUNT(*) AS cnt
+      FROM INFORMATION_SCHEMA.PARTITIONS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'notifications'
+        AND PARTITION_NAME = '${currentPName}'
+    `);
 
-    const pName = `p_${year}_${String(month).padStart(2, "0")}`;
+    // 현재달 파티션이 이미 있으면 일반 달 → 로테이션 불필요
+    if (!rows[0] || Number(rows[0].cnt) > 0) return false;
 
-    try {
-      await this.prisma.$executeRawUnsafe(`
-        ALTER TABLE notifications
-        ADD PARTITION (
-          PARTITION \`${pName}\` VALUES LESS THAN (${upperBound})
-        )
-      `);
-    } catch {
-      // 이미 존재하는 파티션이면 무시
+    // 새 12개월 파티션 생성 (현재달 ~ 현재달+11)
+    for (let i = 0; i < 12; i++) {
+      const target = new Date(now.getFullYear(), now.getMonth() + i, 1);
+      const y = target.getFullYear();
+      const m = target.getMonth() + 1;
+      const nextM = m === 12 ? 1 : m + 1;
+      const nextY = m === 12 ? y + 1 : y;
+      const pName = `p_${y}_${String(m).padStart(2, "0")}`;
+      const upperBound = nextY * 100 + nextM;
+
+      try {
+        await this.prisma.$executeRawUnsafe(`
+          ALTER TABLE notifications ADD PARTITION (
+            PARTITION \`${pName}\` VALUES LESS THAN (${upperBound})
+          )
+        `);
+      } catch {}
     }
+
+    // 이전 12개월 파티션 삭제 (현재달-12 ~ 현재달-1)
+    for (let i = 12; i >= 1; i--) {
+      const target = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const y = target.getFullYear();
+      const m = target.getMonth() + 1;
+
+      try {
+        await this.dropPartition(y, m);
+      } catch {}
+    }
+
+    return true;
   }
 }

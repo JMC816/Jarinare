@@ -37,8 +37,6 @@ model User {
   comments      Comment[]
   commentLikes  CommentLike[]
   boardLikes    BoardLike[]
-  notifications Notification[]
-
   @@index([userId])
   @@map("users")
 }
@@ -110,16 +108,15 @@ model BoardLike {
 }
 
 model Notification {
-  id        BigInt   @id @default(autoincrement())
+  id        BigInt   @default(autoincrement())
   userIdx   BigInt
   type      String   @db.VarChar(20)
   isRead    Boolean  @default(false)
   payload   Json
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userIdx], references: [idx], onDelete: Cascade)
-
-  @@index([userIdx])
+  @@id([id, createdAt])
+  @@index([userIdx, createdAt])
   @@map("notifications")
 }
 

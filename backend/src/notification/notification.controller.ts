@@ -1,7 +1,7 @@
 // @role: widgets/controller
 // @rule: 조회·읽음·삭제·SSE 스트림만 담당, 알림 생성 엔드포인트 없음
-import { Body, Controller, Delete, Get, Patch, Put, Sse } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Delete, Get, Patch, Put, Query, Sse } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
 import { IsBoolean, IsNumber, IsString } from "class-validator";
 import { Observable } from "rxjs";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
@@ -38,8 +38,17 @@ export class NotificationController {
   ) {}
 
   @Get()
-  @ApiOperation({ summary: "내 알림 목록 조회" })
-  getList(@CurrentUser() user: AuthUser) {
+  @ApiOperation({ summary: "내 알림 목록 조회 (year, month 쿼리 파라미터로 월별 조회 가능)" })
+  @ApiQuery({ name: "year", required: false, description: "조회 연도 (예: 2026)" })
+  @ApiQuery({ name: "month", required: false, description: "조회 월 (예: 8)" })
+  getList(
+    @Query("year") year: string | undefined,
+    @Query("month") month: string | undefined,
+    @CurrentUser() user: AuthUser,
+  ) {
+    if (year && month) {
+      return this.notificationService.getListByMonth(Number(year), Number(month), user);
+    }
     return this.notificationService.getList(user);
   }
 

@@ -16,11 +16,13 @@ import { Public } from "../auth/decorators/public.decorator";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import type { AuthUser } from "../auth/interfaces/auth-user.interface";
 import { BoardService } from "./board.service";
+import { BoardDetailQueryDto, BoardListQueryDto } from "./dto/board-query.dto";
 import {
-  BoardDetailQueryDto,
-  BoardListQueryDto,
-} from "./dto/board-query.dto";
-import { CreateBoardDto, UpdateBoardDto, DeleteBoardDto, ToggleBoardLikeDto } from "./dto/board-request.dto";
+  CreateBoardDto,
+  UpdateBoardDto,
+  DeleteBoardDto,
+  ToggleBoardLikeDto,
+} from "./dto/board-request.dto";
 
 @ApiTags("board")
 @Controller("board")
@@ -54,20 +56,14 @@ export class BoardController {
   @ApiBearerAuth()
   @Put()
   @ApiOperation({ summary: "게시물 수정" })
-  update(
-    @Body() dto: UpdateBoardDto,
-    @CurrentUser() user: AuthUser,
-  ) {
+  update(@Body() dto: UpdateBoardDto, @CurrentUser() user: AuthUser) {
     return this.boardService.update(dto.id, dto, user);
   }
 
   @ApiBearerAuth()
   @Delete()
   @ApiOperation({ summary: "게시물 삭제" })
-  remove(
-    @Body() dto: DeleteBoardDto,
-    @CurrentUser() user: AuthUser,
-  ) {
+  remove(@Body() dto: DeleteBoardDto, @CurrentUser() user: AuthUser) {
     return this.boardService.remove(dto.id, dto, user);
   }
 

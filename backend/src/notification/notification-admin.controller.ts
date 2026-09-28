@@ -1,7 +1,19 @@
 // @role: widgets/controller
 // @rule: 알림 파티션 수동 삭제 — 관리자 전용
-import { Controller, Delete, Query } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import {
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+} from "@nestjs/common";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from "@nestjs/swagger";
 import { IsNumber } from "class-validator";
 import { Type } from "class-transformer";
 import { Roles } from "../auth/decorators/roles.decorator";
@@ -35,4 +47,15 @@ export class NotificationAdminController {
     return this.notificationService.dropPartition(query.year, query.month);
   }
 
+  @Roles("admin")
+  @Post("partition/drop-old")
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: "오래된 알림 파티션 자동 삭제 수동 실행 (관리자)",
+    description: "크론과 동일한 로직으로 2달 전 파티션을 즉시 삭제한다.",
+  })
+  async dropOldPartition() {
+    await this.notificationService.dropOldPartition();
+    return { message: "오래된 파티션 삭제가 실행되었습니다." };
+  }
 }

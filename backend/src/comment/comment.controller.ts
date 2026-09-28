@@ -1,6 +1,14 @@
 // @role: widgets/controller
 // @rule: 생성·수정·삭제 모두 JWT 필요
-import { Body, Controller, Delete, Get, Post, Put, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  Query,
+} from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import type { AuthUser } from "../auth/interfaces/auth-user.interface";
@@ -44,7 +52,10 @@ export class CommentController {
 
   @Get("like/me")
   @ApiOperation({ summary: "내가 좋아요한 댓글 ID 목록" })
-  getLikedCommentIds(@Query("boardId") boardId: string, @CurrentUser() user: AuthUser) {
+  getLikedCommentIds(
+    @Query("boardId") boardId: string,
+    @CurrentUser() user: AuthUser,
+  ) {
     return this.commentService.getLikedCommentIds(Number(boardId), user);
   }
 }

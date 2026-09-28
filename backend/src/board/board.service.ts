@@ -13,8 +13,14 @@ import {
   BoardListQueryDto,
   BoardType,
 } from "./dto/board-query.dto";
-import { CreateBoardDto, UpdateBoardDto, DeleteBoardDto, ToggleBoardLikeDto } from "./dto/board-request.dto";
+import {
+  CreateBoardDto,
+  UpdateBoardDto,
+  DeleteBoardDto,
+  ToggleBoardLikeDto,
+} from "./dto/board-request.dto";
 import { NotificationService } from "../notification/notification.service";
+import { shouldNotify } from "../notification/notification.types";
 import type {
   BoardDetailDto,
   BoardDetailFreeDto,
@@ -25,6 +31,13 @@ import type {
   CreateBoardResponseDto,
   MessageResponseDto,
 } from "./dto/board-response.dto";
+
+/**
+ * 인기 게시글/댓글에 좋아요가 몰리면 같은 행의 X 락을 두고 줄을 선다.
+ * 기본 maxWait(2초)로는 줄이 길어질 때 트랜잭션을 시작조차 못 해 500 이 난다.
+ * 좋아요가 조금 느려지는 편이 실패해서 사라지는 것보다 낫다.
+ */
+const LIKE_TX_OPTIONS = { maxWait: 10_000, timeout: 15_000 };
 
 @Injectable()
 export class BoardService {
@@ -140,18 +153,29 @@ export class BoardService {
           parentId: c.parentId !== null ? Number(c.parentId) : null,
           liked: Number(c.liked),
         }));
-        return { ...base, tags: (board.tags as string[]) ?? [], comments } as BoardDetailFreeDto;
+        const freeDto: BoardDetailFreeDto = {
+          ...base,
+          tags: (board.tags as string[]) ?? [],
+          comments,
+        };
+        return freeDto;
       }
-      case BoardType.NOTICE:
-        return base as BoardDetailNoticeDto;
-      case BoardType.EVENT:
-        return base as BoardDetailEventDto;
-      case BoardType.REVIEW:
-        return {
+      case BoardType.NOTICE: {
+        const noticeDto: BoardDetailNoticeDto = base;
+        return noticeDto;
+      }
+      case BoardType.EVENT: {
+        const eventDto: BoardDetailEventDto = base;
+        return eventDto;
+      }
+      case BoardType.REVIEW: {
+        const reviewDto: BoardDetailReviewDto = {
           ...base,
           rating: board.rating ? Number(board.rating) : 0,
           tags: (board.tags as string[]) ?? [],
-        } as BoardDetailReviewDto;
+        };
+        return reviewDto;
+      }
     }
   }
 
@@ -163,7 +187,9 @@ export class BoardService {
       (dto.type === BoardType.NOTICE || dto.type === BoardType.EVENT) &&
       user.role !== "admin"
     ) {
-      throw new ForbiddenException("공지사항/이벤트는 관리자만 작성할 수 있습니다.");
+      throw new ForbiddenException(
+        "공지사항/이벤트는 관리자만 작성할 수 있습니다.",
+      );
     }
 
     const board = await this.prisma.board.create({
@@ -201,7 +227,9 @@ export class BoardService {
     }
 
     if (board.authorIdx !== BigInt(user.idx) && user.role !== "admin") {
-      throw new ForbiddenException("본인이 작성한 게시물만 수정할 수 있습니다.");
+      throw new ForbiddenException(
+        "본인이 작성한 게시물만 수정할 수 있습니다.",
+      );
     }
 
     // imageUrl이 바뀌면 기존 파일 삭제
@@ -216,7 +244,7 @@ export class BoardService {
         ...(dto.content !== undefined && { content: dto.content }),
         ...(dto.imageUrl !== undefined && { imageUrl: dto.imageUrl }),
         ...(dto.tags !== undefined && {
-          tags: dto.tags as unknown as Prisma.InputJsonValue,
+          tags: dto.tags,
         }),
         ...(dto.rating !== undefined && { rating: dto.rating }),
       },
@@ -243,7 +271,9 @@ export class BoardService {
     }
 
     if (board.authorIdx !== BigInt(user.idx) && user.role !== "admin") {
-      throw new ForbiddenException("본인이 작성한 게시물만 삭제할 수 있습니다.");
+      throw new ForbiddenException(
+        "본인이 작성한 게시물만 삭제할 수 있습니다.",
+      );
     }
 
     this.deleteImageFile(board.imageUrl);
@@ -258,7 +288,12 @@ export class BoardService {
   ): Promise<{ liked: number; isLiked: boolean }> {
     const board = await this.prisma.board.findUnique({
       where: { id: BigInt(dto.boardId) },
-      include: { author: { select: { name: true } } },
+      // author 는 알림 수신자 — 수신 설정을 여기서 같이 읽어 왕복을 늘리지 않는다.
+      include: {
+        author: {
+          select: { name: true, notifiChange: true, notifResponse: true },
+        },
+      },
     });
 
     if (!board) {
@@ -279,7 +314,12 @@ export class BoardService {
     });
 
     if (existing) {
+      // 좋아요와 같은 이유로 부모 행을 먼저 잡는다.
       await this.prisma.$transaction([
+        this.prisma.board.update({
+          where: { id: BigInt(dto.boardId) },
+          data: { liked: { decrement: 1 } },
+        }),
         this.prisma.boardLike.delete({
           where: {
             boardId_userIdx: {
@@ -288,47 +328,63 @@ export class BoardService {
             },
           },
         }),
-        this.prisma.board.update({
-          where: { id: BigInt(dto.boardId) },
-          data: { liked: { decrement: 1 } },
-        }),
       ]);
       const updated = await this.prisma.board.findUnique({
         where: { id: BigInt(dto.boardId) },
       });
       return { liked: Number(updated?.liked ?? 0), isLiked: false };
     } else {
-      await this.prisma.$transaction([
-        this.prisma.boardLike.create({
+      // 본인 게시물이 아니고 수신 설정이 켜져 있을 때만 알림
+      const notifyAuthor =
+        board.authorIdx !== BigInt(user.idx) &&
+        shouldNotify("board_like", board.author);
+
+      const liker = notifyAuthor
+        ? await this.prisma.user.findUnique({
+            where: { idx: BigInt(user.idx) },
+            select: { name: true },
+          })
+        : null;
+
+      const result = await this.prisma.$transaction(async (tx) => {
+        // 부모 행(카운터)을 먼저 X 락으로 잡는다.
+        // 자식 INSERT/DELETE 는 FK 때문에 부모 행에 S 락을 걸므로, 자식을 먼저
+        // 처리하면 모든 트랜잭션이 'S 보유 → X 대기' 가 되어 서로 물린다(데드락).
+        const updated = await tx.board.update({
+          where: { id: BigInt(dto.boardId) },
+          data: { liked: { increment: 1 } },
+          select: { liked: true },
+        });
+        await tx.boardLike.create({
           data: {
             boardId: BigInt(dto.boardId),
             userIdx: BigInt(user.idx),
           },
-        }),
-        this.prisma.board.update({
-          where: { id: BigInt(dto.boardId) },
-          data: { liked: { increment: 1 } },
-        }),
-      ]);
-      const updated = await this.prisma.board.findUnique({
-        where: { id: BigInt(dto.boardId) },
-      });
-
-      // 본인 게시물이 아닐 때만 알림
-      if (board.authorIdx !== BigInt(user.idx)) {
-        const liker = await this.prisma.user.findUnique({
-          where: { idx: BigInt(user.idx) },
-          select: { name: true },
         });
-        await this.notificationService.create(board.authorIdx, "board_like", {
-          likerName: liker?.name ?? "",
-          boardId: dto.boardId,
-          boardType: board.type,
-          boardTitle: board.title,
-        });
-      }
 
-      return { liked: Number(updated?.liked ?? 0), isLiked: true };
+        // 좋아요와 같은 트랜잭션에 알림을 남긴다.
+        // 좋아요는 됐는데 알림만 유실되는 상황이 원천적으로 생기지 않는다.
+        const notification = notifyAuthor
+          ? await this.notificationService.createInTx(
+              tx,
+              board.authorIdx,
+              "board_like",
+              {
+                likerName: liker?.name ?? "",
+                boardId: dto.boardId,
+                boardType: board.type,
+                boardTitle: board.title,
+              },
+            )
+          : null;
+
+        return { liked: updated.liked, notification };
+      }, LIKE_TX_OPTIONS);
+
+      // 반드시 커밋 뒤에 — 롤백된 알림을 보내지 않기 위해.
+      this.notificationService.deliver(result.notification);
+
+      return { liked: Number(result.liked), isLiked: true };
     }
   }
 
@@ -348,7 +404,12 @@ export class BoardService {
 
   private deleteImageFile(imageUrl: string | null | undefined): void {
     if (!imageUrl?.startsWith("/uploads/board/")) return;
-    const filePath = join(process.cwd(), "uploads", "board", basename(imageUrl));
+    const filePath = join(
+      process.cwd(),
+      "uploads",
+      "board",
+      basename(imageUrl),
+    );
     if (existsSync(filePath)) unlinkSync(filePath);
   }
 }

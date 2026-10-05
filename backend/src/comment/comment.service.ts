@@ -97,6 +97,7 @@ export class CommentService {
       boardType: board.type,
       boardTitle: board.title,
       commentContent: dto.content.slice(0, 50),
+      path: `/board/${dto.boardId}?type=${board.type.toLowerCase()}`,
     };
 
     // 대댓글: 원댓글 작성자에게 reply 알림
@@ -183,49 +184,19 @@ export class CommentService {
     dto: ToggleCommentLikeDto,
     user: AuthUser,
   ): Promise<{ liked: number; isLiked: boolean }> {
-    const existing = await this.prisma.commentLike.findUnique({
-      where: {
-        commentId_userIdx: {
-          commentId: BigInt(dto.commentId),
-          userIdx: BigInt(user.idx),
-        },
-      },
-    });
+    const result = await this.prisma.$transaction(async (tx) => {
+      // 비관적 락 — 읽는 순간 X락으로 잠금, race condition 방지
+      const rows = await tx.$queryRaw<
+        Array<{
+          id: bigint;
+          liked: bigint;
+          likedById: unknown;
+          authorIdx: bigint;
+          content: string;
+        }>
+      >`SELECT id, liked, likedById, authorIdx, content FROM comments WHERE id = ${BigInt(dto.commentId)} FOR UPDATE`;
 
-    if (existing) {
-      // 좋아요 취소
-      // 좋아요와 같은 이유로 부모 행을 먼저 잡는다.
-      await this.prisma.$transaction([
-        this.prisma.comment.update({
-          where: { id: BigInt(dto.commentId) },
-          data: { liked: { decrement: 1 } },
-        }),
-        this.prisma.commentLike.delete({
-          where: {
-            commentId_userIdx: {
-              commentId: BigInt(dto.commentId),
-              userIdx: BigInt(user.idx),
-            },
-          },
-        }),
-      ]);
-      const comment = await this.prisma.comment.findUnique({
-        where: { id: BigInt(dto.commentId) },
-      });
-      return { liked: Number(comment?.liked ?? 0), isLiked: false };
-    } else {
-      // 좋아요
-      const comment = await this.prisma.comment.findUnique({
-        where: { id: BigInt(dto.commentId) },
-        select: {
-          authorIdx: true,
-          content: true,
-          // 알림 수신자의 설정을 같이 읽어 왕복을 늘리지 않는다.
-          author: { select: { notifiChange: true, notifResponse: true } },
-          board: { select: { id: true, type: true, title: true } },
-        },
-      });
-
+      const comment = rows[0];
       if (!comment) {
         throw new AppException(
           ErrorCode.COMMENT_NOT_FOUND,
@@ -234,68 +205,109 @@ export class CommentService {
         );
       }
 
-      // 본인 댓글이 아니고 수신 설정이 켜져 있을 때만 알림
-      const notifyAuthor =
-        comment.authorIdx !== BigInt(user.idx) &&
-        shouldNotify("comment_like", comment.author);
+      const likedById = (
+        typeof comment.likedById === "string"
+          ? JSON.parse(comment.likedById)
+          : comment.likedById
+      ) as number[];
 
-      const liker = notifyAuthor
-        ? await this.prisma.user.findUnique({
-            where: { idx: BigInt(user.idx) },
-            select: { name: true },
-          })
-        : null;
+      const isLiked = likedById.includes(user.idx);
 
-      const result = await this.prisma.$transaction(async (tx) => {
-        // 부모 행(카운터)을 먼저 X 락으로 잡는다.
-        // 자식 INSERT/DELETE 는 FK 때문에 부모 행에 S 락을 걸므로, 자식을 먼저
-        // 처리하면 모든 트랜잭션이 'S 보유 → X 대기' 가 되어 서로 물린다(데드락).
-        const updated = await tx.comment.update({
+      if (isLiked) {
+        // 좋아요 취소
+        const newLikedById = likedById.filter((idx) => idx !== user.idx);
+        await tx.comment.update({
           where: { id: BigInt(dto.commentId) },
-          data: { liked: { increment: 1 } },
-          select: { liked: true },
-        });
-        await tx.commentLike.create({
           data: {
-            commentId: BigInt(dto.commentId),
-            userIdx: BigInt(user.idx),
+            liked: { decrement: 1 },
+            likedById: newLikedById,
+          },
+        });
+        return {
+          liked: Number(comment.liked) - 1,
+          isLiked: false,
+          notification: null,
+        };
+      } else {
+        // 좋아요
+        const newLikedById = [...likedById, user.idx];
+
+        // 알림 여부 판단을 위해 author 설정 조회
+        const commentAuthor = await tx.user.findUnique({
+          where: { idx: comment.authorIdx },
+          select: { notifiChange: true, notifResponse: true },
+        });
+
+        const notifyAuthor =
+          comment.authorIdx !== BigInt(user.idx) &&
+          shouldNotify("comment_like", commentAuthor ?? { notifiChange: false, notifResponse: false });
+
+        const [boardRow, liker] = await Promise.all([
+          tx.$queryRaw<Array<{ id: bigint; type: string; title: string }>>`
+            SELECT id, type, title FROM boards
+            WHERE id = (SELECT boardId FROM comments WHERE id = ${BigInt(dto.commentId)})
+          `,
+          notifyAuthor
+            ? tx.user.findUnique({
+                where: { idx: BigInt(user.idx) },
+                select: { name: true },
+              })
+            : Promise.resolve(null),
+        ]);
+
+        const board = boardRow[0];
+
+        await tx.comment.update({
+          where: { id: BigInt(dto.commentId) },
+          data: {
+            liked: { increment: 1 },
+            likedById: newLikedById,
           },
         });
 
-        // 좋아요와 같은 트랜잭션에 알림을 남긴다.
-        const notification = notifyAuthor
-          ? await this.notificationService.createInTx(
-              tx,
-              comment.authorIdx,
-              "comment_like",
-              {
-                likerName: liker?.name ?? "",
-                boardId: Number(comment.board.id),
-                boardType: comment.board.type,
-                boardTitle: comment.board.title,
-                commentContent: comment.content.slice(0, 50),
-              },
-            )
-          : null;
+        const notification =
+          notifyAuthor && board
+            ? await this.notificationService.createInTx(
+                tx,
+                comment.authorIdx,
+                "comment_like",
+                {
+                  likerName: liker?.name ?? "",
+                  boardId: Number(board.id),
+                  boardType: board.type,
+                  boardTitle: board.title,
+                  commentContent: comment.content.slice(0, 50),
+                  path: `/board/${Number(board.id)}?type=${board.type.toLowerCase()}`,
+                },
+              )
+            : null;
 
-        return { liked: updated.liked, notification };
-      }, LIKE_TX_OPTIONS);
+        return {
+          liked: Number(comment.liked) + 1,
+          isLiked: true,
+          notification,
+        };
+      }
+    }, LIKE_TX_OPTIONS);
 
-      // 반드시 커밋 뒤에 — 롤백된 알림을 보내지 않기 위해.
-      this.notificationService.deliver(result.notification);
-
-      return { liked: Number(result.liked), isLiked: true };
-    }
+    this.notificationService.deliver(result.notification);
+    return { liked: result.liked, isLiked: result.isLiked };
   }
 
   async getLikedCommentIds(boardId: number, user: AuthUser): Promise<number[]> {
-    const likes = await this.prisma.commentLike.findMany({
-      where: {
-        userIdx: BigInt(user.idx),
-        comment: { boardId: BigInt(boardId) },
-      },
-      select: { commentId: true },
+    const comments = await this.prisma.comment.findMany({
+      where: { boardId: BigInt(boardId) },
+      select: { id: true, likedById: true },
     });
-    return likes.map((l) => Number(l.commentId));
+    return comments
+      .filter((c) => {
+        const likedById = (
+          typeof c.likedById === "string"
+            ? JSON.parse(c.likedById)
+            : c.likedById
+        ) as number[];
+        return likedById.includes(user.idx);
+      })
+      .map((c) => Number(c.id));
   }
 }

@@ -318,7 +318,6 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   boards?: Prisma.BoardListRelationFilter
   comments?: Prisma.CommentListRelationFilter
-  commentLikes?: Prisma.CommentLikeListRelationFilter
   boardLikes?: Prisma.BoardLikeListRelationFilter
 }
 
@@ -341,7 +340,6 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   boards?: Prisma.BoardOrderByRelationAggregateInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
-  commentLikes?: Prisma.CommentLikeOrderByRelationAggregateInput
   boardLikes?: Prisma.BoardLikeOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
@@ -368,7 +366,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   boards?: Prisma.BoardListRelationFilter
   comments?: Prisma.CommentListRelationFilter
-  commentLikes?: Prisma.CommentLikeListRelationFilter
   boardLikes?: Prisma.BoardLikeListRelationFilter
 }, "idx" | "email" | "refreshToken">
 
@@ -437,7 +434,6 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
 }
 
@@ -460,7 +456,6 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -483,7 +478,6 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
 }
 
@@ -506,7 +500,6 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -721,20 +714,6 @@ export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommentsInput, Prisma.UserUpdateWithoutCommentsInput>, Prisma.UserUncheckedUpdateWithoutCommentsInput>
 }
 
-export type UserCreateNestedOneWithoutCommentLikesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCommentLikesInput, Prisma.UserUncheckedCreateWithoutCommentLikesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommentLikesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutCommentLikesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCommentLikesInput, Prisma.UserUncheckedCreateWithoutCommentLikesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCommentLikesInput
-  upsert?: Prisma.UserUpsertWithoutCommentLikesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommentLikesInput, Prisma.UserUpdateWithoutCommentLikesInput>, Prisma.UserUncheckedUpdateWithoutCommentLikesInput>
-}
-
 export type UserCreateNestedOneWithoutBoardLikesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutBoardLikesInput, Prisma.UserUncheckedCreateWithoutBoardLikesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutBoardLikesInput
@@ -767,7 +746,6 @@ export type UserCreateWithoutBoardsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
 }
 
@@ -789,7 +767,6 @@ export type UserUncheckedCreateWithoutBoardsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -827,7 +804,6 @@ export type UserUpdateWithoutBoardsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
 }
 
@@ -849,7 +825,6 @@ export type UserUncheckedUpdateWithoutBoardsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -871,7 +846,6 @@ export type UserCreateWithoutCommentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
-  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
 }
 
@@ -893,7 +867,6 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
-  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -931,7 +904,6 @@ export type UserUpdateWithoutCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
-  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
 }
 
@@ -953,111 +925,6 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
-  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
-  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutCommentLikesInput = {
-  idx?: bigint | number
-  userId: string
-  name?: string
-  email?: string | null
-  password?: string | null
-  age?: number | null
-  gender?: string | null
-  seatChageCount?: number
-  point?: number
-  notifiChange?: boolean
-  notifResponse?: boolean
-  role?: string
-  refreshToken?: string | null
-  refreshTokenExpiresAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
-  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutCommentLikesInput = {
-  idx?: bigint | number
-  userId: string
-  name?: string
-  email?: string | null
-  password?: string | null
-  age?: number | null
-  gender?: string | null
-  seatChageCount?: number
-  point?: number
-  notifiChange?: boolean
-  notifResponse?: boolean
-  role?: string
-  refreshToken?: string | null
-  refreshTokenExpiresAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
-  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutCommentLikesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCommentLikesInput, Prisma.UserUncheckedCreateWithoutCommentLikesInput>
-}
-
-export type UserUpsertWithoutCommentLikesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCommentLikesInput, Prisma.UserUncheckedUpdateWithoutCommentLikesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCommentLikesInput, Prisma.UserUncheckedCreateWithoutCommentLikesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutCommentLikesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCommentLikesInput, Prisma.UserUncheckedUpdateWithoutCommentLikesInput>
-}
-
-export type UserUpdateWithoutCommentLikesInput = {
-  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
-  point?: Prisma.IntFieldUpdateOperationsInput | number
-  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
-  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutCommentLikesInput = {
-  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
-  point?: Prisma.IntFieldUpdateOperationsInput | number
-  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
-  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1080,7 +947,6 @@ export type UserCreateWithoutBoardLikesInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
-  commentLikes?: Prisma.CommentLikeCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBoardLikesInput = {
@@ -1102,7 +968,6 @@ export type UserUncheckedCreateWithoutBoardLikesInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
-  commentLikes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBoardLikesInput = {
@@ -1140,7 +1005,6 @@ export type UserUpdateWithoutBoardLikesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
-  commentLikes?: Prisma.CommentLikeUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardLikesInput = {
@@ -1162,7 +1026,6 @@ export type UserUncheckedUpdateWithoutBoardLikesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
-  commentLikes?: Prisma.CommentLikeUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1173,14 +1036,12 @@ export type UserUncheckedUpdateWithoutBoardLikesInput = {
 export type UserCountOutputType = {
   boards: number
   comments: number
-  commentLikes: number
   boardLikes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   boards?: boolean | UserCountOutputTypeCountBoardsArgs
   comments?: boolean | UserCountOutputTypeCountCommentsArgs
-  commentLikes?: boolean | UserCountOutputTypeCountCommentLikesArgs
   boardLikes?: boolean | UserCountOutputTypeCountBoardLikesArgs
 }
 
@@ -1211,13 +1072,6 @@ export type UserCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountCommentLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CommentLikeWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
 export type UserCountOutputTypeCountBoardLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BoardLikeWhereInput
 }
@@ -1242,7 +1096,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
-  commentLikes?: boolean | Prisma.User$commentLikesArgs<ExtArgs>
   boardLikes?: boolean | Prisma.User$boardLikesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1272,7 +1125,6 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
-  commentLikes?: boolean | Prisma.User$commentLikesArgs<ExtArgs>
   boardLikes?: boolean | Prisma.User$boardLikesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1282,7 +1134,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     boards: Prisma.$BoardPayload<ExtArgs>[]
     comments: Prisma.$CommentPayload<ExtArgs>[]
-    commentLikes: Prisma.$CommentLikePayload<ExtArgs>[]
     boardLikes: Prisma.$BoardLikePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1644,7 +1495,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   boards<T extends Prisma.User$boardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.User$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  commentLikes<T extends Prisma.User$commentLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   boardLikes<T extends Prisma.User$boardLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2084,30 +1934,6 @@ export type User$commentsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.CommentScalarFieldEnum | Prisma.CommentScalarFieldEnum[]
-}
-
-/**
- * User.commentLikes
- */
-export type User$commentLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CommentLike
-   */
-  select?: Prisma.CommentLikeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CommentLike
-   */
-  omit?: Prisma.CommentLikeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CommentLikeInclude<ExtArgs> | null
-  where?: Prisma.CommentLikeWhereInput
-  orderBy?: Prisma.CommentLikeOrderByWithRelationInput | Prisma.CommentLikeOrderByWithRelationInput[]
-  cursor?: Prisma.CommentLikeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CommentLikeScalarFieldEnum | Prisma.CommentLikeScalarFieldEnum[]
 }
 
 /**

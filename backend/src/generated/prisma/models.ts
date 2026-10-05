@@ -11,7 +11,6 @@
 export type * from './models/User.js'
 export type * from './models/Board.js'
 export type * from './models/Comment.js'
-export type * from './models/CommentLike.js'
 export type * from './models/BoardLike.js'
 export type * from './models/Notification.js'
 export type * from './models/Station.js'

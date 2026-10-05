@@ -54,7 +54,6 @@ export const ModelName = {
   User: 'User',
   Board: 'Board',
   Comment: 'Comment',
-  CommentLike: 'CommentLike',
   BoardLike: 'BoardLike',
   Notification: 'Notification',
   Station: 'Station',
@@ -126,20 +125,12 @@ export const CommentScalarFieldEnum = {
   content: 'content',
   parentId: 'parentId',
   liked: 'liked',
+  likedById: 'likedById',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
-
-
-export const CommentLikeScalarFieldEnum = {
-  commentId: 'commentId',
-  userIdx: 'userIdx',
-  createdAt: 'createdAt'
-} as const
-
-export type CommentLikeScalarFieldEnum = (typeof CommentLikeScalarFieldEnum)[keyof typeof CommentLikeScalarFieldEnum]
 
 
 export const BoardLikeScalarFieldEnum = {

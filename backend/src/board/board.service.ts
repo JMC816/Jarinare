@@ -374,6 +374,7 @@ export class BoardService {
                 boardId: dto.boardId,
                 boardType: board.type,
                 boardTitle: board.title,
+                path: `/board/${dto.boardId}?type=${board.type.toLowerCase()}`,
               },
             )
           : null;

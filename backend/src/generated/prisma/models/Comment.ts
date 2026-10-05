@@ -71,6 +71,7 @@ export type CommentCountAggregateOutputType = {
   content: number
   parentId: number
   liked: number
+  likedById: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -122,6 +123,7 @@ export type CommentCountAggregateInputType = {
   content?: true
   parentId?: true
   liked?: true
+  likedById?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -220,6 +222,7 @@ export type CommentGroupByOutputType = {
   content: string
   parentId: bigint | null
   liked: bigint
+  likedById: runtime.JsonValue
   createdAt: Date
   updatedAt: Date
   _count: CommentCountAggregateOutputType | null
@@ -254,11 +257,11 @@ export type CommentWhereInput = {
   content?: Prisma.StringFilter<"Comment"> | string
   parentId?: Prisma.BigIntNullableFilter<"Comment"> | bigint | number | null
   liked?: Prisma.BigIntFilter<"Comment"> | bigint | number
+  likedById?: Prisma.JsonFilter<"Comment">
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   board?: Prisma.XOR<Prisma.BoardScalarRelationFilter, Prisma.BoardWhereInput>
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  likes?: Prisma.CommentLikeListRelationFilter
 }
 
 export type CommentOrderByWithRelationInput = {
@@ -268,11 +271,11 @@ export type CommentOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
   liked?: Prisma.SortOrder
+  likedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   board?: Prisma.BoardOrderByWithRelationInput
   author?: Prisma.UserOrderByWithRelationInput
-  likes?: Prisma.CommentLikeOrderByRelationAggregateInput
   _relevance?: Prisma.CommentOrderByRelevanceInput
 }
 
@@ -286,11 +289,11 @@ export type CommentWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"Comment"> | string
   parentId?: Prisma.BigIntNullableFilter<"Comment"> | bigint | number | null
   liked?: Prisma.BigIntFilter<"Comment"> | bigint | number
+  likedById?: Prisma.JsonFilter<"Comment">
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   board?: Prisma.XOR<Prisma.BoardScalarRelationFilter, Prisma.BoardWhereInput>
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  likes?: Prisma.CommentLikeListRelationFilter
 }, "id">
 
 export type CommentOrderByWithAggregationInput = {
@@ -300,6 +303,7 @@ export type CommentOrderByWithAggregationInput = {
   content?: Prisma.SortOrder
   parentId?: Prisma.SortOrderInput | Prisma.SortOrder
   liked?: Prisma.SortOrder
+  likedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CommentCountOrderByAggregateInput
@@ -319,6 +323,7 @@ export type CommentScalarWhereWithAggregatesInput = {
   content?: Prisma.StringWithAggregatesFilter<"Comment"> | string
   parentId?: Prisma.BigIntNullableWithAggregatesFilter<"Comment"> | bigint | number | null
   liked?: Prisma.BigIntWithAggregatesFilter<"Comment"> | bigint | number
+  likedById?: Prisma.JsonWithAggregatesFilter<"Comment">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Comment"> | Date | string
 }
@@ -328,11 +333,11 @@ export type CommentCreateInput = {
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   board: Prisma.BoardCreateNestedOneWithoutCommentsInput
   author: Prisma.UserCreateNestedOneWithoutCommentsInput
-  likes?: Prisma.CommentLikeCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUncheckedCreateInput = {
@@ -342,9 +347,9 @@ export type CommentUncheckedCreateInput = {
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  likes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUpdateInput = {
@@ -352,11 +357,11 @@ export type CommentUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   board?: Prisma.BoardUpdateOneRequiredWithoutCommentsNestedInput
   author?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
-  likes?: Prisma.CommentLikeUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateInput = {
@@ -366,9 +371,9 @@ export type CommentUncheckedUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  likes?: Prisma.CommentLikeUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentCreateManyInput = {
@@ -378,6 +383,7 @@ export type CommentCreateManyInput = {
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -387,6 +393,7 @@ export type CommentUpdateManyMutationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -398,6 +405,7 @@ export type CommentUncheckedUpdateManyInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -425,6 +433,7 @@ export type CommentCountOrderByAggregateInput = {
   content?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
   liked?: Prisma.SortOrder
+  likedById?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -465,11 +474,6 @@ export type CommentSumOrderByAggregateInput = {
   authorIdx?: Prisma.SortOrder
   parentId?: Prisma.SortOrder
   liked?: Prisma.SortOrder
-}
-
-export type CommentScalarRelationFilter = {
-  is?: Prisma.CommentWhereInput
-  isNot?: Prisma.CommentWhereInput
 }
 
 export type CommentCreateNestedManyWithoutAuthorInput = {
@@ -564,29 +568,15 @@ export type NullableBigIntFieldUpdateOperationsInput = {
   divide?: bigint | number
 }
 
-export type CommentCreateNestedOneWithoutLikesInput = {
-  create?: Prisma.XOR<Prisma.CommentCreateWithoutLikesInput, Prisma.CommentUncheckedCreateWithoutLikesInput>
-  connectOrCreate?: Prisma.CommentCreateOrConnectWithoutLikesInput
-  connect?: Prisma.CommentWhereUniqueInput
-}
-
-export type CommentUpdateOneRequiredWithoutLikesNestedInput = {
-  create?: Prisma.XOR<Prisma.CommentCreateWithoutLikesInput, Prisma.CommentUncheckedCreateWithoutLikesInput>
-  connectOrCreate?: Prisma.CommentCreateOrConnectWithoutLikesInput
-  upsert?: Prisma.CommentUpsertWithoutLikesInput
-  connect?: Prisma.CommentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CommentUpdateToOneWithWhereWithoutLikesInput, Prisma.CommentUpdateWithoutLikesInput>, Prisma.CommentUncheckedUpdateWithoutLikesInput>
-}
-
 export type CommentCreateWithoutAuthorInput = {
   id?: bigint | number
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   board: Prisma.BoardCreateNestedOneWithoutCommentsInput
-  likes?: Prisma.CommentLikeCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUncheckedCreateWithoutAuthorInput = {
@@ -595,9 +585,9 @@ export type CommentUncheckedCreateWithoutAuthorInput = {
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  likes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentCreateOrConnectWithoutAuthorInput = {
@@ -636,6 +626,7 @@ export type CommentScalarWhereInput = {
   content?: Prisma.StringFilter<"Comment"> | string
   parentId?: Prisma.BigIntNullableFilter<"Comment"> | bigint | number | null
   liked?: Prisma.BigIntFilter<"Comment"> | bigint | number
+  likedById?: Prisma.JsonFilter<"Comment">
   createdAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Comment"> | Date | string
 }
@@ -645,10 +636,10 @@ export type CommentCreateWithoutBoardInput = {
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutCommentsInput
-  likes?: Prisma.CommentLikeCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUncheckedCreateWithoutBoardInput = {
@@ -657,9 +648,9 @@ export type CommentUncheckedCreateWithoutBoardInput = {
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  likes?: Prisma.CommentLikeUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentCreateOrConnectWithoutBoardInput = {
@@ -688,72 +679,13 @@ export type CommentUpdateManyWithWhereWithoutBoardInput = {
   data: Prisma.XOR<Prisma.CommentUpdateManyMutationInput, Prisma.CommentUncheckedUpdateManyWithoutBoardInput>
 }
 
-export type CommentCreateWithoutLikesInput = {
-  id?: bigint | number
-  content: string
-  parentId?: bigint | number | null
-  liked?: bigint | number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  board: Prisma.BoardCreateNestedOneWithoutCommentsInput
-  author: Prisma.UserCreateNestedOneWithoutCommentsInput
-}
-
-export type CommentUncheckedCreateWithoutLikesInput = {
-  id?: bigint | number
-  boardId: bigint | number
-  authorIdx: bigint | number
-  content: string
-  parentId?: bigint | number | null
-  liked?: bigint | number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type CommentCreateOrConnectWithoutLikesInput = {
-  where: Prisma.CommentWhereUniqueInput
-  create: Prisma.XOR<Prisma.CommentCreateWithoutLikesInput, Prisma.CommentUncheckedCreateWithoutLikesInput>
-}
-
-export type CommentUpsertWithoutLikesInput = {
-  update: Prisma.XOR<Prisma.CommentUpdateWithoutLikesInput, Prisma.CommentUncheckedUpdateWithoutLikesInput>
-  create: Prisma.XOR<Prisma.CommentCreateWithoutLikesInput, Prisma.CommentUncheckedCreateWithoutLikesInput>
-  where?: Prisma.CommentWhereInput
-}
-
-export type CommentUpdateToOneWithWhereWithoutLikesInput = {
-  where?: Prisma.CommentWhereInput
-  data: Prisma.XOR<Prisma.CommentUpdateWithoutLikesInput, Prisma.CommentUncheckedUpdateWithoutLikesInput>
-}
-
-export type CommentUpdateWithoutLikesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  content?: Prisma.StringFieldUpdateOperationsInput | string
-  parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  board?: Prisma.BoardUpdateOneRequiredWithoutCommentsNestedInput
-  author?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
-}
-
-export type CommentUncheckedUpdateWithoutLikesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  boardId?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  authorIdx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  content?: Prisma.StringFieldUpdateOperationsInput | string
-  parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-  liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 export type CommentCreateManyAuthorInput = {
   id?: bigint | number
   boardId: bigint | number
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -763,10 +695,10 @@ export type CommentUpdateWithoutAuthorInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   board?: Prisma.BoardUpdateOneRequiredWithoutCommentsNestedInput
-  likes?: Prisma.CommentLikeUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateWithoutAuthorInput = {
@@ -775,9 +707,9 @@ export type CommentUncheckedUpdateWithoutAuthorInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  likes?: Prisma.CommentLikeUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateManyWithoutAuthorInput = {
@@ -786,6 +718,7 @@ export type CommentUncheckedUpdateManyWithoutAuthorInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -796,6 +729,7 @@ export type CommentCreateManyBoardInput = {
   content: string
   parentId?: bigint | number | null
   liked?: bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -805,10 +739,10 @@ export type CommentUpdateWithoutBoardInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
-  likes?: Prisma.CommentLikeUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateWithoutBoardInput = {
@@ -817,9 +751,9 @@ export type CommentUncheckedUpdateWithoutBoardInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  likes?: Prisma.CommentLikeUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateManyWithoutBoardInput = {
@@ -828,39 +762,11 @@ export type CommentUncheckedUpdateManyWithoutBoardInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   parentId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  likedById?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-
-/**
- * Count Type CommentCountOutputType
- */
-
-export type CommentCountOutputType = {
-  likes: number
-}
-
-export type CommentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  likes?: boolean | CommentCountOutputTypeCountLikesArgs
-}
-
-/**
- * CommentCountOutputType without action
- */
-export type CommentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CommentCountOutputType
-   */
-  select?: Prisma.CommentCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * CommentCountOutputType without action
- */
-export type CommentCountOutputTypeCountLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CommentLikeWhereInput
-}
 
 
 export type CommentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -870,12 +776,11 @@ export type CommentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   content?: boolean
   parentId?: boolean
   liked?: boolean
+  likedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  likes?: boolean | Prisma.Comment$likesArgs<ExtArgs>
-  _count?: boolean | Prisma.CommentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["comment"]>
 
 
@@ -887,16 +792,15 @@ export type CommentSelectScalar = {
   content?: boolean
   parentId?: boolean
   liked?: boolean
+  likedById?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "boardId" | "authorIdx" | "content" | "parentId" | "liked" | "createdAt" | "updatedAt", ExtArgs["result"]["comment"]>
+export type CommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "boardId" | "authorIdx" | "content" | "parentId" | "liked" | "likedById" | "createdAt" | "updatedAt", ExtArgs["result"]["comment"]>
 export type CommentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   board?: boolean | Prisma.BoardDefaultArgs<ExtArgs>
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  likes?: boolean | Prisma.Comment$likesArgs<ExtArgs>
-  _count?: boolean | Prisma.CommentCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $CommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -904,7 +808,6 @@ export type $CommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     board: Prisma.$BoardPayload<ExtArgs>
     author: Prisma.$UserPayload<ExtArgs>
-    likes: Prisma.$CommentLikePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
@@ -913,6 +816,7 @@ export type $CommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     content: string
     parentId: bigint | null
     liked: bigint
+    likedById: runtime.JsonValue
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["comment"]>
@@ -1257,7 +1161,6 @@ export interface Prisma__CommentClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   board<T extends Prisma.BoardDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BoardDefaultArgs<ExtArgs>>): Prisma.Prisma__BoardClient<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   author<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  likes<T extends Prisma.Comment$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Comment$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1293,6 +1196,7 @@ export interface CommentFieldRefs {
   readonly content: Prisma.FieldRef<"Comment", 'String'>
   readonly parentId: Prisma.FieldRef<"Comment", 'BigInt'>
   readonly liked: Prisma.FieldRef<"Comment", 'BigInt'>
+  readonly likedById: Prisma.FieldRef<"Comment", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Comment", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Comment", 'DateTime'>
 }
@@ -1640,30 +1544,6 @@ export type CommentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Comments to delete.
    */
   limit?: number
-}
-
-/**
- * Comment.likes
- */
-export type Comment$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CommentLike
-   */
-  select?: Prisma.CommentLikeSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the CommentLike
-   */
-  omit?: Prisma.CommentLikeOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CommentLikeInclude<ExtArgs> | null
-  where?: Prisma.CommentLikeWhereInput
-  orderBy?: Prisma.CommentLikeOrderByWithRelationInput | Prisma.CommentLikeOrderByWithRelationInput[]
-  cursor?: Prisma.CommentLikeWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.CommentLikeScalarFieldEnum | Prisma.CommentLikeScalarFieldEnum[]
 }
 
 /**

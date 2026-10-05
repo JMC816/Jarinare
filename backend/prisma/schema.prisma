@@ -35,7 +35,6 @@ model User {
 
   boards        Board[]
   comments      Comment[]
-  commentLikes  CommentLike[]
   boardLikes    BoardLike[]
   @@index([userId])
   @@map("users")
@@ -65,34 +64,22 @@ model Board {
 }
 
 model Comment {
-  id        BigInt   @id @default(autoincrement())
-  boardId   BigInt
-  authorIdx BigInt
-  content   String   @db.Text
-  parentId  BigInt?
-  liked     BigInt   @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          BigInt   @id @default(autoincrement())
+  boardId     BigInt
+  authorIdx   BigInt
+  content     String   @db.Text
+  parentId    BigInt?
+  liked       BigInt   @default(0)
+  likedById   Json     @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  board  Board         @relation(fields: [boardId], references: [id], onDelete: Cascade)
-  author User          @relation(fields: [authorIdx], references: [idx])
-  likes  CommentLike[]
+  board  Board   @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  author User    @relation(fields: [authorIdx], references: [idx])
 
   @@index([boardId])
   @@index([parentId])
   @@map("comments")
-}
-
-model CommentLike {
-  commentId BigInt
-  userIdx   BigInt
-  createdAt DateTime @default(now())
-
-  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userIdx], references: [idx])
-
-  @@unique([commentId, userIdx])
-  @@map("comment_likes")
 }
 
 model BoardLike {

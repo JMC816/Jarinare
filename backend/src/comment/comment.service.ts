@@ -240,7 +240,10 @@ export class CommentService {
 
         const notifyAuthor =
           comment.authorIdx !== BigInt(user.idx) &&
-          shouldNotify("comment_like", commentAuthor ?? { notifiChange: false, notifResponse: false });
+          shouldNotify(
+            "comment_like",
+            commentAuthor ?? { notifiChange: false, notifResponse: false },
+          );
 
         const [boardRow, liker] = await Promise.all([
           tx.$queryRaw<Array<{ id: bigint; type: string; title: string }>>`
@@ -303,7 +306,7 @@ export class CommentService {
       .filter((c) => {
         const likedById = (
           typeof c.likedById === "string"
-            ? JSON.parse(c.likedById)
+            ? JSON.parse(c.likedById as string)
             : c.likedById
         ) as number[];
         return likedById.includes(user.idx);

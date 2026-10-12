@@ -319,6 +319,12 @@ export type UserWhereInput = {
   boards?: Prisma.BoardListRelationFilter
   comments?: Prisma.CommentListRelationFilter
   boardLikes?: Prisma.BoardLikeListRelationFilter
+  seatHolds?: Prisma.SeatHoldListRelationFilter
+  reservations?: Prisma.ReservationListRelationFilter
+  seatChangeRequests?: Prisma.SeatChangeRequestListRelationFilter
+  seatChangeReceived?: Prisma.SeatChangeRequestListRelationFilter
+  pointHistories?: Prisma.PointHistoryListRelationFilter
+  orderHistories?: Prisma.OrderHistoryListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -341,6 +347,12 @@ export type UserOrderByWithRelationInput = {
   boards?: Prisma.BoardOrderByRelationAggregateInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
   boardLikes?: Prisma.BoardLikeOrderByRelationAggregateInput
+  seatHolds?: Prisma.SeatHoldOrderByRelationAggregateInput
+  reservations?: Prisma.ReservationOrderByRelationAggregateInput
+  seatChangeRequests?: Prisma.SeatChangeRequestOrderByRelationAggregateInput
+  seatChangeReceived?: Prisma.SeatChangeRequestOrderByRelationAggregateInput
+  pointHistories?: Prisma.PointHistoryOrderByRelationAggregateInput
+  orderHistories?: Prisma.OrderHistoryOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
 
@@ -367,6 +379,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   boards?: Prisma.BoardListRelationFilter
   comments?: Prisma.CommentListRelationFilter
   boardLikes?: Prisma.BoardLikeListRelationFilter
+  seatHolds?: Prisma.SeatHoldListRelationFilter
+  reservations?: Prisma.ReservationListRelationFilter
+  seatChangeRequests?: Prisma.SeatChangeRequestListRelationFilter
+  seatChangeReceived?: Prisma.SeatChangeRequestListRelationFilter
+  pointHistories?: Prisma.PointHistoryListRelationFilter
+  orderHistories?: Prisma.OrderHistoryListRelationFilter
 }, "idx" | "email" | "refreshToken">
 
 export type UserOrderByWithAggregationInput = {
@@ -435,6 +453,12 @@ export type UserCreateInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -457,6 +481,12 @@ export type UserUncheckedCreateInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -479,6 +509,12 @@ export type UserUpdateInput = {
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -501,6 +537,12 @@ export type UserUncheckedUpdateInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -728,6 +770,90 @@ export type UserUpdateOneRequiredWithoutBoardLikesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBoardLikesInput, Prisma.UserUpdateWithoutBoardLikesInput>, Prisma.UserUncheckedUpdateWithoutBoardLikesInput>
 }
 
+export type UserCreateNestedOneWithoutSeatHoldsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSeatHoldsInput, Prisma.UserUncheckedCreateWithoutSeatHoldsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSeatHoldsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSeatHoldsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSeatHoldsInput, Prisma.UserUncheckedCreateWithoutSeatHoldsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSeatHoldsInput
+  upsert?: Prisma.UserUpsertWithoutSeatHoldsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSeatHoldsInput, Prisma.UserUpdateWithoutSeatHoldsInput>, Prisma.UserUncheckedUpdateWithoutSeatHoldsInput>
+}
+
+export type UserCreateNestedOneWithoutReservationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReservationsInput, Prisma.UserUncheckedCreateWithoutReservationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReservationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutReservationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutReservationsInput, Prisma.UserUncheckedCreateWithoutReservationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutReservationsInput
+  upsert?: Prisma.UserUpsertWithoutReservationsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutReservationsInput, Prisma.UserUpdateWithoutReservationsInput>, Prisma.UserUncheckedUpdateWithoutReservationsInput>
+}
+
+export type UserCreateNestedOneWithoutSeatChangeRequestsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSeatChangeRequestsInput, Prisma.UserUncheckedCreateWithoutSeatChangeRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSeatChangeRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutSeatChangeReceivedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSeatChangeReceivedInput, Prisma.UserUncheckedCreateWithoutSeatChangeReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSeatChangeReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSeatChangeRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSeatChangeRequestsInput, Prisma.UserUncheckedCreateWithoutSeatChangeRequestsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSeatChangeRequestsInput
+  upsert?: Prisma.UserUpsertWithoutSeatChangeRequestsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSeatChangeRequestsInput, Prisma.UserUpdateWithoutSeatChangeRequestsInput>, Prisma.UserUncheckedUpdateWithoutSeatChangeRequestsInput>
+}
+
+export type UserUpdateOneRequiredWithoutSeatChangeReceivedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSeatChangeReceivedInput, Prisma.UserUncheckedCreateWithoutSeatChangeReceivedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSeatChangeReceivedInput
+  upsert?: Prisma.UserUpsertWithoutSeatChangeReceivedInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSeatChangeReceivedInput, Prisma.UserUpdateWithoutSeatChangeReceivedInput>, Prisma.UserUncheckedUpdateWithoutSeatChangeReceivedInput>
+}
+
+export type UserCreateNestedOneWithoutPointHistoriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPointHistoriesInput, Prisma.UserUncheckedCreateWithoutPointHistoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPointHistoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPointHistoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPointHistoriesInput, Prisma.UserUncheckedCreateWithoutPointHistoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPointHistoriesInput
+  upsert?: Prisma.UserUpsertWithoutPointHistoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPointHistoriesInput, Prisma.UserUpdateWithoutPointHistoriesInput>, Prisma.UserUncheckedUpdateWithoutPointHistoriesInput>
+}
+
+export type UserCreateNestedOneWithoutOrderHistoriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrderHistoriesInput, Prisma.UserUncheckedCreateWithoutOrderHistoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrderHistoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutOrderHistoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOrderHistoriesInput, Prisma.UserUncheckedCreateWithoutOrderHistoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOrderHistoriesInput
+  upsert?: Prisma.UserUpsertWithoutOrderHistoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrderHistoriesInput, Prisma.UserUpdateWithoutOrderHistoriesInput>, Prisma.UserUncheckedUpdateWithoutOrderHistoriesInput>
+}
+
 export type UserCreateWithoutBoardsInput = {
   idx?: bigint | number
   userId: string
@@ -747,6 +873,12 @@ export type UserCreateWithoutBoardsInput = {
   updatedAt?: Date | string
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBoardsInput = {
@@ -768,6 +900,12 @@ export type UserUncheckedCreateWithoutBoardsInput = {
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBoardsInput = {
@@ -805,6 +943,12 @@ export type UserUpdateWithoutBoardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardsInput = {
@@ -826,6 +970,12 @@ export type UserUncheckedUpdateWithoutBoardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -847,6 +997,12 @@ export type UserCreateWithoutCommentsInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -868,6 +1024,12 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -905,6 +1067,12 @@ export type UserUpdateWithoutCommentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -926,6 +1094,12 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBoardLikesInput = {
@@ -947,6 +1121,12 @@ export type UserCreateWithoutBoardLikesInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBoardLikesInput = {
@@ -968,6 +1148,12 @@ export type UserUncheckedCreateWithoutBoardLikesInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBoardLikesInput = {
@@ -1005,6 +1191,12 @@ export type UserUpdateWithoutBoardLikesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardLikesInput = {
@@ -1026,6 +1218,756 @@ export type UserUncheckedUpdateWithoutBoardLikesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSeatHoldsInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSeatHoldsInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSeatHoldsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSeatHoldsInput, Prisma.UserUncheckedCreateWithoutSeatHoldsInput>
+}
+
+export type UserUpsertWithoutSeatHoldsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSeatHoldsInput, Prisma.UserUncheckedUpdateWithoutSeatHoldsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSeatHoldsInput, Prisma.UserUncheckedCreateWithoutSeatHoldsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSeatHoldsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSeatHoldsInput, Prisma.UserUncheckedUpdateWithoutSeatHoldsInput>
+}
+
+export type UserUpdateWithoutSeatHoldsInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSeatHoldsInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutReservationsInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutReservationsInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutReservationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutReservationsInput, Prisma.UserUncheckedCreateWithoutReservationsInput>
+}
+
+export type UserUpsertWithoutReservationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutReservationsInput, Prisma.UserUncheckedUpdateWithoutReservationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutReservationsInput, Prisma.UserUncheckedCreateWithoutReservationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutReservationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutReservationsInput, Prisma.UserUncheckedUpdateWithoutReservationsInput>
+}
+
+export type UserUpdateWithoutReservationsInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutReservationsInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSeatChangeRequestsInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSeatChangeRequestsInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSeatChangeRequestsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSeatChangeRequestsInput, Prisma.UserUncheckedCreateWithoutSeatChangeRequestsInput>
+}
+
+export type UserCreateWithoutSeatChangeReceivedInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSeatChangeReceivedInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSeatChangeReceivedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSeatChangeReceivedInput, Prisma.UserUncheckedCreateWithoutSeatChangeReceivedInput>
+}
+
+export type UserUpsertWithoutSeatChangeRequestsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSeatChangeRequestsInput, Prisma.UserUncheckedUpdateWithoutSeatChangeRequestsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSeatChangeRequestsInput, Prisma.UserUncheckedCreateWithoutSeatChangeRequestsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSeatChangeRequestsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSeatChangeRequestsInput, Prisma.UserUncheckedUpdateWithoutSeatChangeRequestsInput>
+}
+
+export type UserUpdateWithoutSeatChangeRequestsInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSeatChangeRequestsInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutSeatChangeReceivedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSeatChangeReceivedInput, Prisma.UserUncheckedUpdateWithoutSeatChangeReceivedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSeatChangeReceivedInput, Prisma.UserUncheckedCreateWithoutSeatChangeReceivedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSeatChangeReceivedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSeatChangeReceivedInput, Prisma.UserUncheckedUpdateWithoutSeatChangeReceivedInput>
+}
+
+export type UserUpdateWithoutSeatChangeReceivedInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSeatChangeReceivedInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPointHistoriesInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPointHistoriesInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPointHistoriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPointHistoriesInput, Prisma.UserUncheckedCreateWithoutPointHistoriesInput>
+}
+
+export type UserUpsertWithoutPointHistoriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPointHistoriesInput, Prisma.UserUncheckedUpdateWithoutPointHistoriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPointHistoriesInput, Prisma.UserUncheckedCreateWithoutPointHistoriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPointHistoriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPointHistoriesInput, Prisma.UserUncheckedUpdateWithoutPointHistoriesInput>
+}
+
+export type UserUpdateWithoutPointHistoriesInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPointHistoriesInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutOrderHistoriesInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutOrderHistoriesInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutOrderHistoriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrderHistoriesInput, Prisma.UserUncheckedCreateWithoutOrderHistoriesInput>
+}
+
+export type UserUpsertWithoutOrderHistoriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOrderHistoriesInput, Prisma.UserUncheckedUpdateWithoutOrderHistoriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOrderHistoriesInput, Prisma.UserUncheckedCreateWithoutOrderHistoriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutOrderHistoriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOrderHistoriesInput, Prisma.UserUncheckedUpdateWithoutOrderHistoriesInput>
+}
+
+export type UserUpdateWithoutOrderHistoriesInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutOrderHistoriesInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1037,12 +1979,24 @@ export type UserCountOutputType = {
   boards: number
   comments: number
   boardLikes: number
+  seatHolds: number
+  reservations: number
+  seatChangeRequests: number
+  seatChangeReceived: number
+  pointHistories: number
+  orderHistories: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   boards?: boolean | UserCountOutputTypeCountBoardsArgs
   comments?: boolean | UserCountOutputTypeCountCommentsArgs
   boardLikes?: boolean | UserCountOutputTypeCountBoardLikesArgs
+  seatHolds?: boolean | UserCountOutputTypeCountSeatHoldsArgs
+  reservations?: boolean | UserCountOutputTypeCountReservationsArgs
+  seatChangeRequests?: boolean | UserCountOutputTypeCountSeatChangeRequestsArgs
+  seatChangeReceived?: boolean | UserCountOutputTypeCountSeatChangeReceivedArgs
+  pointHistories?: boolean | UserCountOutputTypeCountPointHistoriesArgs
+  orderHistories?: boolean | UserCountOutputTypeCountOrderHistoriesArgs
 }
 
 /**
@@ -1076,6 +2030,48 @@ export type UserCountOutputTypeCountBoardLikesArgs<ExtArgs extends runtime.Types
   where?: Prisma.BoardLikeWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSeatHoldsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SeatHoldWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountReservationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReservationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSeatChangeRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SeatChangeRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSeatChangeReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SeatChangeRequestWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPointHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PointHistoryWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountOrderHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderHistoryWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   idx?: boolean
@@ -1097,6 +2093,12 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   boardLikes?: boolean | Prisma.User$boardLikesArgs<ExtArgs>
+  seatHolds?: boolean | Prisma.User$seatHoldsArgs<ExtArgs>
+  reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
+  seatChangeRequests?: boolean | Prisma.User$seatChangeRequestsArgs<ExtArgs>
+  seatChangeReceived?: boolean | Prisma.User$seatChangeReceivedArgs<ExtArgs>
+  pointHistories?: boolean | Prisma.User$pointHistoriesArgs<ExtArgs>
+  orderHistories?: boolean | Prisma.User$orderHistoriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1126,6 +2128,12 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   boardLikes?: boolean | Prisma.User$boardLikesArgs<ExtArgs>
+  seatHolds?: boolean | Prisma.User$seatHoldsArgs<ExtArgs>
+  reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
+  seatChangeRequests?: boolean | Prisma.User$seatChangeRequestsArgs<ExtArgs>
+  seatChangeReceived?: boolean | Prisma.User$seatChangeReceivedArgs<ExtArgs>
+  pointHistories?: boolean | Prisma.User$pointHistoriesArgs<ExtArgs>
+  orderHistories?: boolean | Prisma.User$orderHistoriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1135,6 +2143,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     boards: Prisma.$BoardPayload<ExtArgs>[]
     comments: Prisma.$CommentPayload<ExtArgs>[]
     boardLikes: Prisma.$BoardLikePayload<ExtArgs>[]
+    seatHolds: Prisma.$SeatHoldPayload<ExtArgs>[]
+    reservations: Prisma.$ReservationPayload<ExtArgs>[]
+    seatChangeRequests: Prisma.$SeatChangeRequestPayload<ExtArgs>[]
+    seatChangeReceived: Prisma.$SeatChangeRequestPayload<ExtArgs>[]
+    pointHistories: Prisma.$PointHistoryPayload<ExtArgs>[]
+    orderHistories: Prisma.$OrderHistoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     idx: bigint
@@ -1496,6 +2510,12 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   boards<T extends Prisma.User$boardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.User$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   boardLikes<T extends Prisma.User$boardLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  seatHolds<T extends Prisma.User$seatHoldsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$seatHoldsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SeatHoldPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reservations<T extends Prisma.User$reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  seatChangeRequests<T extends Prisma.User$seatChangeRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$seatChangeRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SeatChangeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  seatChangeReceived<T extends Prisma.User$seatChangeReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$seatChangeReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SeatChangeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pointHistories<T extends Prisma.User$pointHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pointHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PointHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  orderHistories<T extends Prisma.User$orderHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$orderHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1958,6 +2978,150 @@ export type User$boardLikesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.BoardLikeScalarFieldEnum | Prisma.BoardLikeScalarFieldEnum[]
+}
+
+/**
+ * User.seatHolds
+ */
+export type User$seatHoldsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SeatHold
+   */
+  select?: Prisma.SeatHoldSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SeatHold
+   */
+  omit?: Prisma.SeatHoldOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SeatHoldInclude<ExtArgs> | null
+  where?: Prisma.SeatHoldWhereInput
+  orderBy?: Prisma.SeatHoldOrderByWithRelationInput | Prisma.SeatHoldOrderByWithRelationInput[]
+  cursor?: Prisma.SeatHoldWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SeatHoldScalarFieldEnum | Prisma.SeatHoldScalarFieldEnum[]
+}
+
+/**
+ * User.reservations
+ */
+export type User$reservationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Reservation
+   */
+  select?: Prisma.ReservationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Reservation
+   */
+  omit?: Prisma.ReservationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReservationInclude<ExtArgs> | null
+  where?: Prisma.ReservationWhereInput
+  orderBy?: Prisma.ReservationOrderByWithRelationInput | Prisma.ReservationOrderByWithRelationInput[]
+  cursor?: Prisma.ReservationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReservationScalarFieldEnum | Prisma.ReservationScalarFieldEnum[]
+}
+
+/**
+ * User.seatChangeRequests
+ */
+export type User$seatChangeRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SeatChangeRequest
+   */
+  select?: Prisma.SeatChangeRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SeatChangeRequest
+   */
+  omit?: Prisma.SeatChangeRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SeatChangeRequestInclude<ExtArgs> | null
+  where?: Prisma.SeatChangeRequestWhereInput
+  orderBy?: Prisma.SeatChangeRequestOrderByWithRelationInput | Prisma.SeatChangeRequestOrderByWithRelationInput[]
+  cursor?: Prisma.SeatChangeRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SeatChangeRequestScalarFieldEnum | Prisma.SeatChangeRequestScalarFieldEnum[]
+}
+
+/**
+ * User.seatChangeReceived
+ */
+export type User$seatChangeReceivedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SeatChangeRequest
+   */
+  select?: Prisma.SeatChangeRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SeatChangeRequest
+   */
+  omit?: Prisma.SeatChangeRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SeatChangeRequestInclude<ExtArgs> | null
+  where?: Prisma.SeatChangeRequestWhereInput
+  orderBy?: Prisma.SeatChangeRequestOrderByWithRelationInput | Prisma.SeatChangeRequestOrderByWithRelationInput[]
+  cursor?: Prisma.SeatChangeRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SeatChangeRequestScalarFieldEnum | Prisma.SeatChangeRequestScalarFieldEnum[]
+}
+
+/**
+ * User.pointHistories
+ */
+export type User$pointHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PointHistory
+   */
+  select?: Prisma.PointHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PointHistory
+   */
+  omit?: Prisma.PointHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PointHistoryInclude<ExtArgs> | null
+  where?: Prisma.PointHistoryWhereInput
+  orderBy?: Prisma.PointHistoryOrderByWithRelationInput | Prisma.PointHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.PointHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PointHistoryScalarFieldEnum | Prisma.PointHistoryScalarFieldEnum[]
+}
+
+/**
+ * User.orderHistories
+ */
+export type User$orderHistoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderHistory
+   */
+  select?: Prisma.OrderHistorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderHistory
+   */
+  omit?: Prisma.OrderHistoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderHistoryInclude<ExtArgs> | null
+  where?: Prisma.OrderHistoryWhereInput
+  orderBy?: Prisma.OrderHistoryOrderByWithRelationInput | Prisma.OrderHistoryOrderByWithRelationInput[]
+  cursor?: Prisma.OrderHistoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderHistoryScalarFieldEnum | Prisma.OrderHistoryScalarFieldEnum[]
 }
 
 /**

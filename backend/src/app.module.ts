@@ -17,6 +17,7 @@ import { GoogleModule } from "./google/google.module";
 import { KakaoModule } from "./kakao/kakao.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SchedulerModule } from "./scheduler/scheduler.module";
+import { SeatModule } from "./seat/seat.module";
 import { StationsModule } from "./stations/stations.module";
 import { TrainsModule } from "./trains/trains.module";
 import { UsersModule } from "./users/users.module";
@@ -37,6 +38,7 @@ import { UsersModule } from "./users/users.module";
     CommentModule,
     NotificationModule,
     UploadModule,
+    SeatModule,
     StationsModule,
     TrainsModule,
     KakaoModule,

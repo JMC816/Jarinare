@@ -36,6 +36,12 @@ model User {
   boards        Board[]
   comments      Comment[]
   boardLikes    BoardLike[]
+  seatHolds              SeatHold[]
+  reservations           Reservation[]
+  seatChangeRequests     SeatChangeRequest[] @relation("SeatChangeRequester")
+  seatChangeReceived     SeatChangeRequest[] @relation("SeatChangeTarget")
+  pointHistories         PointHistory[]
+  orderHistories         OrderHistory[]
   @@index([userId])
   @@map("users")
 }
@@ -168,4 +174,179 @@ model SchedulerRunLog {
   @@index([jobName, startYmd, endYmd])
   @@index([status])
   @@map("scheduler_run_log")
+}
+
+model CarLayout {
+  id         Int      @id @default(autoincrement())
+  trainType  String   @db.VarChar(20)
+  carNo      Int
+  rowCount   Int
+  totalSeats Int
+
+  seats SeatSlot[]
+
+  @@unique([trainType, carNo])
+  @@map("car_layouts")
+}
+
+model SeatSlot {
+  id       Int    @id @default(autoincrement())
+  layoutId Int
+  seatId   String @db.VarChar(8)
+  rowNo    Int
+  colLabel String @db.VarChar(2)
+  side     String @db.VarChar(8)
+  isWindow Boolean @default(false)
+
+  layout CarLayout @relation(fields: [layoutId], references: [id], onDelete: Cascade)
+
+  @@unique([layoutId, seatId])
+  @@index([layoutId, rowNo])
+  @@map("seat_slots")
+}
+
+model TrainTrip {
+  id           BigInt   @id @default(autoincrement())
+  trainNo      String   @db.VarChar(20)
+  trainType    String   @db.VarChar(20)
+  depPlaceId   String   @db.VarChar(40)
+  arrPlaceId   String   @db.VarChar(40)
+  depPlandTime String   @db.VarChar(14)
+  arrPlandTime String   @db.VarChar(14)
+  depName      String   @db.VarChar(100)
+  arrName      String   @db.VarChar(100)
+  createdAt    DateTime @default(now())
+
+  holds          SeatHold[]
+  reservations   Reservation[]
+  changeRequests SeatChangeRequest[]
+
+  @@unique([trainNo, depPlaceId, arrPlaceId, depPlandTime])
+  @@index([depPlandTime])
+  @@map("train_trips")
+}
+
+model SeatHold {
+  id        BigInt   @id @default(autoincrement())
+  tripId    BigInt
+  carNo     Int
+  seatId    String   @db.VarChar(8)
+  userIdx   BigInt
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  trip TrainTrip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userIdx], references: [idx])
+
+  @@unique([tripId, carNo, seatId])
+  @@index([expiresAt])
+  @@index([userIdx, tripId])
+  @@map("seat_holds")
+}
+
+model Reservation {
+  id            BigInt   @id @default(autoincrement())
+  tripId        BigInt
+  carNo         Int
+  seatId        String   @db.VarChar(8)
+  userIdx       BigInt
+  orderId       String   @db.VarChar(36)
+  passengerType String   @db.VarChar(10)
+  price         Int      @default(0)
+  canceledAt    DateTime @default(dbgenerated("'1970-01-01 00:00:00.000'"))
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  trip TrainTrip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User      @relation(fields: [userIdx], references: [idx])
+
+  @@unique([tripId, carNo, seatId, canceledAt])
+  @@index([userIdx, createdAt])
+  @@index([orderId])
+  @@map("reservations")
+}
+
+model SeatChangeRequest {
+  id           BigInt    @id @default(autoincrement())
+  tripId       BigInt
+  requesterIdx BigInt
+  targetIdx    BigInt
+  fromSeats    Json
+  toSeats      Json
+  emptySeats   Json
+  status       String    @default("PENDING") @db.VarChar(20)
+  expiresAt    DateTime
+  respondedAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  trip      TrainTrip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  requester User      @relation("SeatChangeRequester", fields: [requesterIdx], references: [idx])
+  target    User      @relation("SeatChangeTarget", fields: [targetIdx], references: [idx])
+
+  @@index([targetIdx, status])
+  @@index([requesterIdx, status])
+  @@index([status, expiresAt])
+  @@map("seat_change_requests")
+}
+
+model PointHistory {
+  id        BigInt   @id @default(autoincrement())
+  userIdx   BigInt
+  amount    Int
+  reason    String   @db.VarChar(30)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userIdx], references: [idx])
+
+  @@index([userIdx, createdAt])
+  @@map("point_histories")
+}
+
+model OrderHistory {
+  id                  BigInt   @id @default(autoincrement())
+  userIdx             BigInt
+  tripId              BigInt?
+  reservationOrderId  String?  @db.VarChar(36)
+  startStationForView String   @db.VarChar(100)
+  endStationForView   String   @db.VarChar(100)
+  startDay            String   @db.VarChar(14)
+  startDayForView     String   @db.VarChar(50)
+  trainType           String   @db.VarChar(20)
+  selectAdult         Int
+  selectKid           Int
+  seatCount           Int
+  finalPrice          Int
+  usedPoint           Int      @default(0)
+  paybackPoint        Int      @default(0)
+  paymentMethod       String   @db.VarChar(20)
+  selectedCard        String?  @db.VarChar(30)
+  isReturn            Boolean  @default(false)
+  createdAt           DateTime @default(now())
+
+  user User @relation(fields: [userIdx], references: [idx])
+
+  @@index([userIdx, createdAt])
+  @@map("order_histories")
+}
+
+model TravelStat {
+  destination String @id @db.VarChar(100)
+  totalCount  Int    @default(0)
+
+  buckets TravelStatBucket[]
+
+  @@index([totalCount])
+  @@map("travel_stats")
+}
+
+model TravelStatBucket {
+  destination String @db.VarChar(100)
+  kind        String @db.VarChar(10)
+  bucket      String @db.VarChar(20)
+  count       Int    @default(0)
+
+  stat TravelStat @relation(fields: [destination], references: [destination], onDelete: Cascade)
+
+  @@id([destination, kind, bucket])
+  @@map("travel_stat_buckets")
 }

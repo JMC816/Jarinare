@@ -34,6 +34,17 @@ export class NotificationService {
    * 좋아요·댓글과 같은 트랜잭션이므로 "행동은 성공했는데 알림만 유실" 이 불가능하고,
    * 별도 큐가 없으니 DB 왕복도 늘지 않는다.
    */
+  async create(
+    userIdx: bigint,
+    type: NotificationType,
+    payload: object,
+  ): Promise<void> {
+    const notification = await this.prisma.notification.create({
+      data: { userIdx, type, payload },
+    });
+    this.deliver(notification);
+  }
+
   createInTx(
     tx: Prisma.TransactionClient,
     userIdx: bigint,

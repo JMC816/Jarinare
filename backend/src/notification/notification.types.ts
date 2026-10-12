@@ -5,6 +5,9 @@ export const NOTIFICATION_TYPES = [
   "comment",
   "reply",
   "comment_like",
+  "seat_change_request",
+  "seat_change_accepted",
+  "seat_change_rejected",
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

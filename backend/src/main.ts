@@ -36,8 +36,12 @@ async function bootstrap() {
   // 업로드된 이미지 정적 파일 서빙 (/uploads/board/xxx.png)
   app.useStaticAssets(join(process.cwd(), "uploads"), { prefix: "/uploads" });
 
+  const corsOrigins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim())
+    : ["http://localhost:5173"];
+
   app.enableCors({
-    origin: process.env.CORS_ORIGIN ?? "http://localhost:5173",
+    origin: corsOrigins,
     credentials: true,
   });
 

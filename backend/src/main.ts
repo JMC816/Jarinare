@@ -31,11 +31,6 @@ async function bootstrap() {
     ],
   });
 
-  app.use(cookieParser());
-
-  // 업로드된 이미지 정적 파일 서빙 (/uploads/board/xxx.png)
-  app.useStaticAssets(join(process.cwd(), "uploads"), { prefix: "/uploads" });
-
   const corsOrigins = process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim())
     : ["http://localhost:5173"];
@@ -43,7 +38,14 @@ async function bootstrap() {
   app.enableCors({
     origin: corsOrigins,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
+
+  app.use(cookieParser());
+
+  // 업로드된 이미지 정적 파일 서빙 (/uploads/board/xxx.png)
+  app.useStaticAssets(join(process.cwd(), "uploads"), { prefix: "/uploads" });
 
   app.useGlobalPipes(
     new ValidationPipe({

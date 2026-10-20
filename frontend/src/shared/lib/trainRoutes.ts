@@ -205,6 +205,7 @@ export const TRAIN_ROUTES: Record<string, Record<string, string[]>> = {
       '구미',
       '동대구',
       '경산',
+      '청도',
       '밀양',
       '구포',
       '부산',
@@ -236,7 +237,7 @@ export const TRAIN_ROUTES: Record<string, Record<string, string[]>> = {
     ],
     중앙선: ['청량리', '양평', '원주', '제천', '단양', '풍기', '영주', '안동'],
     동해선: ['부전', '센텀', '신해운대', '기장', '태화강', '경주', '포항'],
-    태백선: ['제천', '태백', '동해'],
+    태백선: ['제천', '영월', '태백', '동해'],
     영동선: ['영주', '동해', '강릉'],
   },
   누리로: {
@@ -298,7 +299,7 @@ export const TRAIN_ROUTES: Record<string, Record<string, string[]>> = {
     동해선: ['부전', '태화강', '경주', '포항'],
   },
   통근열차: {
-    정선선: ['민둥산', '별어곡', '선평', '정선', '아우라지'],
+    정선선: ['민둥산', '별어곡', '선평', '정선', '고한', '사북', '아우라지'],
   },
   AREX직통: {
     직통: ['서울역', '인천공항1터미널', '인천공항2터미널'],
@@ -406,4 +407,26 @@ export const resolveRoute = (
 
   // fallback: 첫 번째 노선
   return { route: Object.values(routes)[0], gradeName: resolvedKey };
+};
+
+// 열차 타입 + 출발역/도착역으로 구간 정차역 배열 반환
+export const getSegmentStations = (
+  trainType: string,
+  startStationForView: string,
+  endStationForView: string,
+): string[] => {
+  const startName = normalizeStation(startStationForView);
+  const endName = normalizeStation(endStationForView);
+  const { route } = resolveRoute(trainType, startName, endName);
+  const findIdx = (name: string) => {
+    const exact = route.indexOf(name);
+    if (exact !== -1) return exact;
+    return route.findIndex((r) => r.includes(name) || name.includes(r));
+  };
+  const startIdx = findIdx(startName);
+  const endIdx = findIdx(endName);
+  if (startIdx === -1 || endIdx === -1) return [];
+  return startIdx < endIdx
+    ? route.slice(startIdx, endIdx + 1)
+    : route.slice(endIdx, startIdx + 1).reverse();
 };

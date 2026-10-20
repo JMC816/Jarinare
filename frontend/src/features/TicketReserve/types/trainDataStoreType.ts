@@ -47,4 +47,6 @@ export type TrainDataStoreType = {
   setSelectAdult: (type: number) => void;
   setSelectPay: (type: number) => void;
   setSeatsId: (type: string[]) => void;
+  tripId: number | null;
+  setTripId: (tripId: number | null) => void;
 };

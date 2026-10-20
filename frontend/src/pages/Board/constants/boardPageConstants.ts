@@ -10,7 +10,7 @@ export const CAT_STYLE_MAP: Record<
     badge: string;
     bgColor: string;
     textColor: string;
-    path: string;
+    type: string;
     stateKey: string;
   }
 > = {
@@ -18,21 +18,21 @@ export const CAT_STYLE_MAP: Record<
     badge: '자유',
     bgColor: '#dcfce7',
     textColor: '#16a34a',
-    path: '/board/board/detail',
+    type: 'free',
     stateKey: 'post',
   },
   notice: {
     badge: '공지',
     bgColor: '#dbeafe',
     textColor: '#2563eb',
-    path: '/board/notice/detail',
+    type: 'notice',
     stateKey: 'notice',
   },
   event: {
     badge: '이벤트',
     bgColor: '#ffedd5',
     textColor: '#f97316',
-    path: '/board/event/detail',
+    type: 'event',
     stateKey: 'event',
   },
 };

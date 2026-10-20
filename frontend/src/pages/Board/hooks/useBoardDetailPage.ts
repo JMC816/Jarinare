@@ -7,14 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 export const useBoardDetailPage = (post: BoardPost | undefined) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const currentPost = post ?? null;
-  const postDocId = currentPost?.id.split('/').pop() ?? '';
+  const postDocId = currentPost ? String(currentPost.id) : '';
 
   const postItems = useMemo(
     () => (currentPost ? [currentPost] : []),
@@ -22,21 +22,21 @@ export const useBoardDetailPage = (post: BoardPost | undefined) => {
   );
   const { likedMap, likesMap, handleClickLike } = useLikeBoard(postItems);
   const { deletePost } = useDeletePost();
+  const { user: currentUser } = useCurrentUser();
 
-  const currentUid = auth.currentUser?.uid;
-  const isOwner = !!currentUid && currentUid === currentPost?.id.split('/')[1];
-  const isLiked = likedMap[currentPost?.id ?? ''] ?? false;
-  const likesCount = likesMap[currentPost?.id ?? ''] ?? currentPost?.likes ?? 0;
+  const isOwner = !!currentUser?.name && currentUser.name === currentPost?.author;
+  const isLiked = likedMap[postDocId] ?? false;
+  const likesCount = likesMap[postDocId] ?? 0;
 
   const handleDelete = async () => {
     if (!currentPost) return;
-    await deletePost(currentPost.id);
+    await deletePost(currentPost.id, 'free');
     navigate(-1);
   };
 
   const handleLike = () => {
     if (!currentPost) return;
-    handleClickLike(currentPost.id);
+    handleClickLike(postDocId);
   };
 
   return {

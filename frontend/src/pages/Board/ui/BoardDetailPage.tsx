@@ -3,12 +3,15 @@
  * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
  */
 import backward from '@/assets/icons/backward.png';
-import { BoardPost } from '@/entities/Board/types/boardType';
+import { BoardPost, FreeBoardDetail } from '@/entities/Board/types/boardType';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { CommentSection } from '@/widgets/Board/ui/CommentSection';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import PCBoardDetailPage from './PCBoardDetailPage';
 import { useBoardDetailPage } from '../hooks/useBoardDetailPage';
+import { toBackendImageUrl } from '@/shared/api/backendClient';
+import { getBoardDetailApi } from '@/features/Board/api/getBoardApi';
 
 const HamburgerIcon = () => (
   <svg
@@ -30,11 +33,22 @@ const HamburgerIcon = () => (
 const BoardDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const post = location.state?.post as BoardPost | undefined;
+  const { id } = useParams<{ id: string }>();
+  const [fetchedPost, setFetchedPost] = useState<FreeBoardDetail | null>(null);
+
+  const statePost = location.state?.post as BoardPost | undefined;
+  const post = statePost ?? fetchedPost ?? undefined;
+
+  useEffect(() => {
+    if (!statePost && id) {
+      getBoardDetailApi(Number(id), 'free')
+        .then(setFetchedPost)
+        .catch(() => {});
+    }
+  }, [id]);
 
   const {
     currentPost,
-    postDocId,
     isOwner,
     isLiked,
     likesCount,
@@ -48,7 +62,7 @@ const BoardDetailPage = () => {
     return (
       <>
         <div className="hidden w-full lg:block">
-          <PCBoardDetailPage />
+          <PCBoardDetailPage post={post} />
         </div>
         <div className="flex h-screen w-full items-center justify-center lg:hidden">
           <p>게시글을 찾을 수 없습니다.</p>
@@ -60,7 +74,7 @@ const BoardDetailPage = () => {
   return (
     <>
       <div className="hidden w-full lg:block">
-        <PCBoardDetailPage />
+        <PCBoardDetailPage post={post} />
       </div>
       <div className="flex h-screen w-full flex-col lg:hidden">
         {/* 헤더 */}
@@ -88,7 +102,9 @@ const BoardDetailPage = () => {
                   <div className="absolute right-0 top-9 z-20 min-w-[80px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
                     <button
                       onClick={() => {
-                        navigate('/board/board', { state: { editPost: currentPost } });
+                        navigate('/board/board', {
+                          state: { editPost: currentPost },
+                        });
                       }}
                       className="block w-full px-4 py-2.5 text-left text-sm hover:bg-gray-50"
                     >
@@ -136,7 +152,7 @@ const BoardDetailPage = () => {
             {currentPost.imageUrl && (
               <div className="w-full">
                 <img
-                  src={currentPost.imageUrl}
+                  src={toBackendImageUrl(currentPost.imageUrl) ?? ''}
                   alt={currentPost.title}
                   className="w-full object-contain"
                 />
@@ -184,7 +200,7 @@ const BoardDetailPage = () => {
           </div>
 
           {/* 댓글 */}
-          <CommentSection postDocId={postDocId} />
+          <CommentSection boardId={currentPost.id} />
         </div>
       </div>
     </>

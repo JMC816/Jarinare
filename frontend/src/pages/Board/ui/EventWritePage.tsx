@@ -1,6 +1,6 @@
 /**
  * @role: pages — 이벤트 작성·수정 페이지
- * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
+ * @rule: 렌더링·조합만 담당, admin 접근 가드 포함
  */
 import backward from '@/assets/icons/backward.png';
 import { useEventHandler } from '@/features/Board/hooks/useEventHandler';
@@ -8,36 +8,17 @@ import EventForm from '@/widgets/Board/ui/EventForm';
 import LoadingScreen from '@/widgets/Board/ui/LoadingScreen';
 import PCWriteForm from '@/widgets/Board/ui/PCWriteForm';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '@/shared/firebase/firebase';
-import PCLoginRequiredPage from '@/widgets/layouts/ui/PCLoginRequiredPage';
-import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
-
-const LoginRequired = ({ onLogin }: { onLogin: () => void }) => (
-  <>
-    <div className="hidden w-full lg:block">
-      <PCLoginRequiredPage
-        description="로그인 후 글을 작성할 수 있어요"
-        onLogin={onLogin}
-      />
-    </div>
-    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-50 lg:hidden">
-      <LoginRequiredBlock
-        description="로그인 후 글을 작성할 수 있어요"
-        onLogin={onLogin}
-      />
-    </div>
-  </>
-);
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 const EventWirtePage = () => {
   const navigate = useNavigate();
+  const { user, isLoading } = useCurrentUser();
   const event = useEventHandler({ navigateTo: '/board/eventlist' });
   const { isEditMode } = event;
 
-  if (!auth.currentUser)
-    return <LoginRequired onLogin={() => navigate('/auth/login')} />;
+  if (isLoading) return null;
 
-  const isAdmin = auth.currentUser.email === import.meta.env.VITE_ADMIN_EMAIL;
+  const isAdmin = user?.email === import.meta.env.VITE_ADMIN_EMAIL;
   if (!isAdmin) {
     navigate(-1);
     return null;
@@ -47,7 +28,11 @@ const EventWirtePage = () => {
     <>
       {/* PC */}
       <div className="hidden w-full lg:block">
-        <PCWriteForm {...event} categoryLabel={isEditMode ? '이벤트 수정' : '이벤트'} backLabel="이벤트" />
+        <PCWriteForm
+          {...event}
+          categoryLabel={isEditMode ? '이벤트 수정' : '이벤트'}
+          backLabel="이벤트"
+        />
       </div>
 
       {/* 모바일 */}
@@ -59,7 +44,9 @@ const EventWirtePage = () => {
               src={backward}
               className="h-[20px] w-[12px] cursor-pointer"
             />
-            <h1 className="text-lg font-bold">{isEditMode ? '이벤트 수정' : '이벤트 작성'}</h1>
+            <h1 className="text-lg font-bold">
+              {isEditMode ? '이벤트 수정' : '이벤트 작성'}
+            </h1>
           </div>
           <EventForm {...event} />
         </div>

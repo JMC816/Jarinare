@@ -1,8 +1,8 @@
-import { BoardPost } from '@/entities/Board/types/boardType';
+import { BoardDetail } from '@/entities/Board/types/boardType';
 import { useState } from 'react';
 
 interface Props {
-  post: BoardPost;
+  post: BoardDetail;
   onSave: (title: string, content: string) => Promise<void>;
   onClose: () => void;
 }

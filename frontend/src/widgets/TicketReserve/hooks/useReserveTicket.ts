@@ -7,14 +7,32 @@ import { formatAM_PM, formatTimeView } from '@/shared/lib/formatDate';
 import { useNavigation } from './ReserveHook';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
+import {
+  getCachedAllSeats,
+  useAllSeatsInfo,
+} from '@/features/TicketReserve/hooks/useAllSeatsInfo';
+import { useState } from 'react';
 
 export const useReserveTicket = () => {
+  const [isSeatsLoaded, setIsSeatsLoaded] = useState(
+    getCachedAllSeats().length > 0,
+  );
+  useAllSeatsInfo(() => setIsSeatsLoaded(true));
+
   const ticketData = useTicketLists();
   const { navigate } = useNavigation();
   const navigateTo = useNavigate();
 
   const { isLoggedIn } = useCurrentUser();
   const handleLoginNavigate = () => navigateTo('/auth/login');
+
+  if (!isLoggedIn) {
+    return { isEmpty: true, isLoggedIn, handleLoginNavigate };
+  }
+
+  if (!isSeatsLoaded) {
+    return { isLoading: true, isLoggedIn, handleLoginNavigate };
+  }
 
   if (!ticketData?.groupedArray || ticketData.groupedArray.length === 0) {
     return { isEmpty: true, isLoggedIn, handleLoginNavigate };

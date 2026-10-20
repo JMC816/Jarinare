@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import welcomeTourStore from '@/shared/models/welcomeTourStore';
 import useModalStore from '@/widgets/model/ReserveStore';
 import {
   formatDate,
@@ -19,7 +20,7 @@ import {
   getCachedAllSeats,
   useAllSeatsInfo,
 } from '@/features/TicketReserve/hooks/useAllSeatsInfo';
-import { TOTAL_SEATS } from '../constants/PCTrainCheckConstants';
+import { TOTAL_SEATS, TRAIN_OPTIONS } from '../constants/PCTrainCheckConstants';
 import { DropdownType } from '../types/PCTrainCheckTypes';
 import { formatTrainGradeName } from '@/shared/lib/formatTrainName';
 
@@ -46,16 +47,18 @@ const calcDuration = (dep: number, arr: number): string => {
 };
 
 export const usePCTrainCheckPage = () => {
+  const { isActive: isTourActive } = welcomeTourStore();
   const { isFetching, trainTime } = trainQueryData();
   const {
     startDay,
     startTime,
+    trainType,
     kid,
     adult,
     startStationForView,
     endStationForView,
-    trainTypeForView,
-    startTimeForView,
+    trainTypeForView: rawTrainTypeForView,
+    startTimeForView: rawStartTimeForView,
     setStartDay,
     setStartDayForView,
     setSelectStartTime,
@@ -69,6 +72,10 @@ export const usePCTrainCheckPage = () => {
     setStartTime,
     setStartTimeForView,
   } = trainDataStore();
+
+  const trainTypeForView = isTourActive ? 'KTX' : rawTrainTypeForView;
+  const startTimeForView = isTourActive ? '06시 이후' : rawStartTimeForView;
+
   const { openModal } = useModalStore();
   const navigate = useNavigate();
   const handleBack = () => navigate(-1);
@@ -82,6 +89,11 @@ export const usePCTrainCheckPage = () => {
     return d;
   });
 
+  // 투어 시 내일 날짜를 초기 선택일로
+  const tourTomorrow = new Date();
+  tourTomorrow.setDate(tourTomorrow.getDate() + 1);
+  tourTomorrow.setHours(0, 0, 0, 0);
+
   // 홈에서 선택한 날짜(startDay: "20260624")로 초기화, 없으면 오늘
   const initialDate = startDay
     ? new Date(
@@ -91,7 +103,7 @@ export const usePCTrainCheckPage = () => {
       )
     : today;
 
-  const [selectedDate, setSelectedDate] = useState<Date>(initialDate);
+  const [selectedDate, setSelectedDate] = useState<Date>(isTourActive ? tourTomorrow : initialDate);
   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
   const [allSeats, setAllSeats] = useState<SeatType[]>(getCachedAllSeats());
   useAllSeatsInfo((seats) => setAllSeats(seats));
@@ -127,15 +139,22 @@ export const usePCTrainCheckPage = () => {
 
   const todayStr = isToday();
 
-  const filtered = trainTime.filter((time) => {
-    if (startDay === todayStr) {
-      if (startTime > formatTime()) {
+  const selectedGradeName = TRAIN_OPTIONS.find((o) => o.id === trainType)?.gradeName ?? '';
+
+  const filtered = isTourActive
+    ? trainTime
+    : trainTime.filter((time) => {
+        if (selectedGradeName && time.traingradename !== selectedGradeName) {
+          return false;
+        }
+        if (startDay === todayStr) {
+          if (startTime > formatTime()) {
+            return String(time.depplandtime).substring(8, 12) >= startTime;
+          }
+          return time.depplandtime >= formatTodayDate();
+        }
         return String(time.depplandtime).substring(8, 12) >= startTime;
-      }
-      return time.depplandtime >= formatTodayDate();
-    }
-    return String(time.depplandtime).substring(8, 12) >= startTime;
-  });
+      });
 
   const trains = filtered.map((t) => {
     const trainTypeKey = t.traingradename + '-' + t.trainno;

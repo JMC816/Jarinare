@@ -18,7 +18,7 @@ const TrainNumberChoiceModal = () => {
   const { setTrainNo } = trainDataStore();
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-end bg-black/40"
+      className="fixed inset-0 z-[60] flex flex-col items-center justify-end bg-black/40 backdrop-blur-sm"
       onClick={() => closeModal('TrainNumberChoiceModal')}
     >
       <div

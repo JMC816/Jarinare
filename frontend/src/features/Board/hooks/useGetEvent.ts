@@ -1,27 +1,26 @@
 /**
- * @role: features — 이벤트 게시글 목록 조회 훅
- * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ * @role: features — 이벤트 목록 조회 훅
+ * @rule: api/ 호출만 담당
  */
-import { BoardPost } from '@/entities/Board/types/boardType';
 import { useEffect, useState } from 'react';
 import { getEventPostsApi } from '../api/getEventApi';
+import { BoardPost, BoardPagination } from '@/entities/Board/types/boardType';
 
-export const useGetDvent = () => {
-  const [eventDat, setEventData] = useState<BoardPost[]>([]);
+export const useGetEvent = (params?: { page?: number; size?: number; search?: string; sort?: 'asc' | 'desc' }) => {
+  const [eventData, setEventData] = useState<BoardPost[]>([]);
+  const [pagination, setPagination] = useState<BoardPagination | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    getEventPostsApi()
-      .then((datas) => {
-        setEventData(
-          datas
-            .filter((d) => d.title)
-            .sort((a, b) => a.createdAt - b.createdAt),
-        );
-        setIsLoaded(true);
+    setIsLoaded(false);
+    getEventPostsApi(params)
+      .then(({ items, pagination: pg }) => {
+        setEventData(items);
+        setPagination(pg);
       })
-      .catch(() => setIsLoaded(true));
-  }, []);
+      .catch((e) => console.error('[useGetEvent]', e))
+      .finally(() => setIsLoaded(true));
+  }, [params?.page, params?.size, params?.search, params?.sort]);
 
-  return { eventDat, isLoaded };
+  return { eventData, pagination, isLoaded };
 };

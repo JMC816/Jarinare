@@ -9,14 +9,14 @@ import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
 import { useViewCount } from '@/features/Board/hooks/useViewCount';
 import { useFollow } from '@/features/Follow/hooks/useFollow';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const currentPost = post ?? null;
-  const postDocId = currentPost?.id.split('/').pop() ?? '';
+  const postDocId = currentPost ? String(currentPost.id) : '';
 
   const postItems = useMemo(
     () => (currentPost ? [currentPost] : []),
@@ -25,21 +25,21 @@ export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
   const { likedMap, likesMap, handleClickLike } = useLikeBoard(postItems);
   const { deletePost } = useDeletePost();
   const { viewCount } = useViewCount(postDocId);
+  const { user: currentUser } = useCurrentUser();
 
-  const currentUid = auth.currentUser?.uid;
-  const authorUid = currentPost?.id.split('/')[1] ?? '';
-  const isOwner = !!currentUid && authorUid === currentUid;
+  const authorName = currentPost?.author ?? '';
+  const isOwner = !!currentUser?.name && currentUser.name === currentPost?.author;
   const {
     isFollowing,
     loading: followLoading,
     toggleFollow,
-  } = useFollow(authorUid, currentPost?.author ?? '');
-  const isLiked = likedMap[currentPost?.id ?? ''] ?? false;
-  const likesCount = likesMap[currentPost?.id ?? ''] ?? currentPost?.likes ?? 0;
+  } = useFollow(authorName, currentPost?.author ?? '');
+  const isLiked = likedMap[postDocId] ?? false;
+  const likesCount = likesMap[postDocId] ?? 0;
 
   const handleDelete = async () => {
     if (!currentPost) return;
-    await deletePost(currentPost.id);
+    await deletePost(currentPost.id, 'free');
     navigate(-1);
   };
 
@@ -50,7 +50,7 @@ export const usePCBoardDetailPage = (post: BoardPost | undefined) => {
 
   const handleLike = () => {
     if (!currentPost) return;
-    handleClickLike(currentPost.id);
+    handleClickLike(postDocId);
   };
 
   return {

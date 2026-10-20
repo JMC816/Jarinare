@@ -7,25 +7,24 @@ import { useNavigate } from 'react-router-dom';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useViewCount } from '@/features/Board/hooks/useViewCount';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 export const usePCNoticeDetailPage = (notice: BoardPost | undefined) => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const currentNotice = notice ?? null;
-  const postDocId = currentNotice?.id.split('/').pop() ?? '';
+  const postDocId = currentNotice ? String(currentNotice.id) : '';
 
   const { deletePost } = useDeletePost();
   const { viewCount } = useViewCount(postDocId);
+  const { user: currentUser } = useCurrentUser();
 
-  const currentUid = auth.currentUser?.uid;
-  const isOwner =
-    !!currentUid && currentNotice?.id.split('/')[1] === currentUid;
+  const isOwner = !!currentUser?.name && currentUser.name === currentNotice?.author;
 
   const handleDelete = async () => {
     if (!currentNotice) return;
-    await deletePost(currentNotice.id);
+    await deletePost(currentNotice.id, 'notice');
     navigate(-1);
   };
 

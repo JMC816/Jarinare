@@ -8,7 +8,6 @@ import picture from '@/assets/icons/picture.png';
 import { BoardType } from '@/features/Board/types/boardType';
 
 const BoardForm = ({
-  onAuthorChange,
   onContentChange,
   onTitleChange,
   onFileChange,
@@ -29,14 +28,9 @@ const BoardForm = ({
   const navigate = useNavigate();
   return (
     <form onSubmit={onSubmit} className="mt-10 flex flex-col gap-4">
-      <input
-        value={author}
-        onChange={onAuthorChange}
-        type="text"
-        required
-        placeholder="작성자"
-        className="rounded-xl bg-white px-4 py-3 text-base shadow-sm placeholder:text-lightGray focus:outline-none"
-      />
+      <div className="rounded-xl bg-gray-100 px-4 py-3 text-base text-gray-500">
+        {author}
+      </div>
       <input
         value={title}
         onChange={onTitleChange}

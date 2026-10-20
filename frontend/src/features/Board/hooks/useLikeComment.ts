@@ -1,81 +1,69 @@
 /**
  * @role: features — 댓글 좋아요 상태·토글 훅
- * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ * @rule: api/ 호출만 담당, 외부 서비스 직접 호출 금지
  */
-import { auth } from '@/shared/firebase/firebase';
 import { useEffect, useRef, useState } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import type { Comment } from '@/entities/Board/types/commentType';
 import {
-  fetchCommentLikedStateApi,
-  subscribeCommentLikeCountApi,
+  getLikedCommentIdsApi,
   toggleCommentLikeApi,
 } from '../api/likeCommentApi';
 
-export const useLikeComment = (commentIds: string[]) => {
-  const [user, setUser] = useState<User | null>(auth.currentUser);
-  const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
-  const [likesMap, setLikesMap] = useState<Record<string, number>>({});
-  const listenersRef = useRef<(() => void)[]>([]);
-  const processingRef = useRef<Set<string>>(new Set());
+export const useLikeComment = (boardId: number, comments: Comment[]) => {
+  const [likedMap, setLikedMap] = useState<Record<number, boolean>>({});
+  const [likesOverrideMap, setLikesOverrideMap] = useState<
+    Record<number, number>
+  >({});
+  const processingRef = useRef<Set<number>>(new Set());
 
+  // 보드 변경 시 내가 좋아요한 댓글 ID 목록 로드
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => setUser(u));
-    return () => unsubscribe();
-  }, []);
+    if (!boardId) return;
+    getLikedCommentIdsApi(boardId)
+      .then((ids) => {
+        const map: Record<number, boolean> = {};
+        ids.forEach((id) => {
+          map[id] = true;
+        });
+        setLikedMap(map);
+      })
+      .catch(() => {});
+  }, [boardId]);
 
-  // commentIds 변경 시 commentLikes/{commentId} 실시간 구독
+  // comments 변경 시 override 맵 초기화 (refresh 후 서버값으로 동기화)
   useEffect(() => {
-    if (commentIds.length === 0) return;
+    setLikesOverrideMap({});
+  }, [comments]);
 
-    listenersRef.current.forEach((unsub) => unsub());
-    listenersRef.current = [];
-
-    commentIds.forEach((id) => {
-      const unsub = subscribeCommentLikeCountApi(id, (count) => {
-        setLikesMap((prev) => ({ ...prev, [id]: count }));
-      });
-      listenersRef.current.push(unsub);
-    });
-
-    return () => {
-      listenersRef.current.forEach((unsub) => unsub());
-      listenersRef.current = [];
-    };
-  }, [commentIds.join(',')]);
-
-  // 로그인 유저의 좋아요 상태 로드
-  useEffect(() => {
-    if (!user || commentIds.length === 0) return;
-
-    fetchCommentLikedStateApi(user.uid).then((likedDocIds) => {
-      setLikedMap(likedDocIds);
-    });
-  }, [user, commentIds.join(',')]);
-
-  const handleClickLike = async (commentId: string) => {
-    if (!user || processingRef.current.has(commentId)) return;
+  const handleClickLike = async (commentId: number) => {
+    if (processingRef.current.has(commentId)) return;
     processingRef.current.add(commentId);
 
     const isCurrentlyLiked = likedMap[commentId] ?? false;
+    const currentCount =
+      likesOverrideMap[commentId] ??
+      comments.find((c) => c.id === commentId)?.liked ??
+      0;
 
+    // 낙관적 업데이트
     setLikedMap((prev) => ({ ...prev, [commentId]: !isCurrentlyLiked }));
-    setLikesMap((prev) => ({
+    setLikesOverrideMap((prev) => ({
       ...prev,
-      [commentId]: (prev[commentId] ?? 0) + (isCurrentlyLiked ? -1 : 1),
+      [commentId]: currentCount + (isCurrentlyLiked ? -1 : 1),
     }));
 
     try {
-      await toggleCommentLikeApi(user.uid, commentId, isCurrentlyLiked);
+      const { liked, isLiked } = await toggleCommentLikeApi(commentId);
+      setLikedMap((prev) => ({ ...prev, [commentId]: isLiked }));
+      setLikesOverrideMap((prev) => ({ ...prev, [commentId]: liked }));
     } catch {
+      // 롤백
       setLikedMap((prev) => ({ ...prev, [commentId]: isCurrentlyLiked }));
-      setLikesMap((prev) => ({
-        ...prev,
-        [commentId]: (prev[commentId] ?? 0) + (isCurrentlyLiked ? 1 : -1),
-      }));
+      setLikesOverrideMap((prev) => ({ ...prev, [commentId]: currentCount }));
     } finally {
       processingRef.current.delete(commentId);
     }
   };
 
-  return { likedMap, likesMap, handleClickLike };
+  return { likedMap, likesOverrideMap, handleClickLike };
 };

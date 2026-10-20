@@ -9,6 +9,7 @@ import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import { usePCEventDetailPage } from '../hooks/usePCEventDetailPage';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
+import { toBackendImageUrl } from '@/shared/api/backendClient';
 
 
 const OwnerMenu = ({
@@ -59,10 +60,10 @@ const OwnerMenu = ({
   </div>
 );
 
-const PCEventDetailPage = () => {
+const PCEventDetailPage = ({ event: propEvent }: { event?: BoardPost }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const event = location.state?.event as BoardPost | undefined;
+  const event = propEvent ?? (location.state?.event as BoardPost | undefined);
 
   const {
     currentPost,
@@ -181,7 +182,7 @@ const PCEventDetailPage = () => {
                   {currentPost.imageUrl && (
                     <div className="mb-4 overflow-hidden rounded-lg">
                       <img
-                        src={currentPost.imageUrl}
+                        src={toBackendImageUrl(currentPost.imageUrl) ?? ''}
                         alt={currentPost.title}
                         className="w-full object-contain"
                       />

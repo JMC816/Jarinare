@@ -10,6 +10,7 @@ import { CommentSection } from '@/widgets/Board/ui/CommentSection';
 import { usePCBoardDetailPage } from '../hooks/usePCBoardDetailPage';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
+import { toBackendImageUrl } from '@/shared/api/backendClient';
 
 const HeartIcon = ({ filled }: { filled: boolean }) => (
   <svg
@@ -105,14 +106,13 @@ const OwnerMenu = ({
   </div>
 );
 
-const PCBoardDetailPage = () => {
+const PCBoardDetailPage = ({ post: propPost }: { post?: BoardPost }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const post = location.state?.post as BoardPost | undefined;
+  const post = propPost ?? (location.state?.post as BoardPost | undefined);
 
   const {
     currentPost,
-    postDocId,
     isOwner,
     isLiked,
     likesCount,
@@ -249,7 +249,7 @@ const PCBoardDetailPage = () => {
                   {currentPost.imageUrl && (
                     <div className="mb-4 overflow-hidden rounded-lg">
                       <img
-                        src={currentPost.imageUrl}
+                        src={toBackendImageUrl(currentPost.imageUrl) ?? ''}
                         alt={currentPost.title}
                         className="w-full object-contain"
                       />
@@ -298,7 +298,7 @@ const PCBoardDetailPage = () => {
 
               {/* 댓글 카드 */}
               <div className="overflow-hidden rounded-xl bg-white">
-                <CommentSection postDocId={postDocId} isPC />
+                <CommentSection boardId={currentPost?.id ?? 0} isPC />
               </div>
             </div>
           </div>

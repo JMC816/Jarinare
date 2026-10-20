@@ -16,6 +16,19 @@ const TicketListPage = () => {
   const { isLoggedIn } = usePCTicketListPage();
   const navigate = useNavigate();
 
+  const upcomingCount = items.filter((item) => {
+    const now = new Date();
+    const s = item.startTimeStr;
+    const dep = new Date(
+      Number(s.slice(0, 4)),
+      Number(s.slice(4, 6)) - 1,
+      Number(s.slice(6, 8)),
+      Number(s.slice(8, 10)),
+      Number(s.slice(10, 12)),
+    );
+    return dep > now;
+  }).length;
+
   useEffect(() => {
     clearAllSeatsCache();
     prefetchAllSeats();
@@ -31,7 +44,12 @@ const TicketListPage = () => {
       {/* 모바일 버전 */}
       <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
         <BackWardPageButton />
-        <span className="mt-5 w-full text-lg font-bold">내 승차권</span>
+        <div className="mt-5 flex w-full items-baseline justify-between">
+          <span className="text-lg font-bold">내 승차권</span>
+          {!isEmpty && (
+            <span className="text-sm text-gray-400">예정된 승차권 {upcomingCount}권</span>
+          )}
+        </div>
         {!isLoggedIn ? (
           <div className="mt-12">
             <LoginRequiredBlock

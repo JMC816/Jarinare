@@ -8,7 +8,7 @@ import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
 import { useDestinationRatings } from '@/features/TravelReview/hooks/useDestinationRatings';
 import { useGetBoard } from '@/features/Board/hooks/useGetBoard';
 import { useGetNotice } from '@/features/Board/hooks/useGetNotice';
-import { useGetDvent } from '@/features/Board/hooks/useGetEvent';
+import { useGetEvent } from '@/features/Board/hooks/useGetEvent';
 import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
 import { useViewCounts } from '@/features/Board/hooks/useViewCounts';
 import {
@@ -32,7 +32,7 @@ export const usePCBoardPage = (
   const { summaries } = useDestinationRatings();
   const { boardData, isLoaded: boardLoaded } = useGetBoard();
   const { noticeData, isLoaded: noticeLoaded } = useGetNotice();
-  const { eventDat, isLoaded: eventLoaded } = useGetDvent();
+  const { eventData, isLoaded: eventLoaded } = useGetEvent();
   const { topPosts } = useTopViewedPost();
 
   // 오른쪽 컬럼 높이 측정
@@ -61,9 +61,9 @@ export const usePCBoardPage = (
     setCurrentPage(0);
   };
 
-  // 실시간 인기 상위 3개 docId Set
+  // 실시간 인기 상위 3개 id Set
   const top3DocIds = useMemo(
-    () => new Set(topPosts.slice(0, 3).map((p) => p.id.split('/').pop())),
+    () => new Set(topPosts.slice(0, 3).map((p) => String(p.id))),
     [topPosts],
   );
 
@@ -72,9 +72,12 @@ export const usePCBoardPage = (
     return [
       ...boardData.map((p) => ({ ...p, _category: 'board' as const })),
       ...noticeData.map((p) => ({ ...p, _category: 'notice' as const })),
-      ...eventDat.map((p) => ({ ...p, _category: 'event' as const })),
-    ].sort((a, b) => b.createdAt - a.createdAt);
-  }, [boardData, noticeData, eventDat]);
+      ...eventData.map((p) => ({ ...p, _category: 'event' as const })),
+    ].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+  }, [boardData, noticeData, eventData]);
 
   const { viewsMap } = useViewCounts(allPosts);
 
@@ -127,17 +130,26 @@ export const usePCBoardPage = (
     return Array.from({ length: end - start }, (_, i) => start + i);
   })();
 
-  const isNew = (createdAt: number | undefined, category: string) => {
+  const isNew = (createdAt: string | number | undefined, category: string) => {
     if (!createdAt) return false;
     const seenKey = category as keyof typeof seenData;
-    return createdAt > (seenData[seenKey] ?? 0);
+    const createdTs =
+      typeof createdAt === 'number'
+        ? createdAt
+        : new Date(createdAt).getTime() / 1000;
+    return createdTs > (seenData[seenKey] ?? 0);
   };
 
-  const formatDate = (createdAt: number) =>
-    new Date(createdAt * 1000)
+  const formatDate = (createdAt: string | number) => {
+    const d =
+      typeof createdAt === 'number'
+        ? new Date(createdAt * 1000)
+        : new Date(createdAt);
+    return d
       .toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })
       .replace('. ', '/')
       .replace('.', '');
+  };
 
   const totalReviewCount = summaries.reduce((sum, s) => sum + s.reviewCount, 0);
 

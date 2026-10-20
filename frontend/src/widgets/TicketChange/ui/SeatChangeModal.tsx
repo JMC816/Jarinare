@@ -13,13 +13,14 @@ const SeatChangeModal = () => {
   const { changeRequset } = useChangeRequest();
   const { navigate } = useNavigation();
   const [isSent, setIsSent] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // 좌석 상태를 UI로만 보여주는 용도이므로 상태 구독을 하지 않는다.(리렌더링 최적화)
   const target = seatsTargetStore.getState().seatsTarget;
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-end bg-black/40 lg:justify-center lg:backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex flex-col items-center justify-end bg-black/40 backdrop-blur-sm lg:justify-center"
       onClick={() => closeModal('SeatChangeModal')}
     >
       <div
@@ -31,7 +32,37 @@ const SeatChangeModal = () => {
           <div className="h-1 w-10 rounded-full bg-gray-300" />
         </div>
 
-        {!isSent ? (
+        {errorMessage ? (
+          /* 에러 — ExpiredModal과 동일한 UI */
+          <div className="flex flex-col items-center py-6">
+            <div className="animate-bounce-in">
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="28" fill="#FEE1DF" />
+                <line
+                  x1="22"
+                  y1="22"
+                  x2="42"
+                  y2="42"
+                  stroke="#EA4335"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+                <line
+                  x1="42"
+                  y1="22"
+                  x2="22"
+                  y2="42"
+                  stroke="#EA4335"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+            <span className="mt-4 animate-fade-up text-base font-bold text-gray-800">
+              {errorMessage}
+            </span>
+          </div>
+        ) : !isSent ? (
           <>
             {/* PC 헤더 */}
             <div className="mb-5 hidden lg:flex lg:items-start lg:justify-between">
@@ -97,8 +128,13 @@ const SeatChangeModal = () => {
               </button>
               <button
                 onClick={async () => {
+                  const error = await changeRequset(target);
+                  if (error) {
+                    setErrorMessage(error);
+                    setTimeout(() => closeModal('SeatChangeModal'), 1500);
+                    return;
+                  }
                   setIsSent(true);
-                  await changeRequset(target);
                   setTimeout(() => {
                     closeModal('SeatChangeModal');
                     navigate('/');

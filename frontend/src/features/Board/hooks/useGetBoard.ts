@@ -1,27 +1,26 @@
 /**
- * @role: features — 자유게시판 게시글 목록 조회 훅
- * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ * @role: features — 자유게시판 목록 조회 훅
+ * @rule: api/ 호출만 담당
  */
-import { BoardPost } from '@/entities/Board/types/boardType';
 import { useEffect, useState } from 'react';
-import { getBoardPostsApi } from '../api/getBoardApi';
+import { getBoardPostsApi, BoardListParams } from '../api/getBoardApi';
+import { BoardPost, BoardPagination } from '@/entities/Board/types/boardType';
 
-export const useGetBoard = () => {
-  const [boardData, setBoardData] = useState<BoardPost[]>([]);
+export const useGetBoard = (params?: Omit<BoardListParams, 'type'>) => {
+  const [boardData, setBoarData] = useState<BoardPost[]>([]);
+  const [pagination, setPagination] = useState<BoardPagination | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    getBoardPostsApi()
-      .then((datas) => {
-        setBoardData(
-          datas
-            .filter((d) => d.title)
-            .sort((a, b) => a.createdAt - b.createdAt),
-        );
-        setIsLoaded(true);
+    setIsLoaded(false);
+    getBoardPostsApi({ type: 'free', ...params })
+      .then(({ items, pagination: pg }) => {
+        setBoarData(items);
+        setPagination(pg);
       })
-      .catch(() => setIsLoaded(true));
-  }, []);
+      .catch((e) => console.error('[useGetBoard]', e))
+      .finally(() => setIsLoaded(true));
+  }, [params?.page, params?.size, params?.search, params?.sort]);
 
-  return { boardData, isLoaded };
+  return { boardData, pagination, isLoaded };
 };

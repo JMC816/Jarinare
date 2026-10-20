@@ -6,13 +6,14 @@ import { Link } from 'react-router-dom';
 import notification from '@/assets/icons/notification.png';
 import on_user from '@/assets/icons/on_user.png';
 import useNotificationSidebarStore from '@/widgets/Notification/model/notificationSidebarStore';
-import { useHasUnreadNotification } from '@/features/Notification/hooks/useHasUnreadNotification';
+import { useBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
 
 const PCTopNav = () => {
   const openNotificationSidebar = useNotificationSidebarStore(
     (state) => state.open,
   );
-  const { hasUnread } = useHasUnreadNotification();
+  const { notifications } = useBackendNotifications();
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
     <nav className="sticky top-0 z-50 h-14 w-full border-b border-gray-200/50 bg-white/80 shadow-sm backdrop-blur-md">
@@ -26,11 +27,13 @@ const PCTopNav = () => {
         <div className="flex items-center gap-1">
           <button
             onClick={openNotificationSidebar}
-            className="relative rounded-lg p-2 transition-colors hover:bg-gray-100"
+            className={`relative rounded-lg p-2 transition-colors hover:bg-gray-100 ${unreadCount > 0 ? 'animate-bounce' : ''}`}
           >
             <img width={20} height={24} src={notification} />
-            {hasUnread && (
-              <span className="absolute right-1.5 top-1.5 size-1.5 animate-ping rounded-full bg-blue" />
+            {unreadCount > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red text-[10px] font-bold text-white">
+                {unreadCount > 99 ? '99+' : unreadCount}
+              </span>
             )}
           </button>
           <Link

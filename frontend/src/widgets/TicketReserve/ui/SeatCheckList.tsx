@@ -1,19 +1,14 @@
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 import Seat from './Seat';
 import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
-import { auth } from '@/shared/firebase/firebase';
 import { reserveConstants } from '../constants/ReserveConstants';
 import { seatsStateStore } from '@/features/TicketReserve/model/seatsStateStore';
 import { useResetSeatsState } from '@/features/TicketReserve/hooks/useResetSeatsState';
 
 const SeatCheckList = () => {
-  const { handleSingleSelect, seatsInfo, locks, isLocksLoaded } =
-    useSeatQueryData();
+  const { handleSingleSelect, seatsInfo, locks } = useSeatQueryData();
   const { seatsState } = seatsStateStore();
   const { seatsRows } = reserveConstants();
-  const user = auth.currentUser;
-
-  if (!user) return;
 
   // 호차 변경 시 좌석 선택 초기화
   useResetSeatsState();
@@ -60,24 +55,20 @@ const SeatCheckList = () => {
 
                 // 예매된 본인 좌석
                 const isMine = seatsInfo.some(
-                  (item) => item.seatId === id && item.userId === user.uid,
+                  (item) => item.seatId === id && item.userId === 'me',
                 );
 
                 // 예매된 본인 이외의 좌석
                 const isOther = seatsInfo.some(
-                  (item) => item.seatId === id && item.userId !== user.uid,
+                  (item) => item.seatId === id && item.userId === 'other',
                 );
 
                 // 실시간 상대방 좌석 잠금
-                const isLocked = Object.entries(locks).some(
-                  (item) => item[0] === id && item[1] !== user.uid,
-                );
+                const isLocked = id in locks;
                 return (
                   <Seat
                     key={id}
-                    onClick={
-                      isLocksLoaded ? () => handleSingleSelect(id) : null
-                    }
+                    onClick={() => handleSingleSelect(id)}
                     borderColor="lightGray"
                     bgColor={
                       isMine
@@ -98,22 +89,18 @@ const SeatCheckList = () => {
                 const seatState = seatsState[id];
 
                 const isMine = seatsInfo.some(
-                  (item) => item.seatId === id && item.userId === user?.uid,
+                  (item) => item.seatId === id && item.userId === 'me',
                 );
 
                 const isOther = seatsInfo.some(
-                  (item) => item.seatId === id && item.userId !== user?.uid,
+                  (item) => item.seatId === id && item.userId === 'other',
                 );
 
-                const isLocked = Object.entries(locks).some(
-                  (item) => item[0] === id && item[1] !== user.uid,
-                );
+                const isLocked = id in locks;
                 return (
                   <Seat
                     key={id}
-                    onClick={
-                      isLocksLoaded ? () => handleSingleSelect(id) : null
-                    }
+                    onClick={() => handleSingleSelect(id)}
                     borderColor="lightGray"
                     bgColor={
                       isMine

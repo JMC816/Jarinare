@@ -44,7 +44,7 @@ const SeatChangePage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full min-w-[375px] flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
         <BackWardPageButton title="좌석 변경" />
         <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
           <SeatChangeMenu />

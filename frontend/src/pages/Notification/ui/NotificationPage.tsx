@@ -1,6 +1,7 @@
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
 import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptResponse';
+import { useBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
 import backward from '@/assets/icons/backward.png';
 import { useBackButton } from '@/widgets/layouts/hooks/BackWardHook';
 import useModalStore from '@/widgets/model/Notification';
@@ -8,6 +9,7 @@ import { AcceptResponse } from '@/widgets/Notification/ui/acceptResponse';
 import Modal from '@/widgets/Notification/ui/Modal';
 import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
 import { RefuseResponse } from '@/widgets/Notification/ui/refuseResponse';
+import BackendNotificationItem from '@/widgets/Notification/ui/BackendNotificationItem';
 import { Timestamp } from 'firebase/firestore';
 import { auth, realtimeDb } from '@/shared/firebase/firebase';
 import setting from '@/assets/icons/setting.png';
@@ -31,6 +33,7 @@ const NotificationPage = () => {
     updateStartTimeResponse,
     updateAllResponse,
   } = useIsReadNotification();
+  const { notifications, markAsRead, markAllAsRead, deleteNotification } = useBackendNotifications();
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-gray-100">
@@ -47,13 +50,27 @@ const NotificationPage = () => {
           <img width={27} height={27} src={setting} />
         </Link>
       </div>
+      <p className="mt-[16px] w-full px-[10px] text-xs text-gray-400">
+        이전 달부터 이번 달까지의 알림을 표시합니다.
+      </p>
       <span
-        onClick={async () => await updateAllResponse()}
-        className="mt-[20px] flex w-full cursor-pointer justify-end pr-[10px] text-tiny text-darkGray underline"
+        onClick={async () => {
+          await updateAllResponse();
+          await markAllAsRead();
+        }}
+        className="mt-[8px] flex w-full cursor-pointer justify-end pr-[10px] text-tiny text-darkGray underline"
       >
         모두 읽음
       </span>
       <div className="mt-[5px] w-full">
+        {notifications.map((n) => (
+          <BackendNotificationItem
+            key={n.id}
+            notification={n}
+            onClick={() => markAsRead(n.id, n.type)}
+            onDelete={() => deleteNotification(n.id, n.type)}
+          />
+        ))}
         {readStartTime &&
           Object.keys(readStartTime.val()).map((key) => (
             <SwipeToDelete

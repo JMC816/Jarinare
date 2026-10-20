@@ -5,7 +5,7 @@
 import { useMemo } from 'react';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { parseDateTime } from '@/shared/lib/formatDate';
-import { resolveRoute, normalizeStation } from '@/shared/lib/trainRoutes';
+import { getSegmentStations } from '@/shared/lib/trainRoutes';
 
 export const useTicketDetail = (seats: SeatType[]) => {
   const s = seats[0];
@@ -28,28 +28,23 @@ export const useTicketDetail = (seats: SeatType[]) => {
       ? `${Math.floor(dur / 60)}시간 ${dur % 60 > 0 ? `${dur % 60}분` : ''}`
       : `${dur}분`;
 
-  const { departure, arrival } = parseDateTime(s.startTime, dur);
+  const { departure, arrival } = useMemo(
+    () => parseDateTime(s.startTime, dur),
+    [s.startTime, dur],
+  );
 
   const filtred = useMemo(() => seats.map((seat) => seat.seatId), [seats]);
 
   // 열차 노선에서 출발~도착 구간 역 추출
-  const segmentStations = useMemo(() => {
-    const startName = normalizeStation(s.startStationForView);
-    const endName = normalizeStation(s.endStationForView);
-    const { route } = resolveRoute(s.trainType, startName, endName);
-    // 정확한 매칭 실패 시 부분 문자열로 fallback
-    const findIdx = (name: string) => {
-      const exact = route.indexOf(name);
-      if (exact !== -1) return exact;
-      return route.findIndex((r) => r.includes(name) || name.includes(r));
-    };
-    const startIdx = findIdx(startName);
-    const endIdx = findIdx(endName);
-    if (startIdx === -1 || endIdx === -1) return [];
-    return startIdx < endIdx
-      ? route.slice(startIdx, endIdx + 1)
-      : route.slice(endIdx, startIdx + 1).reverse();
-  }, [seats]);
+  const segmentStations = useMemo(
+    () =>
+      getSegmentStations(
+        s.trainType,
+        s.startStationForView,
+        s.endStationForView,
+      ),
+    [s.trainType, s.startStationForView, s.endStationForView],
+  );
 
   // 티켓 정보를 URL-safe Base64로 인코딩하여 QR URL 생성
   const qrValue = useMemo(() => {

@@ -8,8 +8,16 @@ import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { trainQueryData } from '@/features/TicketReserve/hooks/trainQueryData';
 import { errorStateStore } from '@/features/TicketReserve/model/errorStateStore';
 import useModalStore from '@/widgets/model/ReserveStore';
+import welcomeTourStore from '@/shared/models/welcomeTourStore';
+import { formatDateForView } from '@/shared/lib/formatDate';
 import type { DropdownType } from '../types/PCHomePageTypes';
 import type { DestinationItem } from '@/widgets/TicketReserve/types/RecommendDestinationType';
+
+const getTourDayForView = () => {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return formatDateForView(d);
+};
 
 export const usePCHomePage = () => {
   const [openDropdown, setOpenDropdown] = useState<DropdownType>(null);
@@ -17,20 +25,28 @@ export const usePCHomePage = () => {
     useState<DestinationItem | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const { isActive: isTourActive } = welcomeTourStore();
+
   const {
     startStation,
     endStation,
     startDay,
-    startStationForView,
-    endStationForView,
-    startDayForView,
-    adult,
-    kid,
+    startStationForView: rawStartStationForView,
+    endStationForView: rawEndStationForView,
+    startDayForView: rawStartDayForView,
+    adult: rawAdult,
+    kid: rawKid,
     setStartStation,
     setEndStation,
     setStartStationForView,
     setEndStationForView,
   } = trainDataStore();
+
+  const startStationForView = isTourActive ? '서울' : rawStartStationForView;
+  const endStationForView = isTourActive ? '부산' : rawEndStationForView;
+  const startDayForView = isTourActive ? getTourDayForView() : rawStartDayForView;
+  const adult = isTourActive ? 1 : rawAdult;
+  const kid = isTourActive ? 0 : rawKid;
 
   const { refetch } = trainQueryData();
   const { error } = errorStateStore();
@@ -72,10 +88,12 @@ export const usePCHomePage = () => {
   };
 
   const isSearchDisabled =
-    !startStationForView ||
-    !endStationForView ||
-    !startDayForView ||
-    adult + kid === 0;
+    isTourActive
+      ? false
+      : !startStationForView ||
+        !endStationForView ||
+        !startDayForView ||
+        adult + kid === 0;
 
   return {
     openDropdown,

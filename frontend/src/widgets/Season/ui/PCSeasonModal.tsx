@@ -11,7 +11,7 @@ const PCSeasonModal = ({ onClose }: PCSeasonModalProps) => {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 px-[35%] py-10 lg:left-[220px] lg:top-14 lg:flex lg:backdrop-blur-sm"
+      className="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/60 px-[35%] py-10 backdrop-blur-sm lg:flex"
       onClick={onClose}
     >
       <div

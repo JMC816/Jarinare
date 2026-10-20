@@ -21,7 +21,6 @@ const PCWriteForm = ({
   categoryLabel,
   backLabel,
   author,
-  onAuthorChange,
   title,
   onTitleChange,
   content,
@@ -29,10 +28,10 @@ const PCWriteForm = ({
   previewImg,
   onFileChange,
   fileInputRef,
-  setFile,
-  setPreviewImg,
   onSubmit,
+  onClearImage,
   loading,
+  uploading,
   categorySelectable = false,
   selectedCategory,
   onCategoryChange,
@@ -130,13 +129,9 @@ const PCWriteForm = ({
                   <span className="text-xs font-bold text-gray-400">
                     작성자
                   </span>
-                  <input
-                    value={author}
-                    onChange={onAuthorChange}
-                    required
-                    placeholder="작성자를 입력하세요"
-                    className="rounded-sm border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none placeholder:text-gray-300 focus:border-blue"
-                  />
+                  <div className="rounded-sm border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-500">
+                    {author}
+                  </div>
                 </div>
               </div>
 
@@ -181,12 +176,7 @@ const PCWriteForm = ({
                     />
                     <button
                       type="button"
-                      onClick={() => {
-                        setFile(null);
-                        setPreviewImg(null);
-                        if (fileInputRef.current)
-                          fileInputRef.current.value = '';
-                      }}
+                      onClick={onClearImage}
                       className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow"
                     >
                       <img src={cross} width={10} height={10} />
@@ -271,10 +261,10 @@ const PCWriteForm = ({
                 </button>
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || uploading}
                   className="rounded-sm bg-blue px-6 py-2.5 text-sm font-bold text-white transition-colors hover:bg-blue/90 disabled:opacity-50"
                 >
-                  {loading ? '등록 중...' : '작성 완료'}
+                  {loading ? '등록 중...' : uploading ? '이미지 업로드 중...' : '작성 완료'}
                 </button>
               </div>
             </form>

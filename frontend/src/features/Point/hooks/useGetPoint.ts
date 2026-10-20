@@ -1,23 +1,10 @@
-import { auth, db } from '@/shared/firebase/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+/**
+ * @role: features/hooks
+ * @rule: 외부 데이터 호출만 담당
+ */
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 export const useGetPoint = () => {
-  const [point, setPoint] = useState<number>(0);
-  const user = auth.currentUser;
-
-  // 각 사용자의 포인트
-  useEffect(() => {
-    if (!user) return;
-    const getPoint = async () => {
-      const userRef = doc(db, 'users', user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists()) {
-        setPoint(userSnap.data().point ?? 0);
-      }
-    };
-    getPoint();
-  }, [user]);
-  return { point };
+  const { user } = useCurrentUser();
+  return { point: user?.point ?? 0 };
 };

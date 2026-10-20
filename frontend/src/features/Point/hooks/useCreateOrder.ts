@@ -1,21 +1,10 @@
 /**
- * @role: features — 결제 완료 시 주문 내역 Firestore 저장
- * @rule: 외부 데이터 호출만 담당
+ * @role: features/hooks
+ * @rule: 백엔드 예매 API가 주문 내역을 함께 처리하므로 별도 호출 불필요
  */
-import { auth, db } from '@/shared/firebase/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { OrderType } from '@/entities/Point/types/orderType';
 
 export const useCreateOrder = () => {
-  const createOrder = async (order: Omit<OrderType, 'createAt'>) => {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    await addDoc(collection(db, 'orders', user.uid, 'detail'), {
-      ...order,
-      createAt: serverTimestamp(),
-    });
-  };
-
+  const createOrder = async (_order: Omit<OrderType, 'createAt'>) => {};
   return { createOrder };
 };

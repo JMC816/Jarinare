@@ -1,20 +1,19 @@
 /**
  * @role: features — 게시물 삭제 훅
- * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ * @rule: api/ 호출만 담당
  */
-import { auth } from '@/shared/firebase/firebase';
 import { deletePostApi } from '../api/deletePostApi';
+import { BoardType } from '@/entities/Board/types/boardType';
 
 export const useDeletePost = () => {
-  const deletePost = async (postPath: string) => {
-    const uid = auth.currentUser?.uid;
-    if (!uid) return;
+  const deletePost = async (id: number, type: BoardType): Promise<boolean> => {
     try {
-      await deletePostApi(uid, postPath);
+      await deletePostApi(id, type);
+      return true;
     } catch (error) {
-      console.log(error);
+      console.error('[useDeletePost]', error);
+      return false;
     }
   };
-
   return { deletePost };
 };

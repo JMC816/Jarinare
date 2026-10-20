@@ -6,9 +6,12 @@ import { SeatType } from '@/entities/Seat/types/seatType';
 import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
 import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptResponse';
 import { useIsReadFollowNotification } from '@/features/Follow/hooks/useIsReadFollowNotification';
+import { useBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
+import BackendNotificationItem from './BackendNotificationItem';
 import useNotifiModalStore from '@/widgets/model/Notification';
 import { AcceptResponse } from '@/widgets/Notification/ui/acceptResponse';
 import AcceptModal from '@/widgets/Notification/ui/AcceptModal';
+import ExpiredModal from '@/widgets/Notification/ui/ExpiredModal';
 import ResponseModal from '@/widgets/Notification/ui/ResponseModal';
 import NotificationRequest from '@/widgets/Notification/ui/NotificationRequest';
 import { RefuseResponse } from '@/widgets/Notification/ui/refuseResponse';
@@ -47,17 +50,18 @@ const PCNotificationSidebar = () => {
     updateFollowPostResponse,
     updateAllFollowResponse,
   } = useIsReadFollowNotification();
+  const { notifications, markAsRead, markAllAsRead, deleteNotification } = useBackendNotifications();
 
   return (
     <>
       {/* 오버레이 */}
       {isOpen && (
-        <div className="fixed inset-0 z-40 bg-black/30" onClick={close} />
+        <div className="fixed inset-0 z-[55] bg-black/30" onClick={close} />
       )}
 
       {/* 사이드바 패널 */}
       <aside
-        className={`fixed right-0 top-0 z-50 flex h-full w-[400px] flex-col bg-gray-100 transition-transform duration-300 ${
+        className={`fixed right-0 top-0 z-[60] flex h-full w-[400px] flex-col bg-gray-100 transition-transform duration-300 ${
           isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'
         }`}
       >
@@ -86,12 +90,18 @@ const PCNotificationSidebar = () => {
           </div>
         </div>
 
+        {/* 안내 텍스트 */}
+        <div className="px-4 pt-3">
+          <p className="text-xs text-gray-400">이전 달부터 이번 달까지의 알림을 표시합니다.</p>
+        </div>
+
         {/* 모두 읽음 */}
-        <div className="flex justify-end px-4 pt-3">
+        <div className="flex justify-end px-4 pt-2">
           <span
             onClick={async () => {
               await updateAllResponse();
               await updateAllFollowResponse();
+              await markAllAsRead();
               close();
             }}
             className="cursor-pointer text-tiny text-darkGray underline"
@@ -102,6 +112,14 @@ const PCNotificationSidebar = () => {
 
         {/* 알림 목록 */}
         <div className="mt-2 flex-1 overflow-y-auto px-1 pb-6 pt-3">
+          {notifications.map((n) => (
+            <BackendNotificationItem
+              key={n.id}
+              notification={n}
+              onClick={() => markAsRead(n.id, n.type)}
+              onDelete={() => deleteNotification(n.id, n.type)}
+            />
+          ))}
           {topFollowerNotifications &&
             Object.keys(topFollowerNotifications.val()).map((key) => (
               <SwipeToDelete
@@ -287,9 +305,10 @@ const PCNotificationSidebar = () => {
       </aside>
 
       {isShow && modalType ? (
-        <div className="fixed inset-0 z-[60]">
+        <div className="fixed inset-0 z-[70]">
           {modalType === 'ResponseModal' && <ResponseModal centered />}
           {modalType === 'AcceptModal' && <AcceptModal centered />}
+          {modalType === 'ExpiredModal' && <ExpiredModal centered />}
         </div>
       ) : null}
     </>

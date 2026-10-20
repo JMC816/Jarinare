@@ -38,12 +38,15 @@ const PCSeatChangePage = () => {
     handleSelectTrainNo,
     handleSeatClick,
     handleRequestChange,
-    user,
   } = usePCSeatChangePage();
 
   const { isShow, modalType } = useModalStore();
 
-  if (!user || !seatsState) return <LoadingScreen />;
+  if (!seatsState) return (
+    <div className="flex min-h-screen w-full items-center justify-center">
+      <LoadingScreen />
+    </div>
+  );
 
   return (
     <div
@@ -56,10 +59,10 @@ const PCSeatChangePage = () => {
         <PCSidebar />
 
         <main
-          className="relative min-w-0 flex-1 overflow-y-auto overflow-x-hidden"
+          className="relative min-w-0 flex-1 overflow-y-auto overflow-x-auto"
           style={{ height: 'calc(100vh - 3.5rem)' }}
         >
-          <div className="px-96 pb-16 pt-6">
+          <div className="mx-auto max-w-[900px] min-w-[700px] px-6 pb-16 pt-6">
             {/* 제목칸 + 호차 선택 드롭다운 */}
             <div className="mb-6 flex items-end justify-between px-2">
               <div>
@@ -197,21 +200,17 @@ const PCSeatChangePage = () => {
                       const seatState = seatsState[id];
                       const isMine = seatsChangeInfo.some(
                         (item) =>
-                          item.seatId === id && item.userId === user.uid,
+                          item.seatId === id && item.userId === 'me',
                       );
                       const isOther = seatsChangeInfo.some(
                         (item) =>
-                          item.seatId === id && item.userId !== user.uid,
+                          item.seatId === id && item.userId === 'other',
                       );
                       const isMineByChangeTarget =
                         seatsChangeMixTargetOrAllTarget.some(
                           (seatId) => seatId === id,
                         );
-                      const isLocked = Object.entries(locks).some(
-                        ([seatId, val]) =>
-                          seatId === id &&
-                          (val as { userId: string }).userId !== user.uid,
-                      );
+                      const isLocked = id in locks;
 
                       return (
                         <PCSeatChange

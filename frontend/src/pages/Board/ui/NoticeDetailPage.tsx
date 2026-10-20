@@ -2,6 +2,7 @@ import backward from '@/assets/icons/backward.png';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { toBackendImageUrl } from '@/shared/api/backendClient';
 
 const NoticeDetailPage = () => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const NoticeDetailPage = () => {
           {notice.imageUrl && (
             <div className="w-full">
               <img
-                src={notice.imageUrl}
+                src={toBackendImageUrl(notice.imageUrl) ?? ''}
                 alt={notice.title}
                 className="h-full w-full object-contain"
               />
@@ -72,7 +73,7 @@ const NoticeDetailPage = () => {
 
           {/* 좋아요 */}
           <div className="px-4 pb-1 text-sm font-semibold">
-            {notice.likes}명이 좋아합니다
+            {notice.liked}명이 좋아합니다
           </div>
 
           {/* 제목 & 내용 */}

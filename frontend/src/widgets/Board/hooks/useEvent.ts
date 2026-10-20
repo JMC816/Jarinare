@@ -18,8 +18,8 @@ export const useEvent = (
   const [internalSearchQuery, setInternalSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
   const [filterOpen, setFilterOpen] = useState(false);
-  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
-  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
+  const [menuOpenId, setMenuOpenId] = useState<number | null>(null);
+  const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
 
   const searchQuery = isPC ? (externalSearchQuery ?? '') : internalSearchQuery;
   const activeSortOrder = isPC ? (externalSortOrder ?? 'newest') : sortOrder;
@@ -34,7 +34,7 @@ export const useEvent = (
   const displayedItems = items.filter((p) => !deletedIds.has(p.id));
 
   const handleDelete = async (post: BoardPost) => {
-    await deletePost(post.id);
+    await deletePost(post.id, 'event');
     setDeletedIds((prev) => new Set(prev).add(post.id));
     setMenuOpenId(null);
   };

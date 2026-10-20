@@ -36,6 +36,16 @@ export default {
       },
     },
     keyframes: {
+      bounce: {
+        '0%, 100%': {
+          transform: 'translateY(-10%)',
+          animationTimingFunction: 'cubic-bezier(0.8,0,1,1)',
+        },
+        '50%': {
+          transform: 'translateY(0)',
+          animationTimingFunction: 'cubic-bezier(0,0,0.2,1)',
+        },
+      },
       pulse: {
         '50%': { opacity: '0.2' },
       },
@@ -98,6 +108,7 @@ export default {
       },
     },
     animation: {
+      bounce: 'bounce 1s infinite',
       pulse: 'pulse 2s ease-in-out infinite',
       ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;',
       spin: 'spin 1s linear infinite;',
@@ -116,6 +127,10 @@ export default {
     {
       pattern:
         /(bg|text)-(blue|rightBlue|lightestGray|lightGray|mediumGray|darkGray|green|red|rightImpossible|black|white|)/,
+    },
+    {
+      pattern:
+        /(bg|text)-(purple|orange|yellow|emerald|red)-(100|500|600|700)/,
     },
   ],
 };

@@ -8,35 +8,17 @@ import NoticeForm from '@/widgets/Board/ui/NoticeForm';
 import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
 import PCWriteForm from '@/widgets/Board/ui/PCWriteForm';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '@/shared/firebase/firebase';
-import PCLoginRequiredPage from '@/widgets/layouts/ui/PCLoginRequiredPage';
-import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
-
-const LoginRequired = ({ onLogin }: { onLogin: () => void }) => (
-  <>
-    <div className="hidden w-full lg:block">
-      <PCLoginRequiredPage
-        description="로그인 후 글을 작성할 수 있어요"
-        onLogin={onLogin}
-      />
-    </div>
-    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-50 lg:hidden">
-      <LoginRequiredBlock
-        description="로그인 후 글을 작성할 수 있어요"
-        onLogin={onLogin}
-      />
-    </div>
-  </>
-);
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 const NoticeWirtePage = () => {
   const navigate = useNavigate();
+  const { user, isLoading } = useCurrentUser();
   const notice = useNoticeHandler({ navigateTo: '/board/noticelist' });
 
-  if (!auth.currentUser)
-    return <LoginRequired onLogin={() => navigate('/auth/login')} />;
+  if (isLoading) return null;
 
-  if (auth.currentUser.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+  const isAdmin = user?.email === import.meta.env.VITE_ADMIN_EMAIL;
+  if (!isAdmin) {
     navigate('/board/noticelist', { replace: true });
     return null;
   }
@@ -45,7 +27,11 @@ const NoticeWirtePage = () => {
     <>
       {/* PC */}
       <div className="hidden w-full lg:block">
-        <PCWriteForm {...notice} categoryLabel={notice.isEditMode ? '공지사항 수정' : '공지'} backLabel="공지사항" />
+        <PCWriteForm
+          {...notice}
+          categoryLabel={notice.isEditMode ? '공지사항 수정' : '공지'}
+          backLabel="공지사항"
+        />
       </div>
 
       {/* 모바일 */}
@@ -57,7 +43,9 @@ const NoticeWirtePage = () => {
               src={backward}
               className="h-[20px] w-[12px] cursor-pointer"
             />
-            <h1 className="text-lg font-bold">{notice.isEditMode ? '공지사항 수정' : '공지사항 작성'}</h1>
+            <h1 className="text-lg font-bold">
+              {notice.isEditMode ? '공지사항 수정' : '공지사항 작성'}
+            </h1>
           </div>
           <NoticeForm {...notice} />
         </div>

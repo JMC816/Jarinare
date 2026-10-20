@@ -27,7 +27,7 @@ export const useCurrentUser = () => {
       return data;
     },
     enabled: !!token,
-    staleTime: 60_000,
+    staleTime: Infinity,
   });
 
   return {

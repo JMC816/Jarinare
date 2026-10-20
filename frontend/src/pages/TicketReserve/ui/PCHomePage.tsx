@@ -15,6 +15,7 @@ import PCDayDropdown from '@/widgets/TicketReserve/ui/PCDayDropdown';
 import PCCountDropdown from '@/widgets/TicketReserve/ui/PCCountDropdown';
 import { usePCHomePage } from '../hooks/usePCHomePage';
 import PCDestinationModal from '@/widgets/TicketReserve/ui/PCDestinationModal';
+import PCWelcomeTour from '@/widgets/Tour/ui/PCWelcomeTour';
 import start_station from '@/assets/icons/start_station.png';
 import end_station from '@/assets/icons/end_station.png';
 import calendar from '@/assets/icons/calendar.png';
@@ -67,7 +68,7 @@ const PCHomePage = () => {
               <p className="mb-5 text-sm text-white/70">
                 Where will your next journey take you?
               </p>
-              <div className="w-2/3 rounded-lg border border-gray-100 bg-gray-50 p-4">
+              <div id="tour-search" className="w-2/3 rounded-lg border border-gray-100 bg-gray-50 p-4">
                 <div ref={dropdownRef} className="flex items-center gap-4">
                   {/* 출발역 */}
                   <div className="relative flex-1">
@@ -274,6 +275,7 @@ const PCHomePage = () => {
           </div>
         </main>
       </div>
+      <PCWelcomeTour page="home" />
       {isShow && modalType ? <Modal /> : null}
       {selectedDestination && (
         <PCDestinationModal

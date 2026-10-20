@@ -21,8 +21,8 @@ export const usePCNoticeListPage = () => {
   const processedData = useMemo(() => {
     return [...noticeData].sort((a, b) =>
       sortOrder === 'newest'
-        ? b.createdAt - a.createdAt
-        : a.createdAt - b.createdAt,
+        ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
   }, [noticeData, sortOrder]);
 
@@ -32,7 +32,7 @@ export const usePCNoticeListPage = () => {
     return processedData.filter(
       (p) =>
         p.title?.toLowerCase().includes(q) ||
-        p.content?.toLowerCase().includes(q),
+        p.author?.toLowerCase().includes(q),
     );
   }, [processedData, searchQuery]);
 
@@ -60,11 +60,15 @@ export const usePCNoticeListPage = () => {
     setCurrentPage(0);
   };
 
-  const formatDate = (createdAt: number) =>
-    new Date(createdAt * 1000)
+  const formatDate = (createdAt: string | number) => {
+    const d = typeof createdAt === 'number'
+      ? new Date(createdAt * 1000)
+      : new Date(createdAt);
+    return d
       .toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })
       .replace('. ', '/')
       .replace('.', '');
+  };
 
   return {
     searchQuery,

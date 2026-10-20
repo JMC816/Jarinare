@@ -31,7 +31,7 @@ export const useLikeNoitce = (items: BoardPost[]) => {
     listenersRef.current = [];
 
     items.forEach((item) => {
-      const docId = item.id.split('/').pop()!;
+      const docId = String(item.id);
       const unsub = subscribeNoticeLikeCountApi(docId, (count) => {
         setLikesMap((prev) => ({ ...prev, [item.id]: count }));
       });
@@ -51,18 +51,17 @@ export const useLikeNoitce = (items: BoardPost[]) => {
     fetchNoticeLikedStateApi(user.uid).then((likedDocIds) => {
       const likedByPath: Record<string, boolean> = {};
       items.forEach((item) => {
-        const docId = item.id.split('/').pop()!;
-        likedByPath[item.id] = likedDocIds[docId] ?? false;
+        likedByPath[item.id] = likedDocIds[String(item.id)] ?? false;
       });
       setLikedMap(likedByPath);
     });
   }, [user, items.length]);
 
-  const handleClickLike = async (noticeId: string) => {
+  const handleClickLike = async (noticeId: string | number) => {
     if (!user) return;
 
     const isCurrentlyLiked = likedMap[noticeId] ?? false;
-    const docId = noticeId.split('/').pop()!;
+    const docId = String(noticeId);
 
     setLikedMap((prev) => ({ ...prev, [noticeId]: !isCurrentlyLiked }));
 

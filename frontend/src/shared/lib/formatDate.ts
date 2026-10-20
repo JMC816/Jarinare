@@ -109,8 +109,8 @@ export const formatReviewDate = (seconds: number): string => {
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
 };
 
-export const formatBoardTime = (date: number) => {
-  const newDate = new Date(date * 1000);
+export const formatBoardTime = (date: string | number) => {
+  const newDate = typeof date === 'number' ? new Date(date * 1000) : new Date(date);
   const year = newDate.getFullYear();
   const month = (newDate.getMonth() + 1).toString().padStart(2, '0');
   const day = newDate.getDate().toString().padStart(2, '0');

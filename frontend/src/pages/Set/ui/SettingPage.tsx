@@ -14,7 +14,6 @@ const SettingPage = () => {
   const {
     isLoggedIn,
     handleLoginNavigate,
-    isNotification,
     changeOn,
     responseOn,
     allOn,
@@ -50,7 +49,6 @@ const SettingPage = () => {
     );
   }
 
-  if (!isNotification) return null;
 
   return (
     <>

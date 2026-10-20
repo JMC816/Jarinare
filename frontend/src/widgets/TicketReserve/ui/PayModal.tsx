@@ -60,7 +60,10 @@ const PayModal = () => {
     checked,
     value,
     eventSelected,
-    handleEventChange,
+    isEventOpen,
+    eventDropdownRef,
+    handleToggleEventDropdown,
+    handleSelectEvent,
     isDiscountEligible,
     basePrice,
     discountedBase,
@@ -89,10 +92,11 @@ const PayModal = () => {
 
   return (
     <div
-      className="flex h-full w-full flex-col items-center justify-end bg-black/40 lg:justify-center lg:backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex flex-col items-center justify-end bg-black/40 backdrop-blur-sm lg:justify-center"
       onClick={handleClose}
     >
       <div
+        id="tour-pay-modal"
         className="mb-4 w-[343px] animate-slide-up rounded-3xl bg-white px-6 pb-8 pt-5 lg:mb-0 lg:w-[440px] lg:animate-fade-up lg:rounded-2xl lg:px-8"
         onClick={(e) => e.stopPropagation()}
       >
@@ -137,36 +141,55 @@ const PayModal = () => {
         {/* 이벤트 드롭다운 */}
         <div className="mb-3">
           <p className="mb-1 text-xs font-bold text-gray-500">이벤트 선택</p>
-          <div className="relative">
-            <select
-              value={eventSelected}
-              onChange={handleEventChange}
-              className={`w-full appearance-none rounded-lg border px-3 py-2.5 pr-8 text-sm outline-none ${
+          <div ref={eventDropdownRef} className="relative">
+            <button
+              type="button"
+              onClick={handleToggleEventDropdown}
+              className={`flex w-full items-center justify-between rounded-lg border px-3 py-2.5 text-sm outline-none transition-colors ${
                 eventSelected === 'season'
                   ? `border-current ${style.color} font-bold`
                   : 'border-lightGray text-gray-600'
               }`}
             >
-              <option value="none">선택안함</option>
-              {isDiscountEligible && (
-                <option value="season">
-                  {style.emoji} {season} 계절 10% 할인
-                </option>
-              )}
-            </select>
-            <svg
-              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
+              <span>
+                {eventSelected === 'season'
+                  ? `${style.emoji} ${season} 계절 10% 할인`
+                  : '선택안함'}
+              </span>
+              <svg
+                className={`text-gray-400 transition-transform ${isEventOpen ? 'rotate-180' : ''}`}
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            {isEventOpen && (
+              <div className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-lightGray bg-white shadow-md">
+                <button
+                  type="button"
+                  onClick={() => handleSelectEvent('none')}
+                  className="flex w-full items-center px-3 py-2.5 text-sm text-gray-900 transition-colors hover:bg-gray-50"
+                >
+                  선택안함
+                </button>
+                {isDiscountEligible && (
+                  <button
+                    type="button"
+                    onClick={() => handleSelectEvent('season')}
+                    className={`flex w-full items-center px-3 py-2.5 text-sm font-bold transition-colors hover:bg-gray-50 ${style.color}`}
+                  >
+                    {style.emoji} {season} 계절 10% 할인
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 

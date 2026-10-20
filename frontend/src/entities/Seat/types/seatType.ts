@@ -14,4 +14,6 @@ export type SeatType = {
   selectAdult: number;
   selectPay: number;
   id: string;
+  reservationId?: number;
+  tripId?: number;
 };

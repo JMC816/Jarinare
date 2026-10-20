@@ -38,7 +38,6 @@ export const SEASON_STATIONS = {
     '영월',
     '태백',
     '원주',
-    '문경',
     '남원',
     '밀양',
     '청도',

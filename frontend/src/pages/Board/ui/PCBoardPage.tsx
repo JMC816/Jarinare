@@ -200,7 +200,7 @@ const PCBoardPage = () => {
                             <button
                               key={post.id}
                               onClick={() =>
-                                navigate(style.path, {
+                                navigate(`/board/${post.id}?type=${style.type}`, {
                                   state: { [style.stateKey]: post },
                                 })
                               }
@@ -250,9 +250,7 @@ const PCBoardPage = () => {
                     ) : (
                       pagedPosts.map((post) => {
                         const style = CAT_STYLE_MAP[post._category];
-                        const isHot = top3DocIds.has(
-                          post.id.split('/').pop() ?? '',
-                        );
+                        const isHot = top3DocIds.has(String(post.id));
                         const hasNew = isNew(post.createdAt, post._category);
                         return (
                           <button
@@ -265,14 +263,14 @@ const PCBoardPage = () => {
                                     | 'event'
                                     | 'board',
                                 );
-                              navigate(style.path, {
+                              navigate(`/board/${post.id}?type=${style.type}`, {
                                 state: {
                                   [style.stateKey]: {
                                     id: post.id,
                                     title: post.title,
                                     content: post.content,
                                     author: post.author,
-                                    likes: post.likes,
+                                    liked: post.liked,
                                     views: post.views,
                                     createdAt: post.createdAt,
                                     imageUrl: post.imageUrl,
@@ -428,22 +426,15 @@ const PCBoardPage = () => {
                         }
                         const categoryLabel =
                           post.category === 'board' ? '자유' : post.category === 'event' ? '이벤트' : '공지';
-                        const detailPath =
-                          post.category === 'board'
-                            ? '/board/board/detail'
-                            : post.category === 'event'
-                              ? '/board/event/detail'
-                              : '/board/notice/detail';
-                        const detailState =
-                          post.category === 'board'
-                            ? { post: { id: post.id, title: post.title, content: post.content, author: post.author, likes: 0, views: post.viewCount, createdAt: 0, imageUrl: null } }
-                            : post.category === 'event'
-                              ? { event: { id: post.id, title: post.title, content: post.content, author: post.author, likes: 0, views: post.viewCount, createdAt: 0, imageUrl: null } }
-                              : { notice: { id: post.id, title: post.title, content: post.content, author: post.author, likes: 0, views: post.viewCount, createdAt: 0, imageUrl: null } };
+                        const detailType =
+                          post.category === 'board' ? 'free' : post.category === 'event' ? 'event' : 'notice';
+                        const detailStateKey =
+                          post.category === 'board' ? 'post' : post.category === 'event' ? 'event' : 'notice';
+                        const detailData = { id: post.id, title: post.title, content: post.content, author: post.author, liked: 0, views: post.viewCount, createdAt: 0, imageUrl: null, commentCount: 0, tags: [] };
                         return (
                           <button
                             key={post.id}
-                            onClick={() => navigate(detailPath, { state: detailState })}
+                            onClick={() => navigate(`/board/${post.id}?type=${detailType}`, { state: { [detailStateKey]: detailData } })}
                             className="flex w-full items-start gap-2.5 overflow-hidden py-3 text-left"
                           >
                             <span

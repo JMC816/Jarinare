@@ -2,10 +2,12 @@ import { backendClient, ACCESS_TOKEN_KEY } from '@/shared/api/backendClient';
 import { isAxiosError } from 'axios';
 import { LoadingStore, LoginMessageStore } from '../model/useLoginStore';
 import { FieldValues } from 'react-hook-form';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const useLoginState = () => {
   const { isLoading, setIsLoading } = LoadingStore();
   const { setMessage } = LoginMessageStore();
+  const queryClient = useQueryClient();
   const onSubmit = async (data: FieldValues) => {
     try {
       setIsLoading(true);
@@ -13,6 +15,7 @@ export const useLoginState = () => {
         '/oauth/login',
         { email: data.email, password: data.password },
       );
+      queryClient.clear();
       localStorage.setItem(ACCESS_TOKEN_KEY, res.accessToken);
       window.location.href = '/';
     } catch (e: unknown) {

@@ -1,8 +1,12 @@
+/**
+ * @role: entities — 댓글 도메인 타입 정의
+ * @rule: 타입 정의만 담당
+ */
 export interface Comment {
-  id: string;
-  uid: string;
+  id: number;
   author: string;
   content: string;
-  createdAt: number;
-  parentId: string | null; // null = 댓글, commentId = 대댓글
+  createdAt: string;
+  parentId: number | null;
+  liked: number;
 }

@@ -1,6 +1,6 @@
 /**
  * @role: pages — 자유게시판 글 작성/수정 페이지
- * @rule: 레이아웃·조합만 담당, admin 접근 가드 포함
+ * @rule: 레이아웃·조합만 담당
  */
 import backward from '@/assets/icons/backward.png';
 import { useBaordHandler } from '@/features/Board/hooks/useBoardHandler';
@@ -8,33 +8,10 @@ import BoardForm from '@/widgets/Board/ui/BoardForm';
 import LoadingScreen from '@/widgets/Board/ui/LoadingScreen';
 import PCWriteForm from '@/widgets/Board/ui/PCWriteForm';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '@/shared/firebase/firebase';
-import PCLoginRequiredPage from '@/widgets/layouts/ui/PCLoginRequiredPage';
-import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
-
-const LoginRequired = ({ onLogin }: { onLogin: () => void }) => (
-  <>
-    <div className="hidden w-full lg:block">
-      <PCLoginRequiredPage
-        description="로그인 후 글을 작성할 수 있어요"
-        onLogin={onLogin}
-      />
-    </div>
-    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-50 lg:hidden">
-      <LoginRequiredBlock
-        description="로그인 후 글을 작성할 수 있어요"
-        onLogin={onLogin}
-      />
-    </div>
-  </>
-);
 
 const BoardWirtePage = () => {
   const navigate = useNavigate();
   const board = useBaordHandler({ navigateTo: '/board/boardlist' });
-
-  if (!auth.currentUser)
-    return <LoginRequired onLogin={() => navigate('/auth/login')} />;
 
   return (
     <>
@@ -61,7 +38,9 @@ const BoardWirtePage = () => {
               src={backward}
               className="h-[20px] w-[12px] cursor-pointer"
             />
-            <h1 className="text-lg font-bold">{board.isEditMode ? '자유게시판 수정' : '자유게시판 작성'}</h1>
+            <h1 className="text-lg font-bold">
+              {board.isEditMode ? '자유게시판 수정' : '자유게시판 작성'}
+            </h1>
           </div>
           <BoardForm {...board} />
         </div>

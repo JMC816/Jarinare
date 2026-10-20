@@ -1,13 +1,11 @@
 import Seat from './Seat';
 import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
-import { auth } from '@/shared/firebase/firebase';
 import { reserveConstants } from '@/widgets/TicketReserve/constants/ReserveConstants';
 import { seatIdsStore } from '@/features/TicketChange/models/seatIdsStore';
 import { useSeatsSelect } from '@/features/TicketChange/hooks/useSeatsSelect';
 import { useMixSeats } from '@/features/TicketChange/hooks/useMixSeats';
 import { seatsStateStore } from '@/features/TicketChange/models/seatsStateStore';
 import { useGetSeatsState } from '@/features/TicketChange/hooks/useGetSeatsState';
-import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 
 const SeatChangeList = () => {
   const { seatsRows } = reserveConstants();
@@ -16,11 +14,6 @@ const SeatChangeList = () => {
   const { handleSeatsSelect, locks, isLocksLoaded } = useSeatsSelect();
   const { setId } = seatIdsStore();
   const { seatsChangeInfo } = useGetSeatsState();
-  const { trainNo } = trainDataStore();
-
-  const user = auth.currentUser;
-
-  if (!user) return;
 
   if (!seatsState)
     return (
@@ -64,11 +57,11 @@ const SeatChangeList = () => {
 
                 // 예매된 본인 좌석
                 const isMine = seatsChangeInfo.some(
-                  (item) => item.seatId === id && item.userId === user.uid,
+                  (item) => item.seatId === id && item.userId === 'me',
                 );
                 // 예매된 본인 이외의 좌석
                 const isOther = seatsChangeInfo.some(
-                  (item) => item.seatId === id && item.userId !== user.uid,
+                  (item) => item.seatId === id && item.userId === 'other',
                 );
 
                 // 변경할 좌석
@@ -77,13 +70,7 @@ const SeatChangeList = () => {
                     (seatId) => seatId === id,
                   );
 
-                // 실시간 상대방 좌석 잠금
-                const isLocked = Object.entries(locks).some(
-                  (item) =>
-                    item[0] === id &&
-                    item[1].userId !== user.uid &&
-                    item[1].trainNo === trainNo,
-                );
+                const isLocked = id in locks;
 
                 return (
                   <Seat
@@ -116,10 +103,10 @@ const SeatChangeList = () => {
                 const seatState = seatsState[id];
 
                 const isMine = seatsChangeInfo.some(
-                  (item) => item.seatId === id && item.userId === user.uid,
+                  (item) => item.seatId === id && item.userId === 'me',
                 );
                 const isOther = seatsChangeInfo.some(
-                  (item) => item.seatId === id && item.userId !== user.uid,
+                  (item) => item.seatId === id && item.userId === 'other',
                 );
 
                 const isMineByChangeLittleTarget =
@@ -127,13 +114,7 @@ const SeatChangeList = () => {
                     (seatId) => seatId === id,
                   );
 
-                // 실시간 상대방 좌석 잠금
-                const isLocked = Object.entries(locks).some(
-                  (item) =>
-                    item[0] === id &&
-                    item[1].userId !== user.uid &&
-                    item[1].trainNo === trainNo,
-                );
+                const isLocked = id in locks;
 
                 return (
                   <Seat

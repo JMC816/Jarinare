@@ -2,11 +2,16 @@ import { useNavigation } from '../types/useNavigation';
 import useModalStore from '@/widgets/model/AuthStore';
 import { backendClient, ACCESS_TOKEN_KEY } from '@/shared/api/backendClient';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
+import { useQueryClient } from '@tanstack/react-query';
+import { resetBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
+import { useBackendNotificationStore } from '@/features/Notification/models/backendNotificationStore';
 
 const UserInfo = () => {
   const { user, isLoggedIn } = useCurrentUser();
   const { navigation } = useNavigation();
   const { resetModal } = useModalStore();
+  const queryClient = useQueryClient();
+  const { setNotifications } = useBackendNotificationStore();
 
   if (!isLoggedIn || !user) return null;
 
@@ -16,6 +21,9 @@ const UserInfo = () => {
   const handleLogout = async () => {
     await backendClient.post('/oauth/logout').catch(() => {});
     localStorage.removeItem(ACCESS_TOKEN_KEY);
+    queryClient.clear();
+    resetBackendNotifications();
+    setNotifications([]);
     resetModal();
     navigation('/');
   };

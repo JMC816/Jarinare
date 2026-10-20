@@ -1,27 +1,26 @@
 /**
- * @role: features — 공지사항 게시글 목록 조회 훅
- * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ * @role: features — 공지사항 목록 조회 훅
+ * @rule: api/ 호출만 담당
  */
-import { BoardPost } from '@/entities/Board/types/boardType';
 import { useEffect, useState } from 'react';
 import { getNoticePostsApi } from '../api/getNoticeApi';
+import { BoardPost, BoardPagination } from '@/entities/Board/types/boardType';
 
-export const useGetNotice = () => {
+export const useGetNotice = (params?: { page?: number; size?: number; search?: string; sort?: 'asc' | 'desc' }) => {
   const [noticeData, setNoticeData] = useState<BoardPost[]>([]);
+  const [pagination, setPagination] = useState<BoardPagination | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    getNoticePostsApi()
-      .then((datas) => {
-        setNoticeData(
-          datas
-            .filter((d) => d.title)
-            .sort((a, b) => a.createdAt - b.createdAt),
-        );
+    setIsLoaded(false);
+    getNoticePostsApi(params)
+      .then(({ items, pagination: pg }) => {
+        setNoticeData(items);
+        setPagination(pg);
       })
-      .catch((e) => console.error('[useGetNotice] 공지사항 로드 실패:', e))
+      .catch((e) => console.error('[useGetNotice]', e))
       .finally(() => setIsLoaded(true));
-  }, []);
+  }, [params?.page, params?.size, params?.search, params?.sort]);
 
-  return { noticeData, isLoaded };
+  return { noticeData, pagination, isLoaded };
 };

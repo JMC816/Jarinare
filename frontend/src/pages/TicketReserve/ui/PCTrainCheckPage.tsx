@@ -13,6 +13,7 @@ import {
   TIME_OPTIONS,
 } from '../constants/PCTrainCheckConstants';
 import down from '@/assets/icons/down.png';
+import PCWelcomeTour from '@/widgets/Tour/ui/PCWelcomeTour';
 
 const PCTrainCheckPage = () => {
   const {
@@ -77,7 +78,7 @@ const PCTrainCheckPage = () => {
               </div>
 
               {/* 상단: 날짜 + 필터 */}
-              <div className="flex gap-12 border-b border-gray-100 px-8 py-7">
+              <div id="tour-train-filter" className="flex gap-12 border-b border-gray-100 px-8 py-7">
                 {/* 왼쪽: 날짜 + 7일 캘린더 */}
                 <div className="flex flex-1 flex-col gap-5">
                   <div className="flex flex-col gap-1">
@@ -206,7 +207,7 @@ const PCTrainCheckPage = () => {
               </div>
 
               {/* 하단: 열차 선택 */}
-              <div className="flex flex-col bg-gray-50 px-6 py-5">
+              <div id="tour-train-list" className="flex flex-col bg-gray-50 px-6 py-5">
                 {isFetching ? (
                   <PCSkeletonScreen />
                 ) : trains.length === 0 ? (
@@ -357,6 +358,7 @@ const PCTrainCheckPage = () => {
           </div>
         </main>
       </div>
+      <PCWelcomeTour page="traincheck" />
     </div>
   );
 };

@@ -33,6 +33,19 @@ const PCTicketListPage = () => {
   const navigate = useNavigate();
   const { items } = useMiniTicket();
 
+  const upcomingCount = items.filter((item) => {
+    const now = new Date();
+    const s = item.startTimeStr;
+    const dep = new Date(
+      Number(s.slice(0, 4)),
+      Number(s.slice(4, 6)) - 1,
+      Number(s.slice(6, 8)),
+      Number(s.slice(8, 10)),
+      Number(s.slice(10, 12)),
+    );
+    return dep > now;
+  }).length;
+
   useKakaoLoader({
     appkey: import.meta.env.VITE_APP_KAKAO_JS_KEY as string,
   });
@@ -50,7 +63,12 @@ const PCTicketListPage = () => {
         >
           <div className="px-64 pb-16 pt-10">
             <div className="mb-6">
-              <h1 className="text-2xl font-black text-gray-900">내 승차권</h1>
+              <div className="flex items-baseline justify-between">
+                <h1 className="text-2xl font-black text-gray-900">내 승차권</h1>
+                {!isEmpty && (
+                  <span className="text-base text-gray-400">예정된 승차권 {upcomingCount}권</span>
+                )}
+              </div>
               {isEmpty && (
                 <p className="mt-1 text-sm text-gray-400">
                   아직 예매한 승차권이 없어요

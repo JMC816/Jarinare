@@ -2,16 +2,14 @@
  * @role: widgets/TicketReserve — hooks
  * @rule: PayModal 상태·파생값·핸들러만 담당, UI 포함 금지
  */
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import useModalStore from '../../model/ReserveStore';
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
-import { useUpdatePoint } from '@/features/Point/hooks/useUpdatePoint';
 import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateCountStore';
-import { useSaveReserveStat } from '@/features/TicketReserve/hooks/useSaveReserveStat';
-import { useCreateOrder } from '@/features/Point/hooks/useCreateOrder';
 import { useCurrentSeason } from '@/features/Season/hooks/useCurrentSeason';
+import welcomeTourStore from '@/shared/models/welcomeTourStore';
 import {
   PAYMENT_METHODS,
   CARD_LIST,
@@ -22,29 +20,30 @@ import {
 export const usePayModal = () => {
   const { closeModal } = useModalStore();
   const {
-    selectPay,
+    selectPay: rawSelectPay,
+    selectAdult: rawSelectAdult,
+    selectKid: rawSelectKid,
     endStationForView,
-    startStationForView,
-    startDay,
-    startDayForView,
-    selectTrainType,
-    selectAdult,
-    selectKid,
   } = trainDataStore();
   const { createSelectedSeats } = useSeatQueryData();
-  const { saveStat } = useSaveReserveStat();
-  const { createOrder } = useCreateOrder();
-  const { point } = useGetPoint();
-  const { updatePoint } = useUpdatePoint();
-  const { seatsStateCount } = seatsStateCountStore();
+  const { point: rawPoint } = useGetPoint();
+  const { seatsStateCount: rawSeatsStateCount } = seatsStateCountStore();
+  const { isActive: isTourActive } = welcomeTourStore();
+  const selectPay = isTourActive ? 59800 : rawSelectPay;
+  const selectAdult = isTourActive ? 1 : rawSelectAdult;
+  const selectKid = isTourActive ? 0 : rawSelectKid;
+  const seatsStateCount = isTourActive ? selectAdult + selectKid : rawSeatsStateCount;
+  const point = isTourActive ? 5000 : rawPoint;
   const { season, style, isSeasonStation } = useCurrentSeason();
 
-  const [checked, setChecked] = useState(false);
-  const [value, setValue] = useState<number | null>(null);
+  const [checked, setChecked] = useState(isTourActive);
+  const [value, setValue] = useState<number | null>(isTourActive ? 3000 : null);
   const [eventSelected, setEventSelected] = useState<'none' | 'season'>('none');
+  const [isEventOpen, setIsEventOpen] = useState(false);
+  const eventDropdownRef = useRef<HTMLDivElement>(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
-    useState<PaymentMethod | null>(null);
-  const [selectedCard, setSelectedCard] = useState<CardName | null>(null);
+    useState<PaymentMethod | null>(isTourActive ? '신용카드' : null);
+  const [selectedCard, setSelectedCard] = useState<CardName | null>(isTourActive ? '국민' : null);
 
   const isDiscountEligible = isSeasonStation(endStationForView);
   const basePrice = selectPay * seatsStateCount;
@@ -89,8 +88,21 @@ export const usePayModal = () => {
         : undefined,
   }));
 
-  const handleEventChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setEventSelected(e.target.value as 'none' | 'season');
+  useEffect(() => {
+    if (!isEventOpen) return;
+    const handleOutside = (e: MouseEvent) => {
+      if (eventDropdownRef.current && !eventDropdownRef.current.contains(e.target as Node)) {
+        setIsEventOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, [isEventOpen]);
+
+  const handleToggleEventDropdown = () => setIsEventOpen((prev) => !prev);
+  const handleSelectEvent = (val: 'none' | 'season') => {
+    setEventSelected(val);
+    setIsEventOpen(false);
   };
 
   const handleTogglePoint = () => setChecked((prev) => !prev);
@@ -118,23 +130,8 @@ export const usePayModal = () => {
   };
 
   const handlePay = async () => {
+    // 백엔드 createReservation이 포인트·주문내역을 함께 처리하므로 별도 호출 불필요
     await createSelectedSeats(finalPrice);
-    await updatePoint(point - pointValue + cardPayback);
-    await saveStat(endStationForView);
-    await createOrder({
-      startStationForView,
-      endStationForView,
-      startDay,
-      startDayForView,
-      trainType: selectTrainType,
-      selectAdult,
-      selectKid,
-      seatCount: seatsStateCount,
-      finalPrice,
-      paymentMethod: selectedPaymentMethod ?? '',
-      selectedCard,
-      isReturn: false,
-    });
     closeModal('PayModal');
   };
 
@@ -142,7 +139,10 @@ export const usePayModal = () => {
     checked,
     value,
     eventSelected,
-    handleEventChange,
+    isEventOpen,
+    eventDropdownRef,
+    handleToggleEventDropdown,
+    handleSelectEvent,
     isDiscountEligible,
     basePrice,
     discountedBase,

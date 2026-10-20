@@ -120,12 +120,12 @@ export const Event = ({
         ) : (
           <div className="grid grid-cols-4 gap-4">
             {displayedItems.map((event) => {
-              const isOwner = currentUid === event.id.split('/')[1];
+              const isOwner = event.author === currentUid;
               return (
                 <div
                   key={event.id}
                   className="relative cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition-shadow hover:shadow-md"
-                  onClick={() => navigate('/board/event/detail', { state: { event } })}
+                  onClick={() => navigate(`/board/${event.id}?type=event`, { state: { event } })}
                 >
                   <EventCardTop />
                   <div className="p-5">
@@ -233,7 +233,7 @@ export const Event = ({
                 <div
                   key={event.id}
                   className="cursor-pointer overflow-hidden rounded-xl bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
-                  onClick={() => navigate('/board/event/detail', { state: { event } })}
+                  onClick={() => navigate(`/board/${event.id}?type=event`, { state: { event } })}
                 >
                   <EventCardTop />
                   <div className="p-5">

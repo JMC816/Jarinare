@@ -1,113 +1,66 @@
 /**
- * @role: features — 자유게시판 목록 페이지네이션·검색·정렬 훅
+ * @role: features — 자유게시판 서버사이드 페이지네이션·검색·정렬 훅
  * @rule: 상태·사이드이펙트만 담당, UI 로직 포함 금지
  */
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useGetBoard } from './useGetBoard';
-import { BoardPost } from '@/entities/Board/types/boardType';
+import { useEffect, useRef, useState } from 'react';
+import { getBoardPostsApi } from '../api/getBoardApi';
+import { BoardPost, SortOrder } from '@/entities/Board/types/boardType';
 
-type SortOrder = 'newest' | 'oldest' | 'views' | 'likes';
+const PAGE_SIZE = 8;
 
 export const useBoardPagination = (
   searchQuery: string = '',
-  sortOrder: SortOrder = 'newest',
+  sortOrder: SortOrder = 'desc',
 ) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { boardData, isLoaded } = useGetBoard();
-
-  const [boardPage, setBoardPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [items, setItems] = useState<BoardPost[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(true);
 
-  const PAGE_SIZE = 8;
-
-  const filteredData = useMemo(() => {
-    let data = boardData;
-
-    if (searchQuery.trim()) {
-      const raw = searchQuery.trim();
-      if (raw.startsWith('#')) {
-        const tagQ = raw.slice(1).toLowerCase();
-        data = data.filter((d) =>
-          d.tags?.some((t) => t.toLowerCase().includes(tagQ)),
-        );
-      } else {
-        const q = raw.toLowerCase();
-        data = data.filter(
-          (d) =>
-            d.title?.toLowerCase().includes(q) ||
-            d.content?.toLowerCase().includes(q) ||
-            d.author?.toLowerCase().includes(q),
-        );
-      }
-    }
-
-    return [...data].sort((a, b) =>
-      sortOrder === 'newest'
-        ? b.createdAt - a.createdAt
-        : a.createdAt - b.createdAt,
-    );
-  }, [boardData, searchQuery, sortOrder]);
-
+  // 검색어·정렬 변경 시 초기화
   useEffect(() => {
-    if (!isLoaded) return;
+    setPage(1);
+    setItems([]);
+    setHasMore(true);
+    setIsFetching(true);
+  }, [searchQuery, sortOrder]);
 
-    if (filteredData.length === 0) {
-      setItems([]);
-      setHasMore(false);
-      setIsFetching(false);
-      return;
-    }
+  // 페이지 변경 시 fetch
+  useEffect(() => {
+    let cancelled = false;
+    setIsFetching(true);
 
-    const firstPage = filteredData.slice(0, PAGE_SIZE);
-    const nextPage = filteredData.slice(PAGE_SIZE, PAGE_SIZE * 2);
+    getBoardPostsApi({ type: 'free', page, size: PAGE_SIZE, search: searchQuery || undefined, sort: sortOrder })
+      .then(({ items: newItems, pagination }) => {
+        if (cancelled) return;
+        setItems((prev) => (page === 1 ? newItems : [...prev, ...newItems]));
+        setHasMore(page < pagination.totalPages);
+        setIsFetching(false);
+      })
+      .catch(() => {
+        if (!cancelled) setIsFetching(false);
+      });
 
-    setItems(firstPage);
-    setBoardPage(0);
-    setHasMore(nextPage.length > 0);
-    setIsFetching(false);
-  }, [filteredData, isLoaded]);
+    return () => { cancelled = true; };
+  }, [page, searchQuery, sortOrder]);
 
   const fetchMoreItems = () => {
-    const nextPage = boardPage + 1;
-    const nextItems = filteredData.slice(
-      nextPage * PAGE_SIZE,
-      (nextPage + 1) * PAGE_SIZE,
-    );
-
-    if (nextItems.length === 0) {
-      setHasMore(false);
-      return;
-    }
-
-    setItems((prev) => [...prev, ...nextItems]);
-    setBoardPage(nextPage);
-
-    if ((nextPage + 1) * PAGE_SIZE >= filteredData.length) {
-      setHasMore(false);
-    }
+    if (!hasMore || isFetching) return;
+    setPage((prev) => prev + 1);
   };
 
+  // IntersectionObserver
   useEffect(() => {
     if (!hasMore) return;
-
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          fetchMoreItems();
-        }
-      },
+      (entries) => { if (entries[0].isIntersecting) fetchMoreItems(); },
       { threshold: 0.01, rootMargin: '200px' },
     );
-
     const current = ref.current;
     if (current) observer.observe(current);
-
-    return () => {
-      if (current) observer.unobserve(current);
-    };
-  }, [hasMore, boardPage, filteredData]);
+    return () => { if (current) observer.unobserve(current); };
+  }, [hasMore, isFetching]);
 
   return { ref, items, isFetching };
 };

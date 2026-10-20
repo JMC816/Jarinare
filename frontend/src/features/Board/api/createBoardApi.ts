@@ -1,32 +1,22 @@
 /**
- * @role: features — 자유게시판 게시글 생성 API
- * @rule: Firestore 외부 데이터 호출만 담당
+ * @role: features/api — 게시물 생성
+ * @rule: backendClient 호출만 담당
  */
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/shared/firebase/firebase';
+import { backendClient } from '@/shared/api/backendClient';
+import { BoardType } from '@/entities/Board/types/boardType';
+
+export interface CreateBoardParams {
+  type: BoardType;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  tags?: string[];
+  rating?: number;
+}
 
 export const createBoardApi = async (
-  uid: string,
-  author: string,
-  title: string,
-  content: string,
-  views: number,
-  likes: number,
-  tags: string[] = [],
-): Promise<string | undefined> => {
-  const boardCollectionRef = collection(db, 'boards', uid, 'board');
-  try {
-    const docRef = await addDoc(boardCollectionRef, {
-      author,
-      title,
-      content,
-      views,
-      likes,
-      tags,
-      createdAt: serverTimestamp(),
-    });
-    return docRef.id;
-  } catch (error) {
-    console.error('[createBoardApi]', error);
-  }
+  params: CreateBoardParams,
+): Promise<{ id: number }> => {
+  const res = await backendClient.post<{ id: number }>('/api/board', params);
+  return res.data;
 };

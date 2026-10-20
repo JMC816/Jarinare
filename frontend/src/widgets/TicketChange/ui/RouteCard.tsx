@@ -129,7 +129,7 @@ const StationMarker = ({
   );
 };
 
-const RouteMap = memo(
+export const RouteMap = memo(
   ({
     stations,
     departureMs,

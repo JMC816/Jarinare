@@ -10,20 +10,20 @@ export const TOTAL_SEATS = 24 * 4;
 export const SEATS_PER_CAR = 24;
 
 export const TRAIN_OPTIONS = [
-  { id: '00', label: 'KTX' },
-  { id: '01', label: '새마을호' },
-  { id: '02', label: '무궁화호' },
-  { id: '03', label: '통근열차' },
-  { id: '04', label: '누리호' },
-  { id: '06', label: 'AREX직통' },
-  { id: '07', label: 'KTX-산천A' },
-  { id: '08', label: 'ITX-새마을호' },
-  { id: '09', label: 'ITX-청춘' },
-  { id: '10', label: 'KTX-산천B' },
-  { id: '16', label: 'KTX-이음' },
-  { id: '17', label: 'SRT' },
-  { id: '18', label: 'ITX-마음' },
-  { id: '19', label: 'KTX-청룡' },
+  { id: '00', label: 'KTX',        gradeName: 'KTX' },
+  { id: '01', label: '새마을호',    gradeName: '새마을호' },
+  { id: '02', label: '무궁화호',    gradeName: '무궁화호' },
+  { id: '03', label: '통근열차',    gradeName: '통근열차' },
+  { id: '04', label: '누리호',      gradeName: '누리호' },
+  { id: '06', label: 'AREX직통',   gradeName: 'AREX직통' },
+  { id: '07', label: 'KTX-산천A',  gradeName: 'KTX-산천' },
+  { id: '08', label: 'ITX-새마을호', gradeName: 'ITX-새마을' },
+  { id: '09', label: 'ITX-청춘',   gradeName: 'ITX-청춘' },
+  { id: '10', label: 'KTX-산천B',  gradeName: 'KTX-산천' },
+  { id: '16', label: 'KTX-이음',   gradeName: 'KTX-이음' },
+  { id: '17', label: 'SRT',        gradeName: 'SRT' },
+  { id: '18', label: 'ITX-마음',   gradeName: 'ITX-마음' },
+  { id: '19', label: 'KTX-청룡',   gradeName: 'KTX-청룡' },
 ];
 
 export const TIME_OPTIONS = [

@@ -9,7 +9,7 @@ import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { seatsStateStore } from '@/features/TicketReserve/model/seatsStateStore';
 import { reserveConstants } from '@/widgets/TicketReserve/constants/ReserveConstants';
 import useModalStore from '@/widgets/model/ReserveStore';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 import { useResetSeatsState } from '@/features/TicketReserve/hooks/useResetSeatsState';
 import { SEATS_PER_CAR } from '../constants/PCTrainCheckConstants';
 import { formatTrainGradeName } from '@/shared/lib/formatTrainName';
@@ -46,7 +46,7 @@ export const usePCSeatCheckPage = () => {
   const { openModal } = useModalStore();
   const { seatsRows, trainNoArray } = reserveConstants();
   const navigate = useNavigate();
-  const user = auth.currentUser;
+  const { isLoggedIn } = useCurrentUser();
 
   const trainNoSeatsCount = seatsInfo.filter(
     (item) => item.trainNoId === trainNo,
@@ -83,8 +83,6 @@ export const usePCSeatCheckPage = () => {
   const gradeRaw = trainTypeParts.slice(0, -1).join('-');
   const trainTypeDisplay = `${formatTrainGradeName(gradeRaw)}-${trainTypeNo}`;
 
-  const isLoggedIn = !!user;
-
   return {
     handleSingleSelect,
     handleAllSelect,
@@ -102,7 +100,6 @@ export const usePCSeatCheckPage = () => {
     openModal,
     seatsRows,
     navigate,
-    user,
     isAllSelected,
     isAllLocked,
     isTrainDropdownOpen,

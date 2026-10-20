@@ -148,10 +148,10 @@ export const Board = ({
     items,
     isFetching,
     likesMap,
+    currentDisplayName,
     viewsMap,
     displayedItems,
     handleDelete,
-    currentUid,
   } = useBoard(isPC, externalSearchQuery, externalSortOrder);
 
   const currentLabel = SORT_OPTIONS.find((o) => o.value === sortOrder)?.label;
@@ -174,16 +174,16 @@ export const Board = ({
             </div>
           ) : (
             displayedItems.map((post) => {
-              const likesCount = likesMap[post.id] ?? post.likes ?? 0;
+              const likesCount = likesMap[post.id] ?? post.liked ?? 0;
               const commentCount = post.commentCount ?? 0;
-              const isOwner = currentUid === post.id.split('/')[1];
+              const isOwner = !!currentDisplayName && currentDisplayName === post.author;
 
               return (
                 <div
                   key={post.id}
                   className="cursor-pointer overflow-hidden rounded-sm bg-white shadow-sm transition-shadow hover:shadow-md"
                   onClick={() =>
-                    navigate('/board/board/detail', { state: { post } })
+                    navigate(`/board/${post.id}?type=free`, { state: { post } })
                   }
                 >
                   {/* 상단 영역 (3fr) */}
@@ -361,15 +361,15 @@ export const Board = ({
           </div>
         ) : (
           displayedItems.map((post) => {
-            const likesCount = likesMap[post.id] ?? post.likes ?? 0;
-            const isOwner = currentUid === post.id.split('/')[1];
+            const likesCount = likesMap[post.id] ?? post.liked ?? 0;
+            const isOwner = !!currentDisplayName && currentDisplayName === post.author;
 
             return (
               <div
                 key={post.id}
                 className="relative cursor-pointer rounded-xl bg-white shadow-sm transition-shadow duration-200 hover:shadow-md"
                 onClick={() =>
-                  navigate('/board/board/detail', { state: { post } })
+                  navigate(`/board/${post.id}?type=free`, { state: { post } })
                 }
               >
                 <div className="flex items-center gap-x-4 px-4 py-3">

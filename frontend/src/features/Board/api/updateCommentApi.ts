@@ -1,16 +1,20 @@
 /**
  * @role: features/api — 댓글 수정
- * @rule: Firestore 외부 데이터 호출만 담당
+ * @rule: backendClient 호출만 담당
  */
-import { db } from '@/shared/firebase/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { backendClient } from '@/shared/api/backendClient';
 
 export const updateCommentApi = async (
-  postDocId: string,
-  commentId: string,
+  id: number,
+  boardId: number,
   content: string,
-): Promise<void> => {
-  await updateDoc(doc(db, 'boardComments', postDocId, 'items', commentId), {
-    content: content.trim(),
+  parentId: number | null,
+): Promise<{ message: string }> => {
+  const res = await backendClient.put<{ message: string }>('/api/comment', {
+    id,
+    boardId,
+    content,
+    parentId,
   });
+  return res.data;
 };

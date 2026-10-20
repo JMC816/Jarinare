@@ -2,13 +2,16 @@
  * @role: pages — PC 공지사항 상세 페이지
  * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
  */
-import { useLocation, useNavigate } from 'react-router-dom';
-import { BoardPost } from '@/entities/Board/types/boardType';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { BoardDetail, BoardPost } from '@/entities/Board/types/boardType';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import { usePCNoticeDetailPage } from '../hooks/usePCNoticeDetailPage';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
+import { toBackendImageUrl } from '@/shared/api/backendClient';
+import { getBoardDetailApi } from '@/features/Board/api/getBoardApi';
 
 
 const OwnerMenu = ({
@@ -62,7 +65,17 @@ const OwnerMenu = ({
 const PCNoticeDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const notice = location.state?.notice as BoardPost | undefined;
+  const { id } = useParams<{ id: string }>();
+  const [fetchedNotice, setFetchedNotice] = useState<BoardDetail | null>(null);
+
+  const stateNotice = location.state?.notice as BoardPost | undefined;
+  const notice = stateNotice ?? fetchedNotice ?? undefined;
+
+  useEffect(() => {
+    if (!stateNotice && id) {
+      getBoardDetailApi(Number(id), 'notice').then(setFetchedNotice).catch(() => {});
+    }
+  }, [id]);
 
   const {
     currentNotice,
@@ -181,7 +194,7 @@ const PCNoticeDetailPage = () => {
                   {currentNotice.imageUrl && (
                     <div className="mb-4 overflow-hidden rounded-lg">
                       <img
-                        src={currentNotice.imageUrl}
+                        src={toBackendImageUrl(currentNotice.imageUrl) ?? ''}
                         alt={currentNotice.title}
                         className="w-full object-contain"
                       />

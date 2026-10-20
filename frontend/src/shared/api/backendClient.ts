@@ -6,6 +6,13 @@ export const ACCESS_TOKEN_KEY = 'access_token';
 
 const BASE_URL = import.meta.env.VITE_APP_BACKEND_URL ?? 'http://localhost:3000';
 
+/** /uploads/... 경로를 백엔드 절대 URL로 변환 */
+export const toBackendImageUrl = (imageUrl: string | null | undefined): string | null => {
+  if (!imageUrl) return null;
+  if (imageUrl.startsWith('/uploads/')) return `${BASE_URL}${imageUrl}`;
+  return imageUrl;
+};
+
 export const backendClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: true, // httpOnly 쿠키(refresh_token) 자동 전송
@@ -30,7 +37,12 @@ backendClient.interceptors.response.use(
   async (error) => {
     const original = error.config;
 
-    if (error.response?.status !== 401 || original._retry) {
+    if (error.response?.status !== 401 || original._retry || original.url?.includes('/oauth/logout')) {
+      return Promise.reject(error);
+    }
+
+    // 토큰이 없으면 이미 로그아웃 상태 — refresh 시도 없이 그냥 reject
+    if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
       return Promise.reject(error);
     }
 
@@ -61,7 +73,10 @@ backendClient.interceptors.response.use(
     } catch (refreshError) {
       processQueue(null, refreshError);
       localStorage.removeItem(ACCESS_TOKEN_KEY);
-      window.location.href = '/auth/login';
+      // 이미 로그인 페이지면 재리다이렉트 금지 (무한 루프 방지)
+      if (window.location.pathname !== '/auth/login') {
+        window.location.href = '/auth/login';
+      }
       return Promise.reject(refreshError);
     } finally {
       isRefreshing = false;

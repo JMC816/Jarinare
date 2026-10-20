@@ -11,7 +11,7 @@ const RequestChangeModal = () => {
   const isChanged = target.length === emptySeatsTarget.length;
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center bg-darkGray/50">
+    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-darkGray/50 backdrop-blur-sm">
       <div className="flex w-[220px] flex-col items-center rounded-3xl bg-white px-6 py-8 shadow-xl">
         {/* 아이콘 */}
         <div className="animate-bounce-in">

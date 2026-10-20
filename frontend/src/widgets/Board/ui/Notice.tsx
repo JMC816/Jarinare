@@ -143,9 +143,9 @@ export const Notice = () => {
           </div>
         ) : (
           displayedItems.map((notice) => {
-            const isLiked = likedMap[notice.id] ?? false;
-            const likesCount = likesMap[notice.id] ?? notice.likes;
-            const isOwner = currentUid === notice.id.split('/')[1];
+            const isLiked = likedMap[String(notice.id)] ?? false;
+            const likesCount = likesMap[String(notice.id)] ?? 0;
+            const isOwner = notice.author === currentUid;
 
             return (
               <div key={notice.id} className="relative rounded-xl bg-white shadow-sm">
@@ -202,12 +202,11 @@ export const Notice = () => {
                 </div>
                 <div
                   className="cursor-pointer px-4 pb-2 text-sm"
-                  onClick={() => navigate('/board/notice/detail', { state: { notice } })}
+                  onClick={() => navigate(`/board/${notice.id}?type=notice`, { state: { notice } })}
                 >
                   <span className="mr-2 font-semibold">{notice.author}</span>
                   {notice.title}
                 </div>
-                <div className="px-4 pb-2 text-sm text-gray-800">{notice.content}</div>
               </div>
             );
           })

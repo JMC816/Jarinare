@@ -31,9 +31,9 @@ export const useLikeEvent = (items: BoardPost[]) => {
     listenersRef.current = [];
 
     items.forEach((item) => {
-      const docId = item.id.split('/').pop()!;
+      const docId = String(item.id);
       const unsub = subscribeEventLikeCountApi(docId, (count) => {
-        setLikesMap((prev) => ({ ...prev, [item.id]: count }));
+        setLikesMap((prev) => ({ ...prev, [docId]: count }));
       });
       listenersRef.current.push(unsub);
     });
@@ -51,8 +51,8 @@ export const useLikeEvent = (items: BoardPost[]) => {
     fetchEventLikedStateApi(user.uid).then((likedDocIds) => {
       const likedByPath: Record<string, boolean> = {};
       items.forEach((item) => {
-        const docId = item.id.split('/').pop()!;
-        likedByPath[item.id] = likedDocIds[docId] ?? false;
+        const docId = String(item.id);
+        likedByPath[docId] = likedDocIds[docId] ?? false;
       });
       setLikedMap(likedByPath);
     });
@@ -62,7 +62,7 @@ export const useLikeEvent = (items: BoardPost[]) => {
     if (!user) return;
 
     const isCurrentlyLiked = likedMap[eventId] ?? false;
-    const docId = eventId.split('/').pop()!;
+    const docId = eventId;;
 
     setLikedMap((prev) => ({ ...prev, [eventId]: !isCurrentlyLiked }));
     setLikesMap((prev) => ({

@@ -11,9 +11,9 @@ export const subscribeViewCountsApi = (
   onCounts: (id: string, count: number) => void,
 ): (() => void) => {
   const unsubscribes = items.map((item) => {
-    const docId = item.id.split('/').pop() ?? '';
+    const docId = String(item.id);
     return onSnapshot(doc(db, 'boardViews', docId), (snap) => {
-      onCounts(item.id, snap.data()?.count ?? 0);
+      onCounts(String(item.id), snap.data()?.count ?? 0);
     });
   });
   return () => unsubscribes.forEach((unsub) => unsub());

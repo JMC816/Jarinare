@@ -10,9 +10,7 @@ import PCWriteForm from '@/widgets/Board/ui/PCWriteForm';
 import LoadingScreen from '@/widgets/Board/ui/LoadingScreen';
 import { WriteCategory } from '@/widgets/Board/types/boardWidgetType';
 import { sendBoardPostNotifications } from '@/features/Follow/api/boardPostNotification';
-import { auth } from '@/shared/firebase/firebase';
-import { useNavigate } from 'react-router-dom';
-import PCLoginRequiredPage from '@/widgets/layouts/ui/PCLoginRequiredPage';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 const CATEGORY_LABEL: Record<WriteCategory, string> = {
   board: '자유',
@@ -21,15 +19,7 @@ const CATEGORY_LABEL: Record<WriteCategory, string> = {
 };
 
 const PCUnifiedWritePage = () => {
-  const navigate = useNavigate();
-  if (!auth.currentUser)
-    return (
-      <PCLoginRequiredPage
-        description="로그인 후 글을 작성할 수 있어요"
-        onLogin={() => navigate('/auth/login')}
-      />
-    );
-  const isAdmin = auth.currentUser.email === import.meta.env.VITE_ADMIN_EMAIL;
+  const { user, isLoading } = useCurrentUser();
   const [category, setCategory] = useState<WriteCategory>('board');
 
   const handleAfterBoardCreate = useCallback(
@@ -49,10 +39,11 @@ const PCUnifiedWritePage = () => {
   const notice = useNoticeHandler();
   const event = useEventHandler();
 
+  if (isLoading) return null;
+
+  const isAdmin = user?.email === import.meta.env.VITE_ADMIN_EMAIL;
   const activeHandler =
     category === 'board' ? board : category === 'notice' ? notice : event;
-
-  const isLoading = activeHandler.loading;
 
   return (
     <>
@@ -64,7 +55,7 @@ const PCUnifiedWritePage = () => {
         selectedCategory={category}
         onCategoryChange={isAdmin ? setCategory : undefined}
       />
-      {isLoading && <LoadingScreen />}
+      {activeHandler.loading && <LoadingScreen />}
     </>
   );
 };

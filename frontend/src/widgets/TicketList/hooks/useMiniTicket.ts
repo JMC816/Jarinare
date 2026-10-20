@@ -5,6 +5,7 @@
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
 import { formatTimeView } from '@/shared/lib/formatDate';
 import { WEEK_DAYS } from '../constants/miniTicketConstants';
+import { getSegmentStations } from '@/shared/lib/trainRoutes';
 
 const calcDuration = (start: number, end: number): string => {
   const sh = parseInt(String(start).substring(8, 10));
@@ -65,6 +66,16 @@ export const useMiniTicket = () => {
 
     const ticketNo = `JR-${startTimeStr.slice(2, 4)}${startTimeStr.slice(8, 12)}-${ticket.seatId}`;
 
+    const segmentStations = getSegmentStations(
+      ticket.trainType,
+      ticket.startStationForView,
+      ticket.endStationForView,
+    );
+const oddStops = segmentStations.filter(
+      (_, i, arr) => i % 2 === 0 || i === arr.length - 1,
+    );
+    const stopCount = Math.max(0, segmentStations.length - 2);
+
     return {
       groups,
       ticket,
@@ -78,6 +89,8 @@ export const useMiniTicket = () => {
       duration,
       ticketNo,
       startTimeStr,
+      oddStops,
+      stopCount,
     };
   });
 

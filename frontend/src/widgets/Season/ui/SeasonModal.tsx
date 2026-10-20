@@ -10,7 +10,7 @@ const SeasonModal = ({ onClose }: SeasonModalProps) => {
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 lg:hidden"
+      className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 backdrop-blur-sm lg:hidden"
       onClick={onClose}
     >
       <div

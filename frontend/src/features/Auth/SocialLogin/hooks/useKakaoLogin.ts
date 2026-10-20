@@ -1,6 +1,5 @@
 import { KAKAO_AUTH_URL, REDIRECT_URI } from '@/shared/Social/KakaoConfig';
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { backendClient, ACCESS_TOKEN_KEY } from '@/shared/api/backendClient';
 
 export const useKakaoLogin = () => {
@@ -11,7 +10,6 @@ export const useKakaoLogin = () => {
 };
 
 export const useKakaoRedirect = () => {
-  const navigate = useNavigate();
   const called = useRef(false);
   useEffect(() => {
     if (called.current) return;
@@ -24,6 +22,7 @@ export const useKakaoRedirect = () => {
           code,
           redirectUri: REDIRECT_URI,
         });
+        localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE');
         localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
         window.location.href = '/';
       } catch (e) {

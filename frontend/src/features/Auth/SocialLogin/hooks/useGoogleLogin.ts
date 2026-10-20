@@ -3,7 +3,6 @@
 import { GOOGLE_AUTH_URL, REDIRECT_URI } from '@/shared/Social/GoogleConfig';
 import { backendClient, ACCESS_TOKEN_KEY } from '@/shared/api/backendClient';
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export const useGoogleLogin = () => {
   const onClick = () => {
@@ -13,7 +12,6 @@ export const useGoogleLogin = () => {
 };
 
 export const useGoogleRedirect = () => {
-  const navigate = useNavigate();
   const called = useRef(false);
   useEffect(() => {
     if (called.current) return;
@@ -26,6 +24,7 @@ export const useGoogleRedirect = () => {
           '/oauth/google/login',
           { code, redirectUri: REDIRECT_URI },
         );
+        localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE');
         localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
         window.location.href = '/';
       } catch (e) {

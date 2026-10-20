@@ -17,7 +17,6 @@ import { seatsStateStore } from '@/features/TicketChange/models/seatsStateStore'
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { reserveConstants } from '@/widgets/TicketReserve/constants/ReserveConstants';
 import useModalStore from '@/widgets/model/TicketChangeStore';
-import { auth } from '@/shared/firebase/firebase';
 
 const TOTAL_SEATS = 24;
 
@@ -51,8 +50,6 @@ export const usePCSeatChangePage = () => {
     endStationForView,
   } = trainDataStore();
   const { seatsRows, trainNoArray } = reserveConstants();
-  const user = auth.currentUser;
-
   const [isTrainDropdownOpen, setIsTrainDropdownOpen] = useState(false);
 
   const trainNoSeatsCount = seatsChangeInfo.filter(
@@ -124,6 +121,5 @@ export const usePCSeatChangePage = () => {
     handleSelectTrainNo,
     handleSeatClick,
     handleRequestChange,
-    user,
   };
 };

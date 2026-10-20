@@ -31,16 +31,14 @@ export const useNoticePageNation = (
       data = data.filter(
         (d) =>
           d.title?.toLowerCase().includes(q) ||
-          d.content?.toLowerCase().includes(q) ||
           d.author?.toLowerCase().includes(q),
       );
     }
 
-    return [...data].sort((a, b) =>
-      sortOrder === 'newest'
-        ? b.createdAt - a.createdAt
-        : a.createdAt - b.createdAt,
-    );
+    return [...data].sort((a, b) => {
+      const diff = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      return sortOrder === 'newest' ? -diff : diff;
+    });
   }, [noticeData, searchQuery, sortOrder]);
 
   // 검색/정렬 변경 시 페이지 리셋

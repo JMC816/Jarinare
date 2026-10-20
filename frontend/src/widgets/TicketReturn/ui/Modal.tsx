@@ -14,7 +14,7 @@ const Modal = () => {
   return (
     <>
       {/* 모바일 */}
-      <div className="fixed mx-auto my-0 h-screen w-[375px] lg:hidden">
+      <div className="lg:hidden">
         <TicketReturnModal />
       </div>
       {/* PC */}

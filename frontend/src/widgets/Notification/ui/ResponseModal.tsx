@@ -2,24 +2,19 @@
  * @role: widgets — ui
  * @rule: 렌더링만 담당, 사이드이펙트는 useAutoCloseModal에 위임
  */
-import { useDeleteNotification } from '@/features/Notification/hooks/useDeleteNotification';
 import useModalStore from '../../model/Notification';
 import { responesBySeatIdStore } from '../model/responseBySeatIdStore';
-import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
-import { useHandleChange } from '@/features/TicketChange/hooks/useHandleChange';
 import { useIsAcceptRequest } from '@/features/Notification/hooks/useIsAcceptRequest';
 import RequestChangeButton from '@/widgets/TicketChange/ui/RequsetChangeButton';
-import { useAutoCloseModal } from '@/widgets/Notification/hooks/useAutoCloseModal';
+import { pendingChangeRequestStore } from '@/features/Notification/models/pendingChangeRequestStore';
 
 const ResponseModal = ({ centered = false }: { centered?: boolean }) => {
   const { openModal, closeModal } = useModalStore();
   const { seatIds } = responesBySeatIdStore();
-  const { response } = useChangeResponse();
-  const { handleClick } = useHandleChange();
-  const { deleteRequsetAndResponse } = useDeleteNotification();
   const { accpetRequest, refuseRequest } = useIsAcceptRequest();
+  const { changeRequestId } = pendingChangeRequestStore();
 
-  useAutoCloseModal(response, 'ResponseModal');
+  if (!changeRequestId) return null;
 
   // PC 다이얼로그 스타일
   if (centered) {
@@ -82,8 +77,7 @@ const ResponseModal = ({ centered = false }: { centered?: boolean }) => {
             <button
               onClick={async () => {
                 closeModal('ResponseModal');
-                await refuseRequest(response!);
-                await deleteRequsetAndResponse(response!);
+                await refuseRequest();
               }}
               className="flex-1 rounded-xl bg-gray-100 py-3.5 text-base font-bold text-gray-600 transition-colors hover:bg-gray-200"
             >
@@ -92,13 +86,14 @@ const ResponseModal = ({ centered = false }: { centered?: boolean }) => {
             <button
               onClick={async () => {
                 closeModal('ResponseModal');
-                openModal('AcceptModal');
-                await handleClick(response!);
-                await accpetRequest(response!);
-                await deleteRequsetAndResponse(response!);
-                setTimeout(() => {
-                  closeModal('AcceptModal');
-                }, 1500);
+                const isExpired = await accpetRequest();
+                if (isExpired) {
+                  openModal('ExpiredModal');
+                  setTimeout(() => closeModal('ExpiredModal'), 1500);
+                } else {
+                  openModal('AcceptModal');
+                  setTimeout(() => closeModal('AcceptModal'), 1500);
+                }
               }}
               className="flex-[2] rounded-xl bg-blue py-3.5 text-base font-bold text-white transition-colors hover:bg-blue/90 active:brightness-95"
             >
@@ -120,7 +115,6 @@ const ResponseModal = ({ centered = false }: { centered?: boolean }) => {
         className="mb-4 w-[343px] animate-slide-up rounded-3xl bg-white px-6 pb-8 pt-5"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 핸들 바 */}
         <div className="mb-5 flex justify-center">
           <div className="h-1 w-10 rounded-full bg-gray-300" />
         </div>
@@ -138,8 +132,7 @@ const ResponseModal = ({ centered = false }: { centered?: boolean }) => {
             textColor="blue"
             onClick={async () => {
               closeModal('ResponseModal');
-              await refuseRequest(response!);
-              await deleteRequsetAndResponse(response!);
+              await refuseRequest();
             }}
             className="flex-1 rounded-2xl py-3.5"
           />
@@ -149,13 +142,14 @@ const ResponseModal = ({ centered = false }: { centered?: boolean }) => {
             textColor="white"
             onClick={async () => {
               closeModal('ResponseModal');
-              openModal('AcceptModal');
-              await handleClick(response!);
-              await accpetRequest(response!);
-              await deleteRequsetAndResponse(response!);
-              setTimeout(() => {
-                closeModal('AcceptModal');
-              }, 1500);
+              const isExpired = await accpetRequest();
+              if (isExpired) {
+                openModal('ExpiredModal');
+                setTimeout(() => closeModal('ExpiredModal'), 1500);
+              } else {
+                openModal('AcceptModal');
+                setTimeout(() => closeModal('AcceptModal'), 1500);
+              }
             }}
             className="flex-[2] rounded-2xl py-3.5"
           />

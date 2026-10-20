@@ -9,6 +9,8 @@ import PCSeat from '@/widgets/TicketReserve/ui/PCSeat';
 import { usePCSeatCheckPage } from '../hooks/usePCSeatCheckPage';
 import down from '@/assets/icons/down.png';
 import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
+import PCWelcomeTour from '@/widgets/Tour/ui/PCWelcomeTour';
+import welcomeTourStore from '@/shared/models/welcomeTourStore';
 
 const PCSeatCheckPage = () => {
   const {
@@ -27,7 +29,6 @@ const PCSeatCheckPage = () => {
     seatsState,
     seatsRows,
     navigate,
-    user,
     isAllSelected,
     isAllLocked,
     openModal,
@@ -39,6 +40,8 @@ const PCSeatCheckPage = () => {
     trainNoSeatsCount,
     isLoggedIn,
   } = usePCSeatCheckPage();
+
+  const { step: tourStep } = welcomeTourStore();
 
   if (!seatsState) return <LoadingScreen />;
 
@@ -53,10 +56,10 @@ const PCSeatCheckPage = () => {
         <PCSidebar />
 
         <main
-          className="relative min-w-0 flex-1 overflow-y-auto overflow-x-hidden"
+          className="relative min-w-0 flex-1 overflow-y-auto overflow-x-auto"
           style={{ height: 'calc(100vh - 3.5rem)' }}
         >
-          <div className="px-96 pb-16 pt-6">
+          <div id="tour-seat" className="mx-auto max-w-[900px] min-w-[700px] px-6 pb-16 pt-6">
             {/* 제목칸 + 호차 선택 드롭다운 */}
             <div className="mb-6 flex items-end justify-between px-2">
               <div>
@@ -194,16 +197,13 @@ const PCSeatCheckPage = () => {
                             const seatState = seatsState[id];
                             const isMine = seatsInfo.some(
                               (item) =>
-                                item.seatId === id && item.userId === user?.uid,
+                                item.seatId === id && item.userId === 'me',
                             );
                             const isOther = seatsInfo.some(
                               (item) =>
-                                item.seatId === id && item.userId !== user?.uid,
+                                item.seatId === id && item.userId === 'other',
                             );
-                            const isLocked = Object.entries(locks).some(
-                              ([seatId, uid]) =>
-                                seatId === id && uid !== user?.uid,
-                            );
+                            const isLocked = id in locks;
                             return (
                               <PCSeat
                                 key={id}
@@ -234,16 +234,13 @@ const PCSeatCheckPage = () => {
                             const seatState = seatsState[id];
                             const isMine = seatsInfo.some(
                               (item) =>
-                                item.seatId === id && item.userId === user?.uid,
+                                item.seatId === id && item.userId === 'me',
                             );
                             const isOther = seatsInfo.some(
                               (item) =>
-                                item.seatId === id && item.userId !== user?.uid,
+                                item.seatId === id && item.userId === 'other',
                             );
-                            const isLocked = Object.entries(locks).some(
-                              ([seatId, uid]) =>
-                                seatId === id && uid !== user?.uid,
-                            );
+                            const isLocked = id in locks;
                             return (
                               <PCSeat
                                 key={id}
@@ -275,6 +272,7 @@ const PCSeatCheckPage = () => {
 
             {/* 버튼 카드 — 하단 고정 */}
             <div
+              id="tour-seat-bottom"
               className="fixed bottom-6 w-[680px] -translate-x-1/2 overflow-hidden rounded-xl bg-white shadow-xl"
               style={{ left: 'calc(110px + 50vw)' }}
             >
@@ -353,6 +351,10 @@ const PCSeatCheckPage = () => {
           </div>
         </main>
       </div>
+      <PCWelcomeTour
+        page="seatcheck"
+        onNextAction={tourStep === 4 ? () => openModal('PayModal') : undefined}
+      />
     </div>
   );
 };

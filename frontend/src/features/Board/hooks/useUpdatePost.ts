@@ -1,23 +1,17 @@
 /**
  * @role: features — 게시물 수정 훅
- * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ * @rule: api/ 호출만 담당
  */
-import { auth } from '@/shared/firebase/firebase';
-import { updatePostApi } from '../api/updatePostApi';
+import { updatePostApi, UpdatePostParams } from '../api/updatePostApi';
 
 export const useUpdatePost = () => {
-  const updatePost = async (
-    postPath: string,
-    data: { title: string; content: string },
-  ) => {
-    const uid = auth.currentUser?.uid;
-    if (!uid) return;
-    const parts = postPath.split('/');
-    if (parts[1] !== uid) return;
+  const updatePost = async (id: number, params: UpdatePostParams): Promise<boolean> => {
     try {
-      await updatePostApi(postPath, data);
+      await updatePostApi(id, params);
+      return true;
     } catch (error) {
-      console.log(error);
+      console.error('[useUpdatePost]', error);
+      return false;
     }
   };
   return { updatePost };

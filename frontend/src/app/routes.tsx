@@ -5,6 +5,7 @@ import LoginPage from '@/pages/Auth/Login/ui/LoginPage';
 import SignUpPage from '@/pages/Auth/SignUp/ui/SignUpPage';
 import BoardPage from '@/pages/Board/ui/BoardPage';
 import BoardDetailPage from '@/pages/Board/ui/BoardDetailPage';
+import BoardByIdPage from '@/pages/Board/ui/BoardByIdPage';
 import BoardListPage from '@/pages/Board/ui/BoardListPage';
 import BoardWirtePage from '@/pages/Board/ui/BoardWritePage';
 import PCUnifiedWritePage from '@/pages/Board/ui/PCUnifiedWritePage';
@@ -62,12 +63,10 @@ const Router = () => {
             <Route path="/board/noticelist" element={<NoticeListPage />} />
             <Route path="/board/eventlist" element={<EventListPage />} />
             <Route path="/board/boardlist" element={<BoardListPage />} />
-            <Route
-              path="/board/notice/detail"
-              element={<PCNoticeDetailPage />}
-            />
+            <Route path="/board/notice/detail" element={<PCNoticeDetailPage />} />
             <Route path="/board/event/detail" element={<EventDetailPage />} />
             <Route path="/board/board/detail" element={<BoardDetailPage />} />
+            <Route path="/board/:id" element={<BoardByIdPage />} />
             <Route
               path="/travel/review/list"
               element={<PCTravelReviewListPage />}
@@ -78,10 +77,6 @@ const Router = () => {
             <Route path="/reserve/seatcheck" element={<SeatCheckPage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/returnlist" element={<TicketReturnPage />} />
-            <Route path="/board/notice" element={<NoticeWirtePage />} />
-            <Route path="/board/event" element={<EventWirtePage />} />
-            <Route path="/board/board" element={<BoardWirtePage />} />
-            <Route path="/board/write" element={<PCUnifiedWritePage />} />
             <Route path="/setting" element={<SettingPage />} />
           </Route>
           {/* 로그인 필수 페이지들 */}
@@ -90,6 +85,10 @@ const Router = () => {
               path="/reserve/notification"
               element={<NotificationPage />}
             />
+            <Route path="/board/notice" element={<NoticeWirtePage />} />
+            <Route path="/board/event" element={<EventWirtePage />} />
+            <Route path="/board/board" element={<BoardWirtePage />} />
+            <Route path="/board/write" element={<PCUnifiedWritePage />} />
           </Route>
           <Route path="/ticket/view" element={<TicketViewPage />} />
           <Route element={<MainLayout />}>

@@ -12,9 +12,11 @@ import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
 import PCSeatCheckPage from './PCSeatCheckPage';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 const SeatCheckPage = () => {
   const { isShow, modalType, openModal } = useModalStore();
+  const { isLoggedIn } = useCurrentUser();
   const navigate = useNavigate();
   const { handleAllSelect, seatsStateCount, isLocksLoaded } =
     useSeatQueryData();
@@ -60,7 +62,6 @@ const SeatCheckPage = () => {
   // 좌석 전체를 선택하지 않으면 false
   // 좌석을 전체 선택하면 true
   // 전체보다 적게 선택하면 false
-  const isLoggedIn = !!auth.currentUser;
 
   const isAllSelected =
     seatsStateCount === 0 ? false : seatsStateCount === selectKid + selectAdult;
@@ -79,15 +80,14 @@ const SeatCheckPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full min-w-[375px] flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
         <BackWardPageButton title="좌석 선택" />
         <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
           <SeatCheckMenu />
           <SeatCheckList />
           <SeatCheckState />
         </div>
-        <div className="mt-4 flex w-full gap-3">
-          <button
+        <div className="mt-4 flex w-full gap-3"><button
             onClick={isLocksLoaded && isAllLocked ? undefined : handleAllSelect}
             className={`flex-1 rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
               isLocksLoaded && isAllLocked

@@ -1,32 +1,28 @@
+/**
+ * @role: features/hooks
+ * @rule: 좌석 변경 클릭 핸들러만 담당. 백엔드 POST /seats/change-requests 사용
+ */
 import { useMixSeats } from './useMixSeats';
 import { useOccupiedSeats } from './useOccupiedSeats';
 import { DataSnapshot } from 'firebase/database';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { responesBySeatIdTrainNoIdStore } from '@/features/Notification/models/responseBySeatIdAndTrainNoIdStore';
-import {
-  addDoc,
-  collection,
-  doc,
-  increment,
-  runTransaction,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { auth, db } from '@/shared/firebase/firebase';
+import { useLocation } from 'react-router-dom';
+import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
+import { createChangeRequest } from '../api/ticketChangeApi';
 
 export const useHandleChange = () => {
   const { occupiedSeatsChange } = useOccupiedSeats();
   const { mixSeatsChange } = useMixSeats();
   const { seatIdsAndTrainNoId } = responesBySeatIdTrainNoIdStore();
+  const location = useLocation();
+  const { trainNo } = trainDataStore();
+  const mySeats: SeatType[] = location.state;
 
-  // keepSeats : 바꿀 좌석들(빈 좌석 선택시 이전에 선택한 기존 좌석으로 업데이트)
-  // seatsChangeTarget : 바꿀 좌석들(빈 좌석도 포함된다)
-  // isSeatsChangeTarget: 좌석이 있으면 true, 빈 좌석이면 false
   const handleClick = async (response: DataSnapshot) => {
-    const user = auth.currentUser;
-    if (!user) return;
+    if (!mySeats) return;
 
     const keys = Object.keys(response.val());
-
     const filteredKey = keys.filter((item) =>
       item.includes(
         `${seatIdsAndTrainNoId[0].trainNoId}_${seatIdsAndTrainNoId[0].seatId}`,
@@ -34,76 +30,41 @@ export const useHandleChange = () => {
     );
 
     const mySeat = response.val()[filteredKey[0]].mySeat as SeatType[];
-
-    const seatsChangeTarget = response.val()[filteredKey[0]]
-      .targetSeat as SeatType[];
-
+    const seatsChangeTarget = response.val()[filteredKey[0]].targetSeat as SeatType[];
     const newKeepSeats = response.val()[filteredKey[0]].keepSeats as SeatType[];
+    const emptySeatsTarget = response.val()[filteredKey[0]].emptySeatsTarget as string[];
+    const mixSeatId = response.val()[filteredKey[0]].mixTarget.seatsChangeMixTargetSeatId as string[];
+    const isSeatsChangeTarget = response.val()[filteredKey[0]].isSeatsChangeTarget as boolean;
 
-    const emptySeatsTarget = response.val()[filteredKey[0]]
-      .emptySeatsTarget as string[];
+    const reservationIds = mySeats
+      .map((s) => s.reservationId)
+      .filter((id): id is number => id !== undefined);
 
-    const mixSeatId = response.val()[filteredKey[0]].mixTarget
-      .seatsChangeMixTargetSeatId as string[];
+    if (reservationIds.length === 0) return;
 
-    const isSeatsChangeTarget = response.val()[filteredKey[0]]
-      .isSeatsChangeTarget as boolean;
+    const carNo = Number(trainNo) || 1;
 
+    // 혼합: 내 좌석 수 > 남은 좌석 수이고 빈 좌석 포함
     if (
       mySeat.length > newKeepSeats.length &&
       newKeepSeats.length !== 0 &&
       isSeatsChangeTarget === false
     ) {
       await mixSeatsChange(emptySeatsTarget, mySeat, newKeepSeats, mixSeatId);
-
-      // 카운터가 5의 배수면 포인트 2000 증가
-      return await runTransaction(db, async (transaction) => {
-        const userRef = doc(db, 'users', user!.uid);
-        const userSnap = await transaction.get(userRef);
-        if (userSnap.exists()) {
-          const data = userSnap.data();
-
-          transaction.update(userRef, {
-            changeCount: increment(1),
-            // 최근 카운터가 반영되기 전이라 +1
-            point: increment((data.changeCount + 1) % 5 === 0 ? 2000 : 0),
-          });
-          // 카운터가 5의 배수면 포인트 누적 값 기록
-          if ((data.changeCount + 1) % 5 === 0) {
-            addDoc(collection(db, 'payments', user!.uid, 'detail'), {
-              accruedPoint: 2000,
-              createAt: serverTimestamp(),
-            });
-          }
-        }
-      });
+      return;
     }
-    if (
-      mySeat.length === seatsChangeTarget.length &&
-      isSeatsChangeTarget === true
-    ) {
+
+    // 전부 점유 좌석으로 교환
+    if (mySeat.length === seatsChangeTarget.length && isSeatsChangeTarget === true) {
       await occupiedSeatsChange(mySeat, seatsChangeTarget);
+      return;
+    }
 
-      return await runTransaction(db, async (transaction) => {
-        const userRef = doc(db, 'users', user!.uid);
-
-        const userSnap = await transaction.get(userRef);
-        if (userSnap.exists()) {
-          const data = userSnap.data();
-
-          transaction.update(userRef, {
-            changeCount: increment(1),
-            point: increment((data.changeCount + 1) % 5 === 0 ? 2000 : 0),
-          });
-          if ((data.changeCount + 1) % 5 === 0) {
-            addDoc(collection(db, 'payments', user!.uid, 'detail'), {
-              accruedPoint: 2000,
-              createAt: serverTimestamp(),
-            });
-          }
-        }
-      });
+    // 전부 빈 좌석으로 이동
+    if (emptySeatsTarget.length === mySeat.length) {
+      await createChangeRequest(reservationIds, carNo, emptySeatsTarget);
     }
   };
+
   return { handleClick };
 };

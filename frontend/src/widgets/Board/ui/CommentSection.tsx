@@ -29,7 +29,7 @@ const HeartIcon = ({ filled }: { filled: boolean }) => (
 );
 
 interface Props {
-  postDocId: string;
+  boardId: number;
   isPC?: boolean;
 }
 
@@ -45,21 +45,22 @@ const Avatar = ({ name }: { name: string }) => (
 const CommentItem = ({
   comment,
   allComments,
-  postDocId,
+  boardId,
   isLiked,
   likesCount,
   onLike,
+  onRefresh,
 }: {
   comment: Comment;
   allComments: Comment[];
-  postDocId: string;
+  boardId: number;
   isLiked: boolean;
   likesCount: number;
   onLike: () => void;
+  onRefresh: () => void;
 }) => {
   const { user, isLoggedIn } = useCurrentUser();
-  const currentUid = user?.userId;
-  const isOwner = currentUid === comment.uid;
+  const isOwner = !!user?.name && user.name === comment.author;
 
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(comment.content);
@@ -68,20 +69,22 @@ const CommentItem = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const replySubmittingRef = useRef(false);
 
-  const { updateComment } = useUpdateComment(postDocId);
-  const { deleteComment } = useDeleteComment(postDocId);
-  const { createComment } = useCreateComment(postDocId);
+  const { updateComment } = useUpdateComment(boardId);
+  const { deleteComment } = useDeleteComment();
+  const { createComment } = useCreateComment(boardId);
 
   const replies = allComments.filter((c) => c.parentId === comment.id);
 
   const handleEdit = async () => {
-    await updateComment(comment.id, editValue);
+    await updateComment(comment.id, editValue, comment.parentId);
     setIsEditing(false);
+    onRefresh();
   };
 
   const handleDelete = async () => {
     setMenuOpen(false);
-    await deleteComment(comment.id, allComments);
+    await deleteComment(comment.id, comment.parentId);
+    onRefresh();
   };
 
   const handleReplySubmit = async () => {
@@ -91,6 +94,7 @@ const CommentItem = ({
     setReplyValue('');
     setShowReplyInput(false);
     replySubmittingRef.current = false;
+    onRefresh();
   };
 
   return (
@@ -193,7 +197,12 @@ const CommentItem = ({
       {replies.length > 0 && (
         <div className="ml-11 border-l-2 border-gray-100">
           {replies.map((reply) => (
-            <ReplyItem key={reply.id} reply={reply} postDocId={postDocId} />
+            <ReplyItem
+              key={reply.id}
+              reply={reply}
+              boardId={boardId}
+              onRefresh={onRefresh}
+            />
           ))}
         </div>
       )}
@@ -228,25 +237,33 @@ const CommentItem = ({
 
 const ReplyItem = ({
   reply,
-  postDocId,
+  boardId,
+  onRefresh,
 }: {
   reply: Comment;
-  postDocId: string;
+  boardId: number;
+  onRefresh: () => void;
 }) => {
   const { user } = useCurrentUser();
-  const currentUid = user?.userId;
-  const isOwner = currentUid === reply.uid;
+  const isOwner = !!user?.name && user.name === reply.author;
 
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(reply.content);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const { updateComment } = useUpdateComment(postDocId);
-  const { deleteReply } = useDeleteComment(postDocId);
+  const { updateComment } = useUpdateComment(boardId);
+  const { deleteComment } = useDeleteComment();
 
   const handleEdit = async () => {
-    await updateComment(reply.id, editValue);
+    await updateComment(reply.id, editValue, reply.parentId);
     setIsEditing(false);
+    onRefresh();
+  };
+
+  const handleDelete = async () => {
+    setMenuOpen(false);
+    await deleteComment(reply.id, reply.parentId);
+    onRefresh();
   };
 
   return (
@@ -287,10 +304,7 @@ const ReplyItem = ({
                       수정
                     </button>
                     <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        deleteReply(reply.id);
-                      }}
+                      onClick={handleDelete}
                       className="text-red-500 hover:bg-red-50 block w-full px-4 py-2.5 text-left text-sm"
                     >
                       삭제
@@ -330,17 +344,18 @@ const ReplyItem = ({
   );
 };
 
-export const CommentSection = ({ postDocId, isPC = false }: Props) => {
+export const CommentSection = ({ boardId, isPC = false }: Props) => {
   const { user, isLoggedIn } = useCurrentUser();
-  const { comments, isLoaded } = useComments(postDocId);
-  const { createComment } = useCreateComment(postDocId);
+  const { comments, isLoaded, refresh } = useComments(boardId);
+  const { createComment } = useCreateComment(boardId);
   const [input, setInput] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const submittingRef = useRef(false);
 
   const topLevelComments = comments.filter((c) => c.parentId === null);
-  const { likedMap, likesMap, handleClickLike } = useLikeComment(
-    topLevelComments.map((c) => c.id),
+  const { likedMap, likesOverrideMap, handleClickLike } = useLikeComment(
+    boardId,
+    comments,
   );
 
   const handleSubmit = async () => {
@@ -350,6 +365,7 @@ export const CommentSection = ({ postDocId, isPC = false }: Props) => {
     setInput('');
     inputRef.current?.blur();
     submittingRef.current = false;
+    refresh();
   };
 
   return (
@@ -387,10 +403,11 @@ export const CommentSection = ({ postDocId, isPC = false }: Props) => {
               <CommentItem
                 comment={comment}
                 allComments={comments}
-                postDocId={postDocId}
+                boardId={boardId}
                 isLiked={likedMap[comment.id] ?? false}
-                likesCount={likesMap[comment.id] ?? 0}
+                likesCount={likesOverrideMap[comment.id] ?? comment.liked}
                 onLike={() => handleClickLike(comment.id)}
+                onRefresh={refresh}
               />
             </div>
           ))

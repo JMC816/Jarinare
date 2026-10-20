@@ -1,14 +1,23 @@
 /**
  * @role: features/api — 게시물 수정
- * @rule: Firestore 외부 데이터 호출만 담당
+ * @rule: backendClient 호출만 담당
  */
-import { db } from '@/shared/firebase/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { backendClient } from '@/shared/api/backendClient';
+import { BoardType } from '@/entities/Board/types/boardType';
+
+export interface UpdatePostParams {
+  type: BoardType;
+  title?: string;
+  content?: string;
+  imageUrl?: string | null;
+  tags?: string[];
+  rating?: number;
+}
 
 export const updatePostApi = async (
-  postPath: string,
-  data: { title: string; content: string },
-): Promise<void> => {
-  const parts = postPath.split('/');
-  await updateDoc(doc(db, parts[0], parts[1], parts[2], parts[3]), data);
+  id: number,
+  params: UpdatePostParams,
+): Promise<{ message: string }> => {
+  const res = await backendClient.put<{ message: string }>('/api/board', { id, ...params });
+  return res.data;
 };

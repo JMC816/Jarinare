@@ -1,6 +1,7 @@
 import useModalStore from '@/widgets/model/Notification';
 import ResponseModal from './ResponseModal';
 import AcceptModal from './AcceptModal';
+import ExpiredModal from './ExpiredModal';
 
 const Modal = () => {
   const { modalType, isShow } = useModalStore();
@@ -10,6 +11,7 @@ const Modal = () => {
         <ResponseModal />
       ) : null}
       {isShow == true && modalType == 'AcceptModal' ? <AcceptModal /> : null}
+      {isShow == true && modalType == 'ExpiredModal' ? <ExpiredModal /> : null}
     </div>
   );
 };

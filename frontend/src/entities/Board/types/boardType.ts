@@ -2,29 +2,43 @@
  * @role: entities — 게시판 도메인 타입 정의
  * @rule: 타입 정의만 담당
  */
+
+export type BoardType = 'free' | 'notice' | 'event' | 'review';
+export type SortOrder = 'asc' | 'desc';
+
 export interface BoardPost {
-  id: string;
-  author: string;
-  content: string;
+  id: number;
   title: string;
-  views: number;
-  likes: number;
-  createdAt: number;
+  author: string;
+  createdAt: string;
   imageUrl: string | null;
-  commentCount?: number;
-  tags?: string[];
+  commentCount: number;
+  tags: string[];
+  liked: number;
+  content?: string;
+  views?: number;
 }
 
-export interface BoardCategory {
-  id: string;
-  name: string;
-  description?: string;
+export interface BoardDetail extends BoardPost {
+  content: string;
 }
 
-export interface BoardState {
-  posts: BoardPost[];
-  categories: BoardCategory[];
-  currentCategory: string | null;
-  isLoading: boolean;
-  error: string | null;
+export interface FreeBoardDetail extends BoardDetail {
+  comments: import('./commentType').Comment[];
+}
+
+export interface ReviewDetail extends BoardDetail {
+  rating: number;
+}
+
+export interface BoardPagination {
+  page: number;
+  size: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface BoardListResponse {
+  items: BoardPost[];
+  pagination: BoardPagination;
 }

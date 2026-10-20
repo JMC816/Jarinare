@@ -13,6 +13,8 @@ export interface MiniTicketItem {
   duration: string;
   ticketNo: string;
   startTimeStr: string;
+  oddStops: string[];
+  stopCount: number;
 }
 
 export type MiniTicketVariantProps = {

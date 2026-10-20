@@ -192,7 +192,7 @@ const PCNoticeListPage = () => {
                       <button
                         key={notice.id}
                         onClick={() =>
-                          navigate('/board/notice/detail', {
+                          navigate(`/board/${notice.id}?type=notice`, {
                             state: { notice },
                           })
                         }

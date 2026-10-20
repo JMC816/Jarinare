@@ -22,6 +22,9 @@ import {
 import { useNaviation } from '../hooks/useNavigation';
 import useModalStore from '@/widgets/model/AuthStore';
 import { backendClient, ACCESS_TOKEN_KEY } from '@/shared/api/backendClient';
+import { resetBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
+import { useBackendNotificationStore } from '@/features/Notification/models/backendNotificationStore';
+import { useQueryClient } from '@tanstack/react-query';
 import { OrderType } from '@/entities/Point/types/orderType';
 import { PaymentType } from '@/entities/Point/types/paymentType';
 import { FilterTab } from '../types/myPageTypes';
@@ -67,6 +70,9 @@ const PCMyPage = () => {
     filteredPoints,
   } = useMyPageFilter(orders, pointHistory);
 
+  const { setNotifications } = useBackendNotificationStore();
+  const queryClient = useQueryClient();
+
   if (!isLoggedIn || !user) {
     return (
       <PCLoginRequiredPage
@@ -82,6 +88,9 @@ const PCMyPage = () => {
   const handleLogout = async () => {
     await backendClient.post('/oauth/logout').catch(() => {});
     localStorage.removeItem(ACCESS_TOKEN_KEY);
+    queryClient.clear();
+    resetBackendNotifications();
+    setNotifications([]);
     resetModal();
     navigate('/');
   };

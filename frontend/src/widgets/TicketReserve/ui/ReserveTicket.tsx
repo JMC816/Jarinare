@@ -7,6 +7,7 @@ import LoginRequiredBlock from '@/shared/ui/LoginRequiredBlock';
 
 const ReserveTicket = () => {
   const {
+    isLoading,
     isEmpty,
     isLoggedIn,
     handleLoginNavigate,
@@ -19,6 +20,43 @@ const ReserveTicket = () => {
     handleDetail,
     handleSeatChange,
   } = useReserveTicket();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-[196px] w-full shrink-0 animate-pulse flex-col overflow-hidden rounded-xl bg-white shadow-md">
+        <div className="flex items-center justify-between px-5 pt-4">
+          <div className="flex flex-col gap-1">
+            <div className="h-4 w-12 rounded bg-gray-200" />
+            <div className="h-3 w-16 rounded bg-gray-100" />
+          </div>
+          <div className="flex flex-col items-end gap-1">
+            <div className="h-3 w-8 rounded bg-gray-100" />
+            <div className="h-3 w-20 rounded bg-gray-200" />
+          </div>
+        </div>
+        <div className="flex flex-1 items-center justify-between px-5">
+          <div className="flex flex-col items-center gap-1">
+            <div className="h-3 w-8 rounded bg-gray-100" />
+            <div className="h-8 w-14 rounded bg-gray-200" />
+            <div className="h-3 w-16 rounded bg-gray-100" />
+          </div>
+          <div className="mx-4 h-0.5 flex-1 rounded bg-gray-200" />
+          <div className="flex flex-col items-center gap-1">
+            <div className="h-3 w-8 rounded bg-gray-100" />
+            <div className="h-8 w-14 rounded bg-gray-200" />
+            <div className="h-3 w-16 rounded bg-gray-100" />
+          </div>
+        </div>
+        <div className="flex items-center justify-between border-t border-dashed border-gray-200 px-5 py-3">
+          <div className="h-4 w-20 rounded bg-gray-200" />
+          <div className="flex gap-2">
+            <div className="h-7 w-16 rounded-md bg-gray-200" />
+            <div className="h-7 w-16 rounded-md bg-gray-100" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isEmpty || !ticket) {
     if (!isLoggedIn) {
@@ -41,7 +79,7 @@ const ReserveTicket = () => {
               <line x1="9" y1="17" x2="12" y2="17" />
             </svg>
             <span className="text-tiny font-bold">
-              아직 예매한 승차권이 없어요
+              자리나래와 함께 신나는 여행, 시작해볼까요?
             </span>
           </div>
           <div className="absolute inset-0 flex items-center justify-center bg-white/70 backdrop-blur-sm">
@@ -67,7 +105,7 @@ const ReserveTicket = () => {
           <line x1="9" y1="13" x2="15" y2="13" />
           <line x1="9" y1="17" x2="12" y2="17" />
         </svg>
-        <span className="text-tiny font-bold">아직 예매한 승차권이 없어요</span>
+        <span className="text-tiny font-bold">자리나래와 함께 신나는 여행, 시작해볼까요?</span>
       </div>
     );
   }

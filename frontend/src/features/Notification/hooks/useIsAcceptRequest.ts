@@ -1,69 +1,36 @@
-import { realtimeDb } from '@/shared/firebase/firebase';
-import { DataSnapshot, ref, serverTimestamp, set } from 'firebase/database';
-import { responesBySeatIdTrainNoIdStore } from '../models/responseBySeatIdAndTrainNoIdStore';
-import { SeatType } from '@/entities/Seat/types/seatType';
+/**
+ * @role: features/hooks
+ * @rule: 좌석 변경 수락·거절만 담당. 백엔드 accept/reject API 사용
+ */
+import { backendClient } from '@/shared/api/backendClient';
+import { pendingChangeRequestStore } from '../models/pendingChangeRequestStore';
+import { isAxiosError } from 'axios';
 
 export const useIsAcceptRequest = () => {
-  const { seatIdsAndTrainNoId } = responesBySeatIdTrainNoIdStore();
+  const { changeRequestId, clear } = pendingChangeRequestStore();
 
-  // 수락 시 상대방에게 수락 알림 전송
-  const accpetRequest = async (response: DataSnapshot) => {
-    if (!response) return;
-    const keys = Object.keys(response.val());
-
-    // 변경 요청을 보낸 좌석 데이터로 만들어진 key
-    const filteredKey = keys.filter((item) =>
-      item.includes(
-        `${seatIdsAndTrainNoId[0].id}_${seatIdsAndTrainNoId[0].trainNoId}_${seatIdsAndTrainNoId[0].seatId}`,
-      ),
-    );
-
-    const mySeats = response.val()[filteredKey[0]].mySeat as SeatType[];
-    const targetSeats = response.val()[filteredKey[0]].targetSeat as SeatType[];
-
-    await set(
-      ref(
-        realtimeDb,
-        `${mySeats[0].userId}_accept/${mySeats[0].id}_${mySeats[0].trainNoId}_${mySeats.map((item) => item.seatId)}`,
-      ),
-      {
-        text: '수락',
-        createdAt: serverTimestamp(),
-        mySeats,
-        targetSeats,
-        isRead: false,
-      },
-    );
+  // 409: 이미 만료된 신청 → true 반환
+  const accpetRequest = async (): Promise<boolean> => {
+    if (!changeRequestId) return false;
+    try {
+      await backendClient.post(`/api/seats/change-requests/${changeRequestId}/accept`);
+      return false;
+    } catch (e) {
+      if (isAxiosError(e) && e.response?.status === 409) return true;
+      return false;
+    } finally {
+      clear();
+    }
   };
 
-  // 거절 시 상대방에게 거절 알림 전송
-  const refuseRequest = async (response: DataSnapshot) => {
-    if (!response) return;
-    const keys = Object.keys(response.val());
-
-    // 변경 요청을 보낸 좌석 데이터로 만들어진 key
-    const filteredKey = keys.filter((item) =>
-      item.includes(
-        `${seatIdsAndTrainNoId[0].id}_${seatIdsAndTrainNoId[0].trainNoId}_${seatIdsAndTrainNoId[0].seatId}`,
-      ),
-    );
-
-    const mySeats = response.val()[filteredKey[0]].mySeat as SeatType[];
-    const targetSeats = response.val()[filteredKey[0]].targetSeat as SeatType[];
-
-    await set(
-      ref(
-        realtimeDb,
-        `${mySeats[0].userId}_refuse/${mySeats[0].id}_${mySeats[0].trainNoId}_${mySeats.map((item) => item.seatId)}`,
-      ),
-      {
-        text: '거절',
-        createdAt: serverTimestamp(),
-        mySeats,
-        targetSeats,
-        isRead: false,
-      },
-    );
+  const refuseRequest = async () => {
+    if (!changeRequestId) return;
+    try {
+      await backendClient.post(`/api/seats/change-requests/${changeRequestId}/reject`);
+    } finally {
+      clear();
+    }
   };
+
   return { accpetRequest, refuseRequest };
 };

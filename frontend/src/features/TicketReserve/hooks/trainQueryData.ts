@@ -1,10 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { QueryDataProps } from '../types/stationType';
+import { QueryDataProps, TrainTimeProps } from '../types/stationType';
 import { trainDataStore } from '../model/trainDataStore';
 import { fetchAllStations } from '../api/station';
 import { getTimeByStation } from '../api/trainTime';
+import welcomeTourStore from '@/shared/models/welcomeTourStore';
+
+const generateDemoTrains = (): TrainTimeProps => {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  const base = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+  return [
+    { adultcharge: 59800, arrplacename: '부산', arrplandtime: Number(`${base}103000`), depplacename: '서울', depplandtime: Number(`${base}080000`), traingradename: 'KTX', trainno: 1 },
+    { adultcharge: 0,     arrplacename: '부산', arrplandtime: Number(`${base}163000`), depplacename: '서울', depplandtime: Number(`${base}133000`), traingradename: 'KTX', trainno: 103 },
+    { adultcharge: 42500, arrplacename: '부산', arrplandtime: Number(`${base}212000`), depplacename: '서울', depplandtime: Number(`${base}183000`), traingradename: 'ITX-마음', trainno: 1021 },
+  ];
+};
 
 export const trainQueryData = (): QueryDataProps => {
+  const { isActive } = welcomeTourStore();
   const { startStation, endStation, startDay, trainType } = trainDataStore();
 
   // 역 정보 조회
@@ -26,8 +39,8 @@ export const trainQueryData = (): QueryDataProps => {
         startDay,
         trainType || undefined,
       ),
-    // 필수 파라미터가 있을 때만 자동 실행
-    enabled: !!(
+    // 필수 파라미터가 있을 때만 자동 실행 (투어 모드 제외)
+    enabled: !isActive && !!(
       startStation &&
       endStation &&
       startDay &&
@@ -41,6 +54,16 @@ export const trainQueryData = (): QueryDataProps => {
     retry: 1, // 실패 시 1회 재시도
     retryDelay: 3000, // 재시도 전 3초 대기
   });
+
+  if (isActive) {
+    return {
+      stations: stationQuery.data || [],
+      trainTime: generateDemoTrains(),
+      isLoading: false,
+      isFetching: false,
+      refetch: () => {},
+    };
+  }
 
   return {
     stations: stationQuery.data || [],

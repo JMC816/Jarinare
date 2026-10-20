@@ -30,6 +30,7 @@ export type BoardType = {
   onTitleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClearImage: () => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
   setFile: React.Dispatch<React.SetStateAction<File | null>>;
   setPreviewImg: React.Dispatch<React.SetStateAction<string | null>>;
@@ -40,6 +41,7 @@ export type BoardType = {
   content: string;
   previewImg: string | null;
   loading: boolean;
+  uploading: boolean;
   tags?: string[];
   tagInput?: string;
   onTagInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;

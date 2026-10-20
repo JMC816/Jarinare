@@ -3,7 +3,7 @@
  * @rule: 페이지 상태·정렬·검색 로직만 담당
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useGetDvent } from './useGetEvent';
+import { useGetEvent } from './useGetEvent';
 import { BoardPost } from '@/entities/Board/types/boardType';
 
 type SortOrder = 'newest' | 'oldest';
@@ -13,7 +13,7 @@ export const useEventPagination = (
   sortOrder: SortOrder = 'newest',
 ) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { eventDat, isLoaded } = useGetDvent();
+  const { eventData, isLoaded } = useGetEvent();
 
   const [eventPage, setEventPage] = useState(0);
   const [items, setItems] = useState<BoardPost[]>([]);
@@ -23,23 +23,18 @@ export const useEventPagination = (
   const PAGE_SIZE = 6;
 
   const filteredData = useMemo(() => {
-    let data = eventDat;
+    let data = eventData ?? [];
 
     if (searchQuery.trim()) {
       const q = searchQuery.trim().toLowerCase();
-      data = data.filter(
-        (d) =>
-          d.title?.toLowerCase().includes(q) ||
-          d.content?.toLowerCase().includes(q),
-      );
+      data = data.filter((d) => d.title?.toLowerCase().includes(q));
     }
 
-    return [...data].sort((a, b) =>
-      sortOrder === 'newest'
-        ? b.createdAt - a.createdAt
-        : a.createdAt - b.createdAt,
-    );
-  }, [eventDat, searchQuery, sortOrder]);
+    return [...data].sort((a, b) => {
+      const diff = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      return sortOrder === 'newest' ? -diff : diff;
+    });
+  }, [eventData, searchQuery, sortOrder]);
 
   useEffect(() => {
     if (!isLoaded) return;

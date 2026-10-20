@@ -1,90 +1,76 @@
 /**
- * @role: features — 자유게시판 좋아요 상태·토글 훅
- * @rule: api/ 호출만 담당, Firestore 직접 호출 금지
+ * @role: features — 게시물 좋아요 상태·토글 훅
+ * @rule: api/ 호출만 담당, 외부 서비스 직접 호출 금지
  */
-import { BoardPost } from '@/entities/Board/types/boardType';
-import { auth } from '@/shared/firebase/firebase';
 import { useEffect, useRef, useState } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import {
-  fetchBoardLikedStateApi,
-  subscribeBoardLikeCountApi,
-  toggleBoardLikeApi,
-} from '../api/likeBoardApi';
+import { BoardPost } from '@/entities/Board/types/boardType';
+import { getLikedBoardIdsApi, toggleBoardLikeApi } from '../api/likeBoardApi';
 
 export const useLikeBoard = (items: BoardPost[]) => {
-  const [user, setUser] = useState<User | null>(auth.currentUser);
-  const [likedMap, setLikedMap] = useState<Record<string, boolean>>({});
-  const [likesMap, setLikesMap] = useState<Record<string, number>>({});
-  const listenersRef = useRef<(() => void)[]>([]);
-  const processingRef = useRef<Set<string>>(new Set());
+  const [likedMap, setLikedMap] = useState<Record<number, boolean>>({});
+  const [likesOverrideMap, setLikesOverrideMap] = useState<
+    Record<number, number>
+  >({});
+  const processingRef = useRef<Set<number>>(new Set());
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => setUser(u));
-    return () => unsubscribe();
-  }, []);
-
-  // items 로드 시 boardLikes/{docId} 실시간 구독
   useEffect(() => {
     if (items.length === 0) return;
+    getLikedBoardIdsApi()
+      .then((ids) => {
+        const map: Record<number, boolean> = {};
+        ids.forEach((id) => {
+          map[id] = true;
+        });
+        setLikedMap(map);
+      })
+      .catch(() => {});
+  }, [items.length]);
 
-    listenersRef.current.forEach((unsub) => unsub());
-    listenersRef.current = [];
-
-    items.forEach((item) => {
-      const docId = item.id.split('/').pop()!;
-      const unsub = subscribeBoardLikeCountApi(docId, (count) => {
-        setLikesMap((prev) => ({ ...prev, [item.id]: count }));
-      });
-      listenersRef.current.push(unsub);
-    });
-
-    return () => {
-      listenersRef.current.forEach((unsub) => unsub());
-      listenersRef.current = [];
-    };
+  // items 변경 시 override 맵 초기화
+  useEffect(() => {
+    setLikesOverrideMap({});
   }, [items]);
 
-  // 로그인 유저의 좋아요 상태 로드
-  useEffect(() => {
-    if (!user || items.length === 0) return;
-
-    fetchBoardLikedStateApi(user.uid).then((likedDocIds) => {
-      const likedByPath: Record<string, boolean> = {};
-      items.forEach((item) => {
-        const docId = item.id.split('/').pop()!;
-        likedByPath[item.id] = likedDocIds[docId] ?? false;
-      });
-      setLikedMap(likedByPath);
-    });
-  }, [user, items.length]);
-
-  const handleClickLike = async (boardId: string) => {
-    if (!user || processingRef.current.has(boardId)) return;
+  const handleClickLike = async (boardId: number) => {
+    if (processingRef.current.has(boardId)) return;
     processingRef.current.add(boardId);
 
     const isCurrentlyLiked = likedMap[boardId] ?? false;
-    const docId = boardId.split('/').pop()!;
+    const currentCount =
+      likesOverrideMap[boardId] ??
+      items.find((p) => p.id === boardId)?.liked ??
+      0;
 
+    // 낙관적 업데이트
     setLikedMap((prev) => ({ ...prev, [boardId]: !isCurrentlyLiked }));
-    setLikesMap((prev) => ({
+    setLikesOverrideMap((prev) => ({
       ...prev,
-      [boardId]: (prev[boardId] ?? 0) + (isCurrentlyLiked ? -1 : 1),
+      [boardId]: currentCount + (isCurrentlyLiked ? -1 : 1),
     }));
 
     try {
-      await toggleBoardLikeApi(user.uid, docId, isCurrentlyLiked);
-    } catch (error) {
-      console.error('자유게시판 좋아요 오류:', error);
+      const { liked, isLiked } = await toggleBoardLikeApi(boardId);
+      setLikedMap((prev) => ({ ...prev, [boardId]: isLiked }));
+      setLikesOverrideMap((prev) => ({ ...prev, [boardId]: liked }));
+    } catch {
       setLikedMap((prev) => ({ ...prev, [boardId]: isCurrentlyLiked }));
-      setLikesMap((prev) => ({
-        ...prev,
-        [boardId]: (prev[boardId] ?? 0) + (isCurrentlyLiked ? 1 : -1),
-      }));
+      setLikesOverrideMap((prev) => ({ ...prev, [boardId]: currentCount }));
     } finally {
       processingRef.current.delete(boardId);
     }
   };
 
-  return { likedMap, likesMap, handleClickLike };
+  // 기존 호출부와 동일한 인터페이스 유지 (string key)
+  const likesMap: Record<string, number> = {};
+  const likedMapStr: Record<string, boolean> = {};
+  items.forEach((p) => {
+    likesMap[String(p.id)] = likesOverrideMap[p.id] ?? p.liked;
+    likedMapStr[String(p.id)] = likedMap[p.id] ?? false;
+  });
+
+  return {
+    likedMap: likedMapStr,
+    likesMap,
+    handleClickLike: (boardId: string) => handleClickLike(Number(boardId)),
+  };
 };

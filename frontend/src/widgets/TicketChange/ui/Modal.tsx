@@ -10,7 +10,7 @@ import RequestChangeModal from './RequestChangeModal';
 const Modal = () => {
   const { modalType, isShow } = useModalStore();
   return (
-    <div className="fixed z-50 mx-auto my-0 h-screen w-[375px] lg:absolute lg:inset-0 lg:h-full lg:w-full">
+    <div className="fixed inset-0 z-[60]">
       {isShow == true && modalType == 'TrainNumberChoiceModal' ? (
         <TrainNumberChoiceModal />
       ) : null}

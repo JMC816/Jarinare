@@ -135,19 +135,10 @@ const BoardPage = () => {
             {topPost ? (
               <button
                 onClick={() => {
-                  const detailPath =
-                    topPost.category === 'board'
-                      ? '/board/board/detail'
-                      : topPost.category === 'event'
-                        ? '/board/event/detail'
-                        : '/board/notice/detail';
-                  const detailState =
-                    topPost.category === 'board'
-                      ? { post: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } }
-                      : topPost.category === 'event'
-                        ? { event: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } }
-                        : { notice: { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, likes: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null } };
-                  navigate(detailPath, { state: detailState });
+                  const topType = topPost.category === 'board' ? 'free' : topPost.category === 'event' ? 'event' : 'notice';
+                  const topKey = topPost.category === 'board' ? 'post' : topPost.category === 'event' ? 'event' : 'notice';
+                  const topData = { id: topPost.id, title: topPost.title, content: topPost.content, author: topPost.author, liked: 0, views: topPost.viewCount, createdAt: 0, imageUrl: null, commentCount: 0, tags: [] };
+                  navigate(`/board/${topPost.id}?type=${topType}`, { state: { [topKey]: topData } });
                 }}
                 className="flex w-full items-center gap-3 rounded-lg bg-gray-100 px-4 py-3 text-left"
               >

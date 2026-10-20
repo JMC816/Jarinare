@@ -15,8 +15,8 @@ export const useNotice = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<SortOrder>('newest');
   const [filterOpen, setFilterOpen] = useState(false);
-  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
-  const [deletedIds, setDeletedIds] = useState<Set<string>>(new Set());
+  const [menuOpenId, setMenuOpenId] = useState<number | null>(null);
+  const [deletedIds, setDeletedIds] = useState<Set<number>>(new Set());
 
   const { ref, items, isFetching } = useNoticePageNation(
     searchQuery,
@@ -31,7 +31,7 @@ export const useNotice = () => {
     .map((p) => ({ ...p }) as BoardPost);
 
   const handleDelete = async (post: BoardPost) => {
-    await deletePost(post.id);
+    await deletePost(post.id, 'notice');
     setDeletedIds((prev) => new Set(prev).add(post.id));
     setMenuOpenId(null);
   };

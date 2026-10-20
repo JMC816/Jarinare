@@ -114,6 +114,9 @@ const MiniTicket = ({ variant, items, isEmpty }: MiniTicketVariantProps) => {
             dotDate,
             koreanDate,
             ticketNo,
+            duration,
+            oddStops,
+            stopCount,
           },
           idx,
         ) => {
@@ -158,13 +161,39 @@ const MiniTicket = ({ variant, items, isEmpty }: MiniTicketVariantProps) => {
                     </div>
 
                     <div className="flex flex-1 flex-col items-center gap-2 px-6">
-                      <div className="flex items-center">
-                        <div className="w-4 border-t-2 border-dashed border-gray-200" />
-                        <ArrowIcon className="mx-4 h-7 w-7 text-gray-400" />
-                        <div className="w-4 border-t-2 border-dashed border-gray-200" />
+                      <div className="flex w-full items-start">
+                        {oddStops.map((stop, i) => {
+                          const isFirst = i === 0;
+                          const isLast = i === oddStops.length - 1;
+                          return (
+                            <div
+                              key={`${stop}-${i}`}
+                              className="relative flex flex-1 flex-col items-center"
+                            >
+                              {!isFirst && (
+                                <div className="absolute left-0 right-[calc(50%+5px)] top-[5px] border-t-2 border-dashed border-gray-200" />
+                              )}
+                              {!isLast && (
+                                <div className="absolute left-[calc(50%+5px)] right-0 top-[5px] border-t-2 border-dashed border-gray-200" />
+                              )}
+                              <div
+                                className={`relative z-10 rounded-full ${
+                                  isFirst || isLast
+                                    ? 'h-3 w-3 border-2 border-gray-300 bg-white'
+                                    : 'h-2 w-2 border border-gray-300 bg-white'
+                                }`}
+                              />
+                              {!isFirst && !isLast && (
+                                <span className="mt-1 text-center text-[9px] leading-tight text-gray-500">
+                                  {stop}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
-                      <span className="text-sm font-semibold text-gray-500">
-                        DIRECT
+                      <span className="text-xs text-gray-400">
+                        {duration}{stopCount > 0 ? ` · ${stopCount}개역 정차` : ''}
                       </span>
                     </div>
 
@@ -270,14 +299,40 @@ const MiniTicket = ({ variant, items, isEmpty }: MiniTicketVariantProps) => {
                     </span>
                   </div>
 
-                  <div className="flex flex-1 flex-col items-center gap-1 px-3">
-                    <div className="flex items-center">
-                      <div className="w-3 border-t-2 border-dashed border-gray-300" />
-                      <ArrowIcon className="mx-2 h-4 w-4 text-gray-400" />
-                      <div className="w-3 border-t-2 border-dashed border-gray-300" />
+                  <div className="flex flex-1 flex-col items-center gap-1 px-2">
+                    <div className="flex w-full items-start">
+                      {oddStops.map((stop, i) => {
+                        const isFirst = i === 0;
+                        const isLast = i === oddStops.length - 1;
+                        return (
+                          <div
+                            key={`${stop}-${i}`}
+                            className="relative flex flex-1 flex-col items-center"
+                          >
+                            {!isFirst && (
+                              <div className="absolute left-0 right-[calc(50%+3px)] top-[4px] border-t-2 border-dashed border-gray-300" />
+                            )}
+                            {!isLast && (
+                              <div className="absolute left-[calc(50%+3px)] right-0 top-[4px] border-t-2 border-dashed border-gray-300" />
+                            )}
+                            <div
+                              className={`relative z-10 rounded-full ${
+                                isFirst || isLast
+                                  ? 'h-2.5 w-2.5 border-2 border-gray-300 bg-white'
+                                  : 'h-2 w-2 border border-gray-300 bg-white'
+                              }`}
+                            />
+                            {!isFirst && !isLast && (
+                              <span className="mt-0.5 text-center text-[8px] leading-tight text-gray-500">
+                                {stop}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
-                    <span className="text-xs font-semibold text-gray-500">
-                      DIRECT
+                    <span className="text-[10px] text-gray-400">
+                      {duration}{stopCount > 0 ? ` · ${stopCount}개역 정차` : ''}
                     </span>
                   </div>
 

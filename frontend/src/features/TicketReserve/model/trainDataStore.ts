@@ -64,6 +64,8 @@ export const trainDataStore = create(
       setSelectTrainType: (selectTrainType: string) =>
         set(() => ({ selectTrainType })),
       setSeatsId: (seatsId: string[]) => set(() => ({ seatsId })),
+      tripId: null,
+      setTripId: (tripId: number | null) => set(() => ({ tripId })),
     }),
     {
       name: 'trainTiem-storage',

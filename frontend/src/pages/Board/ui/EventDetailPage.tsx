@@ -3,13 +3,15 @@
  * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
  */
 import backward from '@/assets/icons/backward.png';
-import { BoardPost } from '@/entities/Board/types/boardType';
+import { BoardDetail, BoardPost } from '@/entities/Board/types/boardType';
 import PCEventDetailPage from './PCEventDetailPage';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { auth } from '@/shared/firebase/firebase';
 import { formatBoardTime } from '@/shared/lib/formatDate';
-import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { toBackendImageUrl } from '@/shared/api/backendClient';
+import { getBoardDetailApi } from '@/features/Board/api/getBoardApi';
 
 const HamburgerIcon = () => (
   <svg
@@ -31,11 +33,18 @@ const HamburgerIcon = () => (
 const EventDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const event = location.state?.event as BoardPost | undefined;
-
+  const { id } = useParams<{ id: string }>();
+  const [fetchedEvent, setFetchedEvent] = useState<BoardDetail | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const post = event;
+  const stateEvent = location.state?.event as BoardPost | undefined;
+  const post = stateEvent ?? fetchedEvent ?? undefined;
+
+  useEffect(() => {
+    if (!stateEvent && id) {
+      getBoardDetailApi(Number(id), 'event').then(setFetchedEvent).catch(() => {});
+    }
+  }, [id]);
 
   const { deletePost } = useDeletePost();
 
@@ -47,11 +56,10 @@ const EventDetailPage = () => {
     );
   }
 
-  const currentUid = auth.currentUser?.uid;
-  const isOwner = currentUid === post.id.split('/')[1];
+  const isOwner = !!auth.currentUser?.displayName && auth.currentUser.displayName === post.author;
 
   const handleDelete = async () => {
-    await deletePost(post.id);
+    await deletePost(post.id, 'event');
     navigate(-1);
   };
 
@@ -59,7 +67,7 @@ const EventDetailPage = () => {
     <>
       {/* PC 버전 */}
       <div className="hidden w-full lg:block">
-        <PCEventDetailPage />
+        <PCEventDetailPage event={post} />
       </div>
 
       {/* 모바일 버전 */}
@@ -135,7 +143,7 @@ const EventDetailPage = () => {
             {post.imageUrl && (
               <div className="w-full">
                 <img
-                  src={post.imageUrl}
+                  src={toBackendImageUrl(post.imageUrl) ?? ''}
                   alt={post.title}
                   className="w-full object-contain"
                 />

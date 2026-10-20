@@ -49,17 +49,16 @@ export const useTicketDetail = (seats: SeatType[]) => {
   // 티켓 정보를 URL-safe Base64로 인코딩하여 QR URL 생성
   const qrValue = useMemo(() => {
     const payload = JSON.stringify({
-      start: s.startStationForView,
-      end: s.endStationForView,
+      s: s.startStationForView,
+      e: s.endStationForView,
       st: s.startTime,
       et: s.endTime,
-      day: s.startDayForView,
-      type: s.trainType,
-      car: s.trainNoId,
-      seats: filtred,
-      adult: s.selectAdult,
-      kid: s.selectKid,
-      pay: s.selectPay,
+      tp: s.trainType,
+      c: s.trainNoId,
+      ss: filtred,
+      a: s.selectAdult,
+      k: s.selectKid,
+      p: s.selectPay,
     });
     const bytes = new TextEncoder().encode(payload);
     const b64 = btoa(Array.from(bytes, (b) => String.fromCharCode(b)).join(''))

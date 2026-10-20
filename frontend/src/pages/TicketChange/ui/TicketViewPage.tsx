@@ -2,17 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import { resolveRoute, normalizeStation } from '@/shared/lib/trainRoutes';
 
 type TicketData = {
-  start: string;
-  end: string;
+  s: string;
+  e: string;
   st: number;
   et: number;
-  day: string;
-  type: string;
-  car: string;
-  seats: string[];
-  adult: number;
-  kid: number;
-  pay: number;
+  tp: string;
+  c: string;
+  ss: string[];
+  a: number;
+  k: number;
+  p: number;
 };
 
 const parseDateTime = (st: number): Date => {
@@ -73,9 +72,9 @@ const TicketView = ({ d }: { d: TicketData }) => {
   const departureTime = parseDateTime(d.st);
   const arrivalTime = new Date(departureTime.getTime() + dur * 60 * 1000);
 
-  const startName = normalizeStation(d.start);
-  const endName = normalizeStation(d.end);
-  const { route } = resolveRoute(d.type, startName, endName);
+  const startName = normalizeStation(d.s);
+  const endName = normalizeStation(d.e);
+  const { route } = resolveRoute(d.tp, startName, endName);
   const startIdx = route.indexOf(startName);
   const endIdx = route.indexOf(endName);
   const segmentStations =
@@ -110,13 +109,12 @@ const TicketView = ({ d }: { d: TicketData }) => {
         <div className="bg-blue px-5 pb-6 pt-5">
           <div className="mb-4 flex items-center justify-between">
             <span className="rounded-full bg-white/20 px-3 py-0.5 text-xs font-bold text-white">
-              {d.type}
+              {d.tp}
             </span>
-            <span className="text-xs text-white/80">{d.day}</span>
           </div>
           <div className="flex items-center justify-between gap-2">
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-2xl font-black text-white">{d.start}</span>
+              <span className="text-2xl font-black text-white">{d.s}</span>
               <span className="text-sm font-semibold text-white/80">
                 {startHH}:{startMM}
               </span>
@@ -132,7 +130,7 @@ const TicketView = ({ d }: { d: TicketData }) => {
               <span className="text-[10px] text-white/70">{durText}</span>
             </div>
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-2xl font-black text-white">{d.end}</span>
+              <span className="text-2xl font-black text-white">{d.e}</span>
               <span className="text-sm font-semibold text-white/80">
                 {endHH}:{endMM}
               </span>
@@ -150,12 +148,12 @@ const TicketView = ({ d }: { d: TicketData }) => {
           <div className="flex flex-col gap-3">
             <Row
               label="호차 / 좌석"
-              value={`${d.car}호차  ${d.seats.join(', ')}`}
+              value={`${d.c}호차  ${d.ss.join(', ')}`}
             />
-            <Row label="인원" value={`어른 ${d.adult}명 · 어린이 ${d.kid}명`} />
+            <Row label="인원" value={`어른 ${d.a}명 · 어린이 ${d.k}명`} />
             <Row
               label="요금"
-              value={`${d.pay.toLocaleString('ko-KR')}원`}
+              value={`${d.p.toLocaleString('ko-KR')}원`}
               bold
             />
           </div>

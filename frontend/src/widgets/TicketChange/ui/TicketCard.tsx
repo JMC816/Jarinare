@@ -98,7 +98,7 @@ const TicketCard = ({
         <div className="mx-5 flex-1 border-t-2 border-dashed border-gray-300" />
       </div>
       <div className="flex flex-col items-center gap-2 px-5 pb-5">
-        <QRCode value={qrValue} size={200} level="L" />
+        <QRCode value={qrValue} size={256} level="L" />
         <a
           href={qrValue}
           target="_blank"

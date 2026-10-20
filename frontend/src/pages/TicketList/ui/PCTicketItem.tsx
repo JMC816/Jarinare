@@ -99,7 +99,6 @@ const PCTicketItem = ({
   startLabel,
   endLabel,
   dotDate,
-  koreanDate,
   ticketNo,
   onSeatChange,
 }: PCTicketItemProps) => {
@@ -116,7 +115,7 @@ const PCTicketItem = ({
     return () => ro.disconnect();
   }, []);
 
-  const { s, segmentStations, departure, arrival, dur, durText } =
+  const { s, segmentStations, departure, arrival, durText } =
     useTicketDetail(groups);
 
   const dDayLabel = useMemo(() => {
@@ -159,7 +158,6 @@ const PCTicketItem = ({
         ? 1
         : 0;
 
-  const n = oddStops.length;
   const ns = segmentStations.length;
   const segProgress = ns > 1 ? progress * (ns - 1) : 0;
   const currentSegIdx = ns > 1 ? Math.min(Math.floor(segProgress), ns - 2) : 0;

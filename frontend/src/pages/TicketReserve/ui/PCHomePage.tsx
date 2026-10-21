@@ -20,7 +20,6 @@ import start_station from '@/assets/icons/start_station.png';
 import end_station from '@/assets/icons/end_station.png';
 import calendar from '@/assets/icons/calendar.png';
 import on_user from '@/assets/icons/on_user.png';
-import change from '@/assets/icons/change.png';
 import homeBg from '@/assets/background/홈.png';
 
 const PCHomePage = () => {

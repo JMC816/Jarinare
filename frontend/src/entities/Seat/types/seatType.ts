@@ -16,4 +16,5 @@ export type SeatType = {
   id: string;
   reservationId?: number;
   tripId?: number;
+  inspected?: boolean;
 };

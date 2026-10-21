@@ -29,6 +29,7 @@ export interface TicketDto {
   seatId: string;
   passengerType: string;
   price: number;
+  inspected: boolean;
 }
 
 /** 한 번에 결제한 묶음. 교환을 거치면 한 묶음 안에 여러 호차 좌석이 섞일 수 있다. */
@@ -176,6 +177,18 @@ export class ReservationService {
     return this.findOrders({ userIdx: BigInt(user.idx), canceledAt: ACTIVE });
   }
 
+  async inspect(
+    reservationIds: number[],
+    user: AuthUser,
+  ): Promise<{ inspected: number }> {
+    const ids = reservationIds.map((id) => BigInt(id));
+    const res = await this.prisma.reservation.updateMany({
+      where: { id: { in: ids }, userIdx: BigInt(user.idx), canceledAt: ACTIVE },
+      data: { inspected: true },
+    });
+    return { inspected: res.count };
+  }
+
   /**
    * 예매 취소(반환). 좌석 단위로 취소할 수 있다.
    *
@@ -304,6 +317,7 @@ export class ReservationService {
         seatId: r.seatId,
         passengerType: r.passengerType,
         price: r.price,
+        inspected: Boolean(r.inspected),
       });
     }
     return [...orders.values()];

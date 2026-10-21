@@ -5,6 +5,7 @@
 import { useMemo } from 'react';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { parseDateTime } from '@/shared/lib/formatDate';
+import { encodeTicketNumeric } from '@/shared/constants/ticketEncoding';
 import { getSegmentStations } from '@/shared/lib/trainRoutes';
 
 export const useTicketDetail = (seats: SeatType[]) => {
@@ -46,27 +47,28 @@ export const useTicketDetail = (seats: SeatType[]) => {
     [s.trainType, s.startStationForView, s.endStationForView],
   );
 
-  // 티켓 정보를 URL-safe Base64로 인코딩하여 QR URL 생성
+  // 숫자 인코딩 QR URL 생성 (numeric mode → 더 큰 점), 불가 시 base64 fallback
   const qrValue = useMemo(() => {
+    const numeric = encodeTicketNumeric({
+      startTime: s.startTime, dur,
+      startStation: s.startStationForView, endStation: s.endStationForView,
+      trainType: s.trainType, car: s.trainNoId,
+      seats: filtred, adult: s.selectAdult, kid: s.selectKid, price: s.selectPay,
+      reservationIds: seats.map((seat) => seat.reservationId ?? 0),
+    });
+    if (numeric) return `${window.location.origin}/ticket/view#${numeric}`;
+
     const payload = JSON.stringify({
-      s: s.startStationForView,
-      e: s.endStationForView,
-      st: s.startTime,
-      et: s.endTime,
-      tp: s.trainType,
-      c: s.trainNoId,
-      ss: filtred,
-      a: s.selectAdult,
-      k: s.selectKid,
-      p: s.selectPay,
+      s: s.startStationForView, e: s.endStationForView,
+      st: s.startTime, et: s.endTime, tp: s.trainType,
+      c: s.trainNoId, ss: filtred, a: s.selectAdult, k: s.selectKid, p: s.selectPay,
+      rids: seats.map((seat) => seat.reservationId ?? 0),
     });
     const bytes = new TextEncoder().encode(payload);
     const b64 = btoa(Array.from(bytes, (b) => String.fromCharCode(b)).join(''))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
     return `${window.location.origin}/ticket/view#${b64}`;
-  }, [seats, filtred]);
+  }, [s.startStationForView, s.endStationForView, s.startTime, s.endTime, s.trainType, s.trainNoId, s.selectAdult, s.selectKid, s.selectPay, dur, filtred]);
 
   return {
     s,

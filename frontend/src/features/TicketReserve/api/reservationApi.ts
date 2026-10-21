@@ -11,6 +11,7 @@ export interface TicketDto {
   seatId: string;
   passengerType: string;
   price: number;
+  inspected: boolean;
 }
 
 export interface TripDto {
@@ -76,6 +77,7 @@ export const orderDtoToSeatTypes = (orders: OrderDto[], userId: string): SeatTyp
       id: `${order.trip.depPlaceId}_${order.trip.depPlandTime}`,
       reservationId: ticket.reservationId,
       tripId: order.trip.tripId,
+      inspected: ticket.inspected,
     }));
   });
 

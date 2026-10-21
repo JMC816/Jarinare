@@ -1,28 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
-import { resolveRoute, normalizeStation } from '@/shared/lib/trainRoutes';
+import { useEffect } from 'react';
+import { decodeTicketNumeric } from '@/shared/constants/ticketEncoding';
+import { backendClient } from '@/shared/api/backendClient';
 
 type TicketData = {
-  s: string;
-  e: string;
-  st: number;
-  et: number;
-  tp: string;
-  c: string;
-  ss: string[];
-  a: number;
-  k: number;
-  p: number;
-};
-
-const parseDateTime = (st: number): Date => {
-  const s = String(st);
-  return new Date(
-    Number(s.substring(0, 4)),
-    Number(s.substring(4, 6)) - 1,
-    Number(s.substring(6, 8)),
-    Number(s.substring(8, 10)),
-    Number(s.substring(10, 12)),
-  );
+  s: string; e: string; st: number; et: number; tp: string;
+  c: string; ss: string[]; a: number; k: number; p: number;
+  rids?: number[];
 };
 
 const TicketViewPage = () => {
@@ -34,13 +17,17 @@ const TicketViewPage = () => {
 
   let d: TicketData;
   try {
-    const normalized = hash.replace(/-/g, '+').replace(/_/g, '/');
-    const padded = normalized.padEnd(
-      normalized.length + ((4 - (normalized.length % 4)) % 4),
-      '=',
-    );
-    const bytes = Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
-    d = JSON.parse(new TextDecoder().decode(bytes)) as TicketData;
+    if (/^\d+$/.test(hash)) {
+      d = decodeTicketNumeric(hash) as TicketData;
+    } else {
+      const normalized = hash.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = normalized.padEnd(
+        normalized.length + ((4 - (normalized.length % 4)) % 4),
+        '=',
+      );
+      const bytes = Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
+      d = JSON.parse(new TextDecoder().decode(bytes)) as TicketData;
+    }
   } catch {
     return (
       <div className="p-8 text-center text-gray-400">잘못된 접근입니다.</div>
@@ -51,256 +38,131 @@ const TicketViewPage = () => {
 };
 
 const TicketView = ({ d }: { d: TicketData }) => {
-  const [showRoute, setShowRoute] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const startHH = String(d.st).substring(8, 10);
-  const startMM = String(d.st).substring(10, 12);
-  const endHH = String(d.et).substring(8, 10);
-  const endMM = String(d.et).substring(10, 12);
-  let dur =
-    Number(endHH) * 60 +
-    Number(endMM) -
-    (Number(startHH) * 60 + Number(startMM));
-  if (dur < 0) dur += 24 * 60;
-  const durText =
-    dur >= 60
-      ? `${Math.floor(dur / 60)}시간 ${dur % 60 > 0 ? `${dur % 60}분` : ''}`
-      : `${dur}분`;
-
-  const departureTime = parseDateTime(d.st);
-  const arrivalTime = new Date(departureTime.getTime() + dur * 60 * 1000);
-
-  const startName = normalizeStation(d.s);
-  const endName = normalizeStation(d.e);
-  const { route } = resolveRoute(d.tp, startName, endName);
-  const startIdx = route.indexOf(startName);
-  const endIdx = route.indexOf(endName);
-  const segmentStations =
-    startIdx !== -1 && endIdx !== -1 && startIdx < endIdx
-      ? route.slice(startIdx, endIdx + 1)
-      : [];
-
   useEffect(() => {
-    if (!showRoute) return;
+    const rids = d.rids?.filter((id) => id > 0);
+    if (!rids || rids.length === 0) return;
+    backendClient.patch('/api/seats/reservations', { reservationIds: rids }).catch(() => {});
+  }, []);
+  const st = String(d.st);
+  const et = String(d.et);
 
-    const tick = () => {
-      const now = Date.now();
-      const total = arrivalTime.getTime() - departureTime.getTime();
-      const elapsed = now - departureTime.getTime();
-      setProgress(Math.min(Math.max(elapsed / total, 0), 1));
-    };
+  const year = st.slice(0, 4);
+  const month = st.slice(4, 6);
+  const day = st.slice(6, 8);
+  const startHH = st.slice(8, 10);
+  const startMM = st.slice(10, 12);
+  const endHH = et.slice(8, 10);
+  const endMM = et.slice(10, 12);
 
-    tick();
-    intervalRef.current = setInterval(tick, 10000);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [showRoute]);
+  const dateObj = new Date(Number(year), Number(month) - 1, Number(day));
+  const DAY_KR = ['일', '월', '화', '수', '목', '금', '토'];
+  const dayLabel = DAY_KR[dateObj.getDay()];
 
-  // 전체 노선에서 예매 구간 내 위치 (0~1)
-  const trainTop = progress; // 0 = 출발역, 1 = 도착역
+  let dur = Number(endHH) * 60 + Number(endMM) - (Number(startHH) * 60 + Number(startMM));
+  if (dur < 0) dur += 24 * 60;
+  const durText = dur >= 60
+    ? `${Math.floor(dur / 60)}시간 ${dur % 60 > 0 ? `${dur % 60}분` : ''}`
+    : `${dur}분`;
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 px-6 py-10">
-      <div className="w-full max-w-sm overflow-hidden rounded-2xl shadow-xl">
-        {/* 상단: 파란 헤더 */}
-        <div className="bg-blue px-5 pb-6 pt-5">
-          <div className="mb-4 flex items-center justify-between">
+    <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 px-5 py-10">
+      {/* 헤더 */}
+      <div className="mb-5 flex w-full max-w-sm items-center justify-between">
+        <span className="text-xs font-bold tracking-widest text-gray-400 uppercase">승차권 확인</span>
+        <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-600">
+          ✓ 유효한 승차권
+        </span>
+      </div>
+
+      {/* 티켓 카드 */}
+      <div className="relative w-full max-w-sm">
+
+        <div className="overflow-hidden rounded-2xl bg-white shadow-lg">
+        {/* 파란 헤더 */}
+        <div className="bg-blue px-6 pb-6 pt-5">
+          <div className="mb-1 text-xs font-bold text-white/60">{year}년 {month}월 {day}일 ({dayLabel})</div>
+          <div className="mb-4">
             <span className="rounded-full bg-white/20 px-3 py-0.5 text-xs font-bold text-white">
               {d.tp}
             </span>
           </div>
           <div className="flex items-center justify-between gap-2">
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-2xl font-black text-white">{d.s}</span>
-              <span className="text-sm font-semibold text-white/80">
-                {startHH}:{startMM}
-              </span>
-            </div>
-            <div className="flex flex-1 flex-col items-center gap-0.5">
-              <div className="flex w-full items-center">
-                <div className="h-0 flex-1 border-t border-dashed border-white/50" />
-                <span className="mx-1 inline-block -scale-x-100 text-lg leading-none">
-                  🚄
-                </span>
-                <div className="h-0 flex-1 border-t border-dashed border-white/50" />
+              <span className="text-3xl font-black text-white">{d.s}</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-[10px] font-bold text-white/80">{startHH}:{startMM}</span>
+                <span className="text-[10px] font-semibold text-white/50">출발</span>
               </div>
-              <span className="text-[10px] text-white/70">{durText}</span>
+            </div>
+            <div className="flex flex-1 flex-col items-center gap-1">
+              <span className="text-[10px] text-white/60">{durText}</span>
+              <div className="flex w-full items-center gap-1">
+                <div className="h-px flex-1 border-t border-dashed border-white/40" />
+                <div className="h-px flex-1 border-t border-dashed border-white/40" />
+              </div>
             </div>
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-2xl font-black text-white">{d.e}</span>
-              <span className="text-sm font-semibold text-white/80">
-                {endHH}:{endMM}
-              </span>
+              <span className="text-3xl font-black text-white">{d.e}</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-[10px] font-bold text-white/80">{endHH}:{endMM}</span>
+                <span className="text-[10px] font-semibold text-white/50">도착</span>
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* 호차/좌석 강조 — 점선 위 */}
+        <div className="bg-white px-6 pt-5 pb-4">
+          <div className="rounded-xl bg-blue/5 px-4 py-3">
+            <p className="mb-0.5 text-xs text-gray-400">호차 / 좌석</p>
+            <p className="text-xl font-black text-blue">
+              {d.c}호차 &nbsp;{d.ss.join(', ')}
+            </p>
           </div>
         </div>
 
         {/* 절취선 */}
-        <div className="flex items-center bg-white py-3">
-          <div className="mx-5 flex-1 border-t-2 border-dashed border-gray-300" />
+        <div className="relative flex items-center bg-white py-3">
+          <div className="absolute -left-3 h-6 w-6 rounded-full bg-gray-50" />
+          <div className="mx-5 flex-1 border-t-2 border-dashed border-gray-200" />
+          <div className="absolute -right-3 h-6 w-6 rounded-full bg-gray-50" />
         </div>
 
-        {/* 중단: 상세 정보 */}
-        <div className="bg-white px-5 pb-4">
-          <div className="flex flex-col gap-3">
-            <Row
-              label="호차 / 좌석"
-              value={`${d.c}호차  ${d.ss.join(', ')}`}
-            />
-            <Row label="인원" value={`어른 ${d.a}명 · 어린이 ${d.k}명`} />
-            <Row
-              label="요금"
-              value={`${d.p.toLocaleString('ko-KR')}원`}
-              bold
-            />
+        {/* 부가 정보 — 점선 아래 */}
+        <div className="bg-white px-6 pb-6">
+          <div className="flex flex-col gap-2.5">
+            <Row label="인원" value={`어른 ${d.a}명${d.k > 0 ? ` · 어린이 ${d.k}명` : ''}`} />
+            <Row label="결제 금액" value={`${d.p.toLocaleString('ko-KR')}원`} bold />
           </div>
         </div>
+        </div>{/* overflow-hidden 카드 끝 */}
 
-        {/* 열차 구간 버튼 */}
-        <div className="bg-white px-5 pb-5">
-          <button
-            onClick={() => setShowRoute((v) => !v)}
-            className="flex w-full items-center justify-center gap-x-1.5 rounded-xl border border-gray-200 py-2.5 text-sm font-bold text-blue transition-all active:brightness-95"
+        {/* 예매확정 스탬프 — 카드 위에 겹치기 */}
+        <div
+          className="pointer-events-none absolute right-6 top-[140px] z-10 rotate-[-18deg] flex h-[80px] w-[80px] items-center justify-center rounded-full"
+          style={{ border: '3px solid #e00' }}
+        >
+          <div
+            className="flex h-[64px] w-[64px] flex-col items-center justify-center rounded-full"
+            style={{ border: '1.5px solid #e00' }}
           >
-            <span>{showRoute ? '구간 닫기' : '열차 구간 보기'}</span>
-            <span
-              className="text-xs transition-transform duration-200"
-              style={{
-                transform: showRoute ? 'rotate(180deg)' : 'rotate(0deg)',
-              }}
-            >
-              ▼
-            </span>
-          </button>
-        </div>
-      </div>
-
-      {/* 노선 표시 */}
-      {showRoute && segmentStations.length > 0 && (
-        <div className="mt-4 w-full max-w-sm rounded-2xl bg-white px-6 py-5 shadow-xl">
-          <div className="mb-4 flex items-center justify-between">
-            <span className="text-sm font-bold text-gray-800">열차 구간</span>
-            {progress > 0 && progress < 1 && (
-              <span className="rounded-full bg-blue/10 px-2.5 py-0.5 text-xs font-bold text-blue">
-                운행 중
-              </span>
-            )}
-            {progress >= 1 && (
-              <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-bold text-gray-400">
-                도착 완료
-              </span>
-            )}
-            {progress <= 0 && (
-              <span className="rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-bold text-yellow-500">
-                출발 전
-              </span>
-            )}
-          </div>
-
-          <div className="relative flex flex-col">
-            {segmentStations.map((station, i) => {
-              const stationProgress = i / (segmentStations.length - 1);
-              const isPassed = progress >= stationProgress;
-              const isStart = i === 0;
-              const isEnd = i === segmentStations.length - 1;
-
-              return (
-                <div
-                  key={station}
-                  className="relative flex items-center gap-x-4"
-                >
-                  {/* 세로선 */}
-                  {i < segmentStations.length - 1 && (
-                    <div
-                      className="absolute left-[11px] top-6 w-[2px]"
-                      style={{
-                        height: '48px',
-                        backgroundColor:
-                          progress >= (i + 1) / (segmentStations.length - 1)
-                            ? '#2563eb'
-                            : '#e5e7eb',
-                      }}
-                    />
-                  )}
-
-                  {/* 역 점 */}
-                  <div
-                    className="z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2"
-                    style={{
-                      borderColor: isPassed ? '#2563eb' : '#e5e7eb',
-                      backgroundColor: isPassed ? '#2563eb' : '#ffffff',
-                    }}
-                  >
-                    {(isStart || isEnd) && (
-                      <div className="h-2 w-2 rounded-full bg-white" />
-                    )}
-                  </div>
-
-                  {/* 역 이름 + 시간 */}
-                  <div className="flex flex-1 items-center justify-between py-3">
-                    <span
-                      className={`text-sm font-bold ${isPassed ? 'text-gray-800' : 'text-gray-300'}`}
-                    >
-                      {station}
-                    </span>
-                    {isStart && (
-                      <span className="text-xs font-medium text-blue">
-                        {startHH}:{startMM} 출발
-                      </span>
-                    )}
-                    {isEnd && (
-                      <span className="text-xs font-medium text-blue">
-                        {endHH}:{endMM} 도착
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-
-            {/* 열차 아이콘 (운행 중일 때만) */}
-            {progress > 0 && progress < 1 && (
-              <div
-                className="pointer-events-none absolute left-[-2px] z-20 transition-all duration-[10000ms] ease-linear"
-                style={{
-                  top: `${12 + trainTop * ((segmentStations.length - 1) * 54)}px`,
-                }}
-              >
-                <span className="inline-block -scale-x-100 text-xl">🚄</span>
-              </div>
-            )}
+            <span className="text-[10px] font-black leading-tight tracking-[0.2em]" style={{ color: '#e00' }}>예매</span>
+            <span className="text-[10px] font-black leading-tight tracking-[0.2em]" style={{ color: '#e00' }}>확정</span>
           </div>
         </div>
-      )}
+      </div>{/* relative 래퍼 끝 */}
 
-      {showRoute && segmentStations.length === 0 && (
-        <div className="mt-4 w-full max-w-sm rounded-2xl bg-white px-6 py-5 shadow-xl">
-          <span className="text-sm text-gray-400">
-            해당 열차 노선 정보를 찾을 수 없습니다.
-          </span>
-        </div>
-      )}
+      <p className="mt-6 text-center text-xs text-gray-400">
+        본 화면을 승무원에게 제시해주세요
+      </p>
     </div>
   );
 };
 
-const Row = ({
-  label,
-  value,
-  bold,
-}: {
-  label: string;
-  value: string;
-  bold?: boolean;
-}) => (
+const Row = ({ label, value, bold }: { label: string; value: string; bold?: boolean }) => (
   <div className="flex items-center justify-between">
     <span className="text-xs text-gray-400">{label}</span>
-    <span
-      className={`text-sm ${bold ? 'font-bold text-blue' : 'font-semibold text-gray-800'}`}
-    >
+    <span className={`text-sm ${bold ? 'font-bold text-blue' : 'font-semibold text-gray-800'}`}>
       {value}
     </span>
   </div>

@@ -20,6 +20,7 @@ export const useSeatsSelect = () => {
   const { seatsChangeMixTargetOrAllTarget } = useMixSeats();
 
   const [isLocksLoaded, setIsLocksLoaded] = useState(false);
+  const [seatError, setSeatError] = useState<string | null>(null);
   const isSelectingRef = useRef<Record<string, boolean>>({});
 
   const location = useLocation();
@@ -49,8 +50,11 @@ export const useSeatsSelect = () => {
     if (!tripId) return false;
     try {
       await holdSeats(tripId, carNo, [seatId]);
+      setSeatError(null);
       return true;
-    } catch {
+    } catch (err) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setSeatError(msg ?? null);
       return false;
     }
   };
@@ -120,5 +124,5 @@ export const useSeatsSelect = () => {
     }
   };
 
-  return { handleSeatsSelect, locks: {}, isLocksLoaded };
+  return { handleSeatsSelect, locks: {}, isLocksLoaded, seatError };
 };

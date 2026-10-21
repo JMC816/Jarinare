@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
 } from "@nestjs/common";
@@ -24,6 +25,7 @@ import { ReservationService } from "./reservation.service";
 import { SeatChangeService } from "./seat-change.service";
 import {
   CancelReservationDto,
+  InspectReservationDto,
   ChangeRequestListQueryDto,
   CreateChangeRequestDto,
   CreateReservationDto,
@@ -133,6 +135,16 @@ export class SeatController {
   @ApiOperation({ summary: "내 예매 목록" })
   listMine(@CurrentUser() user: AuthUser) {
     return this.reservations.listMine(user);
+  }
+
+  @ApiBearerAuth()
+  @Patch("reservations")
+  @ApiOperation({ summary: "검표 처리 — inspected = true" })
+  inspectReservation(
+    @Body() { reservationIds }: InspectReservationDto,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.reservations.inspect(reservationIds as number[], user);
   }
 
   @ApiBearerAuth()

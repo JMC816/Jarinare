@@ -164,6 +164,14 @@ export class SeatChangeService {
       },
     });
 
+    if (occupants.some((o) => o.inspected)) {
+      throw new AppException(
+        ErrorCode.SEAT_ALREADY_RESERVED,
+        "검표가 완료된 좌석은 변경 신청할 수 없습니다.",
+        HttpStatus.CONFLICT,
+      );
+    }
+
     //  내 좌석만 옮기면 된다 — 빈 좌석이므로 신청 없이 바로 옮긴다.
     if (occupants.length === 0) {
       const seats = await this.moveGroup(

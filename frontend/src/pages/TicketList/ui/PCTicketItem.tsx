@@ -7,77 +7,11 @@ import type { CSSProperties } from 'react';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useTicketDetail } from '@/features/TicketChange/hooks/useTicketDetail';
 import { RouteMap } from '@/widgets/TicketChange/ui/RouteCard';
+import StyledQRCode from '@/shared/ui/StyledQRCode';
 
 type Panel = 'route' | 'qr';
 type RouteView = 'stations' | 'map';
 
-const QRCodePlaceholder = () => (
-  <svg
-    viewBox="0 0 25 25"
-    className="h-full w-full text-gray-400"
-    fill="currentColor"
-  >
-    <rect
-      x="1"
-      y="1"
-      width="7"
-      height="7"
-      rx="1"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1"
-    />
-    <rect x="2.5" y="2.5" width="4" height="4" />
-    <rect
-      x="17"
-      y="1"
-      width="7"
-      height="7"
-      rx="1"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1"
-    />
-    <rect x="18.5" y="2.5" width="4" height="4" />
-    <rect
-      x="1"
-      y="17"
-      width="7"
-      height="7"
-      rx="1"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1"
-    />
-    <rect x="2.5" y="18.5" width="4" height="4" />
-    <rect x="9" y="6" width="1.5" height="1.5" />
-    <rect x="11" y="6" width="1.5" height="1.5" />
-    <rect x="13" y="6" width="1.5" height="1.5" />
-    <rect x="6" y="9" width="1.5" height="1.5" />
-    <rect x="6" y="11" width="1.5" height="1.5" />
-    <rect x="6" y="13" width="1.5" height="1.5" />
-    <rect x="9" y="9" width="1.5" height="1.5" />
-    <rect x="12" y="9" width="1.5" height="1.5" />
-    <rect x="14" y="9" width="3" height="1.5" />
-    <rect x="9" y="12" width="3" height="1.5" />
-    <rect x="14" y="12" width="1.5" height="1.5" />
-    <rect x="9" y="14" width="1.5" height="3" />
-    <rect x="12" y="14" width="3" height="1.5" />
-    <rect x="17" y="9" width="1.5" height="3" />
-    <rect x="20" y="9" width="3" height="1.5" />
-    <rect x="20" y="12" width="1.5" height="1.5" />
-    <rect x="17" y="14" width="3" height="1.5" />
-    <rect x="22" y="14" width="1.5" height="1.5" />
-    <rect x="9" y="17" width="3" height="1.5" />
-    <rect x="14" y="17" width="1.5" height="3" />
-    <rect x="17" y="17" width="1.5" height="1.5" />
-    <rect x="20" y="17" width="1.5" height="3" />
-    <rect x="9" y="20" width="1.5" height="3" />
-    <rect x="12" y="20" width="3" height="1.5" />
-    <rect x="17" y="22" width="3" height="1.5" />
-    <rect x="22" y="20" width="1.5" height="3" />
-  </svg>
-);
 
 interface PCTicketItemProps {
   groups: SeatType[];
@@ -115,7 +49,7 @@ const PCTicketItem = ({
     return () => ro.disconnect();
   }, []);
 
-  const { s, segmentStations, departure, arrival, durText } =
+  const { s, segmentStations, departure, arrival, durText, qrValue } =
     useTicketDetail(groups);
 
   const dDayLabel = useMemo(() => {
@@ -309,7 +243,7 @@ const PCTicketItem = ({
                 <div className="flex w-full rounded-xs bg-lightestGray p-0.5">
                   <button
                     onClick={() => setPanel('route')}
-                    className={`flex-1 rounded-xs py-2 text-[13px] font-bold transition-colors ${
+                    className={`flex-1 rounded-xs py-1.5 text-[13px] font-bold transition-colors ${
                       panel === 'route'
                         ? 'bg-white text-blue shadow-sm'
                         : 'text-gray-400 hover:text-gray-600'
@@ -319,7 +253,7 @@ const PCTicketItem = ({
                   </button>
                   <button
                     onClick={() => setPanel('qr')}
-                    className={`flex-1 rounded-xs py-2 text-[13px] font-bold transition-colors ${
+                    className={`flex-1 rounded-xs py-1.5 text-[13px] font-bold transition-colors ${
                       panel === 'qr'
                         ? 'bg-white text-blue shadow-sm'
                         : 'text-gray-400 hover:text-gray-600'
@@ -328,15 +262,26 @@ const PCTicketItem = ({
                     QR
                   </button>
                 </div>
-                <button
-                  onClick={() => onSeatChange(groups)}
-                  className="flex w-full items-center justify-center gap-0.5 rounded-xs bg-blue py-2 text-[13px] font-bold text-white transition-colors hover:bg-blue/90 active:brightness-95"
-                >
-                  좌석변경
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
+                {(() => {
+                  const isInspected = groups.some((g) => g.inspected);
+                  const disabled = status === 'running' || isInspected;
+                  return (
+                    <button
+                      onClick={() => !disabled && onSeatChange(groups)}
+                      disabled={disabled}
+                      className={`flex w-full items-center justify-center gap-0.5 rounded-xs py-1.5 text-[13px] font-bold transition-colors ${
+                        disabled
+                          ? 'cursor-not-allowed bg-gray-200 text-gray-400'
+                          : 'bg-blue text-white hover:bg-blue/90 active:brightness-95'
+                      }`}
+                    >
+                      좌석변경
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                      </svg>
+                    </button>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -352,7 +297,7 @@ const PCTicketItem = ({
           style={lowerPanelHeight && routeView !== 'map' ? { height: lowerPanelHeight } : undefined}
         >
           {/* 헤더 */}
-          <div className="flex h-16 flex-row items-center justify-between px-6">
+          <div className="flex h-14 flex-row items-center justify-between px-5">
             <div className="flex items-center gap-3">
               {routeView === 'stations' ? (
                 <>
@@ -428,12 +373,12 @@ const PCTicketItem = ({
           {/* 콘텐츠 영역 — 헤더 아래 스크롤 */}
           <div
             className="overflow-y-auto"
-            style={lowerPanelHeight && routeView !== 'map' ? { height: lowerPanelHeight - 64 } : undefined}
+            style={lowerPanelHeight && routeView !== 'map' ? { height: lowerPanelHeight - 56 } : undefined}
           >
 
           {/* 정차역 뷰 */}
           {routeView === 'stations' && (
-            <div className="px-6 pb-8 pt-2">
+            <div className="px-5 pb-6 pt-2">
               {/* @role: 줄무늬 이동 애니메이션 키프레임 */}
               <style>{`@keyframes routeStripe{from{background-position:0 0}to{background-position:24px 0}}`}</style>
               <div className="relative">
@@ -608,13 +553,11 @@ const PCTicketItem = ({
 
       {/* QR 패널 */}
       {panel === 'qr' && (
-        <div className="overflow-hidden rounded-xl bg-white p-5 shadow-sm">
-          <div className="flex items-center gap-6">
-            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-gray-50">
-              <div className="h-16 w-16">
-                <QRCodePlaceholder />
-              </div>
-            </div>
+        <div className="overflow-hidden rounded-xl bg-white p-4 shadow-sm">
+          <div className="flex items-center gap-5">
+            <a href={qrValue} target="_blank" rel="noopener noreferrer" className="shrink-0">
+              <StyledQRCode value={qrValue} size={120} />
+            </a>
             <div className="flex flex-col gap-2">
               <div className="flex gap-4 text-sm">
                 <span className="w-20 shrink-0 text-gray-400">승차권 번호</span>

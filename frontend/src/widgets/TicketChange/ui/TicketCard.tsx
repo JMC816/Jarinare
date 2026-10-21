@@ -2,8 +2,8 @@
  * @role: widgets — 티켓 카드 UI 컴포넌트
  * @rule: 데이터 가공 금지, 전달받은 props만 렌더링
  */
-import QRCode from 'react-qr-code';
 import { TicketCardProps } from '../types/TicketCardType';
+import StyledQRCode from '@/shared/ui/StyledQRCode';
 
 const Row = ({
   label,
@@ -98,14 +98,8 @@ const TicketCard = ({
         <div className="mx-5 flex-1 border-t-2 border-dashed border-gray-300" />
       </div>
       <div className="flex flex-col items-center gap-2 px-5 pb-5">
-        <QRCode value={qrValue} size={256} level="L" />
-        <a
-          href={qrValue}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[10px] text-blue underline"
-        >
-          링크로 열기
+        <a href={qrValue} target="_blank" rel="noopener noreferrer">
+          <StyledQRCode value={qrValue} size={180} />
         </a>
       </div>
     </div>

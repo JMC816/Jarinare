@@ -205,6 +205,16 @@ export class CancelReservationDto {
   reservationIds!: number[];
 }
 
+export class InspectReservationDto {
+  @ApiProperty({ example: [1, 2] })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(MAX_SEATS_PER_ORDER)
+  @ArrayUnique()
+  @IsInt({ each: true })
+  reservationIds!: number[];
+}
+
 /**
  * 좌석 변경 신청. 기존 앱처럼 함께 예매한 일행 좌석은 같이 움직인다.
  * 고른 좌석이 전부 비어 있으면 즉시 이동, 남의 일행 좌석이 섞여 있으면 그 사람에게 교환 신청.

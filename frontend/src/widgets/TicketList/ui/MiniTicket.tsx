@@ -73,7 +73,6 @@ const QRCodePlaceholder = () => (
   </svg>
 );
 
-
 const MiniTicket = ({ variant, items, isEmpty }: MiniTicketVariantProps) => {
   if (isEmpty) {
     return (
@@ -178,7 +177,8 @@ const MiniTicket = ({ variant, items, isEmpty }: MiniTicketVariantProps) => {
                         })}
                       </div>
                       <span className="text-xs text-gray-400">
-                        {duration}{stopCount > 0 ? ` · ${stopCount}개역 정차` : ''}
+                        {duration}
+                        {stopCount > 0 ? ` · ${stopCount}개역 정차` : ''}
                       </span>
                     </div>
 
@@ -317,7 +317,8 @@ const MiniTicket = ({ variant, items, isEmpty }: MiniTicketVariantProps) => {
                       })}
                     </div>
                     <span className="text-[10px] text-gray-400">
-                      {duration}{stopCount > 0 ? ` · ${stopCount}개역 정차` : ''}
+                      {duration}
+                      {stopCount > 0 ? ` · ${stopCount}개역 정차` : ''}
                     </span>
                   </div>
 

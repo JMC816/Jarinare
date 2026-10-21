@@ -11,7 +11,7 @@ const SeatChangeList = () => {
   const { seatsRows } = reserveConstants();
   const { seatsState } = seatsStateStore();
   const { seatsChangeMixTargetOrAllTarget } = useMixSeats();
-  const { handleSeatsSelect, locks, isLocksLoaded } = useSeatsSelect();
+  const { handleSeatsSelect, locks, isLocksLoaded, seatError } = useSeatsSelect();
   const { setId } = seatIdsStore();
   const { seatsChangeInfo } = useGetSeatsState();
 
@@ -23,7 +23,11 @@ const SeatChangeList = () => {
     );
 
   return (
-    <div className="mt-[15px] h-[420px] w-full rounded-lg bg-lightestGray px-5">
+    <div className="mt-[15px] w-full rounded-lg bg-lightestGray px-5">
+      <div className="h-[420px] flex flex-col">
+      {seatError && (
+        <div className="pt-2 pb-1 text-xs font-semibold text-red-500">{seatError}</div>
+      )}
       <div className="flex justify-between text-lg font-bold text-black">
         <div className="flex gap-x-2">
           <span className="flex h-[40px] w-[40px] items-center justify-center">
@@ -143,6 +147,7 @@ const SeatChangeList = () => {
           </div>
         );
       })}
+      </div>{/* h-[420px] 끝 */}
     </div>
   );
 };

@@ -9,18 +9,18 @@ type TicketData = {
 };
 
 const TicketViewPage = () => {
-  const hash = window.location.hash.slice(1);
-  if (!hash)
+  const param = new URLSearchParams(window.location.search).get('d') ?? '';
+  if (!param)
     return (
       <div className="p-8 text-center text-gray-400">잘못된 접근입니다.</div>
     );
 
   let d: TicketData;
   try {
-    if (/^\d+$/.test(hash)) {
-      d = decodeTicketNumeric(hash) as TicketData;
+    if (/^\d+$/.test(param)) {
+      d = decodeTicketNumeric(param) as TicketData;
     } else {
-      const normalized = hash.replace(/-/g, '+').replace(/_/g, '/');
+      const normalized = param.replace(/-/g, '+').replace(/_/g, '/');
       const padded = normalized.padEnd(
         normalized.length + ((4 - (normalized.length % 4)) % 4),
         '=',

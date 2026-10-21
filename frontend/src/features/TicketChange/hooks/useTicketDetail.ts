@@ -56,7 +56,7 @@ export const useTicketDetail = (seats: SeatType[]) => {
       seats: filtred, adult: s.selectAdult, kid: s.selectKid, price: s.selectPay,
       reservationIds: seats.map((seat) => seat.reservationId ?? 0),
     });
-    if (numeric) return `${window.location.origin}/ticket/view#${numeric}`;
+    if (numeric) return `${window.location.origin}/ticket/view?d=${numeric}`;
 
     const payload = JSON.stringify({
       s: s.startStationForView, e: s.endStationForView,
@@ -67,7 +67,7 @@ export const useTicketDetail = (seats: SeatType[]) => {
     const bytes = new TextEncoder().encode(payload);
     const b64 = btoa(Array.from(bytes, (b) => String.fromCharCode(b)).join(''))
       .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    return `${window.location.origin}/ticket/view#${b64}`;
+    return `${window.location.origin}/ticket/view?d=${b64}`;
   }, [s.startStationForView, s.endStationForView, s.startTime, s.endTime, s.trainType, s.trainNoId, s.selectAdult, s.selectKid, s.selectPay, dur, filtred]);
 
   return {

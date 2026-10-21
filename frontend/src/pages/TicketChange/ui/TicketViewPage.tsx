@@ -8,8 +8,25 @@ type TicketData = {
   rids?: number[];
 };
 
+const decodeParam = (raw: string): TicketData => {
+  if (/^\d+$/.test(raw)) {
+    return decodeTicketNumeric(raw) as TicketData;
+  }
+  const normalized = raw.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = normalized.padEnd(
+    normalized.length + ((4 - (normalized.length % 4)) % 4),
+    '=',
+  );
+  const bytes = Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
+  return JSON.parse(new TextDecoder().decode(bytes)) as TicketData;
+};
+
 const TicketViewPage = () => {
-  const param = new URLSearchParams(window.location.search).get('d') ?? '';
+  // ?d= 쿼리 파라미터 우선, 없으면 # 해시 (구버전 QR 호환)
+  const param =
+    new URLSearchParams(window.location.search).get('d') ??
+    window.location.hash.slice(1);
+
   if (!param)
     return (
       <div className="p-8 text-center text-gray-400">잘못된 접근입니다.</div>
@@ -17,17 +34,7 @@ const TicketViewPage = () => {
 
   let d: TicketData;
   try {
-    if (/^\d+$/.test(param)) {
-      d = decodeTicketNumeric(param) as TicketData;
-    } else {
-      const normalized = param.replace(/-/g, '+').replace(/_/g, '/');
-      const padded = normalized.padEnd(
-        normalized.length + ((4 - (normalized.length % 4)) % 4),
-        '=',
-      );
-      const bytes = Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
-      d = JSON.parse(new TextDecoder().decode(bytes)) as TicketData;
-    }
+    d = decodeParam(param);
   } catch {
     return (
       <div className="p-8 text-center text-gray-400">잘못된 접근입니다.</div>

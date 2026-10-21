@@ -555,9 +555,9 @@ const PCTicketItem = ({
       {panel === 'qr' && (
         <div className="overflow-hidden rounded-xl bg-white p-4 shadow-sm">
           <div className="flex items-center gap-5">
-            <a href={qrValue} target="_blank" rel="noopener noreferrer" className="shrink-0">
+            <div className="shrink-0">
               <StyledQRCode value={qrValue} size={120} />
-            </a>
+            </div>
             <div className="flex flex-col gap-2">
               <div className="flex gap-4 text-sm">
                 <span className="w-20 shrink-0 text-gray-400">승차권 번호</span>

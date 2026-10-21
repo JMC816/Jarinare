@@ -98,9 +98,7 @@ const TicketCard = ({
         <div className="mx-5 flex-1 border-t-2 border-dashed border-gray-300" />
       </div>
       <div className="flex flex-col items-center gap-2 px-5 pb-5">
-        <a href={qrValue} target="_blank" rel="noopener noreferrer">
-          <StyledQRCode value={qrValue} size={180} />
-        </a>
+        <StyledQRCode value={qrValue} size={180} />
       </div>
     </div>
   );

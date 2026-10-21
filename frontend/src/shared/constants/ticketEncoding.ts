@@ -63,16 +63,17 @@ const CODE_TO_COL: Record<string, string> = Object.fromEntries(
   Object.entries(COL_TO_CODE).map(([k, v]) => [v, k]),
 );
 
+// seatId 형식: colLabel + rowNo (예: B0, A1, C10) — CONCAT(col, rowNo) 순서
 export const encodeSeat = (seat: string): string => {
-  const row = seat.slice(0, -1).padStart(2, '0');
-  const col = COL_TO_CODE[seat.slice(-1)] ?? '0';
+  const col = COL_TO_CODE[seat[0]] ?? '0';
+  const row = seat.slice(1).padStart(2, '0');
   return row + col;
 };
 
 export const decodeSeat = (code: string): string => {
   const row = String(parseInt(code.slice(0, 2), 10));
   const col = CODE_TO_COL[code.slice(2)] ?? code.slice(2);
-  return row + col;
+  return col + row;
 };
 
 /**

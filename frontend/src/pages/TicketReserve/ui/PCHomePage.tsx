@@ -108,7 +108,6 @@ const PCHomePage = () => {
                       width={18}
                       height={18}
                       src={change}
-                      style={{ transform: 'rotate(90deg)' }}
                     />
                   </button>
 

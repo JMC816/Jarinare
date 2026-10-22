@@ -13,7 +13,6 @@ import RecommendDestination from '@/widgets/TicketReserve/ui/RecommendDestinatio
 import notification from '@/assets/icons/notification.png';
 import setting from '@/assets/icons/setting.png';
 import { Link } from 'react-router-dom';
-import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
 import { useBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
 import PCHomePage from './PCHomePage';
 
@@ -22,16 +21,8 @@ const HomePage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isScrolledBottom, setIsScrolledBottom] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { readStartTime } = useReadStartTime();
   const { hasUnread } = useBackendNotifications();
-
-  const hasUnreadStartTime =
-    readStartTime?.exists() &&
-    Object.values(readStartTime.val() as Record<string, { isRead: boolean }>).some(
-      (v) => v.isRead === false,
-    );
-
-  const showBadge = hasUnread || hasUnreadStartTime;
+  const showBadge = hasUnread;
 
   useResetTrainType();
 

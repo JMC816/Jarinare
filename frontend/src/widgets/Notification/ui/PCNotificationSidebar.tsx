@@ -2,30 +2,18 @@
  * @role: widgets — PC 알림 오른쪽 사이드바
  * @rule: 렌더링만 담당, 사이드바 열림/닫힘은 notificationSidebarStore로 제어
  */
-import { SeatType } from '@/entities/Seat/types/seatType';
 import { useBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
 import BackendNotificationItem from './BackendNotificationItem';
 import useNotifiModalStore from '@/widgets/model/Notification';
 import AcceptModal from '@/widgets/Notification/ui/AcceptModal';
 import ExpiredModal from '@/widgets/Notification/ui/ExpiredModal';
 import ResponseModal from '@/widgets/Notification/ui/ResponseModal';
-import { realtimeDb } from '@/shared/firebase/firebase';
-import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
-import StartTimeNotification from '@/widgets/Notification/ui/StartTimeNotification';
-import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
-import { useIsReadNotification } from '@/features/Notification/hooks/useIsReadNotification';
-import SwipeToDelete from '@/widgets/Notification/ui/SwipeToDelete';
-import { ref, remove } from 'firebase/database';
-import { sanitizeRtdbKey } from '@/shared/lib/rtdbKey';
 import useNotificationSidebarStore from '../model/notificationSidebarStore';
 
 const PCNotificationSidebar = () => {
   const { isOpen, close } = useNotificationSidebarStore();
   const { isShow, modalType } = useNotifiModalStore();
-  const { readStartTime } = useReadStartTime();
-  const { updateStartTimeResponse, updateAllResponse } = useIsReadNotification();
   const { notifications, markAsRead, markAllAsRead, deleteNotification } = useBackendNotifications();
-  const { user } = useCurrentUser();
 
   return (
     <>
@@ -74,7 +62,6 @@ const PCNotificationSidebar = () => {
         <div className="flex justify-end px-4 pt-2">
           <span
             onClick={async () => {
-              await updateAllResponse();
               await markAllAsRead();
               close();
             }}
@@ -94,27 +81,6 @@ const PCNotificationSidebar = () => {
               onDelete={() => deleteNotification(n.id, n.type)}
             />
           ))}
-          {readStartTime &&
-            Object.keys(readStartTime.val()).map((key) => (
-              <SwipeToDelete
-                key={key}
-                onDelete={() =>
-                  remove(
-                    ref(
-                      realtimeDb,
-                      `${sanitizeRtdbKey(user?.userId ?? '')}_startTime/${key}`,
-                    ),
-                  )
-                }
-              >
-                <StartTimeNotification
-                  createdAt={readStartTime.val()[key].createdAt as number}
-                  seats={readStartTime.val()[key].seats as SeatType[]}
-                  isRead={readStartTime.val()[key].isRead as boolean}
-                  onClick={async () => await updateStartTimeResponse(key)}
-                />
-              </SwipeToDelete>
-            ))}
         </div>
       </aside>
 

@@ -1,8 +1,7 @@
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { seatsStateStore } from '@/features/TicketReserve/model/seatsStateStore';
-import { realtimeDb } from '@/shared/firebase/firebase';
-import { ref, get, remove } from 'firebase/database';
+import { releaseHolds } from '@/features/TicketReserve/api/reservationApi';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/ReserveStore';
 import Modal from '@/widgets/TicketReserve/ui/Modal';
@@ -10,54 +9,25 @@ import SeatCheckList from '@/widgets/TicketReserve/ui/SeatCheckList';
 import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';
 import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
 import PCSeatCheckPage from './PCSeatCheckPage';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 const SeatCheckPage = () => {
   const { isShow, modalType, openModal } = useModalStore();
-  const { isLoggedIn, user } = useCurrentUser();
-  const userRef = useRef(user);
-  userRef.current = user;
+  const { isLoggedIn } = useCurrentUser();
   const navigate = useNavigate();
   const { handleAllSelect, seatsStateCount, isLocksLoaded } =
     useSeatQueryData();
-  const {
-    selectKid,
-    selectAdult,
-    startDay,
-    selectStartTime,
-    selectTrainType,
-    startStationForView,
-    endStationForView,
-    trainNo,
-  } = trainDataStore();
+  const { selectKid, selectAdult } = trainDataStore();
   const { setSeatsState } = seatsStateStore();
 
-  const docIds = `${startDay}_${selectStartTime}_${selectTrainType}_${startStationForView}_${endStationForView}`;
-
-  // 페이지 떠날 때 좌석 선택 초기화 + 잠금 해제
+  // 페이지 떠날 때 로컬 좌석 선택 초기화 + 선점 즉시 해제
   useEffect(() => {
     return () => {
-      const currentUser = userRef.current;
-      if (!currentUser?.userId) return;
-
-      // 로컬 선택 상태 초기화
       setSeatsState({});
-
-      // 실시간 DB 잠금 해제
-      const locksPath = `locks/${docIds}/${trainNo}`;
-      const locksRef = ref(realtimeDb, locksPath);
-      get(locksRef).then((snapshot) => {
-        if (!snapshot.exists()) return;
-        const locks = snapshot.val() as Record<string, string>;
-        const myLockedSeats = Object.entries(locks)
-          .filter(([, uid]) => uid === currentUser.userId)
-          .map(([seatId]) => seatId);
-        myLockedSeats.forEach((seatId) =>
-          remove(ref(realtimeDb, `${locksPath}/${seatId}`)),
-        );
-      });
+      const { tripId, trainNo } = trainDataStore.getState();
+      if (tripId) releaseHolds(tripId, Number(trainNo) || undefined).catch(() => {});
     };
   }, []);
 

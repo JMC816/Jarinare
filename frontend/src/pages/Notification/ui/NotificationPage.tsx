@@ -1,28 +1,18 @@
-import { SeatType } from '@/entities/Seat/types/seatType';
 import { useBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
 import backward from '@/assets/icons/backward.png';
 import { useBackButton } from '@/widgets/layouts/hooks/BackWardHook';
 import useModalStore from '@/widgets/model/Notification';
 import Modal from '@/widgets/Notification/ui/Modal';
 import BackendNotificationItem from '@/widgets/Notification/ui/BackendNotificationItem';
-import { realtimeDb } from '@/shared/firebase/firebase';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 import setting from '@/assets/icons/setting.png';
 import { Link } from 'react-router-dom';
-import StartTimeNotification from '@/widgets/Notification/ui/StartTimeNotification';
-import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
-import { useIsReadNotification } from '@/features/Notification/hooks/useIsReadNotification';
-import SwipeToDelete from '@/widgets/Notification/ui/SwipeToDelete';
-import { ref, remove } from 'firebase/database';
-import { sanitizeRtdbKey } from '@/shared/lib/rtdbKey';
 
 const NotificationPage = () => {
   const { isShow, modalType } = useModalStore();
   const { onClick: goBack } = useBackButton();
-  const { readStartTime } = useReadStartTime();
-  const { updateStartTimeResponse, updateAllResponse } = useIsReadNotification();
   const { notifications, markAsRead, markAllAsRead, deleteNotification } = useBackendNotifications();
-  const { user } = useCurrentUser();
+  const { user: _user } = useCurrentUser();
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-gray-100">
@@ -43,10 +33,7 @@ const NotificationPage = () => {
         이전 달부터 이번 달까지의 알림을 표시합니다.
       </p>
       <span
-        onClick={async () => {
-          await updateAllResponse();
-          await markAllAsRead();
-        }}
+        onClick={async () => { await markAllAsRead(); }}
         className="mt-[8px] flex w-full cursor-pointer justify-end pr-[10px] text-tiny text-darkGray underline"
       >
         모두 읽음
@@ -60,24 +47,6 @@ const NotificationPage = () => {
             onDelete={() => deleteNotification(n.id, n.type)}
           />
         ))}
-        {readStartTime &&
-          Object.keys(readStartTime.val()).map((key) => (
-            <SwipeToDelete
-              key={key}
-              onDelete={() =>
-                remove(
-                  ref(realtimeDb, `${sanitizeRtdbKey(user?.userId ?? '')}_startTime/${key}`),
-                )
-              }
-            >
-              <StartTimeNotification
-                createdAt={readStartTime.val()[key].createdAt as number}
-                seats={readStartTime.val()[key].seats as SeatType[]}
-                isRead={readStartTime.val()[key].isRead as boolean}
-                onClick={async () => await updateStartTimeResponse(key)}
-              />
-            </SwipeToDelete>
-          ))}
       </div>
       {isShow == false || modalType == undefined ? null : <Modal />}
     </div>

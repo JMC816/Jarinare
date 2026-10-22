@@ -89,6 +89,8 @@ export class BoardService {
         commentCount: b._count.comments,
         tags: (b.tags as string[]) ?? [],
         liked: Number(b.liked),
+        views: b.viewCount,
+        ...(b.rating !== null && { rating: Number(b.rating) }),
       })),
       pagination: {
         page,
@@ -103,19 +105,22 @@ export class BoardService {
     id: number,
     query: BoardDetailQueryDto,
   ): Promise<BoardDetailDto> {
-    const board = await this.prisma.board.findFirst({
-      where: { id: BigInt(id), type: query.type },
-      include: {
-        author: { select: { name: true } },
-        comments:
-          query.type === BoardType.FREE
-            ? {
-                include: { author: { select: { name: true } } },
-                orderBy: { createdAt: "asc" },
-              }
-            : false,
-      },
-    });
+    const [board] = await this.prisma.$transaction([
+      this.prisma.board.update({
+        where: { id: BigInt(id) },
+        data: { viewCount: { increment: 1 } },
+        include: {
+          author: { select: { name: true } },
+          comments:
+            query.type === BoardType.FREE
+              ? {
+                  include: { author: { select: { name: true } } },
+                  orderBy: { createdAt: "asc" },
+                }
+              : false,
+        },
+      }),
+    ]);
 
     if (!board) {
       throw new AppException(
@@ -132,6 +137,7 @@ export class BoardService {
       author: board.author.name,
       createdAt: board.createdAt.toISOString(),
       imageUrl: board.imageUrl ?? null,
+      views: board.viewCount,
     };
 
     switch (query.type) {
@@ -389,12 +395,53 @@ export class BoardService {
     }
   }
 
+  async getCounts(): Promise<{ free: number; notice: number; event: number; review: number }> {
+    const [free, notice, event, review] = await Promise.all([
+      this.prisma.board.count({ where: { type: BoardType.FREE } }),
+      this.prisma.board.count({ where: { type: BoardType.NOTICE } }),
+      this.prisma.board.count({ where: { type: BoardType.EVENT } }),
+      this.prisma.board.count({ where: { type: BoardType.REVIEW } }),
+    ]);
+    return { free, notice, event, review };
+  }
+
   async getLikedBoardIds(user: AuthUser): Promise<number[]> {
     const likes = await this.prisma.boardLike.findMany({
       where: { userIdx: BigInt(user.idx) },
       select: { boardId: true },
     });
     return likes.map((l) => Number(l.boardId));
+  }
+
+  async getTopPosts(limit: number): Promise<{ id: number; title: string; author: string; views: number; type: string }[]> {
+    const boards = await this.prisma.board.findMany({
+      orderBy: { viewCount: 'desc' },
+      take: limit,
+      include: { author: { select: { name: true } } },
+    });
+    return boards.map((b) => ({
+      id: Number(b.id),
+      title: b.title,
+      author: b.author.name,
+      views: b.viewCount,
+      type: b.type.toLowerCase(),
+    }));
+  }
+
+  async markRead(boardId: number, user: AuthUser): Promise<void> {
+    await this.prisma.boardRead.upsert({
+      where: { boardId_userIdx: { boardId: BigInt(boardId), userIdx: BigInt(user.idx) } },
+      create: { boardId: BigInt(boardId), userIdx: BigInt(user.idx) },
+      update: {},
+    });
+  }
+
+  async getReadBoardIds(user: AuthUser): Promise<number[]> {
+    const reads = await this.prisma.boardRead.findMany({
+      where: { userIdx: BigInt(user.idx) },
+      select: { boardId: true },
+    });
+    return reads.map((r) => Number(r.boardId));
   }
 
   private resolveOrderBy(

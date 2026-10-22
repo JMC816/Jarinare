@@ -1,55 +1,48 @@
 /**
  * @role: features — 전체 역의 평균 별점 조회 (Ticker 정렬용)
- * @rule: Firestore 읽기만 담당, UI 로직 포함 금지
+ * @rule: API 호출만 담당, UI 로직 포함 금지
  */
-import { DestinationReviewSummary } from '@/entities/TravelReview/types/travelReviewType';
-import { getAllStations } from '@/shared/lib/trainRoutes';
-import { db } from '@/shared/firebase/firebase';
-import { collection, getDocs } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getBoardPostsApi } from '@/features/Board/api/getBoardApi';
+import type { DestinationReviewSummary } from '@/entities/TravelReview/types/travelReviewType';
 
 export const useDestinationRatings = () => {
-  const [summaries, setSummaries] = useState<DestinationReviewSummary[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { data, isLoading } = useQuery({
+    queryKey: ['destinationRatings'],
+    queryFn: () => getBoardPostsApi({ type: 'review', size: 1000 }),
+  });
 
-  useEffect(() => {
-    const fetch = async () => {
-      const stations = getAllStations();
+  const summaries: DestinationReviewSummary[] = (() => {
+    if (!data) return [];
 
-      const results = await Promise.all(
-        stations.map(async (city) => {
-          const snap = await getDocs(
-            collection(db, 'travelReviews', city, 'posts'),
-          );
-          const ratings = snap.docs.map(
-            (d) => (d.data().rating as number) ?? 0,
-          );
-          const averageRating =
-            ratings.length > 0
-              ? ratings.reduce((s, r) => s + r, 0) / ratings.length
-              : 0;
+    const cityMap = new Map<string, { totalRating: number; count: number }>();
 
-          return {
-            city,
-            averageRating,
-            reviewCount: ratings.length,
-          } as DestinationReviewSummary;
-        }),
-      );
-
-      // 별점 내림차순, 동점이면 역 이름 오름차순
-      results.sort((a, b) => {
-        if (b.averageRating !== a.averageRating)
-          return b.averageRating - a.averageRating;
-        return a.city.localeCompare(b.city, 'ko');
+    for (const item of data.items) {
+      const city = item.tags?.[0];
+      if (!city) continue;
+      const existing = cityMap.get(city) ?? { totalRating: 0, count: 0 };
+      cityMap.set(city, {
+        totalRating: existing.totalRating + (item.rating ?? 0),
+        count: existing.count + 1,
       });
+    }
 
-      setSummaries(results);
-      setIsLoaded(true);
-    };
+    const result: DestinationReviewSummary[] = Array.from(cityMap.entries()).map(
+      ([city, { totalRating, count }]) => ({
+        city,
+        averageRating: count > 0 ? totalRating / count : 0,
+        reviewCount: count,
+      }),
+    );
 
-    fetch();
-  }, []);
+    result.sort((a, b) => {
+      if (b.averageRating !== a.averageRating)
+        return b.averageRating - a.averageRating;
+      return a.city.localeCompare(b.city, 'ko');
+    });
 
-  return { summaries, isLoaded };
+    return result;
+  })();
+
+  return { summaries, isLoaded: !isLoading };
 };

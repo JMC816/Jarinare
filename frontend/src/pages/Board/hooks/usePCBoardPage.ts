@@ -2,47 +2,22 @@
  * @role: pages — PCBoardPage 상태·로직 훅
  * @rule: 상태·사이드이펙트·이벤트 핸들러만 담당
  */
-import { useEffect, useMemo, useState } from 'react';
-import type { RefObject } from 'react';
-import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
-import { useDestinationRatings } from '@/features/TravelReview/hooks/useDestinationRatings';
+import { useMemo, useState } from 'react';
 import { useGetBoard } from '@/features/Board/hooks/useGetBoard';
 import { useGetNotice } from '@/features/Board/hooks/useGetNotice';
 import { useGetEvent } from '@/features/Board/hooks/useGetEvent';
-import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
-import { useViewCounts } from '@/features/Board/hooks/useViewCounts';
-import {
-  BOARD_CARD_HEADER_H,
-  BOARD_ROW_H,
-  BOARD_PAGINATION_H,
-} from '../constants/boardPageConstants';
 import { BoardFilter, SearchResultPost } from '../types/boardPageType';
 
 export type { BoardFilter };
 
-export const usePCBoardPage = (
-  rightColRef: RefObject<HTMLDivElement | null>,
-) => {
+export const usePCBoardPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSearchQuery, setActiveSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<BoardFilter>('전체');
   const [currentPage, setCurrentPage] = useState(0);
-  const [rightColH, setRightColH] = useState(0);
-  const { seenData } = useBoardSeen();
-  const { summaries } = useDestinationRatings();
   const { boardData, isLoaded: boardLoaded } = useGetBoard();
   const { noticeData, isLoaded: noticeLoaded } = useGetNotice();
   const { eventData, isLoaded: eventLoaded } = useGetEvent();
-  const { topPosts } = useTopViewedPost();
-
-  // 오른쪽 컬럼 높이 측정
-  useEffect(() => {
-    const el = rightColRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => setRightColH(el.offsetHeight));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [rightColRef]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,12 +36,6 @@ export const usePCBoardPage = (
     setCurrentPage(0);
   };
 
-  // 실시간 인기 상위 3개 id Set
-  const top3DocIds = useMemo(
-    () => new Set(topPosts.slice(0, 3).map((p) => String(p.id))),
-    [topPosts],
-  );
-
   // 전체 게시물: 모든 카테고리 합산, 최신순 정렬
   const allPosts = useMemo((): SearchResultPost[] => {
     return [
@@ -78,8 +47,6 @@ export const usePCBoardPage = (
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
   }, [boardData, noticeData, eventData]);
-
-  const { viewsMap } = useViewCounts(allPosts);
 
   // 필터 적용된 게시물
   const displayPosts = useMemo((): SearchResultPost[] => {
@@ -104,17 +71,7 @@ export const usePCBoardPage = (
     );
   }, [activeSearchQuery, displayPosts]);
 
-  // 오른쪽 컬럼 높이 기반 페이지당 게시물 수
-  const pageSize =
-    rightColH > 0
-      ? Math.max(
-          1,
-          Math.floor(
-            (rightColH - BOARD_CARD_HEADER_H - BOARD_PAGINATION_H) /
-              BOARD_ROW_H,
-          ),
-        )
-      : 8;
+  const pageSize = 8;
 
   const pagedPosts = displayPosts.slice(
     currentPage * pageSize,
@@ -130,16 +87,6 @@ export const usePCBoardPage = (
     return Array.from({ length: end - start }, (_, i) => start + i);
   })();
 
-  const isNew = (createdAt: string | number | undefined, category: string) => {
-    if (!createdAt) return false;
-    const seenKey = category as keyof typeof seenData;
-    const createdTs =
-      typeof createdAt === 'number'
-        ? createdAt
-        : new Date(createdAt).getTime() / 1000;
-    return createdTs > (seenData[seenKey] ?? 0);
-  };
-
   const formatDate = (createdAt: string | number) => {
     const d =
       typeof createdAt === 'number'
@@ -151,8 +98,6 @@ export const usePCBoardPage = (
       .replace('.', '');
   };
 
-  const totalReviewCount = summaries.reduce((sum, s) => sum + s.reviewCount, 0);
-
   return {
     searchQuery,
     setSearchQuery,
@@ -162,20 +107,14 @@ export const usePCBoardPage = (
     searchResults,
     activeFilter,
     setActiveFilter: handleFilterChange,
-    isNew,
     formatDate,
-    totalReviewCount,
     displayPosts,
     currentPage,
     setCurrentPage,
     isLoading: !boardLoaded || !noticeLoaded || !eventLoaded,
-    topPosts,
-    top3DocIds,
     pagedPosts,
     totalPages,
     showPagination,
-    viewsMap,
     visiblePages,
-    rightColH,
   };
 };

@@ -342,7 +342,7 @@ export const useSeatQueryData = () => {
     setIsMutating(false);
   };
 
-  const createSelectedSeats = async (finalPrice: number) => {
+  const createSelectedSeats = async (finalPrice: number, usedPoint = 0, paybackPoint = 0) => {
     if (!localStorage.getItem(ACCESS_TOKEN_KEY) || !tripId) return;
     if (isMutating) return;
     setIsMutating(true);
@@ -406,6 +406,8 @@ export const useSeatQueryData = () => {
         adult,
         kid,
         totalPrice: finalPrice,
+        usedPoint,
+        paybackPoint,
         startDayForView: dayView,
       });
 
@@ -413,7 +415,7 @@ export const useSeatQueryData = () => {
       setSeatsStateCount(0);
       clearAllSeatsCache();
       await prefetchAllSeats();
-      await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+      await queryClient.refetchQueries({ queryKey: ['currentUser'] });
       navigate('/');
     } catch (e) {
       console.log(e);

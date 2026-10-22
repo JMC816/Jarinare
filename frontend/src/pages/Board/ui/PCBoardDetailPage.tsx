@@ -122,9 +122,6 @@ const PCBoardDetailPage = ({ post: propPost }: { post?: BoardPost }) => {
     handleDelete,
     handleEdit,
     handleLike,
-    isFollowing,
-    followLoading,
-    toggleFollow,
   } = usePCBoardDetailPage(post);
 
   if (!currentPost) {
@@ -214,19 +211,6 @@ const PCBoardDetailPage = ({ post: propPost }: { post?: BoardPost }) => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        {!isOwner && (
-                          <button
-                            onClick={toggleFollow}
-                            disabled={followLoading}
-                            className={`rounded-sm px-4 py-1.5 text-sm font-bold transition-colors disabled:opacity-50 ${
-                              isFollowing
-                                ? 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                                : 'bg-lightBlue text-blue hover:bg-lightBlueImpossible'
-                            }`}
-                          >
-                            {isFollowing ? '팔로잉' : '팔로우'}
-                          </button>
-                        )}
                         {isOwner && (
                           <OwnerMenu
                             menuOpen={menuOpen}

@@ -54,6 +54,7 @@ export const ModelName = {
   User: 'User',
   Board: 'Board',
   Comment: 'Comment',
+  BoardRead: 'BoardRead',
   BoardLike: 'BoardLike',
   Notification: 'Notification',
   Station: 'Station',
@@ -141,6 +142,16 @@ export const CommentScalarFieldEnum = {
 } as const
 
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
+
+
+export const BoardReadScalarFieldEnum = {
+  id: 'id',
+  boardId: 'boardId',
+  userIdx: 'userIdx',
+  readAt: 'readAt'
+} as const
+
+export type BoardReadScalarFieldEnum = (typeof BoardReadScalarFieldEnum)[keyof typeof BoardReadScalarFieldEnum]
 
 
 export const BoardLikeScalarFieldEnum = {

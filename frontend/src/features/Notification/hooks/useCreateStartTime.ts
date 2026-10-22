@@ -1,5 +1,6 @@
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { realtimeDb } from '@/shared/firebase/firebase';
+import { sanitizeRtdbKey } from '@/shared/lib/rtdbKey';
 import { ref, serverTimestamp, set } from 'firebase/database';
 
 export const useCreateStartTime = () => {
@@ -11,7 +12,7 @@ export const useCreateStartTime = () => {
       await set(
         ref(
           realtimeDb,
-          `${item[0].userId}_startTime/${item[0].id}_${item[0].trainNoId}_${item.map((id) => id.seatId)}`,
+          `${sanitizeRtdbKey(item[0].userId)}_startTime/${item[0].id}_${item[0].trainNoId}_${item.map((id) => id.seatId)}`,
         ),
         {
           createdAt: serverTimestamp(),

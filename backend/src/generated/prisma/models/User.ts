@@ -319,6 +319,7 @@ export type UserWhereInput = {
   boards?: Prisma.BoardListRelationFilter
   comments?: Prisma.CommentListRelationFilter
   boardLikes?: Prisma.BoardLikeListRelationFilter
+  boardReads?: Prisma.BoardReadListRelationFilter
   seatHolds?: Prisma.SeatHoldListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
   seatChangeRequests?: Prisma.SeatChangeRequestListRelationFilter
@@ -347,6 +348,7 @@ export type UserOrderByWithRelationInput = {
   boards?: Prisma.BoardOrderByRelationAggregateInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
   boardLikes?: Prisma.BoardLikeOrderByRelationAggregateInput
+  boardReads?: Prisma.BoardReadOrderByRelationAggregateInput
   seatHolds?: Prisma.SeatHoldOrderByRelationAggregateInput
   reservations?: Prisma.ReservationOrderByRelationAggregateInput
   seatChangeRequests?: Prisma.SeatChangeRequestOrderByRelationAggregateInput
@@ -379,6 +381,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   boards?: Prisma.BoardListRelationFilter
   comments?: Prisma.CommentListRelationFilter
   boardLikes?: Prisma.BoardLikeListRelationFilter
+  boardReads?: Prisma.BoardReadListRelationFilter
   seatHolds?: Prisma.SeatHoldListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
   seatChangeRequests?: Prisma.SeatChangeRequestListRelationFilter
@@ -453,6 +456,7 @@ export type UserCreateInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
@@ -481,6 +485,7 @@ export type UserUncheckedCreateInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -509,6 +514,7 @@ export type UserUpdateInput = {
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
@@ -537,6 +543,7 @@ export type UserUncheckedUpdateInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -756,6 +763,20 @@ export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommentsInput, Prisma.UserUpdateWithoutCommentsInput>, Prisma.UserUncheckedUpdateWithoutCommentsInput>
 }
 
+export type UserCreateNestedOneWithoutBoardReadsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBoardReadsInput, Prisma.UserUncheckedCreateWithoutBoardReadsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBoardReadsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutBoardReadsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutBoardReadsInput, Prisma.UserUncheckedCreateWithoutBoardReadsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutBoardReadsInput
+  upsert?: Prisma.UserUpsertWithoutBoardReadsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBoardReadsInput, Prisma.UserUpdateWithoutBoardReadsInput>, Prisma.UserUncheckedUpdateWithoutBoardReadsInput>
+}
+
 export type UserCreateNestedOneWithoutBoardLikesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutBoardLikesInput, Prisma.UserUncheckedCreateWithoutBoardLikesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutBoardLikesInput
@@ -873,6 +894,7 @@ export type UserCreateWithoutBoardsInput = {
   updatedAt?: Date | string
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
@@ -900,6 +922,7 @@ export type UserUncheckedCreateWithoutBoardsInput = {
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -943,6 +966,7 @@ export type UserUpdateWithoutBoardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
@@ -970,6 +994,7 @@ export type UserUncheckedUpdateWithoutBoardsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -997,6 +1022,7 @@ export type UserCreateWithoutCommentsInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
@@ -1024,6 +1050,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -1067,6 +1094,7 @@ export type UserUpdateWithoutCommentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
@@ -1093,6 +1121,135 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutBoardReadsInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutBoardReadsInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutBoardReadsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutBoardReadsInput, Prisma.UserUncheckedCreateWithoutBoardReadsInput>
+}
+
+export type UserUpsertWithoutBoardReadsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutBoardReadsInput, Prisma.UserUncheckedUpdateWithoutBoardReadsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutBoardReadsInput, Prisma.UserUncheckedCreateWithoutBoardReadsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutBoardReadsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutBoardReadsInput, Prisma.UserUncheckedUpdateWithoutBoardReadsInput>
+}
+
+export type UserUpdateWithoutBoardReadsInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutBoardReadsInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
@@ -1121,6 +1278,7 @@ export type UserCreateWithoutBoardLikesInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
@@ -1148,6 +1306,7 @@ export type UserUncheckedCreateWithoutBoardLikesInput = {
   updatedAt?: Date | string
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -1191,6 +1350,7 @@ export type UserUpdateWithoutBoardLikesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
@@ -1218,6 +1378,7 @@ export type UserUncheckedUpdateWithoutBoardLikesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -1246,6 +1407,7 @@ export type UserCreateWithoutSeatHoldsInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
@@ -1273,6 +1435,7 @@ export type UserUncheckedCreateWithoutSeatHoldsInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
   seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
@@ -1316,6 +1479,7 @@ export type UserUpdateWithoutSeatHoldsInput = {
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
@@ -1343,6 +1507,7 @@ export type UserUncheckedUpdateWithoutSeatHoldsInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
@@ -1370,6 +1535,7 @@ export type UserCreateWithoutReservationsInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
@@ -1397,6 +1563,7 @@ export type UserUncheckedCreateWithoutReservationsInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
   seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
@@ -1440,6 +1607,7 @@ export type UserUpdateWithoutReservationsInput = {
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
@@ -1467,6 +1635,7 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
@@ -1494,6 +1663,7 @@ export type UserCreateWithoutSeatChangeRequestsInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
@@ -1521,6 +1691,7 @@ export type UserUncheckedCreateWithoutSeatChangeRequestsInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
@@ -1553,6 +1724,7 @@ export type UserCreateWithoutSeatChangeReceivedInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
@@ -1580,6 +1752,7 @@ export type UserUncheckedCreateWithoutSeatChangeReceivedInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -1623,6 +1796,7 @@ export type UserUpdateWithoutSeatChangeRequestsInput = {
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
@@ -1650,6 +1824,7 @@ export type UserUncheckedUpdateWithoutSeatChangeRequestsInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
@@ -1688,6 +1863,7 @@ export type UserUpdateWithoutSeatChangeReceivedInput = {
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
@@ -1715,6 +1891,7 @@ export type UserUncheckedUpdateWithoutSeatChangeReceivedInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -1742,6 +1919,7 @@ export type UserCreateWithoutPointHistoriesInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
@@ -1769,6 +1947,7 @@ export type UserUncheckedCreateWithoutPointHistoriesInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -1812,6 +1991,7 @@ export type UserUpdateWithoutPointHistoriesInput = {
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
@@ -1839,6 +2019,7 @@ export type UserUncheckedUpdateWithoutPointHistoriesInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -1866,6 +2047,7 @@ export type UserCreateWithoutOrderHistoriesInput = {
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
@@ -1893,6 +2075,7 @@ export type UserUncheckedCreateWithoutOrderHistoriesInput = {
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
   seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
@@ -1936,6 +2119,7 @@ export type UserUpdateWithoutOrderHistoriesInput = {
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
@@ -1963,6 +2147,7 @@ export type UserUncheckedUpdateWithoutOrderHistoriesInput = {
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
   seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
@@ -1979,6 +2164,7 @@ export type UserCountOutputType = {
   boards: number
   comments: number
   boardLikes: number
+  boardReads: number
   seatHolds: number
   reservations: number
   seatChangeRequests: number
@@ -1991,6 +2177,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   boards?: boolean | UserCountOutputTypeCountBoardsArgs
   comments?: boolean | UserCountOutputTypeCountCommentsArgs
   boardLikes?: boolean | UserCountOutputTypeCountBoardLikesArgs
+  boardReads?: boolean | UserCountOutputTypeCountBoardReadsArgs
   seatHolds?: boolean | UserCountOutputTypeCountSeatHoldsArgs
   reservations?: boolean | UserCountOutputTypeCountReservationsArgs
   seatChangeRequests?: boolean | UserCountOutputTypeCountSeatChangeRequestsArgs
@@ -2028,6 +2215,13 @@ export type UserCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Types.E
  */
 export type UserCountOutputTypeCountBoardLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BoardLikeWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountBoardReadsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BoardReadWhereInput
 }
 
 /**
@@ -2093,6 +2287,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   boardLikes?: boolean | Prisma.User$boardLikesArgs<ExtArgs>
+  boardReads?: boolean | Prisma.User$boardReadsArgs<ExtArgs>
   seatHolds?: boolean | Prisma.User$seatHoldsArgs<ExtArgs>
   reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
   seatChangeRequests?: boolean | Prisma.User$seatChangeRequestsArgs<ExtArgs>
@@ -2128,6 +2323,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   boardLikes?: boolean | Prisma.User$boardLikesArgs<ExtArgs>
+  boardReads?: boolean | Prisma.User$boardReadsArgs<ExtArgs>
   seatHolds?: boolean | Prisma.User$seatHoldsArgs<ExtArgs>
   reservations?: boolean | Prisma.User$reservationsArgs<ExtArgs>
   seatChangeRequests?: boolean | Prisma.User$seatChangeRequestsArgs<ExtArgs>
@@ -2143,6 +2339,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     boards: Prisma.$BoardPayload<ExtArgs>[]
     comments: Prisma.$CommentPayload<ExtArgs>[]
     boardLikes: Prisma.$BoardLikePayload<ExtArgs>[]
+    boardReads: Prisma.$BoardReadPayload<ExtArgs>[]
     seatHolds: Prisma.$SeatHoldPayload<ExtArgs>[]
     reservations: Prisma.$ReservationPayload<ExtArgs>[]
     seatChangeRequests: Prisma.$SeatChangeRequestPayload<ExtArgs>[]
@@ -2510,6 +2707,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   boards<T extends Prisma.User$boardsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   comments<T extends Prisma.User$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   boardLikes<T extends Prisma.User$boardLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  boardReads<T extends Prisma.User$boardReadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$boardReadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardReadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   seatHolds<T extends Prisma.User$seatHoldsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$seatHoldsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SeatHoldPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reservations<T extends Prisma.User$reservationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reservationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReservationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   seatChangeRequests<T extends Prisma.User$seatChangeRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$seatChangeRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SeatChangeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2978,6 +3176,30 @@ export type User$boardLikesArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.BoardLikeScalarFieldEnum | Prisma.BoardLikeScalarFieldEnum[]
+}
+
+/**
+ * User.boardReads
+ */
+export type User$boardReadsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BoardRead
+   */
+  select?: Prisma.BoardReadSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BoardRead
+   */
+  omit?: Prisma.BoardReadOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardReadInclude<ExtArgs> | null
+  where?: Prisma.BoardReadWhereInput
+  orderBy?: Prisma.BoardReadOrderByWithRelationInput | Prisma.BoardReadOrderByWithRelationInput[]
+  cursor?: Prisma.BoardReadWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BoardReadScalarFieldEnum | Prisma.BoardReadScalarFieldEnum[]
 }
 
 /**

@@ -297,6 +297,31 @@ export class CommentService {
     return { liked: result.liked, isLiked: result.isLiked };
   }
 
+  async getByBoardId(boardId: number): Promise<
+    Array<{
+      id: number;
+      author: string;
+      content: string;
+      createdAt: string;
+      parentId: number | null;
+      liked: number;
+    }>
+  > {
+    const comments = await this.prisma.comment.findMany({
+      where: { boardId: BigInt(boardId) },
+      include: { author: { select: { name: true } } },
+      orderBy: { createdAt: "asc" },
+    });
+    return comments.map((c) => ({
+      id: Number(c.id),
+      author: c.author.name,
+      content: c.content,
+      createdAt: c.createdAt.toISOString(),
+      parentId: c.parentId !== null ? Number(c.parentId) : null,
+      liked: Number(c.liked),
+    }));
+  }
+
   async getLikedCommentIds(boardId: number, user: AuthUser): Promise<number[]> {
     const comments = await this.prisma.comment.findMany({
       where: { boardId: BigInt(boardId) },

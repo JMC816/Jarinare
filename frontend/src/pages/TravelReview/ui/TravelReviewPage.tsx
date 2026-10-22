@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import backward from '@/assets/icons/backward.png';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 import { useGetTravelReviews } from '@/features/TravelReview/hooks/useGetTravelReviews';
 import { useDeleteTravelReview } from '@/features/TravelReview/hooks/useDeleteTravelReview';
 import { useUpdateTravelReview } from '@/features/TravelReview/hooks/useUpdateTravelReview';
@@ -17,8 +17,8 @@ import StarPicker from '@/shared/ui/StarPicker';
 
 const GAP = 12; // gap-3 = 12px
 
-const formatDate = (seconds: number) => {
-  const d = new Date(seconds * 1000);
+const formatDate = (createdAt: string) => {
+  const d = new Date(createdAt);
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
 };
 
@@ -27,12 +27,12 @@ const TravelReviewPage = () => {
   const { state } = useLocation();
   const city: string = state?.city ?? '';
 
-  const currentUser = auth.currentUser;
+  const { user: currentUser } = useCurrentUser();
   const { reviews, isLoaded, averageRating } = useGetTravelReviews(city);
   const { deleteReview } = useDeleteTravelReview(city);
   const { updateReview } = useUpdateTravelReview(city);
 
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
   const [editRating, setEditRating] = useState(5);
@@ -197,11 +197,11 @@ const TravelReviewPage = () => {
                     <StarRating rating={review.rating} />
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] text-gray-400">
-                        {currentUser?.displayName === review.author
+                        {currentUser?.name === review.author
                           ? review.author
                           : '***'}
                       </span>
-                      {currentUser?.displayName === review.author && (
+                      {currentUser?.name === review.author && (
                         <>
                           <button
                             onClick={() =>

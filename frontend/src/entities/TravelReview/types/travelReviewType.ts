@@ -1,12 +1,12 @@
 export interface TravelReview {
-  id: string;
+  id: number;
   author: string;
   title: string;
   content: string;
   rating: number;
-  createdAt: number;
-  updatedAt?: number;
+  createdAt: string;
   imageUrl?: string | null;
+  tags: string[];
 }
 
 export interface DestinationReviewSummary {

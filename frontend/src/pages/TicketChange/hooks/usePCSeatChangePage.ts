@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useSeatsChangeBlocked } from '@/features/Notification/hooks/useSeatsChangeBlocked';
-import { useRequestSenderTimer } from '@/features/Notification/hooks/useRequestTimer';
 import { seatsChangeTargetStore } from '@/features/TicketChange/models/seatsChangeTargetStore';
 import { seatsTargetStore } from '@/features/TicketChange/models/seatsTargetStore';
 import { useMixSeats } from '@/features/TicketChange/hooks/useMixSeats';
@@ -34,8 +33,7 @@ export const usePCSeatChangePage = () => {
 
   const { seatsChangeTarget } = seatsChangeTargetStore();
   const { seatsTarget } = seatsTargetStore();
-  const { isBlocked } = useSeatsChangeBlocked();
-  const { remaining } = useRequestSenderTimer();
+  const { isBlocked, remaining } = useSeatsChangeBlocked();
   const { seatsChangeMixTargetOrAllTarget } = useMixSeats();
   const { handleSeatsSelect, locks, isLocksLoaded } = useSeatsSelect();
   const { setId } = seatIdsStore();

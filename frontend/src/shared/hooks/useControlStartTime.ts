@@ -1,13 +1,14 @@
-import { auth } from '../firebase/firebase';
 import { formatStartTime, isToday } from '../lib/formatDate';
 import { useEffect, useState } from 'react';
 import { SeatType } from '@/entities/Seat/types/seatType';
 import { useTicketLists } from '@/features/TicketList/hooks/useTicketLists';
 import { useCreateStartTime } from '@/features/Notification/hooks/useCreateStartTime';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 export const useControlStartTime = () => {
   const { groupedArray } = useTicketLists() ?? {};
   const { creatStartTime } = useCreateStartTime();
+  const { user } = useCurrentUser();
 
   const [timeDifferenceData, setTimeDifferenceData] = useState<SeatType[][]>([
     [],
@@ -16,10 +17,8 @@ export const useControlStartTime = () => {
   // 이미 실행한 좌석 기록용 Set
   const [isExistData, setIsExistData] = useState<Set<string>>(new Set());
 
-  const user = auth.currentUser;
-
   useEffect(() => {
-    if (!groupedArray || !user) return;
+    if (!groupedArray || !user?.userId) return;
 
     const timers: NodeJS.Timeout[] = [];
     const now = Date.now();
@@ -27,7 +26,7 @@ export const useControlStartTime = () => {
 
     groupedArray.forEach((item) => {
       // 현재 사용자가 아니거나 오늘 날짜가 아니면 return
-      if (item[0].userId !== user.uid || item[0].startDay !== isToday()) return;
+      if (item[0].userId !== user.userId || item[0].startDay !== isToday()) return;
 
       // 고유 키 생성 (중복 방지용)
       const seatKey = `${item[0].startTime}-${item[0].trainType}`;
@@ -67,8 +66,7 @@ export const useControlStartTime = () => {
     }
 
     return () => timers.forEach(clearTimeout);
-    // user 객체는 참조 값이 다르므로, user.uid로 불필요한 렌더링 최적화
-  }, [groupedArray, user?.uid, isExistData]);
+  }, [groupedArray, user?.userId, isExistData]);
 
   return { timeDifferenceData };
 };

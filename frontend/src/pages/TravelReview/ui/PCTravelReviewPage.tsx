@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 import { useGetTravelReviews } from '@/features/TravelReview/hooks/useGetTravelReviews';
 import StarRating from '@/shared/ui/StarRating';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
@@ -84,7 +84,7 @@ const PCTravelReviewPage = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const city: string = state?.city ?? '';
-  const currentUser = auth.currentUser;
+  const { user: currentUser } = useCurrentUser();
 
   const { reviews, isLoaded, averageRating } = useGetTravelReviews(city);
   const {
@@ -505,7 +505,7 @@ const PCTravelReviewPage = () => {
                               {/* 이름 + 날짜 수직 */}
                               <div className="flex flex-col">
                                 <span className="text-sm font-bold text-gray-800">
-                                  {currentUser?.displayName === review.author
+                                  {currentUser?.name === review.author
                                     ? review.author
                                     : review.author?.charAt(0) + '**'}
                                 </span>
@@ -518,7 +518,7 @@ const PCTravelReviewPage = () => {
                             {/* 우측: 별점 + ... 메뉴 */}
                             <div className="flex items-center gap-3">
                               <StarRating rating={review.rating} />
-                              {currentUser?.displayName === review.author && (
+                              {currentUser?.name === review.author && (
                                 <MoreMenu
                                   onEdit={() =>
                                     handleEditStart(

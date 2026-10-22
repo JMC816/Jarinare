@@ -1,5 +1,5 @@
 // @role: widgets/controller
-// @rule: 생성·수정·삭제 모두 JWT 필요
+// @rule: 목록 조회는 Public, 생성·수정·삭제 모두 JWT 필요
 import {
   Body,
   Controller,
@@ -10,6 +10,7 @@ import {
   Query,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Public } from "../auth/decorators/public.decorator";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import type { AuthUser } from "../auth/interfaces/auth-user.interface";
 import { CommentService } from "./comment.service";
@@ -25,6 +26,13 @@ import {
 @Controller("comment")
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
+
+  @Public()
+  @Get()
+  @ApiOperation({ summary: "게시물 댓글 목록" })
+  getByBoardId(@Query("boardId") boardId: string) {
+    return this.commentService.getByBoardId(Number(boardId));
+  }
 
   @Post()
   @ApiOperation({ summary: "댓글 생성" })

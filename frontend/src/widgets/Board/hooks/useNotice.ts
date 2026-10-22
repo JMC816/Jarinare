@@ -5,9 +5,8 @@
 import { useState } from 'react';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { useNoticePageNation } from '@/features/Board/hooks/useNoticePagination';
-import { useLikeNoitce } from '@/features/Board/hooks/useLikeNotice';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 type SortOrder = 'newest' | 'oldest';
 
@@ -22,9 +21,9 @@ export const useNotice = () => {
     searchQuery,
     sortOrder,
   );
-  const { likedMap, likesMap, handleClickLike } = useLikeNoitce(items);
   const { deletePost } = useDeletePost();
-  const currentUid = auth.currentUser?.uid;
+  const { user } = useCurrentUser();
+  const currentUid = user?.userId;
 
   const displayedItems = items
     .filter((p) => !deletedIds.has(p.id))
@@ -48,9 +47,6 @@ export const useNotice = () => {
     ref,
     items,
     isFetching,
-    likedMap,
-    likesMap,
-    handleClickLike,
     displayedItems,
     handleDelete,
     currentUid,

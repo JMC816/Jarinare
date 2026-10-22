@@ -2,24 +2,23 @@
  * @role: pages — PC 게시판 허브 페이지
  * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
  */
-import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
 import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import SeasonBanner from '@/widgets/Season/ui/SeasonBanner';
-import TravelReviewTicker from '@/widgets/TravelReview/ui/TravelReviewTicker';
 import { usePCBoardPage } from '../hooks/usePCBoardPage';
-import { useBoardCounts } from '@/features/Board/hooks/useBoardCounts';
-import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
 import {
   BOARD_CATEGORIES,
   FILTER_TABS,
   CAT_STYLE_MAP,
 } from '../constants/boardPageConstants';
+import { useBoardCounts } from '@/features/Board/hooks/useBoardCounts';
+import { useBoardRead } from '@/features/Board/hooks/useBoardRead';
+import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
+import TravelReviewTicker from '@/widgets/TravelReview/ui/TravelReviewTicker';
 
 const PCBoardPage = () => {
   const navigate = useNavigate();
-  const rightColRef = useRef<HTMLDivElement>(null);
 
   const {
     searchQuery,
@@ -30,25 +29,26 @@ const PCBoardPage = () => {
     searchResults,
     activeFilter,
     setActiveFilter,
-    isNew,
     formatDate,
-    totalReviewCount,
     displayPosts,
     currentPage,
     setCurrentPage,
     isLoading,
-    topPosts,
-    top3DocIds,
     pagedPosts,
     showPagination,
     visiblePages,
     totalPages,
-    rightColH,
-    viewsMap,
-  } = usePCBoardPage(rightColRef);
+  } = usePCBoardPage();
 
   const { counts } = useBoardCounts();
-  const { markSeen } = useBoardSeen();
+  const { readIds } = useBoardRead();
+  const { topPosts } = useTopViewedPost(3);
+  const countMap: Record<string, number> = {
+    notice: counts.notice,
+    event: counts.event,
+    board: counts.free,
+    review: counts.review,
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-50">
@@ -81,12 +81,11 @@ const PCBoardPage = () => {
                 <TravelReviewTicker title="베스트 여행지 후기" />
               </div>
 
-              {/* 2열 그리드 — 왼쪽 4fr(통합게시판), 오른쪽 1fr(인기게시물+카테고리) */}
+              {/* 2열 그리드 — 왼쪽 4fr(통합게시판), 오른쪽 1fr(카테고리) */}
               <div className="grid grid-cols-[4fr_1fr] items-start gap-6">
                 {/* [col1] 통합게시판 */}
                 <div
                   className="flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm"
-                  style={showPagination ? { height: rightColH } : undefined}
                 >
                   {/* 카드 헤더: 제목 + 필터 탭 + 글쓰기 버튼 */}
                   <div className="flex items-center gap-2 px-5 py-4">
@@ -250,19 +249,10 @@ const PCBoardPage = () => {
                     ) : (
                       pagedPosts.map((post) => {
                         const style = CAT_STYLE_MAP[post._category];
-                        const isHot = top3DocIds.has(String(post.id));
-                        const hasNew = isNew(post.createdAt, post._category);
                         return (
                           <button
                             key={post.id}
                             onClick={() => {
-                              if (hasNew)
-                                markSeen(
-                                  post._category as
-                                    | 'notice'
-                                    | 'event'
-                                    | 'board',
-                                );
                               navigate(`/board/${post.id}?type=${style.type}`, {
                                 state: {
                                   [style.stateKey]: {
@@ -290,21 +280,18 @@ const PCBoardPage = () => {
                             >
                               {style.badge}
                             </span>
-                            <span className="flex-1 truncate text-base font-bold text-gray-800">
-                              {post.title}
-                              {(post.commentCount ?? 0) > 0 && (
-                                <span className="ml-2 inline-flex items-center justify-center align-middle text-sm font-bold text-blue">
-                                  [{post.commentCount}]
-                                </span>
-                              )}
-                              {isHot && (
-                                <span className="ml-2 inline-flex items-center justify-center rounded-[3px] bg-red px-1.5 py-0.5 align-middle text-[10px] font-bold text-white">
-                                  HOT
-                                </span>
-                              )}
-                              {hasNew && !isHot && (
-                                <span className="ml-2 inline-flex items-center justify-center rounded-[3px] bg-lightImpossible px-1.5 py-0.5 align-middle text-[10px] font-bold text-red">
-                                  NEW
+                            <span className="flex flex-1 items-center gap-1.5 overflow-hidden">
+                              <span className="truncate text-base font-bold text-gray-800">
+                                {post.title}
+                                {(post.commentCount ?? 0) > 0 && (
+                                  <span className="ml-2 text-sm font-bold text-blue">
+                                    [{post.commentCount}]
+                                  </span>
+                                )}
+                              </span>
+                              {!readIds.includes(post.id) && (
+                                <span className="shrink-0 text-[10px] font-black text-red">
+                                  [NEW]
                                 </span>
                               )}
                             </span>
@@ -315,7 +302,7 @@ const PCBoardPage = () => {
                               {formatDate(post.createdAt)}
                             </span>
                             <span className="w-[28px] shrink-0 text-right text-sm text-gray-400">
-                              {viewsMap[post.id] ?? post.views ?? 0}
+                              {post.views ?? 0}
                             </span>
                           </button>
                         );
@@ -323,7 +310,7 @@ const PCBoardPage = () => {
                     )}
                   </div>
 
-                  {/* 페이지네이션 — 게시물이 많을 때만 표시 */}
+                  {/* 페이지네이션 */}
                   {showPagination && (
                     <div className="flex items-center justify-center gap-1.5 px-5 py-4">
                       <button
@@ -385,70 +372,48 @@ const PCBoardPage = () => {
                   )}
                 </div>
 
-                {/* [col2] 실시간 인기 게시물 + 카테고리 (세로 적층) */}
-                <div ref={rightColRef} className="flex min-w-0 flex-col gap-6">
+                {/* [col2] 실시간 인기 + 카테고리 */}
+                <div className="flex min-w-0 flex-col gap-6">
                   {/* 실시간 인기 */}
                   <div className="flex flex-col overflow-hidden rounded-xl bg-white p-5 shadow-sm">
                     <div className="mb-4 flex items-center gap-2">
                       <span className="text-lg">🔥</span>
-                      <h2 className="text-lg font-bold text-gray-800">
-                        실시간 인기
-                      </h2>
+                      <h2 className="text-lg font-bold text-gray-800">실시간 인기</h2>
                     </div>
                     <div className="flex flex-col divide-y divide-gray-100">
-                      {Array.from({ length: 5 }).map((_, i) => {
+                      {Array.from({ length: 3 }).map((_, i) => {
                         const post = topPosts[i];
                         const rankColor =
-                          i === 0
-                            ? '#ef4444'
-                            : i === 1
-                              ? '#f97316'
-                              : i === 2
-                                ? '#ca8a04'
-                                : '#9ca3af';
+                          i === 0 ? '#ef4444' : i === 1 ? '#f97316' : i === 2 ? '#ca8a04' : '#9ca3af';
                         if (!post) {
                           return (
-                            <div
-                              key={i}
-                              className="flex items-center gap-2.5 py-3"
-                            >
-                              <span
-                                className="w-4 shrink-0 text-center text-sm font-black"
-                                style={{ color: rankColor }}
-                              >
+                            <div key={i} className="flex items-center gap-2.5 py-3">
+                              <span className="w-4 shrink-0 text-center text-sm font-black" style={{ color: rankColor }}>
                                 {i + 1}
                               </span>
-                              <span className="flex-1 truncate text-xs text-gray-300">
-                                -
-                              </span>
+                              <span className="flex-1 truncate text-xs text-gray-300">-</span>
                             </div>
                           );
                         }
-                        const categoryLabel =
-                          post.category === 'board' ? '자유' : post.category === 'event' ? '이벤트' : '공지';
-                        const detailType =
-                          post.category === 'board' ? 'free' : post.category === 'event' ? 'event' : 'notice';
-                        const detailStateKey =
-                          post.category === 'board' ? 'post' : post.category === 'event' ? 'event' : 'notice';
-                        const detailData = { id: post.id, title: post.title, content: post.content, author: post.author, liked: 0, views: post.viewCount, createdAt: 0, imageUrl: null, commentCount: 0, tags: [] };
+                        const detailStateKey = post.type === 'free' ? 'post' : post.type === 'event' ? 'event' : 'notice';
                         return (
                           <button
                             key={post.id}
-                            onClick={() => navigate(`/board/${post.id}?type=${detailType}`, { state: { [detailStateKey]: detailData } })}
+                            onClick={() =>
+                              navigate(`/board/${post.id}?type=${post.type}`, {
+                                state: { [detailStateKey]: { id: post.id, title: post.title, author: post.author, views: post.views } },
+                              })
+                            }
                             className="flex w-full items-start gap-2.5 overflow-hidden py-3 text-left"
                           >
-                            <span
-                              className="mt-0.5 w-4 shrink-0 text-center text-sm font-black"
-                              style={{ color: rankColor }}
-                            >
+                            <span className="mt-0.5 w-4 shrink-0 text-center text-sm font-black" style={{ color: rankColor }}>
                               {i + 1}
                             </span>
                             <div className="flex min-w-0 flex-col gap-0.5">
-                              <span className="truncate text-base font-semibold text-gray-800">
-                                {post.title}
-                              </span>
+                              <span className="truncate text-sm font-semibold text-gray-800">{post.title}</span>
                               <span className="text-[10px] text-gray-400">
-                                {categoryLabel} - {post.viewCount}
+                                {post.type === 'free' ? '자유' : post.type === 'event' ? '이벤트' : '공지'} · 조회{' '}
+                                {post.views}
                               </span>
                             </div>
                           </button>
@@ -474,10 +439,8 @@ const PCBoardPage = () => {
                           <span className="flex-1 text-sm text-gray-800">
                             {label}
                           </span>
-                          <span className="rounded-md bg-lightBlue px-2 py-0.5 text-[10px] font-bold text-blue">
-                            {key === 'review'
-                              ? totalReviewCount
-                              : counts[key as keyof typeof counts]}
+                          <span className="text-xs font-bold text-gray-400">
+                            {countMap[key] ?? 0}
                           </span>
                         </button>
                       ))}

@@ -6,9 +6,8 @@ import { useState } from 'react';
 import { BoardPost, SortOrder } from '@/entities/Board/types/boardType';
 import { useBoardPagination } from '@/features/Board/hooks/useBoardPagination';
 import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
-import { useViewCounts } from '@/features/Board/hooks/useViewCounts';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 type WidgetSortOrder = 'newest' | 'oldest' | 'views' | 'likes';
 
@@ -36,17 +35,17 @@ export const useBoard = (
     toApiSort(activeSortOrder as WidgetSortOrder),
   );
   const { likesMap } = useLikeBoard(items);
-  const { viewsMap } = useViewCounts(items);
   const { deletePost } = useDeletePost();
-  const currentUid = auth.currentUser?.uid;
-  const currentDisplayName = auth.currentUser?.displayName ?? null;
+  const { user } = useCurrentUser();
+  const currentUid = user?.userId;
+  const currentDisplayName = user?.name ?? null;
 
   const displayedItems = items
     .filter((p) => !deletedIds.has(p.id))
     .map((p) => ({ ...p }) as BoardPost)
     .sort((a, b) => {
       if (sortOrder === 'views')
-        return (viewsMap[String(b.id)] ?? 0) - (viewsMap[String(a.id)] ?? 0);
+        return (b.views ?? 0) - (a.views ?? 0);
       if (sortOrder === 'likes')
         return (likesMap[String(b.id)] ?? 0) - (likesMap[String(a.id)] ?? 0);
       return 0;
@@ -72,7 +71,6 @@ export const useBoard = (
     items,
     isFetching,
     likesMap,
-    viewsMap,
     displayedItems,
     handleDelete,
     currentUid,

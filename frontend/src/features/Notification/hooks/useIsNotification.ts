@@ -14,5 +14,10 @@ export const useIsNotification = () => {
     queryClient.invalidateQueries({ queryKey: ['currentUser'] });
   };
 
-  return { updateIsChange, updateIsResponse };
+  const updateAll = async (notifiChange: boolean, notifResponse: boolean) => {
+    await backendClient.patch('/api/users/me/notification-settings', { notifiChange, notifResponse });
+    queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+  };
+
+  return { updateIsChange, updateIsResponse, updateAll };
 };

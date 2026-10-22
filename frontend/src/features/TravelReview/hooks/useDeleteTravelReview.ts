@@ -1,14 +1,14 @@
 /**
  * @role: features — 여행지 후기 삭제
- * @rule: Firestore 삭제만 담당, UI 로직 포함 금지
+ * @rule: API 호출만 담당, UI 로직 포함 금지
  */
-import { db } from '@/shared/firebase/firebase';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { backendClient } from '@/shared/api/backendClient';
 
-export const useDeleteTravelReview = (destination: string) => {
-  const deleteReview = async (reviewId: string) => {
-    const ref = doc(db, 'travelReviews', destination, 'posts', reviewId);
-    await deleteDoc(ref);
+export const useDeleteTravelReview = (_destination: string) => {
+  const deleteReview = async (reviewId: number) => {
+    await backendClient.delete('/api/board', {
+      data: { id: reviewId, type: 'review' },
+    });
   };
 
   return { deleteReview };

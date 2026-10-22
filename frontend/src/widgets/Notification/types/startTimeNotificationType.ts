@@ -1,8 +1,7 @@
 import { SeatType } from '@/entities/Seat/types/seatType';
-import { Timestamp } from 'firebase/firestore';
 
 export type StartTimeNotificationType = {
-  createdAt: Timestamp;
+  createdAt: number;
   seats: SeatType[];
   onClick: () => void;
   isRead: boolean;

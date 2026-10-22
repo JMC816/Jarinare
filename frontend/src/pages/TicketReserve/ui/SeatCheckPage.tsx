@@ -1,7 +1,7 @@
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import { seatsStateStore } from '@/features/TicketReserve/model/seatsStateStore';
-import { auth, realtimeDb } from '@/shared/firebase/firebase';
+import { realtimeDb } from '@/shared/firebase/firebase';
 import { ref, get, remove } from 'firebase/database';
 import BackWardPageButton from '@/widgets/layouts/ui/BackWardPageButton';
 import useModalStore from '@/widgets/model/ReserveStore';
@@ -10,13 +10,15 @@ import SeatCheckList from '@/widgets/TicketReserve/ui/SeatCheckList';
 import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';
 import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
 import PCSeatCheckPage from './PCSeatCheckPage';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 const SeatCheckPage = () => {
   const { isShow, modalType, openModal } = useModalStore();
-  const { isLoggedIn } = useCurrentUser();
+  const { isLoggedIn, user } = useCurrentUser();
+  const userRef = useRef(user);
+  userRef.current = user;
   const navigate = useNavigate();
   const { handleAllSelect, seatsStateCount, isLocksLoaded } =
     useSeatQueryData();
@@ -37,8 +39,8 @@ const SeatCheckPage = () => {
   // 페이지 떠날 때 좌석 선택 초기화 + 잠금 해제
   useEffect(() => {
     return () => {
-      const user = auth.currentUser;
-      if (!user) return;
+      const currentUser = userRef.current;
+      if (!currentUser?.userId) return;
 
       // 로컬 선택 상태 초기화
       setSeatsState({});
@@ -50,7 +52,7 @@ const SeatCheckPage = () => {
         if (!snapshot.exists()) return;
         const locks = snapshot.val() as Record<string, string>;
         const myLockedSeats = Object.entries(locks)
-          .filter(([, uid]) => uid === user.uid)
+          .filter(([, uid]) => uid === currentUser.userId)
           .map(([seatId]) => seatId);
         myLockedSeats.forEach((seatId) =>
           remove(ref(realtimeDb, `${locksPath}/${seatId}`)),

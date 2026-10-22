@@ -6,12 +6,13 @@ import backward from '@/assets/icons/backward.png';
 import { BoardDetail, BoardPost } from '@/entities/Board/types/boardType';
 import PCEventDetailPage from './PCEventDetailPage';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toBackendImageUrl } from '@/shared/api/backendClient';
 import { getBoardDetailApi } from '@/features/Board/api/getBoardApi';
+import { useBoardRead } from '@/features/Board/hooks/useBoardRead';
 
 const HamburgerIcon = () => (
   <svg
@@ -38,15 +39,19 @@ const EventDetailPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const stateEvent = location.state?.event as BoardPost | undefined;
-  const post = stateEvent ?? fetchedEvent ?? undefined;
+  const post = fetchedEvent ?? stateEvent ?? undefined;
+
+  const { markRead } = useBoardRead();
 
   useEffect(() => {
-    if (!stateEvent && id) {
+    if (id && (!stateEvent || !stateEvent.content)) {
       getBoardDetailApi(Number(id), 'event').then(setFetchedEvent).catch(() => {});
     }
+    if (id) markRead(Number(id));
   }, [id]);
 
   const { deletePost } = useDeletePost();
+  const { user } = useCurrentUser();
 
   if (!post) {
     return (
@@ -56,7 +61,7 @@ const EventDetailPage = () => {
     );
   }
 
-  const isOwner = !!auth.currentUser?.displayName && auth.currentUser.displayName === post.author;
+  const isOwner = !!user?.name && user.name === post.author;
 
   const handleDelete = async () => {
     await deletePost(post.id, 'event');

@@ -12,6 +12,7 @@ import PCBoardDetailPage from './PCBoardDetailPage';
 import { useBoardDetailPage } from '../hooks/useBoardDetailPage';
 import { toBackendImageUrl } from '@/shared/api/backendClient';
 import { getBoardDetailApi } from '@/features/Board/api/getBoardApi';
+import { useBoardRead } from '@/features/Board/hooks/useBoardRead';
 
 const HamburgerIcon = () => (
   <svg
@@ -37,14 +38,17 @@ const BoardDetailPage = () => {
   const [fetchedPost, setFetchedPost] = useState<FreeBoardDetail | null>(null);
 
   const statePost = location.state?.post as BoardPost | undefined;
-  const post = statePost ?? fetchedPost ?? undefined;
+  const post = fetchedPost ?? statePost ?? undefined;
+
+  const { markRead } = useBoardRead();
 
   useEffect(() => {
-    if (!statePost && id) {
+    if (id && (!statePost || !statePost.content)) {
       getBoardDetailApi(Number(id), 'free')
         .then(setFetchedPost)
         .catch(() => {});
     }
+    if (id) markRead(Number(id));
   }, [id]);
 
   const {

@@ -1,18 +1,11 @@
 import backward from '@/assets/icons/backward.png';
-import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
 import WriteButton from '@/shared/ui/WriteButton';
 import { Notice } from '@/widgets/Board/ui/Notice';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PCNoticeListPage from './PCNoticeListPage';
 
 const NoticeListPage = () => {
   const navigate = useNavigate();
-  const { markSeen } = useBoardSeen();
-
-  useEffect(() => {
-    markSeen('notice');
-  }, []);
 
   return (
     <>

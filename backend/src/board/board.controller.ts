@@ -30,6 +30,20 @@ export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @Public()
+  @Get("counts")
+  @ApiOperation({ summary: "카테고리별 게시물 수" })
+  getCounts() {
+    return this.boardService.getCounts();
+  }
+
+  @Public()
+  @Get("top")
+  @ApiOperation({ summary: "조회수 상위 게시물" })
+  getTopPosts(@Query("limit") limit?: string) {
+    return this.boardService.getTopPosts(limit ? parseInt(limit, 10) : 5);
+  }
+
+  @Public()
   @Get()
   @ApiOperation({ summary: "게시물 목록 조회" })
   getList(@Query() query: BoardListQueryDto) {
@@ -79,5 +93,22 @@ export class BoardController {
   @ApiOperation({ summary: "내가 좋아요한 게시물 ID 목록" })
   getLikedBoardIds(@CurrentUser() user: AuthUser) {
     return this.boardService.getLikedBoardIds(user);
+  }
+
+  @ApiBearerAuth()
+  @Post("read/:boardId")
+  @ApiOperation({ summary: "게시물 읽음 처리 (최초 1회만 기록)" })
+  markRead(
+    @Param("boardId", ParseIntPipe) boardId: number,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.boardService.markRead(boardId, user);
+  }
+
+  @ApiBearerAuth()
+  @Get("read/me")
+  @ApiOperation({ summary: "내가 읽은 게시물 ID 목록" })
+  getReadBoardIds(@CurrentUser() user: AuthUser) {
+    return this.boardService.getReadBoardIds(user);
   }
 }

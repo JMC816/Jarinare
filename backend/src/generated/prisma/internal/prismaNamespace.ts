@@ -387,6 +387,7 @@ export const ModelName = {
   User: 'User',
   Board: 'Board',
   Comment: 'Comment',
+  BoardRead: 'BoardRead',
   BoardLike: 'BoardLike',
   Notification: 'Notification',
   Station: 'Station',
@@ -418,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "board" | "comment" | "boardLike" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket"
+    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -617,6 +618,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CommentCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CommentCountAggregateOutputType> | number
+        }
+      }
+    }
+    BoardRead: {
+      payload: Prisma.$BoardReadPayload<ExtArgs>
+      fields: Prisma.BoardReadFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BoardReadFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BoardReadFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload>
+        }
+        findFirst: {
+          args: Prisma.BoardReadFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BoardReadFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload>
+        }
+        findMany: {
+          args: Prisma.BoardReadFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload>[]
+        }
+        create: {
+          args: Prisma.BoardReadCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload>
+        }
+        createMany: {
+          args: Prisma.BoardReadCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BoardReadDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload>
+        }
+        update: {
+          args: Prisma.BoardReadUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload>
+        }
+        deleteMany: {
+          args: Prisma.BoardReadDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BoardReadUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BoardReadUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardReadPayload>
+        }
+        aggregate: {
+          args: Prisma.BoardReadAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBoardRead>
+        }
+        groupBy: {
+          args: Prisma.BoardReadGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardReadGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BoardReadCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardReadCountAggregateOutputType> | number
         }
       }
     }
@@ -1770,6 +1837,16 @@ export const CommentScalarFieldEnum = {
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum]
 
 
+export const BoardReadScalarFieldEnum = {
+  id: 'id',
+  boardId: 'boardId',
+  userIdx: 'userIdx',
+  readAt: 'readAt'
+} as const
+
+export type BoardReadScalarFieldEnum = (typeof BoardReadScalarFieldEnum)[keyof typeof BoardReadScalarFieldEnum]
+
+
 export const BoardLikeScalarFieldEnum = {
   boardId: 'boardId',
   userIdx: 'userIdx',
@@ -2378,6 +2455,7 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   board?: Prisma.BoardOmit
   comment?: Prisma.CommentOmit
+  boardRead?: Prisma.BoardReadOmit
   boardLike?: Prisma.BoardLikeOmit
   notification?: Prisma.NotificationOmit
   station?: Prisma.StationOmit

@@ -80,9 +80,6 @@ export const Notice = () => {
     ref,
     items,
     isFetching,
-    likedMap,
-    likesMap,
-    handleClickLike,
     displayedItems,
     handleDelete,
     currentUid,
@@ -143,8 +140,6 @@ export const Notice = () => {
           </div>
         ) : (
           displayedItems.map((notice) => {
-            const isLiked = likedMap[String(notice.id)] ?? false;
-            const likesCount = likesMap[String(notice.id)] ?? 0;
             const isOwner = notice.author === currentUid;
 
             return (
@@ -191,15 +186,6 @@ export const Notice = () => {
 
                 {notice.imageUrl && <NoticeImage src={notice.imageUrl} alt={notice.title} />}
 
-                <div className="flex items-center gap-3 px-4 pb-1 pt-3">
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleClickLike(notice.id); }}
-                    className={`flex items-center justify-center rounded-full p-1.5 text-xl transition-all duration-150 ${isLiked ? 'text-red' : 'text-gray-400'}`}
-                  >
-                    {isLiked ? '❤️' : '🤍'}
-                  </button>
-                  <span className="text-sm font-semibold">{likesCount}명이 좋아합니다</span>
-                </div>
                 <div
                   className="cursor-pointer px-4 pb-2 text-sm"
                   onClick={() => navigate(`/board/${notice.id}?type=notice`, { state: { notice } })}

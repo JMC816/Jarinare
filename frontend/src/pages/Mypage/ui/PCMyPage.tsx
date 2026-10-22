@@ -9,7 +9,6 @@ import PCSidebar from '@/widgets/layouts/ui/PCSidebar';
 import PCLoginRequiredPage from '@/widgets/layouts/ui/PCLoginRequiredPage';
 import SlotNumber from '@/widgets/Point/ui/SlotNumber';
 import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
-import { useFollowList } from '@/features/Follow/hooks/useFollowList';
 import { useGetPayment } from '@/features/Point/hooks/useGetPayment';
 import { useGetOrders } from '@/features/Point/hooks/useGetOrders';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
@@ -36,13 +35,11 @@ import {
 } from '../constants/myPageConstants';
 import { useMyPageFilter } from '../hooks/useMyPageFilter';
 import { useMyPageModal } from '../hooks/useMyPageModal';
-import PCFollowModal from '@/widgets/Follow/ui/PCFollowModal';
 
 const PCMyPage = () => {
   const { point } = useGetPoint();
   const { navigate } = useNaviation();
   const { resetModal } = useModalStore();
-  const { followers, following, counts } = useFollowList();
   const { payment: pointHistory } = useGetPayment();
   const { orders } = useGetOrders();
   const routerNavigate = useNavigate();
@@ -51,7 +48,7 @@ const PCMyPage = () => {
   const [activeTab, setActiveTab] = useState<FilterTab>('payment');
   const [selectedOrder, setSelectedOrder] = useState<OrderType | null>(null);
   const [selectedPoint, setSelectedPoint] = useState<PaymentType | null>(null);
-  const { followModalOpen, followModalTab, openFollowModal, closeFollowModal } = useMyPageModal();
+  useMyPageModal();
 
   const {
     period,
@@ -162,30 +159,6 @@ const PCMyPage = () => {
                   </span>
                   <span className="text-sm text-gray-400">일반 계정</span>
                 </div>
-
-                <div className="mx-2 h-12 w-px self-center bg-gray-100" />
-
-                <button
-                  onClick={() => openFollowModal('followers')}
-                  className="flex flex-col items-center gap-0.5 transition-opacity hover:opacity-70"
-                >
-                  <span className="text-2xl font-semibold text-gray-900">
-                    {counts.followers}
-                  </span>
-                  <span className="text-xs text-gray-400">팔로워</span>
-                </button>
-
-                <div className="h-12 w-px self-center bg-gray-100" />
-
-                <button
-                  onClick={() => openFollowModal('following')}
-                  className="flex flex-col items-center gap-0.5 transition-opacity hover:opacity-70"
-                >
-                  <span className="text-2xl font-semibold text-gray-900">
-                    {counts.following}
-                  </span>
-                  <span className="text-xs text-gray-400">팔로잉</span>
-                </button>
 
                 <div className="ml-auto">
                   <button
@@ -585,15 +558,6 @@ const PCMyPage = () => {
             </div>
           </div>
 
-          {followModalOpen && (
-            <PCFollowModal
-              followers={followers}
-              following={following}
-              counts={counts}
-              initialTab={followModalTab}
-              onClose={closeFollowModal}
-            />
-          )}
         </main>
       </div>
     </div>

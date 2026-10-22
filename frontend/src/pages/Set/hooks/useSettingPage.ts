@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const useSettingPage = () => {
   const navigate = useNavigate();
-  const { updateIsChange, updateIsResponse } = useIsNotification();
+  const { updateIsChange, updateIsResponse, updateAll } = useIsNotification();
   const { notifiChange, notifResponse } = useIsNotificationResponse();
   const { isLoggedIn } = useCurrentUser();
   const handleLoginNavigate = () => navigate('/auth/login');
@@ -19,8 +19,7 @@ export const useSettingPage = () => {
   const allOn = changeOn && responseOn;
 
   const handleAllToggle = () => {
-    updateIsChange(!allOn);
-    updateIsResponse(!allOn);
+    updateAll(!allOn, !allOn);
   };
   const handleChangeToggle = () => updateIsChange(!changeOn);
   const handleResponseToggle = () => updateIsResponse(!responseOn);

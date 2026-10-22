@@ -16,6 +16,8 @@ export interface BoardListItemDto {
   commentCount: number;
   tags: string[];
   liked: number;
+  views: number;
+  rating?: number;
 }
 
 export interface BoardListResponseDto {
@@ -39,6 +41,7 @@ export interface BoardDetailFreeDto {
   author: string;
   createdAt: string;
   imageUrl: string | null;
+  views: number;
   tags: string[];
   comments: CommentDto[];
 }
@@ -50,6 +53,7 @@ export interface BoardDetailNoticeDto {
   author: string;
   createdAt: string;
   imageUrl: string | null;
+  views: number;
 }
 
 export interface BoardDetailEventDto {
@@ -59,6 +63,7 @@ export interface BoardDetailEventDto {
   author: string;
   createdAt: string;
   imageUrl: string | null;
+  views: number;
 }
 
 export interface BoardDetailReviewDto {
@@ -69,6 +74,7 @@ export interface BoardDetailReviewDto {
   rating: number;
   createdAt: string;
   imageUrl: string | null;
+  views: number;
   tags: string[];
 }
 

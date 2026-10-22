@@ -4,8 +4,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useGetNotice } from '@/features/Board/hooks/useGetNotice';
-import { useViewCounts } from '@/features/Board/hooks/useViewCounts';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 const PAGE_SIZE = 10;
 
@@ -15,8 +14,9 @@ export const usePCNoticeListPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const { noticeData, isLoaded } = useGetNotice();
+  const { user } = useCurrentUser();
 
-  const isAdmin = auth.currentUser?.email === import.meta.env.VITE_ADMIN_EMAIL;
+  const isAdmin = user?.email === import.meta.env.VITE_ADMIN_EMAIL;
 
   const processedData = useMemo(() => {
     return [...noticeData].sort((a, b) =>
@@ -47,8 +47,6 @@ export const usePCNoticeListPage = () => {
     const end = Math.min(totalPages, start + 5);
     return Array.from({ length: end - start }, (_, i) => start + i);
   }, [currentPage, totalPages]);
-
-  const { viewsMap } = useViewCounts(pagedData);
 
   const handleSearchChange = (q: string) => {
     setSearchQuery(q);
@@ -82,7 +80,6 @@ export const usePCNoticeListPage = () => {
     totalPages,
     visiblePages,
     isLoading: !isLoaded,
-    viewsMap,
     isAdmin,
     formatDate,
   };

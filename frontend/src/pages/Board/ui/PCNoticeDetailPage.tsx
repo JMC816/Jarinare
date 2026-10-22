@@ -12,6 +12,7 @@ import { formatBoardTime } from '@/shared/lib/formatDate';
 import { getProfileColor } from '@/shared/lib/profileColor';
 import { toBackendImageUrl } from '@/shared/api/backendClient';
 import { getBoardDetailApi } from '@/features/Board/api/getBoardApi';
+import { useBoardRead } from '@/features/Board/hooks/useBoardRead';
 
 
 const OwnerMenu = ({
@@ -69,12 +70,15 @@ const PCNoticeDetailPage = () => {
   const [fetchedNotice, setFetchedNotice] = useState<BoardDetail | null>(null);
 
   const stateNotice = location.state?.notice as BoardPost | undefined;
-  const notice = stateNotice ?? fetchedNotice ?? undefined;
+  const notice = fetchedNotice ?? stateNotice ?? undefined;
+
+  const { markRead } = useBoardRead();
 
   useEffect(() => {
-    if (!stateNotice && id) {
+    if (id && (!stateNotice || !stateNotice.content)) {
       getBoardDetailApi(Number(id), 'notice').then(setFetchedNotice).catch(() => {});
     }
+    if (id) markRead(Number(id));
   }, [id]);
 
   const {

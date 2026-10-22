@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { useViewCount } from '@/features/Board/hooks/useViewCount';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 export const usePCEventDetailPage = (event: BoardPost | undefined) => {
@@ -14,13 +13,12 @@ export const usePCEventDetailPage = (event: BoardPost | undefined) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const currentPost = event ?? null;
-  const postDocId = currentPost ? String(currentPost.id) : '';
 
   const { deletePost } = useDeletePost();
-  const { viewCount } = useViewCount(postDocId);
   const { user: currentUser } = useCurrentUser();
 
   const isOwner = !!currentUser?.name && currentUser.name === currentPost?.author;
+  const viewCount = currentPost?.views ?? 0;
 
   const handleDelete = async () => {
     if (!currentPost) return;
@@ -30,7 +28,6 @@ export const usePCEventDetailPage = (event: BoardPost | undefined) => {
 
   return {
     currentPost,
-    postDocId,
     isOwner,
     viewCount,
     menuOpen,

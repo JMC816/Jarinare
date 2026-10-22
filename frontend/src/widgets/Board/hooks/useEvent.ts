@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { BoardPost } from '@/entities/Board/types/boardType';
 import { useEventPagination } from '@/features/Board/hooks/useEventPagination';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
-import { auth } from '@/shared/firebase/firebase';
+import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 type SortOrder = 'newest' | 'oldest';
 
@@ -29,7 +29,8 @@ export const useEvent = (
     activeSortOrder,
   );
   const { deletePost } = useDeletePost();
-  const currentUid = auth.currentUser?.uid;
+  const { user } = useCurrentUser();
+  const currentUid = user?.userId;
 
   const displayedItems = items.filter((p) => !deletedIds.has(p.id));
 

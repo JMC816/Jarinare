@@ -13,6 +13,8 @@ import EventDetailPage from '@/pages/Board/ui/EventDetailPage';
 import EventListPage from '@/pages/Board/ui/EventListPage';
 import EventWirtePage from '@/pages/Board/ui/EventWritePage';
 import PCNoticeDetailPage from '@/pages/Board/ui/PCNoticeDetailPage';
+import PCTravelReviewPage from '@/pages/TravelReview/ui/PCTravelReviewPage';
+import PCTravelReviewListPage from '@/pages/TravelReview/ui/PCTravelReviewListPage';
 import NoticeListPage from '@/pages/Board/ui/NoticeListPage';
 import NoticeWirtePage from '@/pages/Board/ui/NoticeWritePage';
 import MenuPage from '@/pages/Menu/ui/MenuPage';
@@ -27,9 +29,7 @@ import SeatCheckPage from '@/pages/TicketReserve/ui/SeatCheckPage';
 import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
 import SeatReturnPage from '@/pages/TicketReturn/ui/SeatReturnPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
-import PCTravelReviewPage from '@/pages/TravelReview/ui/PCTravelReviewPage';
 import SettingPage from '@/pages/Set/ui/SettingPage';
-import PCTravelReviewListPage from '@/pages/TravelReview/ui/PCTravelReviewListPage';
 import Modal from '@/shared/ui/Modal';
 import PCNotificationSidebar from '@/widgets/Notification/ui/PCNotificationSidebar';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
@@ -67,10 +67,7 @@ const Router = () => {
             <Route path="/board/event/detail" element={<EventDetailPage />} />
             <Route path="/board/board/detail" element={<BoardDetailPage />} />
             <Route path="/board/:id" element={<BoardByIdPage />} />
-            <Route
-              path="/travel/review/list"
-              element={<PCTravelReviewListPage />}
-            />
+            <Route path="/travel/review/list" element={<PCTravelReviewListPage />} />
             <Route path="/travel/review" element={<PCTravelReviewPage />} />
             <Route path="/ticketlist" element={<TicketListPage />} />
             <Route path="/reserve/traincheck" element={<TrainCheckPage />} />

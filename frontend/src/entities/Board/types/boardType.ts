@@ -17,6 +17,7 @@ export interface BoardPost {
   liked: number;
   content?: string;
   views?: number;
+  rating?: number;
 }
 
 export interface BoardDetail extends BoardPost {

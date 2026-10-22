@@ -3,9 +3,7 @@
  * @rule: 렌더링·조합만 담당, 비즈니스 로직 포함 금지
  */
 import backward from '@/assets/icons/backward.png';
-import { useBoardSeen } from '@/features/Board/hooks/useBoardSeen';
 import { Event } from '@/widgets/Board/ui/Event';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import WriteButton from '@/shared/ui/WriteButton';
 import PCEventListPage from './PCEventListPage';
@@ -13,13 +11,8 @@ import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 
 const EventListPage = () => {
   const navigate = useNavigate();
-  const { markSeen } = useBoardSeen();
   const { user } = useCurrentUser();
   const isAdmin = user?.role === 'admin';
-
-  useEffect(() => {
-    markSeen('event');
-  }, []);
 
   return (
     <>

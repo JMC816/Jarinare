@@ -130,8 +130,7 @@ export const usePayModal = () => {
   };
 
   const handlePay = async () => {
-    // 백엔드 createReservation이 포인트·주문내역을 함께 처리하므로 별도 호출 불필요
-    await createSelectedSeats(finalPrice);
+    await createSelectedSeats(finalPrice, checked ? pointValue : 0, cardPayback);
     closeModal('PayModal');
   };
 

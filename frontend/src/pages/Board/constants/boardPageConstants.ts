@@ -84,9 +84,9 @@ export const BOARD_CATEGORIES = [
     key: 'review' as const,
     label: '여행지 후기',
     path: '/travel/review/list',
-    bgColor: '#fef9c3',
-    textColor: '#ca8a04',
-    iconStroke: '#ca8a04',
+    bgColor: '#fdf4ff',
+    textColor: '#9333ea',
+    iconStroke: '#9333ea',
   },
 ];
 

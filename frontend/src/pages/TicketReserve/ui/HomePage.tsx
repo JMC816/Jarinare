@@ -13,10 +13,8 @@ import RecommendDestination from '@/widgets/TicketReserve/ui/RecommendDestinatio
 import notification from '@/assets/icons/notification.png';
 import setting from '@/assets/icons/setting.png';
 import { Link } from 'react-router-dom';
-import { useChangeResponse } from '@/features/Notification/hooks/useChangeResponse';
-import { useIsAcceptResponse } from '@/features/Notification/hooks/useIsAcceptResponse';
-import { useIsNotificationResponse } from '@/features/Notification/hooks/useIsNotificationResponse';
 import { useReadStartTime } from '@/features/Notification/hooks/useReadStartTime';
+import { useBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
 import PCHomePage from './PCHomePage';
 
 const HomePage = () => {
@@ -24,54 +22,16 @@ const HomePage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isScrolledBottom, setIsScrolledBottom] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { response } = useChangeResponse();
-  const { acceptResponse, refuseResponse } = useIsAcceptResponse();
-  const { notifiChange, notifResponse } = useIsNotificationResponse();
   const { readStartTime } = useReadStartTime();
+  const { hasUnread } = useBackendNotifications();
 
-  const isStartTimeResponse =
-    readStartTime && Object.entries(readStartTime.val()).length;
-  const isRefuseResponse =
-    refuseResponse && Object.entries(refuseResponse.val()).length;
-  const isAcceptResponse =
-    acceptResponse && Object.entries(acceptResponse.val()).length;
-  const isChangeResponse = response && Object.entries(response.val()).length;
+  const hasUnreadStartTime =
+    readStartTime?.exists() &&
+    Object.values(readStartTime.val() as Record<string, { isRead: boolean }>).some(
+      (v) => v.isRead === false,
+    );
 
-  const isChangeRefuseOrAcceptResponse = ((isRefuseResponse! > 0 ||
-    isAcceptResponse! > 0) &&
-    notifResponse) as boolean;
-  const isSeatsChangeResponse = (isChangeResponse! > 0 &&
-    notifiChange) as boolean;
-  const isExistNotification =
-    isChangeRefuseOrAcceptResponse ||
-    isSeatsChangeResponse ||
-    isStartTimeResponse;
-
-  const changeResponseKeys = response && Object.keys(response.val());
-  const acceptResponseKeys =
-    acceptResponse && Object.keys(acceptResponse.val());
-  const refuseResponseKeys =
-    refuseResponse && Object.keys(refuseResponse.val());
-  const startTimeResponseKeys =
-    readStartTime && Object.keys(readStartTime.val());
-
-  const isReadNotification =
-    (changeResponseKeys
-      ?.map((k) => response?.val()[k].isRead as boolean)
-      .includes(false) ??
-      false) ||
-    (acceptResponseKeys
-      ?.map((k) => acceptResponse?.val()[k].isRead as boolean)
-      .includes(false) ??
-      false) ||
-    (refuseResponseKeys
-      ?.map((k) => refuseResponse?.val()[k].isRead as boolean)
-      .includes(false) ??
-      false) ||
-    (startTimeResponseKeys
-      ?.map((k) => readStartTime?.val()[k].isRead as boolean)
-      .includes(false) ??
-      false);
+  const showBadge = hasUnread || hasUnreadStartTime;
 
   useResetTrainType();
 
@@ -112,9 +72,9 @@ const HomePage = () => {
           <div className="flex items-center gap-3">
             <Link to={'/reserve/notification'} className="relative">
               <img width={19} height={24} src={notification} />
-              {isReadNotification && isExistNotification ? (
+              {showBadge && (
                 <span className="absolute bottom-6 left-4 size-1.5 animate-ping rounded-full bg-blue" />
-              ) : null}
+              )}
             </Link>
             <Link to={'/setting'}>
               <img width={22} height={22} src={setting} />

@@ -1,59 +1,61 @@
-import { SeatType } from '@/entities/Seat/types/seatType';
-import { seatsTargetStore } from '@/features/TicketChange/models/seatsTargetStore';
-import { auth, realtimeDb } from '@/shared/firebase/firebase';
-import { get, ref } from 'firebase/database';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+/**
+ * @role: features — 보낸 좌석 변경 요청 대기 여부 감지
+ * @rule: 백엔드 GET /seats/change-requests?box=sent 조회만 담당
+ */
+import { backendClient } from '@/shared/api/backendClient';
+import { useEffect, useRef, useState } from 'react';
+
+interface SentRequest {
+  requestId: number;
+  status: string;
+  expiresAt: string;
+}
 
 export const useSeatsChangeBlocked = () => {
-  const location = useLocation();
-  const { seatsTarget } = seatsTargetStore();
-  const [isBlocked, setIsBlocked] = useState<boolean>(false);
-
-  const user = auth.currentUser;
-
-  const mySeats: SeatType[] = location.state;
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [remaining, setRemaining] = useState<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    const seatsChangeBlocked = async () => {
-      if (!user) return;
+    const check = async () => {
+      try {
+        const { data } = await backendClient.get<SentRequest[]>(
+          '/api/seats/change-requests',
+          { params: { box: 'sent' } },
+        );
+        const pending = data.find((r) => r.status === 'PENDING') ?? null;
 
-      const snapshot = await get(ref(realtimeDb));
-      const data = Object(snapshot.val());
-
-      // 데이터가 존재하지 않으면 좌석 변경 가능
-      if (!data || data === undefined) {
-        return setIsBlocked(false);
-      }
-
-      // refuse와 accept는 좌석 변경 가능
-      const filteredKeys = Object.keys(data).filter(
-        (key) =>
-          key !== 'locks' && !key.includes('refuse') && !key.includes('accept'),
-      );
-
-      for (const key of filteredKeys) {
-        const allDbRef = await get(ref(realtimeDb, key));
-
-        // 데이터가 존재하면서
-        // 데이터의 키(userId)가 요청을 보낸 사용자의 key(userId)와 다를 때(키는 달라도 데이터는 같을 수 있기 때문에 중복 제거)
-        if (allDbRef.exists() && key !== `${user.uid}_change`) {
-          const values = allDbRef.val();
-          const value = Object.keys(values);
-
-          // 요청 데이터 안에 본인이 예매한 티켓의 좌석 데이터(요청 보낼 데이터)가 포함되면 그 티켓에서는 좌석 변경 불가
-          if (
-            value.includes(
-              `${mySeats[0]?.id}_${mySeats[0]?.trainNoId}_${mySeats.map((item) => item.seatId)}`,
-            )
-          ) {
-            return setIsBlocked(true);
-          }
+        if (pending) {
+          setIsBlocked(true);
+          const tick = () => {
+            const left = Math.max(
+              0,
+              Math.ceil((new Date(pending.expiresAt).getTime() - Date.now()) / 1000),
+            );
+            setRemaining(left);
+            if (left <= 0) {
+              clearInterval(timerRef.current!);
+              setIsBlocked(false);
+              setRemaining(null);
+            }
+          };
+          tick();
+          timerRef.current = setInterval(tick, 1000);
+        } else {
+          setIsBlocked(false);
+          setRemaining(null);
         }
+      } catch {
+        setIsBlocked(false);
+        setRemaining(null);
       }
     };
-    seatsChangeBlocked();
-  }, [mySeats, seatsTarget]);
 
-  return { isBlocked };
+    void check();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  return { isBlocked, remaining };
 };

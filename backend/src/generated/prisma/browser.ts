@@ -33,6 +33,11 @@ export type Board = Prisma.BoardModel
  */
 export type Comment = Prisma.CommentModel
 /**
+ * Model BoardRead
+ * 
+ */
+export type BoardRead = Prisma.BoardReadModel
+/**
  * Model BoardLike
  * 
  */

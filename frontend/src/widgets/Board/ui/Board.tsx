@@ -149,7 +149,6 @@ export const Board = ({
     isFetching,
     likesMap,
     currentDisplayName,
-    viewsMap,
     displayedItems,
     handleDelete,
   } = useBoard(isPC, externalSearchQuery, externalSortOrder);
@@ -453,7 +452,7 @@ export const Board = ({
                   </div>
                   <div className="flex items-center gap-1 text-xs text-gray-400">
                     <span>조회수</span>
-                    <span>{viewsMap[post.id] ?? 0}</span>
+                    <span>{post.views ?? 0}</span>
                   </div>
                 </div>
               </div>

@@ -22,7 +22,6 @@ const PCNoticeListPage = () => {
     totalPages,
     visiblePages,
     isLoading,
-    viewsMap,
     isAdmin,
     formatDate,
   } = usePCNoticeListPage();
@@ -212,7 +211,7 @@ const PCNoticeListPage = () => {
                           {formatDate(notice.createdAt)}
                         </span>
                         <span className="w-[32px] shrink-0 text-right text-sm text-gray-400">
-                          {viewsMap[notice.id] ?? 0}
+                          {notice.views ?? 0}
                         </span>
                       </button>
                     );

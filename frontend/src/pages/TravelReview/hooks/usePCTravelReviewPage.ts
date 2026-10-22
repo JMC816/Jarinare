@@ -33,14 +33,14 @@ export const usePCTravelReviewPage = (
   const [writePreviewImg, setWritePreviewImg] = useState<string | null>(null);
   const writeFileInputRef = useRef<HTMLInputElement | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
   const [editRating, setEditRating] = useState(5);
   const [saving, setSaving] = useState(false);
 
   const handleEditStart = (
-    id: string,
+    id: number,
     title: string,
     content: string,
     rating: number,
@@ -65,7 +65,7 @@ export const usePCTravelReviewPage = (
     navigate(0);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     await deleteReview(id);
     navigate(0);
   };
@@ -102,7 +102,7 @@ export const usePCTravelReviewPage = (
   const sortReviews = (reviews: TravelReview[]) => {
     if (sortOption === '별점순')
       return [...reviews].sort((a, b) => b.rating - a.rating);
-    return [...reviews].sort((a, b) => b.createdAt - a.createdAt);
+    return [...reviews].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   };
 
   const filterReviews = (reviews: TravelReview[]) => {

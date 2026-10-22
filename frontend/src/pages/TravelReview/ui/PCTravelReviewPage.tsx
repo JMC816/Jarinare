@@ -510,8 +510,7 @@ const PCTravelReviewPage = () => {
                                     : review.author?.charAt(0) + '**'}
                                 </span>
                                 <span className="text-xs text-gray-400">
-                                  {formatReviewDate(review.createdAt)}
-                                  {review.updatedAt && ' · 수정됨'}
+                                  {formatReviewDate(new Date(review.createdAt).getTime() / 1000)}
                                 </span>
                               </div>
                             </div>

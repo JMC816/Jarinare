@@ -71,7 +71,7 @@ const TravelReviewPage = () => {
   const showPagination = isLoaded && totalPages > 1;
 
   const handleEditStart = (
-    id: string,
+    id: number,
     title: string,
     content: string,
     rating: number,
@@ -237,11 +237,6 @@ const TravelReviewPage = () => {
                     <span className="text-[10px] text-gray-400">
                       {formatDate(review.createdAt)}
                     </span>
-                    {review.updatedAt && (
-                      <span className="text-[10px] text-gray-400">
-                        · 수정됨 {formatDate(review.updatedAt)}
-                      </span>
-                    )}
                   </div>
                 </>
               )}

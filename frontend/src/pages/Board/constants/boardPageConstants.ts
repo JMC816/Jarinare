@@ -35,6 +35,13 @@ export const CAT_STYLE_MAP: Record<
     type: 'event',
     stateKey: 'event',
   },
+  review: {
+    badge: '후기',
+    bgColor: '#fdf4ff',
+    textColor: '#9333ea',
+    type: 'review',
+    stateKey: 'review',
+  },
 };
 
 // 통합게시판 카드 높이 계산용 (Tailwind py-4/py-3 기준 px)

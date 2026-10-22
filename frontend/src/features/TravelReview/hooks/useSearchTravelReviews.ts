@@ -15,7 +15,7 @@ export interface SearchResultItem {
   createdAt: string;
 }
 
-export const useSearchTravelReviews = (query: string, cities: string[]) => {
+export const useSearchTravelReviews = (query: string, _cities: string[]) => {
   const { data, isFetching } = useQuery({
     queryKey: ['travelReviewSearch', query],
     queryFn: () => getBoardPostsApi({ type: 'review', size: 1000 }),

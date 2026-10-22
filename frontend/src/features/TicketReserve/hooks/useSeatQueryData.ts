@@ -24,6 +24,7 @@ import {
 } from '../api/reservationApi';
 import { ACCESS_TOKEN_KEY } from '@/shared/api/backendClient';
 import welcomeTourStore from '@/shared/models/welcomeTourStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const DEMO_LOCKS: Record<string, string> = {
   A1: 'other', C2: 'other', B4: 'other',
@@ -58,6 +59,7 @@ export const useSeatQueryData = () => {
 
   const [locks, setLocks] = useState<Record<string, string>>({});
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { isActive: isTourActive } = welcomeTourStore();
 
   const selectedCount = Object.values(seatsState).filter(Boolean).length;
@@ -411,6 +413,7 @@ export const useSeatQueryData = () => {
       setSeatsStateCount(0);
       clearAllSeatsCache();
       await prefetchAllSeats();
+      await queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       navigate('/');
     } catch (e) {
       console.log(e);

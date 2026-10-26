@@ -2,7 +2,7 @@
  * @role: pages — PC 공지사항 상세 페이지
  * @rule: 레이아웃·조합만 담당, 비즈니스 로직 포함 금지
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { BoardDetail, BoardPost } from '@/entities/Board/types/boardType';
 import PCTopNav from '@/widgets/layouts/ui/PCTopNav';
@@ -73,12 +73,15 @@ const PCNoticeDetailPage = () => {
   const notice = fetchedNotice ?? stateNotice ?? undefined;
 
   const { markRead } = useBoardRead();
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    if (id && (!stateNotice || !stateNotice.content)) {
+    if (!id || hasFetched.current) return;
+    hasFetched.current = true;
+    if (!stateNotice || !stateNotice.content) {
       getBoardDetailApi(Number(id), 'notice').then(setFetchedNotice).catch(() => {});
     }
-    if (id) markRead(Number(id));
+    markRead(Number(id));
   }, [id]);
 
   const {

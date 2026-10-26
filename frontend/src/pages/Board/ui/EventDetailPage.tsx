@@ -8,7 +8,7 @@ import PCEventDetailPage from './PCEventDetailPage';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 import { formatBoardTime } from '@/shared/lib/formatDate';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toBackendImageUrl } from '@/shared/api/backendClient';
 import { getBoardDetailApi } from '@/features/Board/api/getBoardApi';
@@ -42,12 +42,15 @@ const EventDetailPage = () => {
   const post = fetchedEvent ?? stateEvent ?? undefined;
 
   const { markRead } = useBoardRead();
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    if (id && (!stateEvent || !stateEvent.content)) {
+    if (!id || hasFetched.current) return;
+    hasFetched.current = true;
+    if (!stateEvent || !stateEvent.content) {
       getBoardDetailApi(Number(id), 'event').then(setFetchedEvent).catch(() => {});
     }
-    if (id) markRead(Number(id));
+    markRead(Number(id));
   }, [id]);
 
   const { deletePost } = useDeletePost();

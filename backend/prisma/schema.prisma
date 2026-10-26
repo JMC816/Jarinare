@@ -35,8 +35,10 @@ model User {
 
   boards        Board[]
   comments      Comment[]
-  boardLikes    BoardLike[]
-  boardReads    BoardRead[]
+  boardLikes      BoardLike[]
+  boardReads      BoardRead[]
+  boardBookmarks  BoardBookmark[]
+  boardShares     BoardShare[]
   seatHolds              SeatHold[]
   reservations           Reservation[]
   seatChangeRequests     SeatChangeRequest[] @relation("SeatChangeRequester")
@@ -57,14 +59,17 @@ model Board {
   tags         Json?
   rating       Decimal?  @db.Decimal(3, 1)
   liked        BigInt    @default(0)
+  shareCount   Int       @default(0)
   viewCount    Int       @default(0)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
   author   User        @relation(fields: [authorIdx], references: [idx])
   comments Comment[]
-  likes    BoardLike[]
-  reads    BoardRead[]
+  likes     BoardLike[]
+  reads     BoardRead[]
+  bookmarks BoardBookmark[]
+  shares    BoardShare[]
 
   @@index([type])
   @@index([authorIdx])
@@ -114,6 +119,32 @@ model BoardLike {
 
   @@unique([boardId, userIdx])
   @@map("board_likes")
+}
+
+model BoardBookmark {
+  boardId   BigInt
+  userIdx   BigInt
+  createdAt DateTime @default(now())
+
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userIdx], references: [idx])
+
+  @@id([boardId, userIdx])
+  @@index([userIdx])
+  @@map("board_bookmarks")
+}
+
+model BoardShare {
+  boardId   BigInt
+  userIdx   BigInt
+  createdAt DateTime @default(now())
+
+  board Board @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userIdx], references: [idx])
+
+  @@id([boardId, userIdx])
+  @@index([userIdx])
+  @@map("board_shares")
 }
 
 model Notification {

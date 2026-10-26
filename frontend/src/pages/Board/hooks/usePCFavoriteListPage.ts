@@ -1,0 +1,86 @@
+/**
+ * @role: pages — PC 즐겨찾기 목록 페이지 상태·로직 훅
+ * @rule: 상태·사이드이펙트·이벤트 핸들러만 담당
+ */
+import { useMemo, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getBookmarkedPostsApi } from '@/features/Board/api/bookmarkApi';
+
+const PAGE_SIZE = 10;
+
+export const usePCFavoriteListPage = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest'>('newest');
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ['bookmarkedPosts'],
+    queryFn: getBookmarkedPostsApi,
+    staleTime: 0,
+  });
+
+  const processedData = useMemo(() => {
+    return [...posts].sort((a, b) =>
+      sortOrder === 'newest'
+        ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+  }, [posts, sortOrder]);
+
+  const filteredData = useMemo(() => {
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return processedData;
+    return processedData.filter(
+      (p) =>
+        p.title?.toLowerCase().includes(q) ||
+        p.author?.toLowerCase().includes(q),
+    );
+  }, [processedData, searchQuery]);
+
+  const totalPages = Math.ceil(filteredData.length / PAGE_SIZE);
+  const pagedData = filteredData.slice(
+    currentPage * PAGE_SIZE,
+    (currentPage + 1) * PAGE_SIZE,
+  );
+
+  const visiblePages = useMemo(() => {
+    const start = Math.max(0, Math.min(currentPage - 2, totalPages - 5));
+    const end = Math.min(totalPages, start + 5);
+    return Array.from({ length: end - start }, (_, i) => start + i);
+  }, [currentPage, totalPages]);
+
+  const handleSearchChange = (q: string) => {
+    setSearchQuery(q);
+    setCurrentPage(0);
+  };
+
+  const handleSortChange = (order: 'newest' | 'oldest') => {
+    setSortOrder(order);
+    setCurrentPage(0);
+  };
+
+  const formatDate = (createdAt: string | number) => {
+    const d = typeof createdAt === 'number'
+      ? new Date(createdAt * 1000)
+      : new Date(createdAt);
+    return d
+      .toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' })
+      .replace('. ', '/')
+      .replace('.', '');
+  };
+
+  return {
+    searchQuery,
+    setSearchQuery: handleSearchChange,
+    sortOrder,
+    setSortOrder: handleSortChange,
+    currentPage,
+    setCurrentPage,
+    pagedData,
+    filteredData,
+    totalPages,
+    visiblePages,
+    isLoading,
+    formatDate,
+  };
+};

@@ -23,6 +23,11 @@ const BOARDS = [
     label: '자유게시판',
     path: '/board/boardlist',
   },
+  {
+    key: 'favorites' as const,
+    label: '즐겨찾기',
+    path: '/board/favorites',
+  },
 ];
 
 const BoardPage = () => {

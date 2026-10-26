@@ -31,6 +31,7 @@ export type BoardAvgAggregateOutputType = {
   authorIdx: number | null
   rating: runtime.Decimal | null
   liked: number | null
+  shareCount: number | null
   viewCount: number | null
 }
 
@@ -39,6 +40,7 @@ export type BoardSumAggregateOutputType = {
   authorIdx: bigint | null
   rating: runtime.Decimal | null
   liked: bigint | null
+  shareCount: number | null
   viewCount: number | null
 }
 
@@ -51,6 +53,7 @@ export type BoardMinAggregateOutputType = {
   imageUrl: string | null
   rating: runtime.Decimal | null
   liked: bigint | null
+  shareCount: number | null
   viewCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +68,7 @@ export type BoardMaxAggregateOutputType = {
   imageUrl: string | null
   rating: runtime.Decimal | null
   liked: bigint | null
+  shareCount: number | null
   viewCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -80,6 +84,7 @@ export type BoardCountAggregateOutputType = {
   tags: number
   rating: number
   liked: number
+  shareCount: number
   viewCount: number
   createdAt: number
   updatedAt: number
@@ -92,6 +97,7 @@ export type BoardAvgAggregateInputType = {
   authorIdx?: true
   rating?: true
   liked?: true
+  shareCount?: true
   viewCount?: true
 }
 
@@ -100,6 +106,7 @@ export type BoardSumAggregateInputType = {
   authorIdx?: true
   rating?: true
   liked?: true
+  shareCount?: true
   viewCount?: true
 }
 
@@ -112,6 +119,7 @@ export type BoardMinAggregateInputType = {
   imageUrl?: true
   rating?: true
   liked?: true
+  shareCount?: true
   viewCount?: true
   createdAt?: true
   updatedAt?: true
@@ -126,6 +134,7 @@ export type BoardMaxAggregateInputType = {
   imageUrl?: true
   rating?: true
   liked?: true
+  shareCount?: true
   viewCount?: true
   createdAt?: true
   updatedAt?: true
@@ -141,6 +150,7 @@ export type BoardCountAggregateInputType = {
   tags?: true
   rating?: true
   liked?: true
+  shareCount?: true
   viewCount?: true
   createdAt?: true
   updatedAt?: true
@@ -243,6 +253,7 @@ export type BoardGroupByOutputType = {
   tags: runtime.JsonValue | null
   rating: runtime.Decimal | null
   liked: bigint
+  shareCount: number
   viewCount: number
   createdAt: Date
   updatedAt: Date
@@ -281,6 +292,7 @@ export type BoardWhereInput = {
   tags?: Prisma.JsonNullableFilter<"Board">
   rating?: Prisma.DecimalNullableFilter<"Board"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFilter<"Board"> | bigint | number
+  shareCount?: Prisma.IntFilter<"Board"> | number
   viewCount?: Prisma.IntFilter<"Board"> | number
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
@@ -288,6 +300,8 @@ export type BoardWhereInput = {
   comments?: Prisma.CommentListRelationFilter
   likes?: Prisma.BoardLikeListRelationFilter
   reads?: Prisma.BoardReadListRelationFilter
+  bookmarks?: Prisma.BoardBookmarkListRelationFilter
+  shares?: Prisma.BoardShareListRelationFilter
 }
 
 export type BoardOrderByWithRelationInput = {
@@ -300,6 +314,7 @@ export type BoardOrderByWithRelationInput = {
   tags?: Prisma.SortOrderInput | Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
   liked?: Prisma.SortOrder
+  shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -307,6 +322,8 @@ export type BoardOrderByWithRelationInput = {
   comments?: Prisma.CommentOrderByRelationAggregateInput
   likes?: Prisma.BoardLikeOrderByRelationAggregateInput
   reads?: Prisma.BoardReadOrderByRelationAggregateInput
+  bookmarks?: Prisma.BoardBookmarkOrderByRelationAggregateInput
+  shares?: Prisma.BoardShareOrderByRelationAggregateInput
   _relevance?: Prisma.BoardOrderByRelevanceInput
 }
 
@@ -323,6 +340,7 @@ export type BoardWhereUniqueInput = Prisma.AtLeast<{
   tags?: Prisma.JsonNullableFilter<"Board">
   rating?: Prisma.DecimalNullableFilter<"Board"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFilter<"Board"> | bigint | number
+  shareCount?: Prisma.IntFilter<"Board"> | number
   viewCount?: Prisma.IntFilter<"Board"> | number
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
@@ -330,6 +348,8 @@ export type BoardWhereUniqueInput = Prisma.AtLeast<{
   comments?: Prisma.CommentListRelationFilter
   likes?: Prisma.BoardLikeListRelationFilter
   reads?: Prisma.BoardReadListRelationFilter
+  bookmarks?: Prisma.BoardBookmarkListRelationFilter
+  shares?: Prisma.BoardShareListRelationFilter
 }, "id">
 
 export type BoardOrderByWithAggregationInput = {
@@ -342,6 +362,7 @@ export type BoardOrderByWithAggregationInput = {
   tags?: Prisma.SortOrderInput | Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
   liked?: Prisma.SortOrder
+  shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -365,6 +386,7 @@ export type BoardScalarWhereWithAggregatesInput = {
   tags?: Prisma.JsonNullableWithAggregatesFilter<"Board">
   rating?: Prisma.DecimalNullableWithAggregatesFilter<"Board"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntWithAggregatesFilter<"Board"> | bigint | number
+  shareCount?: Prisma.IntWithAggregatesFilter<"Board"> | number
   viewCount?: Prisma.IntWithAggregatesFilter<"Board"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Board"> | Date | string
@@ -379,6 +401,7 @@ export type BoardCreateInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -386,6 +409,8 @@ export type BoardCreateInput = {
   comments?: Prisma.CommentCreateNestedManyWithoutBoardInput
   likes?: Prisma.BoardLikeCreateNestedManyWithoutBoardInput
   reads?: Prisma.BoardReadCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateInput = {
@@ -398,12 +423,15 @@ export type BoardUncheckedCreateInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
   likes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutBoardInput
   reads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUpdateInput = {
@@ -415,6 +443,7 @@ export type BoardUpdateInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -422,6 +451,8 @@ export type BoardUpdateInput = {
   comments?: Prisma.CommentUpdateManyWithoutBoardNestedInput
   likes?: Prisma.BoardLikeUpdateManyWithoutBoardNestedInput
   reads?: Prisma.BoardReadUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateInput = {
@@ -434,12 +465,15 @@ export type BoardUncheckedUpdateInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
   likes?: Prisma.BoardLikeUncheckedUpdateManyWithoutBoardNestedInput
   reads?: Prisma.BoardReadUncheckedUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardCreateManyInput = {
@@ -452,6 +486,7 @@ export type BoardCreateManyInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -466,6 +501,7 @@ export type BoardUpdateManyMutationInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -481,6 +517,7 @@ export type BoardUncheckedUpdateManyInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -512,6 +549,7 @@ export type BoardCountOrderByAggregateInput = {
   tags?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   liked?: Prisma.SortOrder
+  shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -522,6 +560,7 @@ export type BoardAvgOrderByAggregateInput = {
   authorIdx?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   liked?: Prisma.SortOrder
+  shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
 }
 
@@ -534,6 +573,7 @@ export type BoardMaxOrderByAggregateInput = {
   imageUrl?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   liked?: Prisma.SortOrder
+  shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -548,6 +588,7 @@ export type BoardMinOrderByAggregateInput = {
   imageUrl?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   liked?: Prisma.SortOrder
+  shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -558,6 +599,7 @@ export type BoardSumOrderByAggregateInput = {
   authorIdx?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   liked?: Prisma.SortOrder
+  shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
 }
 
@@ -658,6 +700,34 @@ export type BoardUpdateOneRequiredWithoutLikesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BoardUpdateToOneWithWhereWithoutLikesInput, Prisma.BoardUpdateWithoutLikesInput>, Prisma.BoardUncheckedUpdateWithoutLikesInput>
 }
 
+export type BoardCreateNestedOneWithoutBookmarksInput = {
+  create?: Prisma.XOR<Prisma.BoardCreateWithoutBookmarksInput, Prisma.BoardUncheckedCreateWithoutBookmarksInput>
+  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutBookmarksInput
+  connect?: Prisma.BoardWhereUniqueInput
+}
+
+export type BoardUpdateOneRequiredWithoutBookmarksNestedInput = {
+  create?: Prisma.XOR<Prisma.BoardCreateWithoutBookmarksInput, Prisma.BoardUncheckedCreateWithoutBookmarksInput>
+  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutBookmarksInput
+  upsert?: Prisma.BoardUpsertWithoutBookmarksInput
+  connect?: Prisma.BoardWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BoardUpdateToOneWithWhereWithoutBookmarksInput, Prisma.BoardUpdateWithoutBookmarksInput>, Prisma.BoardUncheckedUpdateWithoutBookmarksInput>
+}
+
+export type BoardCreateNestedOneWithoutSharesInput = {
+  create?: Prisma.XOR<Prisma.BoardCreateWithoutSharesInput, Prisma.BoardUncheckedCreateWithoutSharesInput>
+  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutSharesInput
+  connect?: Prisma.BoardWhereUniqueInput
+}
+
+export type BoardUpdateOneRequiredWithoutSharesNestedInput = {
+  create?: Prisma.XOR<Prisma.BoardCreateWithoutSharesInput, Prisma.BoardUncheckedCreateWithoutSharesInput>
+  connectOrCreate?: Prisma.BoardCreateOrConnectWithoutSharesInput
+  upsert?: Prisma.BoardUpsertWithoutSharesInput
+  connect?: Prisma.BoardWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BoardUpdateToOneWithWhereWithoutSharesInput, Prisma.BoardUpdateWithoutSharesInput>, Prisma.BoardUncheckedUpdateWithoutSharesInput>
+}
+
 export type BoardCreateWithoutAuthorInput = {
   id?: bigint | number
   type: string
@@ -667,12 +737,15 @@ export type BoardCreateWithoutAuthorInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentCreateNestedManyWithoutBoardInput
   likes?: Prisma.BoardLikeCreateNestedManyWithoutBoardInput
   reads?: Prisma.BoardReadCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutAuthorInput = {
@@ -684,12 +757,15 @@ export type BoardUncheckedCreateWithoutAuthorInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
   likes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutBoardInput
   reads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutAuthorInput = {
@@ -731,6 +807,7 @@ export type BoardScalarWhereInput = {
   tags?: Prisma.JsonNullableFilter<"Board">
   rating?: Prisma.DecimalNullableFilter<"Board"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFilter<"Board"> | bigint | number
+  shareCount?: Prisma.IntFilter<"Board"> | number
   viewCount?: Prisma.IntFilter<"Board"> | number
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
@@ -745,12 +822,15 @@ export type BoardCreateWithoutCommentsInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
   likes?: Prisma.BoardLikeCreateNestedManyWithoutBoardInput
   reads?: Prisma.BoardReadCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutCommentsInput = {
@@ -763,11 +843,14 @@ export type BoardUncheckedCreateWithoutCommentsInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   likes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutBoardInput
   reads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutCommentsInput = {
@@ -795,12 +878,15 @@ export type BoardUpdateWithoutCommentsInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
   likes?: Prisma.BoardLikeUpdateManyWithoutBoardNestedInput
   reads?: Prisma.BoardReadUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutCommentsInput = {
@@ -813,11 +899,14 @@ export type BoardUncheckedUpdateWithoutCommentsInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likes?: Prisma.BoardLikeUncheckedUpdateManyWithoutBoardNestedInput
   reads?: Prisma.BoardReadUncheckedUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardCreateWithoutReadsInput = {
@@ -829,12 +918,15 @@ export type BoardCreateWithoutReadsInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
   comments?: Prisma.CommentCreateNestedManyWithoutBoardInput
   likes?: Prisma.BoardLikeCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutReadsInput = {
@@ -847,11 +939,14 @@ export type BoardUncheckedCreateWithoutReadsInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
   likes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutReadsInput = {
@@ -879,12 +974,15 @@ export type BoardUpdateWithoutReadsInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
   comments?: Prisma.CommentUpdateManyWithoutBoardNestedInput
   likes?: Prisma.BoardLikeUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutReadsInput = {
@@ -897,11 +995,14 @@ export type BoardUncheckedUpdateWithoutReadsInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
   likes?: Prisma.BoardLikeUncheckedUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardCreateWithoutLikesInput = {
@@ -913,12 +1014,15 @@ export type BoardCreateWithoutLikesInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
   comments?: Prisma.CommentCreateNestedManyWithoutBoardInput
   reads?: Prisma.BoardReadCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareCreateNestedManyWithoutBoardInput
 }
 
 export type BoardUncheckedCreateWithoutLikesInput = {
@@ -931,11 +1035,14 @@ export type BoardUncheckedCreateWithoutLikesInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
   reads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareUncheckedCreateNestedManyWithoutBoardInput
 }
 
 export type BoardCreateOrConnectWithoutLikesInput = {
@@ -963,12 +1070,15 @@ export type BoardUpdateWithoutLikesInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
   comments?: Prisma.CommentUpdateManyWithoutBoardNestedInput
   reads?: Prisma.BoardReadUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutLikesInput = {
@@ -981,11 +1091,206 @@ export type BoardUncheckedUpdateWithoutLikesInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
   reads?: Prisma.BoardReadUncheckedUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUncheckedUpdateManyWithoutBoardNestedInput
+}
+
+export type BoardCreateWithoutBookmarksInput = {
+  id?: bigint | number
+  type: string
+  title: string
+  content: string
+  imageUrl?: string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  liked?: bigint | number
+  shareCount?: number
+  viewCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author: Prisma.UserCreateNestedOneWithoutBoardsInput
+  comments?: Prisma.CommentCreateNestedManyWithoutBoardInput
+  likes?: Prisma.BoardLikeCreateNestedManyWithoutBoardInput
+  reads?: Prisma.BoardReadCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareCreateNestedManyWithoutBoardInput
+}
+
+export type BoardUncheckedCreateWithoutBookmarksInput = {
+  id?: bigint | number
+  type: string
+  title: string
+  content: string
+  authorIdx: bigint | number
+  imageUrl?: string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  liked?: bigint | number
+  shareCount?: number
+  viewCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
+  likes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutBoardInput
+  reads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutBoardInput
+  shares?: Prisma.BoardShareUncheckedCreateNestedManyWithoutBoardInput
+}
+
+export type BoardCreateOrConnectWithoutBookmarksInput = {
+  where: Prisma.BoardWhereUniqueInput
+  create: Prisma.XOR<Prisma.BoardCreateWithoutBookmarksInput, Prisma.BoardUncheckedCreateWithoutBookmarksInput>
+}
+
+export type BoardUpsertWithoutBookmarksInput = {
+  update: Prisma.XOR<Prisma.BoardUpdateWithoutBookmarksInput, Prisma.BoardUncheckedUpdateWithoutBookmarksInput>
+  create: Prisma.XOR<Prisma.BoardCreateWithoutBookmarksInput, Prisma.BoardUncheckedCreateWithoutBookmarksInput>
+  where?: Prisma.BoardWhereInput
+}
+
+export type BoardUpdateToOneWithWhereWithoutBookmarksInput = {
+  where?: Prisma.BoardWhereInput
+  data: Prisma.XOR<Prisma.BoardUpdateWithoutBookmarksInput, Prisma.BoardUncheckedUpdateWithoutBookmarksInput>
+}
+
+export type BoardUpdateWithoutBookmarksInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutBoardNestedInput
+  likes?: Prisma.BoardLikeUpdateManyWithoutBoardNestedInput
+  reads?: Prisma.BoardReadUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUpdateManyWithoutBoardNestedInput
+}
+
+export type BoardUncheckedUpdateWithoutBookmarksInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  authorIdx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
+  likes?: Prisma.BoardLikeUncheckedUpdateManyWithoutBoardNestedInput
+  reads?: Prisma.BoardReadUncheckedUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUncheckedUpdateManyWithoutBoardNestedInput
+}
+
+export type BoardCreateWithoutSharesInput = {
+  id?: bigint | number
+  type: string
+  title: string
+  content: string
+  imageUrl?: string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  liked?: bigint | number
+  shareCount?: number
+  viewCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author: Prisma.UserCreateNestedOneWithoutBoardsInput
+  comments?: Prisma.CommentCreateNestedManyWithoutBoardInput
+  likes?: Prisma.BoardLikeCreateNestedManyWithoutBoardInput
+  reads?: Prisma.BoardReadCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkCreateNestedManyWithoutBoardInput
+}
+
+export type BoardUncheckedCreateWithoutSharesInput = {
+  id?: bigint | number
+  type: string
+  title: string
+  content: string
+  authorIdx: bigint | number
+  imageUrl?: string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  liked?: bigint | number
+  shareCount?: number
+  viewCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
+  likes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutBoardInput
+  reads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutBoardInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedCreateNestedManyWithoutBoardInput
+}
+
+export type BoardCreateOrConnectWithoutSharesInput = {
+  where: Prisma.BoardWhereUniqueInput
+  create: Prisma.XOR<Prisma.BoardCreateWithoutSharesInput, Prisma.BoardUncheckedCreateWithoutSharesInput>
+}
+
+export type BoardUpsertWithoutSharesInput = {
+  update: Prisma.XOR<Prisma.BoardUpdateWithoutSharesInput, Prisma.BoardUncheckedUpdateWithoutSharesInput>
+  create: Prisma.XOR<Prisma.BoardCreateWithoutSharesInput, Prisma.BoardUncheckedCreateWithoutSharesInput>
+  where?: Prisma.BoardWhereInput
+}
+
+export type BoardUpdateToOneWithWhereWithoutSharesInput = {
+  where?: Prisma.BoardWhereInput
+  data: Prisma.XOR<Prisma.BoardUpdateWithoutSharesInput, Prisma.BoardUncheckedUpdateWithoutSharesInput>
+}
+
+export type BoardUpdateWithoutSharesInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutBoardNestedInput
+  likes?: Prisma.BoardLikeUpdateManyWithoutBoardNestedInput
+  reads?: Prisma.BoardReadUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUpdateManyWithoutBoardNestedInput
+}
+
+export type BoardUncheckedUpdateWithoutSharesInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  authorIdx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
+  likes?: Prisma.BoardLikeUncheckedUpdateManyWithoutBoardNestedInput
+  reads?: Prisma.BoardReadUncheckedUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardCreateManyAuthorInput = {
@@ -997,6 +1302,7 @@ export type BoardCreateManyAuthorInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: bigint | number
+  shareCount?: number
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1011,12 +1317,15 @@ export type BoardUpdateWithoutAuthorInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUpdateManyWithoutBoardNestedInput
   likes?: Prisma.BoardLikeUpdateManyWithoutBoardNestedInput
   reads?: Prisma.BoardReadUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateWithoutAuthorInput = {
@@ -1028,12 +1337,15 @@ export type BoardUncheckedUpdateWithoutAuthorInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
   likes?: Prisma.BoardLikeUncheckedUpdateManyWithoutBoardNestedInput
   reads?: Prisma.BoardReadUncheckedUpdateManyWithoutBoardNestedInput
+  bookmarks?: Prisma.BoardBookmarkUncheckedUpdateManyWithoutBoardNestedInput
+  shares?: Prisma.BoardShareUncheckedUpdateManyWithoutBoardNestedInput
 }
 
 export type BoardUncheckedUpdateManyWithoutAuthorInput = {
@@ -1045,6 +1357,7 @@ export type BoardUncheckedUpdateManyWithoutAuthorInput = {
   tags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1059,12 +1372,16 @@ export type BoardCountOutputType = {
   comments: number
   likes: number
   reads: number
+  bookmarks: number
+  shares: number
 }
 
 export type BoardCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   comments?: boolean | BoardCountOutputTypeCountCommentsArgs
   likes?: boolean | BoardCountOutputTypeCountLikesArgs
   reads?: boolean | BoardCountOutputTypeCountReadsArgs
+  bookmarks?: boolean | BoardCountOutputTypeCountBookmarksArgs
+  shares?: boolean | BoardCountOutputTypeCountSharesArgs
 }
 
 /**
@@ -1098,6 +1415,20 @@ export type BoardCountOutputTypeCountReadsArgs<ExtArgs extends runtime.Types.Ext
   where?: Prisma.BoardReadWhereInput
 }
 
+/**
+ * BoardCountOutputType without action
+ */
+export type BoardCountOutputTypeCountBookmarksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BoardBookmarkWhereInput
+}
+
+/**
+ * BoardCountOutputType without action
+ */
+export type BoardCountOutputTypeCountSharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BoardShareWhereInput
+}
+
 
 export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1109,6 +1440,7 @@ export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   tags?: boolean
   rating?: boolean
   liked?: boolean
+  shareCount?: boolean
   viewCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1116,6 +1448,8 @@ export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   comments?: boolean | Prisma.Board$commentsArgs<ExtArgs>
   likes?: boolean | Prisma.Board$likesArgs<ExtArgs>
   reads?: boolean | Prisma.Board$readsArgs<ExtArgs>
+  bookmarks?: boolean | Prisma.Board$bookmarksArgs<ExtArgs>
+  shares?: boolean | Prisma.Board$sharesArgs<ExtArgs>
   _count?: boolean | Prisma.BoardCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["board"]>
 
@@ -1131,17 +1465,20 @@ export type BoardSelectScalar = {
   tags?: boolean
   rating?: boolean
   liked?: boolean
+  shareCount?: boolean
   viewCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BoardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "title" | "content" | "authorIdx" | "imageUrl" | "tags" | "rating" | "liked" | "viewCount" | "createdAt" | "updatedAt", ExtArgs["result"]["board"]>
+export type BoardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "title" | "content" | "authorIdx" | "imageUrl" | "tags" | "rating" | "liked" | "shareCount" | "viewCount" | "createdAt" | "updatedAt", ExtArgs["result"]["board"]>
 export type BoardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   comments?: boolean | Prisma.Board$commentsArgs<ExtArgs>
   likes?: boolean | Prisma.Board$likesArgs<ExtArgs>
   reads?: boolean | Prisma.Board$readsArgs<ExtArgs>
+  bookmarks?: boolean | Prisma.Board$bookmarksArgs<ExtArgs>
+  shares?: boolean | Prisma.Board$sharesArgs<ExtArgs>
   _count?: boolean | Prisma.BoardCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1152,6 +1489,8 @@ export type $BoardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     comments: Prisma.$CommentPayload<ExtArgs>[]
     likes: Prisma.$BoardLikePayload<ExtArgs>[]
     reads: Prisma.$BoardReadPayload<ExtArgs>[]
+    bookmarks: Prisma.$BoardBookmarkPayload<ExtArgs>[]
+    shares: Prisma.$BoardSharePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: bigint
@@ -1163,6 +1502,7 @@ export type $BoardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     tags: runtime.JsonValue | null
     rating: runtime.Decimal | null
     liked: bigint
+    shareCount: number
     viewCount: number
     createdAt: Date
     updatedAt: Date
@@ -1510,6 +1850,8 @@ export interface Prisma__BoardClient<T, Null = never, ExtArgs extends runtime.Ty
   comments<T extends Prisma.Board$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   likes<T extends Prisma.Board$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reads<T extends Prisma.Board$readsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$readsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardReadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  bookmarks<T extends Prisma.Board$bookmarksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$bookmarksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardBookmarkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  shares<T extends Prisma.Board$sharesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Board$sharesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BoardSharePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1548,6 +1890,7 @@ export interface BoardFieldRefs {
   readonly tags: Prisma.FieldRef<"Board", 'Json'>
   readonly rating: Prisma.FieldRef<"Board", 'Decimal'>
   readonly liked: Prisma.FieldRef<"Board", 'BigInt'>
+  readonly shareCount: Prisma.FieldRef<"Board", 'Int'>
   readonly viewCount: Prisma.FieldRef<"Board", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Board", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Board", 'DateTime'>
@@ -1968,6 +2311,54 @@ export type Board$readsArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   distinct?: Prisma.BoardReadScalarFieldEnum | Prisma.BoardReadScalarFieldEnum[]
+}
+
+/**
+ * Board.bookmarks
+ */
+export type Board$bookmarksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BoardBookmark
+   */
+  select?: Prisma.BoardBookmarkSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BoardBookmark
+   */
+  omit?: Prisma.BoardBookmarkOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardBookmarkInclude<ExtArgs> | null
+  where?: Prisma.BoardBookmarkWhereInput
+  orderBy?: Prisma.BoardBookmarkOrderByWithRelationInput | Prisma.BoardBookmarkOrderByWithRelationInput[]
+  cursor?: Prisma.BoardBookmarkWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BoardBookmarkScalarFieldEnum | Prisma.BoardBookmarkScalarFieldEnum[]
+}
+
+/**
+ * Board.shares
+ */
+export type Board$sharesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BoardShare
+   */
+  select?: Prisma.BoardShareSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the BoardShare
+   */
+  omit?: Prisma.BoardShareOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BoardShareInclude<ExtArgs> | null
+  where?: Prisma.BoardShareWhereInput
+  orderBy?: Prisma.BoardShareOrderByWithRelationInput | Prisma.BoardShareOrderByWithRelationInput[]
+  cursor?: Prisma.BoardShareWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BoardShareScalarFieldEnum | Prisma.BoardShareScalarFieldEnum[]
 }
 
 /**

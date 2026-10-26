@@ -13,6 +13,7 @@ import EventDetailPage from '@/pages/Board/ui/EventDetailPage';
 import EventListPage from '@/pages/Board/ui/EventListPage';
 import EventWirtePage from '@/pages/Board/ui/EventWritePage';
 import PCNoticeDetailPage from '@/pages/Board/ui/PCNoticeDetailPage';
+import FavoriteListPage from '@/pages/Board/ui/FavoriteListPage';
 import PCTravelReviewPage from '@/pages/TravelReview/ui/PCTravelReviewPage';
 import PCTravelReviewListPage from '@/pages/TravelReview/ui/PCTravelReviewListPage';
 import NoticeListPage from '@/pages/Board/ui/NoticeListPage';
@@ -68,6 +69,7 @@ const Router = () => {
             <Route path="/board/board/detail" element={<BoardDetailPage />} />
             <Route path="/board/:id" element={<BoardByIdPage />} />
             <Route path="/travel/review/list" element={<PCTravelReviewListPage />} />
+            <Route path="/board/favorites" element={<FavoriteListPage />} />
             <Route path="/travel/review" element={<PCTravelReviewPage />} />
             <Route path="/ticketlist" element={<TicketListPage />} />
             <Route path="/reserve/traincheck" element={<TrainCheckPage />} />

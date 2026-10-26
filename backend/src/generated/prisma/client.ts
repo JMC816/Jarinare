@@ -65,6 +65,16 @@ export type BoardRead = Prisma.BoardReadModel
  */
 export type BoardLike = Prisma.BoardLikeModel
 /**
+ * Model BoardBookmark
+ * 
+ */
+export type BoardBookmark = Prisma.BoardBookmarkModel
+/**
+ * Model BoardShare
+ * 
+ */
+export type BoardShare = Prisma.BoardShareModel
+/**
  * Model Notification
  * 
  */

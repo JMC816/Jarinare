@@ -95,6 +95,14 @@ export const BOARD_CATEGORIES = [
     textColor: '#9333ea',
     iconStroke: '#9333ea',
   },
+  {
+    key: 'favorites' as const,
+    label: '즐겨찾기',
+    path: '/board/favorites',
+    bgColor: '#fefce8',
+    textColor: '#ca8a04',
+    iconStroke: '#ca8a04',
+  },
 ];
 
 export const BOARDS = [

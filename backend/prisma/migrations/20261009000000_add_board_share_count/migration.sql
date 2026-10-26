@@ -1,0 +1,1 @@
+ALTER TABLE `boards` ADD COLUMN `shareCount` INT NOT NULL DEFAULT 0;

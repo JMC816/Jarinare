@@ -18,6 +18,7 @@ import {
   UpdateBoardDto,
   DeleteBoardDto,
   ToggleBoardLikeDto,
+  BookmarkBoardDto,
 } from "./dto/board-request.dto";
 import { NotificationService } from "../notification/notification.service";
 import { shouldNotify } from "../notification/notification.types";
@@ -413,19 +414,41 @@ export class BoardService {
     return likes.map((l) => Number(l.boardId));
   }
 
-  async getTopPosts(limit: number): Promise<{ id: number; title: string; author: string; views: number; type: string }[]> {
-    const boards = await this.prisma.board.findMany({
-      orderBy: { viewCount: 'desc' },
-      take: limit,
-      include: { author: { select: { name: true } } },
+  async incrementShare(boardId: number, user: AuthUser): Promise<void> {
+    const existing = await this.prisma.boardShare.findUnique({
+      where: { boardId_userIdx: { boardId: BigInt(boardId), userIdx: BigInt(user.idx) } },
     });
-    return boards.map((b) => ({
-      id: Number(b.id),
-      title: b.title,
-      author: b.author.name,
-      views: b.viewCount,
-      type: b.type.toLowerCase(),
-    }));
+    if (existing) return;
+
+    await this.prisma.$transaction([
+      this.prisma.boardShare.create({
+        data: { boardId: BigInt(boardId), userIdx: BigInt(user.idx) },
+      }),
+      this.prisma.board.update({
+        where: { id: BigInt(boardId) },
+        data: { shareCount: { increment: 1 } },
+      }),
+    ]);
+  }
+
+  async getTopPosts(limit: number): Promise<{ id: number; title: string; author: string; score: number; type: string }[]> {
+    const boards = await this.prisma.board.findMany({
+      include: {
+        author: { select: { name: true } },
+        _count: { select: { bookmarks: true } },
+      },
+    });
+
+    return boards
+      .map((b) => ({
+        id: Number(b.id),
+        title: b.title,
+        author: b.author.name,
+        score: Number(b.liked) + b.shareCount + b._count.bookmarks,
+        type: b.type.toLowerCase(),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, limit);
   }
 
   async markRead(boardId: number, user: AuthUser): Promise<void> {
@@ -442,6 +465,63 @@ export class BoardService {
       select: { boardId: true },
     });
     return reads.map((r) => Number(r.boardId));
+  }
+
+  async toggleBookmark(
+    dto: BookmarkBoardDto,
+    user: AuthUser,
+  ): Promise<{ bookmarked: boolean }> {
+    const existing = await this.prisma.boardBookmark.findUnique({
+      where: { boardId_userIdx: { boardId: BigInt(dto.boardId), userIdx: BigInt(user.idx) } },
+    });
+
+    if (existing) {
+      await this.prisma.boardBookmark.delete({
+        where: { boardId_userIdx: { boardId: BigInt(dto.boardId), userIdx: BigInt(user.idx) } },
+      });
+      return { bookmarked: false };
+    } else {
+      await this.prisma.boardBookmark.create({
+        data: { boardId: BigInt(dto.boardId), userIdx: BigInt(user.idx) },
+      });
+      return { bookmarked: true };
+    }
+  }
+
+  async getBookmarkIds(user: AuthUser): Promise<number[]> {
+    const bookmarks = await this.prisma.boardBookmark.findMany({
+      where: { userIdx: BigInt(user.idx) },
+      select: { boardId: true },
+    });
+    return bookmarks.map((b) => Number(b.boardId));
+  }
+
+  async getBookmarkedPosts(user: AuthUser): Promise<import("./dto/board-response.dto").BoardListItemDto[]> {
+    const bookmarks = await this.prisma.boardBookmark.findMany({
+      where: { userIdx: BigInt(user.idx) },
+      orderBy: { createdAt: "desc" },
+      include: {
+        board: {
+          include: {
+            author: { select: { name: true } },
+            _count: { select: { comments: true } },
+          },
+        },
+      },
+    });
+
+    return bookmarks.map(({ board: b }) => ({
+      id: Number(b.id),
+      title: b.title,
+      author: b.author.name,
+      createdAt: b.createdAt.toISOString(),
+      imageUrl: b.imageUrl ?? null,
+      commentCount: b._count.comments,
+      tags: (b.tags as string[]) ?? [],
+      liked: Number(b.liked),
+      views: b.viewCount,
+      ...(b.rating !== null && { rating: Number(b.rating) }),
+    }));
   }
 
   private resolveOrderBy(

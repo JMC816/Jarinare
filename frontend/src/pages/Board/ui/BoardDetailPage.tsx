@@ -6,7 +6,7 @@ import backward from '@/assets/icons/backward.png';
 import { BoardPost, FreeBoardDetail } from '@/entities/Board/types/boardType';
 import { formatBoardTime } from '@/shared/lib/formatDate';
 import { CommentSection } from '@/widgets/Board/ui/CommentSection';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import PCBoardDetailPage from './PCBoardDetailPage';
 import { useBoardDetailPage } from '../hooks/useBoardDetailPage';
@@ -41,14 +41,17 @@ const BoardDetailPage = () => {
   const post = fetchedPost ?? statePost ?? undefined;
 
   const { markRead } = useBoardRead();
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    if (id && (!statePost || !statePost.content)) {
+    if (!id || hasFetched.current) return;
+    hasFetched.current = true;
+    if (!statePost || !statePost.content) {
       getBoardDetailApi(Number(id), 'free')
         .then(setFetchedPost)
         .catch(() => {});
     }
-    if (id) markRead(Number(id));
+    markRead(Number(id));
   }, [id]);
 
   const {
@@ -60,6 +63,8 @@ const BoardDetailPage = () => {
     setMenuOpen,
     handleDelete,
     handleLike,
+    isBookmarked,
+    handleBookmark,
   } = useBoardDetailPage(post);
 
   if (!currentPost) {
@@ -187,7 +192,7 @@ const BoardDetailPage = () => {
               </div>
             )}
 
-            {/* 좋아요 + 조회수 */}
+            {/* 좋아요 + 즐겨찾기 */}
             <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
               <div className="flex items-center gap-3">
                 <button
@@ -200,6 +205,12 @@ const BoardDetailPage = () => {
                   {likesCount}명이 좋아합니다
                 </span>
               </div>
+              <button
+                onClick={handleBookmark}
+                className="transition-transform duration-150 active:scale-90"
+              >
+                <span className="text-2xl">{isBookmarked ? '⭐' : '☆'}</span>
+              </button>
             </div>
           </div>
 

@@ -8,7 +8,7 @@ export interface TopPost {
   id: number;
   title: string;
   author: string;
-  views: number;
+  score: number;
   type: string;
 }
 
@@ -17,4 +17,8 @@ export const getTopViewedPostsApi = async (limit = 5): Promise<TopPost[]> => {
     params: { limit },
   });
   return data;
+};
+
+export const incrementShareApi = async (boardId: number): Promise<void> => {
+  await backendClient.post(`/api/board/share/${boardId}`);
 };

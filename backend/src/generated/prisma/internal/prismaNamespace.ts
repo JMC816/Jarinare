@@ -389,6 +389,8 @@ export const ModelName = {
   Comment: 'Comment',
   BoardRead: 'BoardRead',
   BoardLike: 'BoardLike',
+  BoardBookmark: 'BoardBookmark',
+  BoardShare: 'BoardShare',
   Notification: 'Notification',
   Station: 'Station',
   StationTime: 'StationTime',
@@ -419,7 +421,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket"
+    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -750,6 +752,138 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.BoardLikeCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.BoardLikeCountAggregateOutputType> | number
+        }
+      }
+    }
+    BoardBookmark: {
+      payload: Prisma.$BoardBookmarkPayload<ExtArgs>
+      fields: Prisma.BoardBookmarkFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BoardBookmarkFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BoardBookmarkFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload>
+        }
+        findFirst: {
+          args: Prisma.BoardBookmarkFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BoardBookmarkFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload>
+        }
+        findMany: {
+          args: Prisma.BoardBookmarkFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload>[]
+        }
+        create: {
+          args: Prisma.BoardBookmarkCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload>
+        }
+        createMany: {
+          args: Prisma.BoardBookmarkCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BoardBookmarkDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload>
+        }
+        update: {
+          args: Prisma.BoardBookmarkUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload>
+        }
+        deleteMany: {
+          args: Prisma.BoardBookmarkDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BoardBookmarkUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BoardBookmarkUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardBookmarkPayload>
+        }
+        aggregate: {
+          args: Prisma.BoardBookmarkAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBoardBookmark>
+        }
+        groupBy: {
+          args: Prisma.BoardBookmarkGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardBookmarkGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BoardBookmarkCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardBookmarkCountAggregateOutputType> | number
+        }
+      }
+    }
+    BoardShare: {
+      payload: Prisma.$BoardSharePayload<ExtArgs>
+      fields: Prisma.BoardShareFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BoardShareFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BoardShareFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload>
+        }
+        findFirst: {
+          args: Prisma.BoardShareFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BoardShareFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload>
+        }
+        findMany: {
+          args: Prisma.BoardShareFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload>[]
+        }
+        create: {
+          args: Prisma.BoardShareCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload>
+        }
+        createMany: {
+          args: Prisma.BoardShareCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.BoardShareDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload>
+        }
+        update: {
+          args: Prisma.BoardShareUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload>
+        }
+        deleteMany: {
+          args: Prisma.BoardShareDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BoardShareUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.BoardShareUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BoardSharePayload>
+        }
+        aggregate: {
+          args: Prisma.BoardShareAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBoardShare>
+        }
+        groupBy: {
+          args: Prisma.BoardShareGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardShareGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BoardShareCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BoardShareCountAggregateOutputType> | number
         }
       }
     }
@@ -1814,6 +1948,7 @@ export const BoardScalarFieldEnum = {
   tags: 'tags',
   rating: 'rating',
   liked: 'liked',
+  shareCount: 'shareCount',
   viewCount: 'viewCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1854,6 +1989,24 @@ export const BoardLikeScalarFieldEnum = {
 } as const
 
 export type BoardLikeScalarFieldEnum = (typeof BoardLikeScalarFieldEnum)[keyof typeof BoardLikeScalarFieldEnum]
+
+
+export const BoardBookmarkScalarFieldEnum = {
+  boardId: 'boardId',
+  userIdx: 'userIdx',
+  createdAt: 'createdAt'
+} as const
+
+export type BoardBookmarkScalarFieldEnum = (typeof BoardBookmarkScalarFieldEnum)[keyof typeof BoardBookmarkScalarFieldEnum]
+
+
+export const BoardShareScalarFieldEnum = {
+  boardId: 'boardId',
+  userIdx: 'userIdx',
+  createdAt: 'createdAt'
+} as const
+
+export type BoardShareScalarFieldEnum = (typeof BoardShareScalarFieldEnum)[keyof typeof BoardShareScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {
@@ -2457,6 +2610,8 @@ export type GlobalOmitConfig = {
   comment?: Prisma.CommentOmit
   boardRead?: Prisma.BoardReadOmit
   boardLike?: Prisma.BoardLikeOmit
+  boardBookmark?: Prisma.BoardBookmarkOmit
+  boardShare?: Prisma.BoardShareOmit
   notification?: Prisma.NotificationOmit
   station?: Prisma.StationOmit
   stationTime?: Prisma.StationTimeOmit

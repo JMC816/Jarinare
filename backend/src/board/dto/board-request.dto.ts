@@ -99,3 +99,9 @@ export class ToggleBoardLikeDto {
   @IsInt()
   boardId!: number;
 }
+
+export class BookmarkBoardDto {
+  @ApiProperty()
+  @IsInt()
+  boardId!: number;
+}

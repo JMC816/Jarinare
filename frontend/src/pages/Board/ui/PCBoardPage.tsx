@@ -15,6 +15,7 @@ import {
 import { useBoardCounts } from '@/features/Board/hooks/useBoardCounts';
 import { useBoardRead } from '@/features/Board/hooks/useBoardRead';
 import { useTopViewedPost } from '@/features/Board/hooks/useTopViewedPost';
+import { useBookmark } from '@/features/Board/hooks/useBookmark';
 import TravelReviewTicker from '@/widgets/TravelReview/ui/TravelReviewTicker';
 
 const PCBoardPage = () => {
@@ -43,11 +44,13 @@ const PCBoardPage = () => {
   const { counts } = useBoardCounts();
   const { readIds } = useBoardRead();
   const { topPosts } = useTopViewedPost(3);
+  const { bookmarkIds } = useBookmark();
   const countMap: Record<string, number> = {
     notice: counts.notice,
     event: counts.event,
     board: counts.free,
     review: counts.review,
+    favorites: bookmarkIds.length,
   };
 
   return (
@@ -82,7 +85,7 @@ const PCBoardPage = () => {
               </div>
 
               {/* 2열 그리드 — 왼쪽 4fr(통합게시판), 오른쪽 1fr(카테고리) */}
-              <div className="grid grid-cols-[4fr_1fr] items-start gap-6">
+              <div className="grid grid-cols-[4fr_1fr] items-stretch gap-6">
                 {/* [col1] 통합게시판 */}
                 <div
                   className="flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm"
@@ -375,10 +378,33 @@ const PCBoardPage = () => {
                 {/* [col2] 실시간 인기 + 카테고리 */}
                 <div className="flex min-w-0 flex-col gap-6">
                   {/* 실시간 인기 */}
-                  <div className="flex flex-col overflow-hidden rounded-xl bg-white p-5 shadow-sm">
+                  <div className="flex flex-col rounded-xl bg-white p-5 shadow-sm">
                     <div className="mb-4 flex items-center gap-2">
                       <span className="text-lg">🔥</span>
                       <h2 className="text-lg font-bold text-gray-800">실시간 인기</h2>
+                      <div className="group relative flex items-center">
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#9ca3af"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="cursor-pointer"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <div className="pointer-events-none absolute left-5 top-0 z-10 w-48 rounded-lg bg-gray-800 px-3 py-2 text-sm leading-relaxed text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+                          <p className="mb-1 font-bold">인기지수 산정 기준</p>
+                          <p>좋아요 수</p>
+                          <p>+ 공유 수 (1인 1회)</p>
+                          <p>+ 즐겨찾기 수 (1인 1회)</p>
+                        </div>
+                      </div>
                     </div>
                     <div className="flex flex-col divide-y divide-gray-100">
                       {Array.from({ length: 3 }).map((_, i) => {
@@ -401,7 +427,7 @@ const PCBoardPage = () => {
                             key={post.id}
                             onClick={() =>
                               navigate(`/board/${post.id}?type=${post.type}`, {
-                                state: { [detailStateKey]: { id: post.id, title: post.title, author: post.author, views: post.views } },
+                                state: { [detailStateKey]: { id: post.id, title: post.title, author: post.author } },
                               })
                             }
                             className="flex w-full items-start gap-2.5 overflow-hidden py-3 text-left"
@@ -410,10 +436,9 @@ const PCBoardPage = () => {
                               {i + 1}
                             </span>
                             <div className="flex min-w-0 flex-col gap-0.5">
-                              <span className="truncate text-sm font-semibold text-gray-800">{post.title}</span>
-                              <span className="text-[10px] text-gray-400">
-                                {post.type === 'free' ? '자유' : post.type === 'event' ? '이벤트' : '공지'} · 조회{' '}
-                                {post.views}
+                              <span className="truncate text-base font-semibold text-gray-800">{post.title}</span>
+                              <span className="text-xs text-gray-400">
+                                {post.type === 'free' ? '자유' : post.type === 'event' ? '이벤트' : post.type === 'review' ? '후기' : '공지'} · 인기지수 {post.score}
                               </span>
                             </div>
                           </button>

@@ -8,6 +8,7 @@ import { BoardPost } from '@/entities/Board/types/boardType';
 import { useDeletePost } from '@/features/Board/hooks/useDeletePost';
 import { useLikeBoard } from '@/features/Board/hooks/useLikeBoard';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
+import { useBookmark } from '@/features/Board/hooks/useBookmark';
 
 export const useBoardDetailPage = (post: BoardPost | undefined) => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const useBoardDetailPage = (post: BoardPost | undefined) => {
   const { likedMap, likesMap, handleClickLike } = useLikeBoard(postItems);
   const { deletePost } = useDeletePost();
   const { user: currentUser } = useCurrentUser();
+  const { isBookmarked, toggleBookmark } = useBookmark(currentPost?.id);
 
   const isOwner = !!currentUser?.name && currentUser.name === currentPost?.author;
   const isLiked = likedMap[postDocId] ?? false;
@@ -39,6 +41,11 @@ export const useBoardDetailPage = (post: BoardPost | undefined) => {
     handleClickLike(postDocId);
   };
 
+  const handleBookmark = () => {
+    if (!currentPost) return;
+    toggleBookmark(currentPost.id);
+  };
+
   return {
     currentPost,
     postDocId,
@@ -49,5 +56,7 @@ export const useBoardDetailPage = (post: BoardPost | undefined) => {
     setMenuOpen,
     handleDelete,
     handleLike,
+    isBookmarked,
+    handleBookmark,
   };
 };

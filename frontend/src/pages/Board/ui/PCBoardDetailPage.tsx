@@ -43,12 +43,12 @@ const LinkIcon = () => (
   </svg>
 );
 
-const StarIcon = () => (
+const StarIcon = ({ filled }: { filled: boolean }) => (
   <svg
     width="16"
     height="16"
     viewBox="0 0 24 24"
-    fill="none"
+    fill={filled ? 'currentColor' : 'none'}
     stroke="currentColor"
     strokeWidth="2"
     strokeLinecap="round"
@@ -122,6 +122,10 @@ const PCBoardDetailPage = ({ post: propPost }: { post?: BoardPost }) => {
     handleDelete,
     handleEdit,
     handleLike,
+    handleShare,
+    copied,
+    isBookmarked,
+    handleBookmark,
   } = usePCBoardDetailPage(post);
 
   if (!currentPost) {
@@ -268,13 +272,19 @@ const PCBoardDetailPage = ({ post: propPost }: { post?: BoardPost }) => {
                       <span>좋아요</span>
                       <span className="text-xs">{likesCount}</span>
                     </button>
-                    <button className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-500 transition-colors hover:bg-lightBlue hover:text-blue">
+                    <button
+                      onClick={handleShare}
+                      className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${copied ? 'border-green-400 bg-green-50 text-green-600' : 'border-gray-200 bg-white text-gray-500 hover:bg-lightBlue hover:text-blue'}`}
+                    >
                       <LinkIcon />
-                      <span>공유</span>
+                      <span>{copied ? '복사됨' : '공유'}</span>
                     </button>
-                    <button className="flex items-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-500 transition-colors hover:bg-yellow-50 hover:text-yellow-500">
-                      <StarIcon />
-                      <span>즐겨찾기</span>
+                    <button
+                      onClick={handleBookmark}
+                      className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${isBookmarked ? 'border-yellow-400 bg-yellow-50 text-yellow-500' : 'border-gray-200 bg-white text-gray-500 hover:border-yellow-400 hover:bg-yellow-50 hover:text-yellow-500'}`}
+                    >
+                      <StarIcon filled={isBookmarked} />
+                      <span>{isBookmarked ? '저장됨' : '즐겨찾기'}</span>
                     </button>
                   </div>
                 </div>

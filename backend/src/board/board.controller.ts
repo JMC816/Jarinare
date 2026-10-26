@@ -22,6 +22,7 @@ import {
   UpdateBoardDto,
   DeleteBoardDto,
   ToggleBoardLikeDto,
+  BookmarkBoardDto,
 } from "./dto/board-request.dto";
 
 @ApiTags("board")
@@ -110,5 +111,36 @@ export class BoardController {
   @ApiOperation({ summary: "내가 읽은 게시물 ID 목록" })
   getReadBoardIds(@CurrentUser() user: AuthUser) {
     return this.boardService.getReadBoardIds(user);
+  }
+
+  @ApiBearerAuth()
+  @Post("share/:boardId")
+  @ApiOperation({ summary: "게시물 공유 카운트 증가 (1인 1회)" })
+  incrementShare(
+    @Param("boardId", ParseIntPipe) boardId: number,
+    @CurrentUser() user: AuthUser,
+  ) {
+    return this.boardService.incrementShare(boardId, user);
+  }
+
+  @ApiBearerAuth()
+  @Post("bookmarks")
+  @ApiOperation({ summary: "게시물 즐겨찾기 토글" })
+  toggleBookmark(@Body() dto: BookmarkBoardDto, @CurrentUser() user: AuthUser) {
+    return this.boardService.toggleBookmark(dto, user);
+  }
+
+  @ApiBearerAuth()
+  @Get("bookmarks/me")
+  @ApiOperation({ summary: "내 즐겨찾기 게시물 ID 목록" })
+  getBookmarkIds(@CurrentUser() user: AuthUser) {
+    return this.boardService.getBookmarkIds(user);
+  }
+
+  @ApiBearerAuth()
+  @Get("bookmarks/posts")
+  @ApiOperation({ summary: "내 즐겨찾기 게시물 목록" })
+  getBookmarkedPosts(@CurrentUser() user: AuthUser) {
+    return this.boardService.getBookmarkedPosts(user);
   }
 }

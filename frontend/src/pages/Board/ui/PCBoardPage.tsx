@@ -400,7 +400,8 @@ const PCBoardPage = () => {
                         </svg>
                         <div className="pointer-events-none absolute left-5 top-0 z-10 w-48 rounded-lg bg-gray-800 px-3 py-2 text-sm leading-relaxed text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
                           <p className="mb-1 font-bold">인기지수 산정 기준</p>
-                          <p>좋아요 수</p>
+                          <p>조회 수</p>
+                          <p>+ 좋아요 수</p>
                           <p>+ 공유 수 (1인 1회)</p>
                           <p>+ 즐겨찾기 수 (1인 1회)</p>
                         </div>

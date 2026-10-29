@@ -444,7 +444,7 @@ export class BoardService {
         id: Number(b.id),
         title: b.title,
         author: b.author.name,
-        score: Number(b.liked) + b.shareCount + b._count.bookmarks,
+        score: Number(b.liked) + b.shareCount + b._count.bookmarks + b.viewCount,
         type: b.type.toLowerCase(),
       }))
       .sort((a, b) => b.score - a.score)

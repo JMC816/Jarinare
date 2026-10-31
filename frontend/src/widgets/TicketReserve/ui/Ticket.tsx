@@ -9,7 +9,7 @@ export const Ticket = () => {
   return (
     <>
       <ReserveTitle text="내 승차권" />
-      <div className="mb-[20px]">
+      <div className="mb-[20px] w-full">
         <ReserveTicket />
       </div>
     </>

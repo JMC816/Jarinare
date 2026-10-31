@@ -81,13 +81,15 @@ const EventDetailPage = () => {
       {/* 모바일 버전 */}
       <div className="flex h-screen w-full flex-col lg:hidden">
         {/* 헤더 */}
-        <div className="flex w-full items-center justify-between border-b border-gray-200 bg-white px-4 py-4 pl-[28px] pr-[27px]">
-          <img
-            onClick={() => navigate(-1)}
-            src={backward}
-            className="h-[20px] w-[12px] cursor-pointer"
-          />
-          <h1 className="text-lg font-bold">이벤트</h1>
+        <div className="flex w-full items-center justify-between px-[28px] pt-[20px]">
+          <div className="flex items-center gap-3">
+            <img
+              onClick={() => navigate(-1)}
+              src={backward}
+              className="h-[20px] w-[12px] cursor-pointer"
+            />
+            <span className="text-base font-bold">이벤트</span>
+          </div>
           {isOwner ? (
             <div className="relative">
               <button

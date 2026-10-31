@@ -20,14 +20,15 @@ const NoticeDetailPage = () => {
   return (
     <div className="flex h-screen w-full flex-col">
       {/* 헤더 */}
-      <div className="flex w-full items-center justify-between border-b border-gray-200 bg-white px-4 py-4 pl-[28px] pr-[27px]">
-        <img
-          onClick={() => navigate(-1)}
-          src={backward}
-          className="h-[20px] w-[12px] cursor-pointer"
-        />
-        <h1 className="text-lg font-bold">공지사항</h1>
-        <div className="w-[12px]" />
+      <div className="flex w-full items-center px-[28px] pt-[20px]">
+        <div className="flex items-center gap-3">
+          <img
+            onClick={() => navigate(-1)}
+            src={backward}
+            className="h-[20px] w-[12px] cursor-pointer"
+          />
+          <span className="text-base font-bold">공지사항</span>
+        </div>
       </div>
 
       {/* 게시글 내용 */}

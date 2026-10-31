@@ -11,8 +11,8 @@ type SortOrder = 'newest' | 'oldest';
 const GiftIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="72"
-    height="72"
+    width="48"
+    height="48"
     viewBox="0 0 24 24"
     fill="none"
     stroke="#3b82f6"
@@ -52,7 +52,7 @@ const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
 ];
 
 const EventCardTop = () => (
-  <div className="flex w-full items-center justify-center bg-blue/10 py-10">
+  <div className="flex w-full items-center justify-center bg-blue/10 py-4">
     <GiftIcon />
   </div>
 );
@@ -236,11 +236,11 @@ export const Event = ({
                   onClick={() => navigate(`/board/${event.id}?type=event`, { state: { event } })}
                 >
                   <EventCardTop />
-                  <div className="p-5">
-                    <span className="mb-2 inline-block rounded px-2 py-0.5 text-xs font-bold" style={{ backgroundColor: '#fef9c3', color: '#ca8a04' }}>이벤트</span>
+                  <div className="p-3">
+                    <span className="mb-1 inline-block rounded px-2 py-0.5 text-xs font-bold" style={{ backgroundColor: '#fef9c3', color: '#ca8a04' }}>이벤트</span>
                     <h3 className="line-clamp-2 text-xs font-bold text-gray-900">{event.title}</h3>
-                    <div className="mt-3 text-xs text-gray-400">{formatBoardTime(event.createdAt)}</div>
-                    <div className="mt-1.5 text-xs text-gray-500">{event.author}</div>
+                    <div className="mt-2 text-xs text-gray-400">{formatBoardTime(event.createdAt)}</div>
+                    <div className="mt-1 text-xs text-gray-500">{event.author}</div>
                   </div>
                 </div>
               ))}

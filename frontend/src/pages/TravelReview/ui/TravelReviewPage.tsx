@@ -99,13 +99,15 @@ const TravelReviewPage = () => {
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-gray-100">
       {/* 헤더 */}
-      <div className="flex w-full shrink-0 items-center gap-4 bg-blue px-[28px] py-4">
-        <img
-          onClick={() => navigate(-1)}
-          src={backward}
-          className="h-[20px] w-[12px] cursor-pointer brightness-0 invert"
-        />
-        <span className="text-lg font-bold text-white">{city} 후기</span>
+      <div className="flex w-full shrink-0 items-center bg-blue px-[28px] pt-[20px]">
+        <div className="flex items-center gap-3">
+          <img
+            onClick={() => navigate(-1)}
+            src={backward}
+            className="h-[20px] w-[12px] cursor-pointer brightness-0 invert"
+          />
+          <span className="text-base font-bold text-white">{city} 후기</span>
+        </div>
       </div>
 
       {/* 평균 별점 */}

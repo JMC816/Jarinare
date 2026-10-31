@@ -14,13 +14,15 @@ const NoticeListPage = () => {
       </div>
       <div className="flex h-screen w-full flex-col bg-gray-100 lg:hidden">
         {/* 헤더 */}
-        <div className="flex w-full items-center bg-white px-[27px] py-4 shadow-sm">
-          <img
-            onClick={() => navigate(-1)}
-            src={backward}
-            className="h-[20px] w-[12px] cursor-pointer"
-          />
-          <h1 className="ml-4 text-lg font-bold">공지사항</h1>
+        <div className="flex w-full items-center px-[28px] pt-[20px]">
+          <div className="flex items-center gap-3">
+            <img
+              onClick={() => navigate(-1)}
+              src={backward}
+              className="h-[20px] w-[12px] cursor-pointer"
+            />
+            <span className="text-base font-bold">공지사항</span>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto pb-[80px]">

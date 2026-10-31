@@ -90,14 +90,14 @@ const TravelReviewListPage = () => {
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-gray-100">
       {/* 헤더 */}
-      <div className="flex w-full shrink-0 items-center justify-between bg-gray-100 px-[28px] py-4">
-        <div className="flex items-center gap-4">
+      <div className="flex w-full shrink-0 items-center justify-between bg-gray-100 px-[28px] pb-4 pt-[20px]">
+        <div className="flex items-center gap-3">
           <img
             onClick={() => navigate(-1)}
             src={backward}
             className="h-[20px] w-[12px] cursor-pointer"
           />
-          <h1 className="text-lg font-bold">여행지 후기</h1>
+          <span className="text-base font-bold">여행지 후기</span>
         </div>
         <button
           onClick={() => setShowForm((v) => !v)}

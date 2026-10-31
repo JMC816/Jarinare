@@ -45,7 +45,7 @@ const TicketListPage = () => {
       <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
         <BackWardPageButton />
         <div className="mt-5 flex w-full items-baseline justify-between">
-          <span className="text-lg font-bold">내 승차권</span>
+          <span className="text-base font-bold">내 승차권</span>
           {!isEmpty && (
             <span className="text-sm text-gray-400">예정된 승차권 {upcomingCount}권</span>
           )}

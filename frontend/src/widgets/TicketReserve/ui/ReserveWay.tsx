@@ -2,8 +2,6 @@ import { reserveConstants } from '../constants/ReserveConstants';
 import useModalStore from '@/widgets/model/ReserveStore';
 import { trainDataStore } from '@/features/TicketReserve/model/trainDataStore';
 import ReserveButton from './ReserveButton';
-import { useState } from 'react';
-import calendar from '@/assets/icons/calendar.png';
 
 const SwapIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
@@ -25,13 +23,11 @@ const SwapIcon = () => (
 );
 
 const ReserveWay = () => {
-  const [isRoundTrip, setIsRoundTrip] = useState(false);
   const { openModal } = useModalStore();
   const {
     startStationForView,
     endStationForView,
     startDayForView,
-    endDayForView,
     kid,
     adult,
     setStartStation,
@@ -64,22 +60,11 @@ const ReserveWay = () => {
 
   return (
     <div className="flex w-full flex-col gap-y-3 rounded-2xl bg-white px-4 py-4 shadow-sm">
-      {/* 승차권 예매 / 왕복 */}
-      <div className="flex items-center justify-between">
+      {/* 승차권 예매 */}
+      <div className="flex items-center">
         <span className="ml-[15px] text-base font-bold text-gray-800">
           승차권 예매
         </span>
-        <button
-          type="button"
-          onClick={() => setIsRoundTrip((v) => !v)}
-          className={`rounded-full border px-3 py-1 text-xs font-bold transition-colors ${
-            isRoundTrip
-              ? 'border-blue bg-blue text-white'
-              : 'border-gray-300 bg-white text-gray-400'
-          }`}
-        >
-          왕복
-        </button>
       </div>
 
       {/* 구분선 */}
@@ -135,47 +120,9 @@ const ReserveWay = () => {
           </div>
         </button>
 
-        {/* 왕복: 오는날 / 편도: 인원 */}
-        {isRoundTrip ? (
-          <button
-            onClick={() => openModal('ReturnDayModal')}
-            className="flex h-[52px] flex-1 items-center gap-x-2 rounded-2xl bg-gray-100 px-3 shadow-sm transition-all active:brightness-95"
-          >
-            <img width={18} height={18} src={calendar} />
-            <div className="flex flex-col items-start">
-              <span className="text-xs text-mediumGray">오는날</span>
-              <span
-                className={`text-sm font-bold ${!endDayForView ? 'text-mediumGray' : 'text-black'}`}
-              >
-                {endDayForView || '선택'}
-              </span>
-            </div>
-          </button>
-        ) : (
-          <button
-            onClick={() => openModal(countItem.modalType)}
-            className="flex h-[52px] flex-1 items-center gap-x-2 rounded-2xl bg-gray-100 px-3 shadow-sm transition-all active:brightness-95"
-          >
-            <img width={18} height={18} src={countItem.icon} />
-            <div className="flex flex-col items-start">
-              <span className="text-xs text-mediumGray">
-                {countItem.attribute}
-              </span>
-              <span
-                className={`text-sm font-bold ${adult + kid === 0 ? 'text-mediumGray' : 'text-black'}`}
-              >
-                {adult + kid > 0 ? `${adult + kid}명` : '선택'}
-              </span>
-            </div>
-          </button>
-        )}
-      </div>
-
-      {/* 왕복일 때만 인원 단독 행 */}
-      {isRoundTrip && (
         <button
           onClick={() => openModal(countItem.modalType)}
-          className="flex h-[52px] w-full items-center gap-x-2 rounded-2xl bg-gray-100 px-3 shadow-sm transition-all active:brightness-95"
+          className="flex h-[52px] flex-1 items-center gap-x-2 rounded-2xl bg-gray-100 px-3 shadow-sm transition-all active:brightness-95"
         >
           <img width={18} height={18} src={countItem.icon} />
           <div className="flex flex-col items-start">
@@ -189,7 +136,7 @@ const ReserveWay = () => {
             </span>
           </div>
         </button>
-      )}
+      </div>
 
       {/* 조회 버튼 */}
       <ReserveButton

@@ -4,11 +4,20 @@
  */
 import { Link } from 'react-router-dom';
 import { MenuConstants } from '../constants/MenuConstants';
+import backward from '@/assets/icons/backward.png';
+import { useBackButton } from '@/widgets/layouts/hooks/BackWardHook';
 
 const MenuPage = () => {
+  const { onClick: goBack } = useBackButton();
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-100 px-[28px]">
-      <span className="mt-[60px] w-full text-lg font-bold">메뉴</span>
+      <div className="flex w-full items-center pt-[20px]">
+        <div className="flex items-center gap-3">
+          <img onClick={goBack} src={backward} className="h-[20px] w-[12px] cursor-pointer" />
+          <span className="text-base font-bold">메뉴</span>
+        </div>
+      </div>
       <div className="mt-[20px] flex w-full flex-col gap-y-3">
         {MenuConstants().map(({ text, link, icon, subItems }, idx) => {
           if (subItems) {

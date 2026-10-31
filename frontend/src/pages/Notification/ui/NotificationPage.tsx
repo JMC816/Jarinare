@@ -5,8 +5,6 @@ import useModalStore from '@/widgets/model/Notification';
 import Modal from '@/widgets/Notification/ui/Modal';
 import BackendNotificationItem from '@/widgets/Notification/ui/BackendNotificationItem';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
-import setting from '@/assets/icons/setting.png';
-import { Link } from 'react-router-dom';
 
 const NotificationPage = () => {
   const { isShow, modalType } = useModalStore();
@@ -16,7 +14,7 @@ const NotificationPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-gray-100">
-      <div className="flex w-full items-center justify-between px-[28px] pt-[20px]">
+      <div className="flex w-full items-center px-[28px] pt-[20px]">
         <div className="flex items-center gap-3">
           <img
             onClick={goBack}
@@ -25,20 +23,17 @@ const NotificationPage = () => {
           />
           <span className="text-base font-bold">알림</span>
         </div>
-        <Link to={'/setting'}>
-          <img width={27} height={27} src={setting} />
-        </Link>
       </div>
-      <p className="mt-[16px] w-full px-[10px] text-xs text-gray-400">
+      <p className="mt-[16px] w-full px-[28px] text-xs text-gray-400">
         이전 달부터 이번 달까지의 알림을 표시합니다.
       </p>
       <span
         onClick={async () => { await markAllAsRead(); }}
-        className="mt-[8px] flex w-full cursor-pointer justify-end pr-[10px] text-tiny text-darkGray underline"
+        className="mt-[8px] flex w-full cursor-pointer justify-end pr-[28px] text-tiny text-darkGray underline"
       >
         모두 읽음
       </span>
-      <div className="mt-[5px] w-full">
+      <div className="mt-[5px] w-full px-[28px]">
         {notifications.map((n) => (
           <BackendNotificationItem
             key={n.id}

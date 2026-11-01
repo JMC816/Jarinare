@@ -19,7 +19,7 @@ const MenuPage = () => {
         </div>
       </div>
       <div className="mt-[20px] flex w-full flex-col">
-        {MenuConstants().map(({ text, link, icon, subItems }, idx) => {
+        {MenuConstants().map(({ text, link, subItems }, idx) => {
           if (subItems) {
             return (
               <div key={idx} className="flex flex-col">

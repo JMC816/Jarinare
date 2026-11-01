@@ -7,7 +7,6 @@ import useModalStore from '@/widgets/model/ReserveStore';
 import Modal from '@/widgets/TicketReserve/ui/Modal';
 import SeatCheckList from '@/widgets/TicketReserve/ui/SeatCheckList';
 import SeatCheckMenu from '@/widgets/TicketReserve/ui/SeatCheckMenu';
-import SeatCheckState from '@/widgets/TicketReserve/ui/SeatCheckState';
 import PCSeatCheckPage from './PCSeatCheckPage';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

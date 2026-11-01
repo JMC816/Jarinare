@@ -10,7 +10,7 @@ import PCMyPage from './PCMyPage';
 const MyPage = () => {
   const { isShow, modalType } = useModalStore();
   const { point } = useGetPoint();
-  const { navigate } = useNaviation();
+  useNaviation();
 
   return (
     <>

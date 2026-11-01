@@ -13,7 +13,7 @@ const NotificationPage = () => {
   const { user: _user } = useCurrentUser();
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100">
+    <div className="flex min-h-screen w-full flex-col items-center bg-gray-50">
       <div className="flex w-full items-center px-[28px] pt-[20px]">
         <div className="flex items-center gap-3">
           <img
@@ -24,16 +24,18 @@ const NotificationPage = () => {
           <span className="text-base font-bold">알림</span>
         </div>
       </div>
-      <p className="mt-[16px] w-full px-[28px] text-xs text-gray-400">
-        이전 달부터 이번 달까지의 알림을 표시합니다.
-      </p>
-      <span
-        onClick={async () => { await markAllAsRead(); }}
-        className="mt-[8px] flex w-full cursor-pointer justify-end pr-[28px] text-tiny text-darkGray underline"
-      >
-        모두 읽음
-      </span>
-      <div className="mt-[5px] w-full px-[28px]">
+      <div className="mt-[16px] flex w-full items-center justify-between px-[28px]">
+        <p className="text-xs text-gray-400">
+          이전 달부터 이번 달까지의 알림을 표시합니다.
+        </p>
+        <span
+          onClick={async () => { await markAllAsRead(); }}
+          className="shrink-0 cursor-pointer text-tiny text-darkGray underline"
+        >
+          모두 읽음
+        </span>
+      </div>
+      <div className="mt-[12px] w-full px-[28px]">
         {notifications.map((n) => (
           <BackendNotificationItem
             key={n.id}

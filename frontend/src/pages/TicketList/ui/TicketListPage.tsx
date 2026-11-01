@@ -42,7 +42,7 @@ const TicketListPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 pl-[28px] pr-[27px] lg:hidden">
         <BackWardPageButton />
         <div className="mt-5 flex w-full items-baseline justify-between">
           <span className="text-base font-bold">내 승차권</span>

@@ -8,6 +8,7 @@ import on_user from '@/assets/icons/on_user.png';
 import returned from '@/assets/icons/returned.png';
 import on_key from '@/assets/icons/on_key.png';
 import join from '@/assets/icons/join.png';
+import point_check from '@/assets/icons/point_check.png';
 import type { MenuItem } from '../types/menuType';
 
 export const BOARD_SUB_ITEMS = [
@@ -22,6 +23,7 @@ export const MenuConstants = (): MenuItem[] => {
   if (isLoggedIn) {
     return [
       { text: '마이페이지', link: '/mypage', icon: on_user },
+      { text: '결제/포인트 내역', link: '/history', icon: point_check },
       { text: '승차권 반환', link: '/returnlist', icon: returned },
       { text: '게시판', icon: on_board, subItems: BOARD_SUB_ITEMS },
     ];

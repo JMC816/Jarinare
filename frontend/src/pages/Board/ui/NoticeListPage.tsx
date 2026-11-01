@@ -12,7 +12,7 @@ const NoticeListPage = () => {
       <div className="hidden w-full lg:block">
         <PCNoticeListPage />
       </div>
-      <div className="flex h-screen w-full flex-col bg-gray-100 lg:hidden">
+      <div className="flex h-screen w-full flex-col bg-gray-50 lg:hidden">
         {/* 헤더 */}
         <div className="flex w-full items-center px-[28px] pt-[20px]">
           <div className="flex items-center gap-3">

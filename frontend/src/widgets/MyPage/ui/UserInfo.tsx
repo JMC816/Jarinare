@@ -5,6 +5,7 @@ import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 import { useQueryClient } from '@tanstack/react-query';
 import { resetBackendNotifications } from '@/features/Notification/hooks/useBackendNotifications';
 import { useBackendNotificationStore } from '@/features/Notification/models/backendNotificationStore';
+import { getProfileColor } from '@/shared/lib/profileColor';
 
 const UserInfo = () => {
   const { user, isLoggedIn } = useCurrentUser();
@@ -31,7 +32,10 @@ const UserInfo = () => {
   return (
     <div className="flex w-full items-center gap-x-4 px-1 py-2">
       {/* 이니셜 아바타 */}
-      <div className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-xl bg-gray-300">
+      <div
+        className="flex h-[48px] w-[48px] shrink-0 items-center justify-center rounded-xl"
+        style={{ backgroundColor: getProfileColor(displayName) }}
+      >
         <span className="text-xl font-bold text-white">{initial}</span>
       </div>
 

@@ -29,7 +29,7 @@ const TicketReturnPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 pl-[28px] pr-[27px] lg:hidden">
         <BackWardPageButton />
         <span className="mt-5 w-full text-lg font-bold">승차권 반환</span>
         {!isLoggedIn ? (

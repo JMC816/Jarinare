@@ -4,14 +4,13 @@
  */
 import ReserveTitle from './ReserveTitle';
 import { useRecommendDestination } from '../hooks/useRecommendDestination';
-import { AGES } from '../constants/RecommendConstants';
+import { CITY_HIGHLIGHTS } from '../constants/PCDestinationConstants';
 
 const RecommendDestination = () => {
   const {
     selected,
     setSelected,
     detailCity,
-    detailStat,
     filtered,
     handleCardClick,
     categories,
@@ -43,12 +42,16 @@ const RecommendDestination = () => {
       <div className="flex-1 overflow-y-auto pb-4">
         {/* 여행지 그리드 */}
         <div className="mb-3 grid w-full grid-cols-3 gap-3 p-1">
-          {filtered.map(({ city, desc, gradient, emoji }) => (
+          {filtered.map(({ city, desc, gradient, emoji, image }) => (
             <div
               key={city}
-              className="relative flex flex-col justify-between rounded-2xl p-3 shadow-sm active:brightness-90"
+              className="relative flex flex-col justify-between rounded-xl p-3 shadow-sm active:brightness-90"
               style={{
-                background: gradient,
+                backgroundImage: image
+                  ? `linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.6)), url(${image})`
+                  : `linear-gradient(135deg, ${gradient}, ${gradient}cc)`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
                 height: '120px',
                 cursor: 'pointer',
                 transform: detailCity === city ? 'scale(1.05)' : 'scale(1)',
@@ -74,112 +77,20 @@ const RecommendDestination = () => {
           ))}
         </div>
 
-        {/* 상세 통계 카드 */}
-        {detailCity && (
+        {/* 여행지 특징 카드 */}
+        {detailCity && (CITY_HIGHLIGHTS[detailCity] ?? []).length > 0 && (
           <div className="mb-4 w-full rounded-2xl bg-white p-4 shadow-sm">
-            <p className="mb-3 text-sm font-bold text-gray-800">
-              {detailCity} 방문 통계
-            </p>
-
-            {detailStat ? (
-              <div className="flex flex-col gap-y-4">
-                {/* 성별 분포 */}
-                <div className="flex flex-col gap-y-2">
-                  <span className="text-xs font-bold text-gray-500">
-                    성별 분포
-                  </span>
-                  {(() => {
-                    // 남녀 인원 기준 비율 계산
-                    const male = detailStat.byGender['남자'] ?? 0;
-                    const female = detailStat.byGender['여자'] ?? 0;
-                    const total = male + female;
-                    if (total === 0)
-                      return (
-                        <p className="text-xs text-gray-400">
-                          데이터가 없습니다.
-                        </p>
-                      );
-                    const malePct = Math.round((male / total) * 100);
-                    const femalePct = 100 - malePct;
-                    return (
-                      <>
-                        <div className="flex h-5 w-full overflow-hidden rounded-full">
-                          <div
-                            className="flex items-center justify-center bg-blue text-[10px] font-bold text-white"
-                            style={{ width: `${malePct}%` }}
-                          >
-                            {malePct > 15 ? `남 ${malePct}%` : ''}
-                          </div>
-                          <div
-                            className="flex items-center justify-center bg-pink-400 text-[10px] font-bold text-white"
-                            style={{ width: `${femalePct}%` }}
-                          >
-                            {femalePct > 15 ? `여 ${femalePct}%` : ''}
-                          </div>
-                        </div>
-                        <div className="flex gap-x-3">
-                          <div className="flex items-center gap-x-1">
-                            <div className="h-2 w-2 rounded-full bg-blue" />
-                            <span className="text-xs text-gray-500">
-                              남자 {male.toLocaleString('ko-KR')}명
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-x-1">
-                            <div className="h-2 w-2 rounded-full bg-pink-400" />
-                            <span className="text-xs text-gray-500">
-                              여자 {female.toLocaleString('ko-KR')}명
-                            </span>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
-
-                {/* 나이대별 분포 */}
-                <div className="flex flex-col gap-y-2">
-                  <span className="text-xs font-bold text-gray-500">
-                    나이대별 분포
-                  </span>
-                  <div className="flex flex-col gap-y-1.5">
-                    {(() => {
-                      // 최대값 기준 상대 진행률 계산
-                      const max = Math.max(
-                        ...AGES.map((a) => detailStat.byAge[a] ?? 0),
-                        1,
-                      );
-                      return AGES.map((age) => {
-                        const cnt = detailStat.byAge[age] ?? 0;
-                        const pct = Math.round((cnt / max) * 100);
-                        return (
-                          <div key={age} className="flex items-center gap-x-2">
-                            <span className="w-9 text-right text-[10px] text-gray-400">
-                              {age}
-                            </span>
-                            <div
-                              className="flex-1 overflow-hidden rounded-full bg-gray-100"
-                              style={{ height: '8px' }}
-                            >
-                              <div
-                                className="h-full rounded-full bg-blue"
-                                style={{ width: `${pct}%` }}
-                              />
-                            </div>
-                            <span className="w-8 text-[10px] text-gray-400">
-                              {cnt}명
-                            </span>
-                          </div>
-                        );
-                      });
-                    })()}
+            <div className="flex flex-col gap-2">
+              {(CITY_HIGHLIGHTS[detailCity] ?? []).map(({ emoji, title, desc: hdesc }) => (
+                <div key={title} className="flex items-start gap-3 rounded-xl bg-gray-50 p-3">
+                  <span className="text-xl">{emoji}</span>
+                  <div>
+                    <p className="text-sm font-bold text-gray-800">{title}</p>
+                    <p className="mt-0.5 text-xs leading-relaxed text-gray-400">{hdesc}</p>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <p className="text-center text-sm text-gray-400">
-                데이터가 없습니다.
-              </p>
-            )}
+              ))}
+            </div>
           </div>
         )}
       </div>

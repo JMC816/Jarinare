@@ -38,15 +38,17 @@ const BoardPage = () => {
       <div className="hidden w-full lg:block">
         <PCBoardPage />
       </div>
-      <div className="relative flex h-screen w-full flex-col bg-gray-100 lg:hidden">
+      <div className="relative flex h-screen w-full flex-col bg-gray-50 lg:hidden">
         {/* 헤더 */}
-        <div className="flex w-full items-center gap-4 bg-gray-100 px-[28px] py-4">
-          <img
-            onClick={() => navigate(-1)}
-            src={backward}
-            className="h-[20px] w-[12px] cursor-pointer"
-          />
-          <h1 className="text-lg font-bold">게시판</h1>
+        <div className="flex w-full items-center px-[28px] pt-[20px]">
+          <div className="flex items-center gap-3">
+            <img
+              onClick={() => navigate(-1)}
+              src={backward}
+              className="h-[20px] w-[12px] cursor-pointer"
+            />
+            <span className="text-base font-bold">게시판</span>
+          </div>
         </div>
 
         {/* 계절 할인 배너 */}

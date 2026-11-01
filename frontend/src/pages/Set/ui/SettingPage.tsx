@@ -33,8 +33,8 @@ const SettingPage = () => {
           />
         </div>
         {/* 모바일 */}
-        <div className="flex min-h-screen w-full flex-col bg-gray-100 lg:hidden">
-          <div className="bg-gray-100 px-[28px]">
+        <div className="flex min-h-screen w-full flex-col bg-gray-50 lg:hidden">
+          <div className="bg-gray-50 px-[28px]">
             <BackWardPageButton title="설정" />
           </div>
           <div className="flex flex-1 items-center justify-center pb-20">
@@ -103,15 +103,13 @@ const SettingPage = () => {
       </div>
 
       {/* 모바일 */}
-      <div className="flex min-h-screen w-full flex-col bg-gray-100 lg:hidden">
-        <div className="bg-gray-100 px-[28px]">
+      <div className="flex min-h-screen w-full flex-col bg-gray-50 lg:hidden">
+        <div className="bg-gray-50 px-[28px]">
           <BackWardPageButton title="설정" />
         </div>
 
-        <div className="mt-2 px-[28px]">
-          <p className="mb-3 text-xs font-bold text-gray-400">알림</p>
-
-          <div className="mb-3 overflow-hidden rounded-2xl bg-white shadow-sm">
+        <div className="mt-[16px] flex flex-col gap-3 px-[28px]">
+          <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
             <div className="flex items-center justify-between px-5 py-4">
               <div className="flex flex-col gap-0.5">
                 <span className="text-base font-bold text-gray-900">전체 알림</span>

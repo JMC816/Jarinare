@@ -41,18 +41,18 @@ const SeasonBanner = () => {
         </svg>
 
         {/* 콘텐츠 */}
-        <div className="relative flex items-center gap-4 px-5 py-3">
+        <div className="relative flex items-center gap-2 px-3 py-1.5 lg:gap-4 lg:px-5 lg:py-3">
           {/* 계절 아이콘 */}
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white/20 text-2xl shadow-inner">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/20 text-base shadow-inner lg:h-11 lg:w-11 lg:rounded-xl lg:text-2xl">
             {style.emoji}
           </div>
 
           {/* 텍스트 영역 */}
           <div className="flex flex-1 flex-col justify-center">
-            <p className="text-lg font-black text-white">
+            <p className="text-xs font-black text-white lg:text-lg">
               {season} 특별 기차여행 할인 이벤트
             </p>
-            <p className="mt-0.5 text-xs text-white/80">
+            <p className="mt-0.5 text-[10px] text-white/80 lg:text-xs">
               {season} 추천 역 {stations.length}곳 선택 시{' '}
               <span className="font-bold text-yellow-300 underline">
                 10% 즉시 할인
@@ -62,8 +62,8 @@ const SeasonBanner = () => {
           </div>
 
           {/* 자세히 보기 버튼 */}
-          <div className="flex shrink-0 items-center justify-center rounded-xl bg-white px-6 py-2 shadow-md">
-            <span className="text-sm font-bold text-blue">자세히 보기 ›</span>
+          <div className="flex shrink-0 items-center justify-center rounded-lg bg-white px-3 py-1 shadow-md lg:rounded-xl lg:px-6 lg:py-2">
+            <span className="text-[10px] font-bold text-blue lg:text-sm">자세히 보기 ›</span>
           </div>
         </div>
       </button>

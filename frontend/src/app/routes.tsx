@@ -31,6 +31,7 @@ import TrainCheckPage from '@/pages/TicketReserve/ui/TrainCheckPage';
 import SeatReturnPage from '@/pages/TicketReturn/ui/SeatReturnPage';
 import TicketReturnPage from '@/pages/TicketReturn/ui/TicketReturnPage';
 import SettingPage from '@/pages/Set/ui/SettingPage';
+import HistoryPage from '@/pages/History/ui/HistoryPage';
 import Modal from '@/shared/ui/Modal';
 import PCNotificationSidebar from '@/widgets/Notification/ui/PCNotificationSidebar';
 import HomeLayout from '@/widgets/layouts/ui/HomeLayout';
@@ -77,6 +78,7 @@ const Router = () => {
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/returnlist" element={<TicketReturnPage />} />
             <Route path="/setting" element={<SettingPage />} />
+            <Route path="/history" element={<HistoryPage />} />
           </Route>
           {/* 로그인 필수 페이지들 */}
           <Route element={<HomeLayout />}>

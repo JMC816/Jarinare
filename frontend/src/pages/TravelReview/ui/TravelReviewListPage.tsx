@@ -88,9 +88,9 @@ const TravelReviewListPage = () => {
   const showPagination = !showForm && isLoaded && totalPages > 1;
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-gray-100">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-gray-50">
       {/* 헤더 */}
-      <div className="flex w-full shrink-0 items-center justify-between bg-gray-100 px-[28px] pb-4 pt-[20px]">
+      <div className="flex w-full shrink-0 items-center justify-between bg-gray-50 px-[28px] pb-4 pt-[20px]">
         <div className="flex items-center gap-3">
           <img
             onClick={() => navigate(-1)}
@@ -267,7 +267,7 @@ const TravelReviewListPage = () => {
       {/* 페이지네이션 — NavBar 바로 위 */}
       {showPagination && (
         <div
-          className="flex shrink-0 items-center justify-center gap-4 border-t border-gray-200 bg-gray-100 py-3"
+          className="flex shrink-0 items-center justify-center gap-4 border-t border-gray-200 bg-gray-50 py-3"
           style={{ paddingBottom: 'calc(0.75rem + 80px)' }}
         >
           <button

@@ -11,29 +11,23 @@ const MenuPage = () => {
   const { onClick: goBack } = useBackButton();
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-gray-100 px-[28px]">
+    <div className="flex min-h-screen w-full flex-col bg-gray-50 px-[28px]">
       <div className="flex w-full items-center pt-[20px]">
         <div className="flex items-center gap-3">
           <img onClick={goBack} src={backward} className="h-[20px] w-[12px] cursor-pointer" />
           <span className="text-base font-bold">메뉴</span>
         </div>
       </div>
-      <div className="mt-[20px] flex w-full flex-col gap-y-3">
+      <div className="mt-[20px] flex w-full flex-col">
         {MenuConstants().map(({ text, link, icon, subItems }, idx) => {
           if (subItems) {
             return (
-              <div key={idx} className="flex flex-col gap-y-3">
-                <div className="flex items-center gap-x-2 px-1">
-                  <img width={18} height={18} src={icon} />
-                  <span className="text-sm font-bold text-gray-500">
-                    {text}
-                  </span>
-                </div>
+              <div key={idx} className="flex flex-col">
                 {subItems.map((sub) => (
                   <Link
                     key={sub.link}
                     to={sub.link}
-                    className="flex items-center rounded-xl bg-white px-4 py-4 shadow-sm active:brightness-95"
+                    className="flex items-center border-b border-gray-100 py-4 active:opacity-60"
                   >
                     <span className="text-base font-bold">{sub.text}</span>
                   </Link>
@@ -44,10 +38,9 @@ const MenuPage = () => {
           return (
             <Link
               to={link!}
-              className="flex items-center gap-x-3 rounded-xl bg-white px-4 py-4 shadow-sm active:brightness-95"
+              className="flex items-center border-b border-gray-100 py-4 active:opacity-60"
               key={idx}
             >
-              <img width={22} height={22} src={icon} />
               <span className="text-base font-bold">{text}</span>
             </Link>
           );

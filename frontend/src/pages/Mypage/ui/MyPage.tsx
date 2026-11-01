@@ -20,7 +20,7 @@ const MyPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex h-screen w-full flex-col overflow-y-auto bg-gray-100 lg:hidden">
+      <div className="flex h-screen w-full flex-col overflow-y-auto bg-gray-50 lg:hidden">
         {/* 상단 헤더 */}
         <div className="flex w-full flex-col px-[28px]">
           <BackWardPageButton title="마이페이지" />
@@ -31,24 +31,10 @@ const MyPage = () => {
           <UserInfo />
 
           {/* 포인트 카드 */}
-          <div
-            className="flex w-full flex-col justify-between rounded-xl bg-blue px-5 py-6 shadow-sm"
-            style={{ minHeight: '180px' }}
-          >
-            <div className="flex flex-col gap-y-4">
-              <span className="text-sm font-medium text-white">내 포인트</span>
-              <SlotNumber
-                value={point}
-                className="text-3xl font-bold text-white"
-              />
-            </div>
-            <div className="flex justify-end">
-              <button
-                onClick={() => navigate('/mypage/point')}
-                className="rounded-lg bg-white/20 px-4 py-2 text-sm font-bold text-white transition-all active:brightness-95"
-              >
-                더보기
-              </button>
+          <div className="flex w-full flex-col rounded-xl bg-blue px-5 py-6 shadow-sm">
+            <span className="text-sm font-medium text-white">내 포인트</span>
+            <div className="mt-4">
+              <SlotNumber value={point} className="text-3xl font-bold text-white" />
             </div>
           </div>
 

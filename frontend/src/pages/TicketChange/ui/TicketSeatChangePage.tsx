@@ -44,7 +44,7 @@ const TicketSeatChangePage = memo(() => {
   } = useTicketDetail(seats);
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-gray-100 px-6 pb-8">
+    <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 px-6 pb-8">
       <div className="w-full">
         <BackWardPageButton title="좌석 상세" />
       </div>

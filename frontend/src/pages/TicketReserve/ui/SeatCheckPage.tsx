@@ -19,7 +19,7 @@ const SeatCheckPage = () => {
   const navigate = useNavigate();
   const { handleAllSelect, seatsStateCount, isLocksLoaded } =
     useSeatQueryData();
-  const { selectKid, selectAdult } = trainDataStore();
+  const { selectKid, selectAdult, trainTypeForView, startStationForView, endStationForView } = trainDataStore();
   const { setSeatsState } = seatsStateStore();
 
   // 페이지 떠날 때 로컬 좌석 선택 초기화 + 선점 즉시 해제
@@ -52,41 +52,84 @@ const SeatCheckPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full min-w-[375px] flex-col items-center bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full min-w-[375px] flex-col items-center overflow-y-auto bg-gray-50 pb-4 pl-[28px] pr-[27px] lg:hidden">
         <BackWardPageButton title="좌석 선택" />
-        <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
-          <SeatCheckMenu />
-          <SeatCheckList />
-          <SeatCheckState />
+
+        {/* 타이틀 */}
+        <div className="mt-3 w-full">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold tracking-widest text-gray-400">TRAIN SELECTION</span>
+            <SeatCheckMenu />
+          </div>
+          <p className="mt-0.5 text-lg font-bold text-gray-900">{trainTypeForView}</p>
+          <p className="text-xs text-gray-400">{startStationForView} → {endStationForView}</p>
         </div>
-        <div className="mt-4 flex w-full gap-3"><button
-            onClick={isLocksLoaded && isAllLocked ? undefined : handleAllSelect}
-            className={`flex-1 rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
-              isLocksLoaded && isAllLocked
-                ? 'bg-gray-300'
-                : 'bg-blue active:brightness-95'
-            }`}
-          >
-            자동 선택
-          </button>
-          <button
-            onClick={
-              isAllSelected
-                ? isLoggedIn
-                  ? () => openModal('PayModal')
-                  : () => navigate('/auth/login')
-                : undefined
-            }
-            className={`flex-[2] rounded-2xl py-3.5 text-base font-bold text-white transition-colors ${
-              isAllSelected ? 'bg-blue active:brightness-95' : 'bg-gray-300'
-            }`}
-          >
-            {isAllSelected
-              ? isLoggedIn
-                ? '예매'
-                : '로그인하기'
-              : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
-          </button>
+
+        {/* 좌석 카드 */}
+        <div className="mt-3 w-full overflow-hidden rounded-2xl bg-white shadow-sm">
+          {/* 범례 헤더 */}
+          <div className="flex items-center justify-center border-b border-gray-100 bg-gray-50/50 px-4 py-3">
+            <div className="flex items-center gap-5">
+              <div className="flex items-center gap-1.5">
+                <div className="h-2.5 w-2.5 rounded-full bg-blue" />
+                <span className="text-xs font-semibold text-gray-600">선택됨</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="h-2.5 w-2.5 rounded-full bg-lightGray" />
+                <span className="text-xs font-semibold text-gray-600">이용 불가</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <div className="h-2.5 w-2.5 rounded-full border border-lightGray bg-white" />
+                <span className="text-xs font-semibold text-gray-600">이용 가능</span>
+              </div>
+            </div>
+          </div>
+          <div className="px-4 py-4">
+            <SeatCheckList />
+          </div>
+        </div>
+
+        {/* 하단 버튼 카드 */}
+        <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white shadow-sm">
+          <div className="flex items-center justify-between px-5 py-3">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] font-bold tracking-widest text-gray-400">SELECTED SEATS</span>
+              <span className="text-lg font-bold text-blue">
+                {seatsStateCount}
+                <span className="ml-1 text-xs font-normal text-gray-400">/ {selectKid + selectAdult} Seats</span>
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={isLocksLoaded && isAllLocked ? undefined : handleAllSelect}
+                className={`rounded-xl border px-4 py-2.5 text-xs font-bold transition-colors ${
+                  isLocksLoaded && isAllLocked
+                    ? 'border-gray-200 bg-white text-gray-300'
+                    : 'border-blue bg-white text-blue active:brightness-95'
+                }`}
+              >
+                자동 선택
+              </button>
+              <button
+                onClick={
+                  isAllSelected
+                    ? isLoggedIn
+                      ? () => openModal('PayModal')
+                      : () => navigate('/auth/login')
+                    : undefined
+                }
+                className={`rounded-xl px-6 py-2.5 text-xs font-bold text-white transition-colors ${
+                  isAllSelected ? 'bg-blue active:brightness-95' : 'bg-gray-300'
+                }`}
+              >
+                {isAllSelected
+                  ? isLoggedIn
+                    ? '예매'
+                    : '로그인하기'
+                  : `${seatsStateCount} / ${selectKid + selectAdult} 선택`}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

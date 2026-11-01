@@ -18,7 +18,7 @@ import PCTrainCheckPage from './PCTrainCheckPage';
 
 const TrainCheckPage = () => {
   const { isShow, modalType } = useModalStore();
-  const { startDayForView } = trainDataStore();
+  const { startDayForView, startStationForView, endStationForView } = trainDataStore();
 
   // 모달 초기 혼잡도 표시 오류 방지를 위해 좌석 데이터 사전 로딩
   useEffect(() => {
@@ -34,11 +34,12 @@ const TrainCheckPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full flex-col items-center overflow-y-hidden bg-gray-100 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full flex-col items-center overflow-y-hidden bg-gray-50 pl-[28px] pr-[27px] lg:hidden">
         <BackWardPageButton title="열차 조회" />
         <div className="mt-4 w-full">
           <span className="text-xs text-gray-400">출발 날짜</span>
           <p className="text-lg font-bold text-gray-900">{startDayForView}</p>
+          <span className="text-xs text-gray-400">{startStationForView} → {endStationForView}</span>
         </div>
         <TrainCheckTitle />
         <TrainCheckMenu />

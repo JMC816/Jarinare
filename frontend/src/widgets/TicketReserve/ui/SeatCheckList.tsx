@@ -1,117 +1,86 @@
+import loading from '@/assets/icons/loading.png';
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
-import Seat from './Seat';
-import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
 import { reserveConstants } from '../constants/ReserveConstants';
 import { seatsStateStore } from '@/features/TicketReserve/model/seatsStateStore';
 import { useResetSeatsState } from '@/features/TicketReserve/hooks/useResetSeatsState';
 
 const SeatCheckList = () => {
-  const { handleSingleSelect, seatsInfo, locks } = useSeatQueryData();
+  const { handleSingleSelect, seatsInfo, locks, isLocksLoaded } = useSeatQueryData();
   const { seatsState } = seatsStateStore();
   const { seatsRows } = reserveConstants();
 
-  // 호차 변경 시 좌석 선택 초기화
   useResetSeatsState();
 
   if (!seatsState)
     return (
-      <div className="mt-[15px] h-[420px]">
-        <LoadingScreen />
+      <div className="mt-[15px] flex h-[420px] items-center justify-center">
+        <img src={loading} className="h-12 w-12 animate-spin" />
       </div>
     );
 
+  const getSeatBg = (id: string) => {
+    const isMine = seatsInfo.some((item) => item.seatId === id && item.userId === 'me');
+    const isOther = seatsInfo.some((item) => item.seatId === id && item.userId === 'other');
+    const isLocked = id in locks;
+    if (isMine || seatsState[id]) return 'blue';
+    if (isOther || isLocked) return 'lightGray';
+    return 'lightesGray';
+  };
+
   return (
-    <div className="mt-[15px] h-[420px] w-full rounded-lg bg-lightestGray px-5">
-      <div className="flex justify-between text-lg font-bold text-black">
-        <div className="flex gap-x-2">
-          <span className="flex h-[40px] w-[40px] items-center justify-center">
-            A
-          </span>
-          <span className="flex h-[40px] w-[40px] items-center justify-center">
-            B
-          </span>
+    <div className="mt-2 flex flex-col items-center">
+      {/* 열 헤더 */}
+      <div className="mb-2 flex w-fit gap-6">
+        <div className="flex gap-2">
+          {['A', 'B'].map((col) => (
+            <span key={col} className="flex h-[44px] w-[44px] items-center justify-center text-sm text-gray-400">
+              {col}
+            </span>
+          ))}
         </div>
-        <div className="flex gap-x-2">
-          <span className="flex h-[40px] w-[40px] items-center justify-center">
-            C
-          </span>
-          <span className="flex h-[40px] w-[40px] items-center justify-center">
-            D
-          </span>
+        <div className="w-9" />
+        <div className="flex gap-2">
+          {['C', 'D'].map((col) => (
+            <span key={col} className="flex h-[44px] w-[44px] items-center justify-center text-sm text-gray-400">
+              {col}
+            </span>
+          ))}
         </div>
       </div>
+
+      {/* 좌석 행 */}
       {seatsRows.map((row) => {
-        // 왼쪽 좌석 A1~A6, B1~B6
         const leftSeats = [`A${row}`, `B${row}`];
-        // 오른쪽 좌석 C1~C6, D1~D6
         const rightSeats = [`C${row}`, `D${row}`];
 
         return (
-          <div key={row} className="mb-6 flex items-center justify-between">
-            <div className="flex w-[100px] gap-2">
+          <div key={row} className="mb-2 flex w-fit items-center gap-6">
+            <div className="flex gap-2">
               {leftSeats.map((id) => {
-                // 좌석 번호에 맞게 ture(선택)/false(미선택) 반영
-                const seatState = seatsState[id];
-
-                // 예매된 본인 좌석
-                const isMine = seatsInfo.some(
-                  (item) => item.seatId === id && item.userId === 'me',
-                );
-
-                // 예매된 본인 이외의 좌석
-                const isOther = seatsInfo.some(
-                  (item) => item.seatId === id && item.userId === 'other',
-                );
-
-                // 실시간 상대방 좌석 잠금
-                const isLocked = id in locks;
+                const bg = getSeatBg(id);
                 return (
-                  <Seat
+                  <div
                     key={id}
-                    onClick={() => handleSingleSelect(id)}
-                    borderColor="lightGray"
-                    bgColor={
-                      isMine
-                        ? 'blue'
-                        : isOther || isLocked
-                          ? 'lightGray'
-                          : seatState
-                            ? 'blue'
-                            : 'lightesGray'
-                    }
-                  />
+                    onClick={isLocksLoaded ? () => handleSingleSelect(id) : undefined}
+                    className={`bg-${bg} flex h-[44px] w-[44px] cursor-pointer items-center justify-center rounded-md border border-gray-200`}
+                  >
+                    <span className={`text-xs ${bg === 'blue' ? 'text-white' : 'text-gray-400'}`}>{id}</span>
+                  </div>
                 );
               })}
             </div>
-            <div className="w-[40px] text-center text-lg font-bold">{row}</div>
-            <div className="flex w-[100px] justify-end gap-2">
+            <span className="flex w-9 items-center justify-center text-sm text-gray-400">{row}</span>
+            <div className="flex gap-2">
               {rightSeats.map((id) => {
-                const seatState = seatsState[id];
-
-                const isMine = seatsInfo.some(
-                  (item) => item.seatId === id && item.userId === 'me',
-                );
-
-                const isOther = seatsInfo.some(
-                  (item) => item.seatId === id && item.userId === 'other',
-                );
-
-                const isLocked = id in locks;
+                const bg = getSeatBg(id);
                 return (
-                  <Seat
+                  <div
                     key={id}
-                    onClick={() => handleSingleSelect(id)}
-                    borderColor="lightGray"
-                    bgColor={
-                      isMine
-                        ? 'blue'
-                        : isOther || isLocked
-                          ? 'lightGray'
-                          : seatState
-                            ? 'blue'
-                            : 'lightesGray'
-                    }
-                  />
+                    onClick={isLocksLoaded ? () => handleSingleSelect(id) : undefined}
+                    className={`bg-${bg} flex h-[44px] w-[44px] cursor-pointer items-center justify-center rounded-md border border-gray-200`}
+                  >
+                    <span className={`text-xs ${bg === 'blue' ? 'text-white' : 'text-gray-400'}`}>{id}</span>
+                  </div>
                 );
               })}
             </div>

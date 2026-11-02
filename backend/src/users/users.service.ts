@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from "@nestjs/common";
 import { AppException } from "../common/errors/app.exception";
 import { ErrorCode } from "../common/errors/error-code";
-import { AuthUser } from "../auth/interfaces/auth-user.interface";
+import { AuthUser, UserRole } from "../auth/interfaces/auth-user.interface";
 import { Prisma, User } from "../generated/prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { UpdateNotificationSettingsDto } from "./dto/update-notification-settings.dto";
@@ -109,7 +109,7 @@ export class UsersService {
   async ensureUser(
     email: string,
     name?: string,
-    role: "user" | "admin" = "user",
+    role: UserRole = "user",
   ): Promise<User> {
     return this.prisma.user.upsert({
       where: { email },

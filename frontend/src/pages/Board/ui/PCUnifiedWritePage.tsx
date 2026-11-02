@@ -27,7 +27,7 @@ const PCUnifiedWritePage = () => {
 
   if (isLoading) return null;
 
-  const isAdmin = user?.email === import.meta.env.VITE_ADMIN_EMAIL;
+  const isAdmin = user?.role === 'super_admin' || user?.role === 'operator' || user?.role === 'marketer';
   const activeHandler =
     category === 'board' ? board : category === 'notice' ? notice : event;
 

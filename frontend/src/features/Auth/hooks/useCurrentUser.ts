@@ -3,6 +3,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { ACCESS_TOKEN_KEY, backendClient } from '@/shared/api/backendClient';
 
+export type UserRole = 'user' | 'cs' | 'marketer' | 'operator' | 'super_admin';
+
 export type UserProfile = {
   idx: number;
   userId: string;
@@ -14,8 +16,11 @@ export type UserProfile = {
   point: number;
   notifiChange: boolean;
   notifResponse: boolean;
-  role: string;
+  role: UserRole;
 };
+
+export const isAdminRole = (role: UserRole | undefined): boolean =>
+  role === 'super_admin' || role === 'operator' || role === 'marketer' || role === 'cs';
 
 export const useCurrentUser = () => {
   const token = localStorage.getItem(ACCESS_TOKEN_KEY);

@@ -136,7 +136,7 @@ export class CommentService {
       );
     }
 
-    if (comment.authorIdx !== BigInt(user.idx) && user.role !== "admin") {
+    if (comment.authorIdx !== BigInt(user.idx) && user.role !== "super_admin" && user.role !== "operator") {
       throw new ForbiddenException("본인이 작성한 댓글만 수정할 수 있습니다.");
     }
 
@@ -164,7 +164,7 @@ export class CommentService {
       );
     }
 
-    if (comment.authorIdx !== BigInt(user.idx) && user.role !== "admin") {
+    if (comment.authorIdx !== BigInt(user.idx) && user.role !== "super_admin" && user.role !== "operator") {
       throw new ForbiddenException("본인이 작성한 댓글만 삭제할 수 있습니다.");
     }
 

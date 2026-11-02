@@ -5,7 +5,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { Roles } from "../auth/decorators/roles.decorator";
+import { Permissions } from "../auth/decorators/permissions.decorator";
 import { EnqueueResultDto } from "../scheduler/dto/scheduler-run.dto";
 import { TrainTimeSyncRangeDto } from "./dto/train-time-sync.dto";
 import { TrainTimeSyncService } from "./train-time-sync.service";
@@ -20,7 +20,7 @@ import { TrainTimeSyncService } from "./train-time-sync.service";
 export class AdminTrainsController {
   constructor(private readonly trainTimeSync: TrainTimeSyncService) {}
 
-  @Roles("admin")
+  @Permissions("scheduler:run")
   @Post("times/sync")
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({

@@ -14,7 +14,7 @@ import {
   ApiOperation,
   ApiTags,
 } from "@nestjs/swagger";
-import { Roles } from "../auth/decorators/roles.decorator";
+import { Permissions } from "../auth/decorators/permissions.decorator";
 import {
   CancelResultDto,
   SchedulerRunLogItemDto,
@@ -39,7 +39,7 @@ export class AdminSchedulerController {
     private readonly queue: JobQueueService,
   ) {}
 
-  @Roles("admin")
+  @Permissions("scheduler:run")
   @Get("runs")
   @ApiOperation({ summary: "스케줄러 실행 로그 목록 (관리자)" })
   @ApiOkResponse({ type: [SchedulerRunLogItemDto] })
@@ -51,14 +51,14 @@ export class AdminSchedulerController {
     });
   }
 
-  @Roles("admin")
+  @Permissions("scheduler:run")
   @Get("runs/summary")
   @ApiOperation({ summary: "스케줄러 상태별 건수 요약 (관리자)" })
   summary(): Promise<Record<string, number>> {
     return this.runLog.summary();
   }
 
-  @Roles("admin")
+  @Permissions("scheduler:run")
   @Post("runs/:runId/cancel")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({

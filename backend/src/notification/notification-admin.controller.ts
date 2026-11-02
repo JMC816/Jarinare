@@ -16,7 +16,7 @@ import {
 } from "@nestjs/swagger";
 import { IsNumber } from "class-validator";
 import { Type } from "class-transformer";
-import { Roles } from "../auth/decorators/roles.decorator";
+import { Permissions } from "../auth/decorators/permissions.decorator";
 import { NotificationService } from "./notification.service";
 
 class DropPartitionQuery {
@@ -35,7 +35,7 @@ class DropPartitionQuery {
 export class NotificationAdminController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  @Roles("admin")
+  @Permissions("admin:manage")
   @Delete("partition")
   @ApiOperation({
     summary: "알림 파티션 수동 삭제 (관리자)",
@@ -47,7 +47,7 @@ export class NotificationAdminController {
     return this.notificationService.dropPartition(query.year, query.month);
   }
 
-  @Roles("admin")
+  @Permissions("admin:manage")
   @Post("partition/drop-old")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({

@@ -8,7 +8,7 @@ import { JwtService } from "@nestjs/jwt";
 import { Reflector } from "@nestjs/core";
 import { Request } from "express";
 import { IS_PUBLIC_KEY } from "../decorators/public.decorator";
-import { AuthUser } from "../interfaces/auth-user.interface";
+import { AuthUser, UserRole } from "../interfaces/auth-user.interface";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -37,11 +37,13 @@ export class JwtAuthGuard implements CanActivate {
         email: string;
         role: string;
       }>(token);
-      request.user = {
-        idx: payload.sub,
-        email: payload.email,
-        role: payload.role === "admin" ? "admin" : "user",
-      };
+      const knownRoles: UserRole[] = [
+        "user", "cs", "marketer", "operator", "super_admin",
+      ];
+      const role: UserRole = knownRoles.includes(payload.role as UserRole)
+        ? (payload.role as UserRole)
+        : "user";
+      request.user = { idx: payload.sub, email: payload.email, role };
       return true;
     } catch {
       throw new UnauthorizedException("유효하지 않거나 만료된 토큰입니다.");

@@ -5,7 +5,7 @@ import {
   ApiOperation,
   ApiTags,
 } from "@nestjs/swagger";
-import { Roles } from "../auth/decorators/roles.decorator";
+import { Permissions } from "../auth/decorators/permissions.decorator";
 import { StationSyncResultDto } from "./dto/station-response.dto";
 import { StationsSyncService } from "./stations-sync.service";
 
@@ -18,7 +18,7 @@ import { StationsSyncService } from "./stations-sync.service";
 export class AdminStationsController {
   constructor(private readonly stationsSyncService: StationsSyncService) {}
 
-  @Roles("admin")
+  @Permissions("scheduler:run")
   @Post("sync")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({

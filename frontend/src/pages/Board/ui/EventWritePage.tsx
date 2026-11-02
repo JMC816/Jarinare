@@ -18,7 +18,7 @@ const EventWirtePage = () => {
 
   if (isLoading) return null;
 
-  const isAdmin = user?.email === import.meta.env.VITE_ADMIN_EMAIL;
+  const isAdmin = user?.role === 'super_admin' || user?.role === 'operator' || user?.role === 'marketer';
   if (!isAdmin) {
     navigate(-1);
     return null;

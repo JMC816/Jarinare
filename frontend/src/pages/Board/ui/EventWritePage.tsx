@@ -18,7 +18,7 @@ const EventWirtePage = () => {
 
   if (isLoading) return null;
 
-  const isAdmin = user?.role === 'super_admin' || user?.role === 'operator' || user?.role === 'marketer';
+  const isAdmin = user?.permissions?.includes('board:create') ?? false;
   if (!isAdmin) {
     navigate(-1);
     return null;

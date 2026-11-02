@@ -10,6 +10,7 @@ import {
   shouldNotify,
   type NotificationType,
 } from "../notification/notification.types";
+import { RolePermissionsService } from "../role-permissions/role-permissions.service";
 import {
   CreateCommentDto,
   UpdateCommentDto,
@@ -29,6 +30,7 @@ export class CommentService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationService: NotificationService,
+    private readonly rolePermissions: RolePermissionsService,
   ) {}
 
   async create(dto: CreateCommentDto, user: AuthUser): Promise<{ id: number }> {
@@ -136,7 +138,7 @@ export class CommentService {
       );
     }
 
-    if (comment.authorIdx !== BigInt(user.idx) && user.role !== "super_admin" && user.role !== "operator") {
+    if (comment.authorIdx !== BigInt(user.idx) && !await this.rolePermissions.hasPermission(user.role, "board:delete")) {
       throw new ForbiddenException("본인이 작성한 댓글만 수정할 수 있습니다.");
     }
 
@@ -164,7 +166,7 @@ export class CommentService {
       );
     }
 
-    if (comment.authorIdx !== BigInt(user.idx) && user.role !== "super_admin" && user.role !== "operator") {
+    if (comment.authorIdx !== BigInt(user.idx) && !await this.rolePermissions.hasPermission(user.role, "board:delete")) {
       throw new ForbiddenException("본인이 작성한 댓글만 삭제할 수 있습니다.");
     }
 

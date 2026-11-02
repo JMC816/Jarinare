@@ -72,7 +72,8 @@ export const ModelName = {
   PointHistory: 'PointHistory',
   OrderHistory: 'OrderHistory',
   TravelStat: 'TravelStat',
-  TravelStatBucket: 'TravelStatBucket'
+  TravelStatBucket: 'TravelStatBucket',
+  AdminRole: 'AdminRole'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -390,6 +391,15 @@ export const TravelStatBucketScalarFieldEnum = {
 export type TravelStatBucketScalarFieldEnum = (typeof TravelStatBucketScalarFieldEnum)[keyof typeof TravelStatBucketScalarFieldEnum]
 
 
+export const AdminRoleScalarFieldEnum = {
+  role: 'role',
+  permissions: 'permissions',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdminRoleScalarFieldEnum = (typeof AdminRoleScalarFieldEnum)[keyof typeof AdminRoleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -600,4 +610,11 @@ export const TravelStatBucketOrderByRelevanceFieldEnum = {
 } as const
 
 export type TravelStatBucketOrderByRelevanceFieldEnum = (typeof TravelStatBucketOrderByRelevanceFieldEnum)[keyof typeof TravelStatBucketOrderByRelevanceFieldEnum]
+
+
+export const AdminRoleOrderByRelevanceFieldEnum = {
+  role: 'role'
+} as const
+
+export type AdminRoleOrderByRelevanceFieldEnum = (typeof AdminRoleOrderByRelevanceFieldEnum)[keyof typeof AdminRoleOrderByRelevanceFieldEnum]
 

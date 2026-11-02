@@ -27,7 +27,7 @@ const PCUnifiedWritePage = () => {
 
   if (isLoading) return null;
 
-  const isAdmin = user?.role === 'super_admin' || user?.role === 'operator' || user?.role === 'marketer';
+  const isAdmin = user?.permissions?.includes('board:create') ?? false;
   const activeHandler =
     category === 'board' ? board : category === 'notice' ? notice : event;
 

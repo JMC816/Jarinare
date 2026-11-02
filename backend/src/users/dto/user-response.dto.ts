@@ -35,8 +35,11 @@ export class UserProfileDto {
   @ApiProperty({ description: "응답 알림 설정" })
   notifResponse: boolean;
 
-  @ApiProperty({ description: "권한", enum: ["user", "admin"] })
+  @ApiProperty({ description: "역할", enum: ["user", "cs", "marketer", "operator", "super_admin"] })
   role: string;
+
+  @ApiProperty({ description: "보유 권한 목록", type: [String] })
+  permissions: string[];
 }
 
 export class PublicUserDto {

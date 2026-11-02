@@ -22,6 +22,7 @@ import {
 } from "./dto/board-request.dto";
 import { NotificationService } from "../notification/notification.service";
 import { shouldNotify } from "../notification/notification.types";
+import { RolePermissionsService } from "../role-permissions/role-permissions.service";
 import type {
   BoardDetailDto,
   BoardDetailFreeDto,
@@ -45,6 +46,7 @@ export class BoardService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationService: NotificationService,
+    private readonly rolePermissions: RolePermissionsService,
   ) {}
 
   async getList(query: BoardListQueryDto): Promise<BoardListResponseDto> {
@@ -192,7 +194,7 @@ export class BoardService {
   ): Promise<CreateBoardResponseDto> {
     if (
       (dto.type === BoardType.NOTICE || dto.type === BoardType.EVENT) &&
-      user.role !== "super_admin" && user.role !== "operator"
+      !await this.rolePermissions.hasPermission(user.role, "board:create")
     ) {
       throw new ForbiddenException(
         "공지사항/이벤트는 관리자만 작성할 수 있습니다.",
@@ -233,7 +235,7 @@ export class BoardService {
       );
     }
 
-    if (board.authorIdx !== BigInt(user.idx) && user.role !== "super_admin" && user.role !== "operator") {
+    if (board.authorIdx !== BigInt(user.idx) && !await this.rolePermissions.hasPermission(user.role, "board:delete")) {
       throw new ForbiddenException(
         "본인이 작성한 게시물만 수정할 수 있습니다.",
       );
@@ -277,7 +279,7 @@ export class BoardService {
       );
     }
 
-    if (board.authorIdx !== BigInt(user.idx) && user.role !== "super_admin" && user.role !== "operator") {
+    if (board.authorIdx !== BigInt(user.idx) && !await this.rolePermissions.hasPermission(user.role, "board:delete")) {
       throw new ForbiddenException(
         "본인이 작성한 게시물만 삭제할 수 있습니다.",
       );

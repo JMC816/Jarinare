@@ -17,6 +17,7 @@ export type UserProfile = {
   notifiChange: boolean;
   notifResponse: boolean;
   role: UserRole;
+  permissions: string[];
 };
 
 export const isAdminRole = (role: UserRole | undefined): boolean =>

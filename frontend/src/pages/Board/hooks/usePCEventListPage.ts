@@ -11,7 +11,7 @@ export const usePCEventListPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<EventSortOrder>('newest');
   const { user } = useCurrentUser();
-  const isAdmin = user?.role === 'super_admin' || user?.role === 'operator' || user?.role === 'marketer';
+  const isAdmin = user?.permissions?.includes('board:create') ?? false;
 
   return { searchQuery, setSearchQuery, sortOrder, setSortOrder, isAdmin };
 };

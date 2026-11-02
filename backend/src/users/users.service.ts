@@ -2,6 +2,7 @@ import { HttpStatus, Injectable } from "@nestjs/common";
 import { AppException } from "../common/errors/app.exception";
 import { ErrorCode } from "../common/errors/error-code";
 import { AuthUser, UserRole } from "../auth/interfaces/auth-user.interface";
+import { RolePermissionsService } from "../role-permissions/role-permissions.service";
 import { Prisma, User } from "../generated/prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { UpdateNotificationSettingsDto } from "./dto/update-notification-settings.dto";
@@ -10,7 +11,10 @@ import { PublicUserDto, UserProfileDto } from "./dto/user-response.dto";
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly rolePermissions: RolePermissionsService,
+  ) {}
 
   async getMe(authUser: AuthUser): Promise<UserProfileDto> {
     const user = await this.prisma.user.findUnique({
@@ -22,7 +26,8 @@ export class UsersService {
         "사용자를 찾을 수 없습니다.",
         HttpStatus.NOT_FOUND,
       );
-    return this.toProfile(user);
+    const permissions = await this.rolePermissions.getPermissions(user.role);
+    return this.toProfile(user, permissions);
   }
 
   async createUser(data: {
@@ -85,7 +90,8 @@ export class UsersService {
         ...(dto.email !== undefined ? { email: dto.email } : {}),
       },
     });
-    return this.toProfile(user);
+    const permissions = await this.rolePermissions.getPermissions(user.role);
+    return this.toProfile(user, permissions);
   }
 
   async updateNotificationSettings(
@@ -103,7 +109,8 @@ export class UsersService {
           : {}),
       },
     });
-    return this.toProfile(user);
+    const permissions = await this.rolePermissions.getPermissions(user.role);
+    return this.toProfile(user, permissions);
   }
 
   async ensureUser(
@@ -152,11 +159,12 @@ export class UsersService {
     });
   }
 
-  toProfilePublic(user: User): UserProfileDto {
-    return this.toProfile(user);
+  async toProfilePublic(user: User): Promise<UserProfileDto> {
+    const permissions = await this.rolePermissions.getPermissions(user.role);
+    return this.toProfile(user, permissions);
   }
 
-  private toProfile(user: User): UserProfileDto {
+  private toProfile(user: User, permissions: string[] = []): UserProfileDto {
     return {
       idx: Number(user.idx),
       userId: user.userId,
@@ -169,6 +177,7 @@ export class UsersService {
       notifiChange: user.notifiChange,
       notifResponse: user.notifResponse,
       role: user.role,
+      permissions,
     };
   }
 }

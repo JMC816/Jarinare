@@ -12,7 +12,7 @@ import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 const EventListPage = () => {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
-  const isAdmin = user?.role === 'super_admin' || user?.role === 'operator' || user?.role === 'marketer';
+  const isAdmin = user?.permissions?.includes('board:create') ?? false;
 
   return (
     <>

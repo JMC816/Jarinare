@@ -405,7 +405,8 @@ export const ModelName = {
   PointHistory: 'PointHistory',
   OrderHistory: 'OrderHistory',
   TravelStat: 'TravelStat',
-  TravelStatBucket: 'TravelStatBucket'
+  TravelStatBucket: 'TravelStatBucket',
+  AdminRole: 'AdminRole'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket"
+    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket" | "adminRole"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1877,6 +1878,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AdminRole: {
+      payload: Prisma.$AdminRolePayload<ExtArgs>
+      fields: Prisma.AdminRoleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdminRoleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdminRoleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload>
+        }
+        findFirst: {
+          args: Prisma.AdminRoleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdminRoleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload>
+        }
+        findMany: {
+          args: Prisma.AdminRoleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload>[]
+        }
+        create: {
+          args: Prisma.AdminRoleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload>
+        }
+        createMany: {
+          args: Prisma.AdminRoleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.AdminRoleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload>
+        }
+        update: {
+          args: Prisma.AdminRoleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload>
+        }
+        deleteMany: {
+          args: Prisma.AdminRoleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdminRoleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.AdminRoleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminRolePayload>
+        }
+        aggregate: {
+          args: Prisma.AdminRoleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdminRole>
+        }
+        groupBy: {
+          args: Prisma.AdminRoleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdminRoleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdminRoleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdminRoleCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2215,6 +2282,15 @@ export const TravelStatBucketScalarFieldEnum = {
 export type TravelStatBucketScalarFieldEnum = (typeof TravelStatBucketScalarFieldEnum)[keyof typeof TravelStatBucketScalarFieldEnum]
 
 
+export const AdminRoleScalarFieldEnum = {
+  role: 'role',
+  permissions: 'permissions',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AdminRoleScalarFieldEnum = (typeof AdminRoleScalarFieldEnum)[keyof typeof AdminRoleScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2427,6 +2503,13 @@ export const TravelStatBucketOrderByRelevanceFieldEnum = {
 export type TravelStatBucketOrderByRelevanceFieldEnum = (typeof TravelStatBucketOrderByRelevanceFieldEnum)[keyof typeof TravelStatBucketOrderByRelevanceFieldEnum]
 
 
+export const AdminRoleOrderByRelevanceFieldEnum = {
+  role: 'role'
+} as const
+
+export type AdminRoleOrderByRelevanceFieldEnum = (typeof AdminRoleOrderByRelevanceFieldEnum)[keyof typeof AdminRoleOrderByRelevanceFieldEnum]
+
+
 
 /**
  * Field references
@@ -2627,6 +2710,7 @@ export type GlobalOmitConfig = {
   orderHistory?: Prisma.OrderHistoryOmit
   travelStat?: Prisma.TravelStatOmit
   travelStatBucket?: Prisma.TravelStatBucketOmit
+  adminRole?: Prisma.AdminRoleOmit
 }
 
 /* Types for Logging */

@@ -398,3 +398,11 @@ model TravelStatBucket {
   @@id([destination, kind, bucket])
   @@map("travel_stat_buckets")
 }
+
+model AdminRole {
+  role        String   @id @db.VarChar(20)
+  permissions Json
+  updatedAt   DateTime @updatedAt
+
+  @@map("admin_roles")
+}

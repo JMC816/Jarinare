@@ -7,14 +7,18 @@ import {
 import { Reflector } from "@nestjs/core";
 import { Request } from "express";
 import { PERMISSIONS_KEY } from "../decorators/permissions.decorator";
-import { hasPermission, type Permission } from "../permission.types";
+import type { Permission } from "../permission.types";
 import type { AuthUser } from "../interfaces/auth-user.interface";
+import { RolePermissionsService } from "../../role-permissions/role-permissions.service";
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly rolePermissions: RolePermissionsService,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const required = this.reflector.getAllAndOverride<Permission[]>(
       PERMISSIONS_KEY,
       [context.getHandler(), context.getClass()],
@@ -27,7 +31,8 @@ export class PermissionsGuard implements CanActivate {
 
     if (!user) throw new ForbiddenException("접근 권한이 없습니다.");
 
-    const allowed = required.every((p) => hasPermission(user.role, p));
+    const perms = await this.rolePermissions.getPermissions(user.role);
+    const allowed = required.every((p) => perms.includes(p));
     if (!allowed) throw new ForbiddenException("접근 권한이 없습니다.");
     return true;
   }

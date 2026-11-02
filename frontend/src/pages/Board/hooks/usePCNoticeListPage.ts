@@ -16,7 +16,7 @@ export const usePCNoticeListPage = () => {
   const { noticeData, isLoaded } = useGetNotice();
   const { user } = useCurrentUser();
 
-  const isAdmin = user?.role === 'super_admin' || user?.role === 'operator' || user?.role === 'marketer';
+  const isAdmin = user?.permissions?.includes('board:create') ?? false;
 
   const processedData = useMemo(() => {
     return [...noticeData].sort((a, b) =>

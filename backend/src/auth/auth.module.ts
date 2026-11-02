@@ -5,6 +5,7 @@ import { AppConfigService } from "../config/app-config.service";
 import { ConfigModule } from "../config/config.module";
 import { UsersModule } from "../users/users.module";
 import { PrismaModule } from "../prisma/prisma.module";
+import { RolePermissionsModule } from "../role-permissions/role-permissions.module";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { RolesGuard } from "./guards/roles.guard";
 import { PermissionsGuard } from "./guards/permissions.guard";
@@ -15,6 +16,7 @@ import { AuthService } from "./auth.service";
   imports: [
     UsersModule,
     PrismaModule,
+    RolePermissionsModule,
     JwtModule.registerAsync({
       global: true,
       imports: [ConfigModule],

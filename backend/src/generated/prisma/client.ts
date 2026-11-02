@@ -149,3 +149,8 @@ export type TravelStat = Prisma.TravelStatModel
  * 
  */
 export type TravelStatBucket = Prisma.TravelStatBucketModel
+/**
+ * Model AdminRole
+ * 
+ */
+export type AdminRole = Prisma.AdminRoleModel

@@ -69,7 +69,7 @@ export class OAuthController {
     const { accessToken, refreshToken } =
       await this.authService.generateTokenPair(user);
     this.setRefreshCookie(res, refreshToken);
-    return { accessToken, user: this.usersService.toProfilePublic(user) };
+    return { accessToken, user: await this.usersService.toProfilePublic(user) };
   }
 
   @Public()
@@ -98,7 +98,7 @@ export class OAuthController {
     const { accessToken, refreshToken } =
       await this.authService.generateTokenPair(user);
     this.setRefreshCookie(res, refreshToken);
-    return { accessToken, user: this.usersService.toProfilePublic(user) };
+    return { accessToken, user: await this.usersService.toProfilePublic(user) };
   }
 
   @Public()

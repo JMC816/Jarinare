@@ -66,25 +66,29 @@ describe("UsersService", () => {
         update: jest.fn(),
       },
     };
-    service = new UsersService(prisma as never);
+    const rolePermissions = {
+      getPermissions: jest.fn().mockResolvedValue([]),
+      hasPermission: jest.fn().mockResolvedValue(false),
+      invalidate: jest.fn(),
+    };
+    service = new UsersService(prisma as never, rolePermissions as never);
   });
 
-  it("getMe: 최초 로그인 시 기본값으로 사용자를 생성(upsert)한다", async () => {
-    prisma.user.upsert.mockResolvedValue(fakeUser());
+  it("getMe: 인증된 사용자의 프로필을 반환한다", async () => {
+    prisma.user.findUnique.mockResolvedValue(fakeUser());
     const profile = await service.getMe(authUser);
-    expect(prisma.user.upsert).toHaveBeenCalledWith(
-      expect.objectContaining({
-        where: { email: "test@test.com" },
-        create: expect.objectContaining({
-          seatChageCount: 0,
-          point: 0,
-          notifiChange: true,
-          notifResponse: true,
-        }),
-      }),
-    );
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({
+      where: { idx: BigInt(authUser.idx) },
+    });
     expect(profile.idx).toBe(1);
     expect(profile.point).toBe(0);
+  });
+
+  it("getMe: 존재하지 않는 사용자면 USER_NOT_FOUND", async () => {
+    prisma.user.findUnique.mockResolvedValue(null);
+    await expect(service.getMe(authUser)).rejects.toMatchObject({
+      code: ErrorCode.USER_NOT_FOUND,
+    });
   });
 
   it("getPublicProfile: 없는 사용자면 USER_NOT_FOUND", async () => {

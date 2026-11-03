@@ -8,6 +8,7 @@ const requiredEnv = {
   FIREBASE_PROJECT_ID: "pid",
   FIREBASE_CLIENT_EMAIL: "svc@example.com",
   FIREBASE_PRIVATE_KEY: "pk",
+  JWT_SECRET: "test-secret",
 };
 
 describe("validateEnv", () => {

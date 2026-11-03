@@ -18,7 +18,7 @@ const verify = jwtVerify as unknown as jest.Mock;
 
 describe("KakaoService", () => {
   let config: Record<string, unknown>;
-  let firebase: { createCustomToken: jest.Mock };
+  let jwtService: { sign: jest.Mock };
   let users: { ensureUser: jest.Mock };
   let service: KakaoService;
 
@@ -31,13 +31,17 @@ describe("KakaoService", () => {
       kakaoAllowedRedirectUris: ["https://ok.example.com/callback"],
       trainApiTimeoutMs: 5000,
     };
-    firebase = {
-      createCustomToken: jest.fn().mockResolvedValue("firebase-custom-token"),
+    jwtService = { sign: jest.fn().mockReturnValue("jwt-access-token") };
+    users = {
+      ensureUser: jest.fn().mockResolvedValue({
+        idx: BigInt(9999),
+        email: "k@example.com",
+        role: "user",
+      }),
     };
-    users = { ensureUser: jest.fn().mockResolvedValue({}) };
     service = new KakaoService(
       config as never,
-      firebase as never,
+      jwtService as never,
       users as never,
     );
   });
@@ -95,7 +99,7 @@ describe("KakaoService", () => {
     }
   });
 
-  it("login: id_token 검증 후 Custom Token 발급 및 사용자 생성", async () => {
+  it("login: id_token 검증 후 JWT 발급 및 사용자 생성", async () => {
     post.mockResolvedValue({
       data: { access_token: "AT", id_token: "IT", token_type: "bearer" },
     });
@@ -103,13 +107,14 @@ describe("KakaoService", () => {
       payload: { sub: "9999", nickname: "카카오유저", email: "k@example.com" },
     });
     const result = await service.login(validDto);
-    expect(result).toEqual({
-      firebaseToken: "firebase-custom-token",
-      uid: "kakao:9999",
-    });
+    expect(result).toEqual({ accessToken: "jwt-access-token" });
     expect(users.ensureUser).toHaveBeenCalledWith(
-      expect.objectContaining({ uid: "kakao:9999", role: "user" }),
+      "k@example.com",
+      "카카오유저",
+      "user",
     );
-    expect(firebase.createCustomToken).toHaveBeenCalledWith("kakao:9999");
+    expect(jwtService.sign).toHaveBeenCalledWith(
+      expect.objectContaining({ email: "k@example.com", role: "user" }),
+    );
   });
 });

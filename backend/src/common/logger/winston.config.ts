@@ -54,6 +54,10 @@ export const winstonConfig: WinstonModuleOptions = {
       ),
     }),
 
+    // 압축/보관은 winston-daily-rotate-file 이 직접 관리한다.
+    //  - zippedArchive: 회전된(어제까지의) 파일을 gzip 으로 압축(.log.gz)
+    //  - maxFiles: 보관 기간. '37d' = 원본 7일 + 압축 30일에 해당하는 총 수명.
+    //              (원하면 '30d' 등으로 조정)
     new winston.transports.DailyRotateFile({
       dirname: LOG_DIR,
       filename: "backend-%DATE%.log",

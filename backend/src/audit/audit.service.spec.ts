@@ -120,6 +120,33 @@ describe("AuditService", () => {
       expect(call.take).toBe(10);
       expect(res.totalPages).toBe(20);
     });
+
+    it("targetType 필터를 where에 포함한다", async () => {
+      prisma.adminAuditLog.findMany.mockResolvedValueOnce([]);
+      prisma.adminAuditLog.count.mockResolvedValueOnce(0);
+
+      await service.list({ targetType: "user" });
+      const call = prisma.adminAuditLog.findMany.mock.calls[0][0];
+      expect(call.where).toMatchObject({ targetType: "user" });
+    });
+
+    it("targetId 필터를 where에 포함한다", async () => {
+      prisma.adminAuditLog.findMany.mockResolvedValueOnce([]);
+      prisma.adminAuditLog.count.mockResolvedValueOnce(0);
+
+      await service.list({ targetId: "42" });
+      const call = prisma.adminAuditLog.findMany.mock.calls[0][0];
+      expect(call.where).toMatchObject({ targetId: "42" });
+    });
+
+    it("action 필터를 where에 포함한다", async () => {
+      prisma.adminAuditLog.findMany.mockResolvedValueOnce([]);
+      prisma.adminAuditLog.count.mockResolvedValueOnce(0);
+
+      await service.list({ action: "user.suspend" });
+      const call = prisma.adminAuditLog.findMany.mock.calls[0][0];
+      expect(call.where).toMatchObject({ action: "user.suspend" });
+    });
   });
 
   // ──────────────── get() ────────────────

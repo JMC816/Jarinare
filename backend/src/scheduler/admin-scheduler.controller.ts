@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Query,
+  Req,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -14,6 +15,10 @@ import {
   ApiOperation,
   ApiTags,
 } from "@nestjs/swagger";
+import type { Request } from "express";
+import { AuditService } from "../audit/audit.service";
+import { CurrentUser } from "../auth/decorators/current-user.decorator";
+import type { AuthUser } from "../auth/interfaces/auth-user.interface";
 import { Permissions } from "../auth/decorators/permissions.decorator";
 import {
   CancelResultDto,
@@ -37,6 +42,7 @@ export class AdminSchedulerController {
   constructor(
     private readonly runLog: SchedulerRunLogService,
     private readonly queue: JobQueueService,
+    private readonly audit: AuditService,
   ) {}
 
   @Permissions("scheduler:run")
@@ -79,11 +85,23 @@ export class AdminSchedulerController {
       "아직 실행되지 않은 작업만 취소된다. 이미 실행/종료된 작업은 false.",
   })
   @ApiOkResponse({ type: CancelResultDto })
-  async cancel(@Param("runId") runId: string): Promise<CancelResultDto> {
+  async cancel(
+    @Param("runId") runId: string,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ): Promise<CancelResultDto> {
     if (!/^\d+$/.test(runId)) {
       throw new BadRequestException("runId 는 숫자여야 합니다.");
     }
     const cancelled = await this.queue.cancelPending(BigInt(runId));
+    this.audit.log({
+      actorIdx: user.idx,
+      action: "scheduler.cancel",
+      targetType: "scheduler",
+      targetId: runId,
+      after: { cancelled },
+      ip: req.ip,
+    });
     return { runId, cancelled };
   }
 }

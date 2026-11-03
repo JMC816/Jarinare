@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { AuditModule } from "../audit/audit.module";
 import { AdminSchedulerController } from "./admin-scheduler.controller";
 import { JobQueueService } from "./job-queue.service";
 import { SchedulerRunLogService } from "./scheduler-run-log.service";
@@ -11,6 +12,7 @@ import { SchedulerRunLogService } from "./scheduler-run-log.service";
  * 도메인 의존이 없어(PrismaModule 은 전역) 어느 도메인 모듈에서든 안전하게 import 할 수 있다.
  */
 @Module({
+  imports: [AuditModule],
   controllers: [AdminSchedulerController],
   providers: [JobQueueService, SchedulerRunLogService],
   exports: [JobQueueService],

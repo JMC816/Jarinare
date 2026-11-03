@@ -7,12 +7,11 @@ import { Event } from '@/widgets/Board/ui/Event';
 import { useNavigate } from 'react-router-dom';
 import WriteButton from '@/shared/ui/WriteButton';
 import PCEventListPage from './PCEventListPage';
-import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
+import { useHasPermission } from '@/features/Auth/hooks/useHasPermission';
 
 const EventListPage = () => {
   const navigate = useNavigate();
-  const { user } = useCurrentUser();
-  const isAdmin = user?.permissions?.includes('board:create') ?? false;
+  const isAdmin = useHasPermission('board:create');
 
   return (
     <>

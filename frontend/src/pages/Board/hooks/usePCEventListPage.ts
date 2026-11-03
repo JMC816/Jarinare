@@ -3,15 +3,14 @@
  * @rule: 상태·사이드이펙트·이벤트 핸들러만 담당
  */
 import { useState } from 'react';
-import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
+import { useHasPermission } from '@/features/Auth/hooks/useHasPermission';
 
 export type EventSortOrder = 'newest' | 'oldest';
 
 export const usePCEventListPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<EventSortOrder>('newest');
-  const { user } = useCurrentUser();
-  const isAdmin = user?.permissions?.includes('board:create') ?? false;
+  const isAdmin = useHasPermission('board:create');
 
   return { searchQuery, setSearchQuery, sortOrder, setSortOrder, isAdmin };
 };

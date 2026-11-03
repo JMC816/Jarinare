@@ -10,6 +10,7 @@ import PCWriteForm from '@/widgets/Board/ui/PCWriteForm';
 import LoadingScreen from '@/widgets/Board/ui/LoadingScreen';
 import { WriteCategory } from '@/widgets/Board/types/boardWidgetType';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
+import { useHasPermission } from '@/features/Auth/hooks/useHasPermission';
 
 const CATEGORY_LABEL: Record<WriteCategory, string> = {
   board: '자유',
@@ -18,7 +19,8 @@ const CATEGORY_LABEL: Record<WriteCategory, string> = {
 };
 
 const PCUnifiedWritePage = () => {
-  const { user, isLoading } = useCurrentUser();
+  const { isLoading } = useCurrentUser();
+  const isAdmin = useHasPermission('board:create');
   const [category, setCategory] = useState<WriteCategory>('board');
 
   const board = useBaordHandler();
@@ -26,8 +28,6 @@ const PCUnifiedWritePage = () => {
   const event = useEventHandler();
 
   if (isLoading) return null;
-
-  const isAdmin = user?.permissions?.includes('board:create') ?? false;
   const activeHandler =
     category === 'board' ? board : category === 'notice' ? notice : event;
 

@@ -20,8 +20,6 @@ export type UserProfile = {
   permissions: string[];
 };
 
-export const isAdminRole = (role: UserRole | undefined): boolean =>
-  role === 'super_admin' || role === 'operator' || role === 'marketer' || role === 'cs';
 
 export const useCurrentUser = () => {
   const token = localStorage.getItem(ACCESS_TOKEN_KEY);

@@ -4,7 +4,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useGetNotice } from '@/features/Board/hooks/useGetNotice';
-import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
+import { useHasPermission } from '@/features/Auth/hooks/useHasPermission';
 
 const PAGE_SIZE = 10;
 
@@ -14,9 +14,7 @@ export const usePCNoticeListPage = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   const { noticeData, isLoaded } = useGetNotice();
-  const { user } = useCurrentUser();
-
-  const isAdmin = user?.permissions?.includes('board:create') ?? false;
+  const isAdmin = useHasPermission('board:create');
 
   const processedData = useMemo(() => {
     return [...noticeData].sort((a, b) =>

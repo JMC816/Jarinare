@@ -9,15 +9,15 @@ import LoadingScreen from '@/widgets/layouts/ui/LoadingScreen';
 import PCWriteForm from '@/widgets/Board/ui/PCWriteForm';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
+import { useHasPermission } from '@/features/Auth/hooks/useHasPermission';
 
 const NoticeWirtePage = () => {
   const navigate = useNavigate();
-  const { user, isLoading } = useCurrentUser();
+  const { isLoading } = useCurrentUser();
+  const isAdmin = useHasPermission('board:create');
   const notice = useNoticeHandler({ navigateTo: '/board/noticelist' });
 
   if (isLoading) return null;
-
-  const isAdmin = user?.permissions?.includes('board:create') ?? false;
   if (!isAdmin) {
     navigate('/board/noticelist', { replace: true });
     return null;

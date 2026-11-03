@@ -56,6 +56,8 @@ export class JobQueueService implements OnModuleInit {
       endYmd,
       force = false,
       skipIfRunning = false,
+      triggeredBy,
+      params: jobParams,
       jobFn,
     } = params;
 
@@ -88,6 +90,11 @@ export class JobQueueService implements OnModuleInit {
         startYmd,
         endYmd,
         startedAt: new Date(),
+        triggeredBy: triggeredBy ?? null,
+        params:
+          jobParams !== undefined
+            ? (jobParams as Prisma.InputJsonValue)
+            : undefined,
       },
     });
     const runId = log.runId;

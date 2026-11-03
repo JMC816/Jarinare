@@ -209,18 +209,38 @@ model SyncLock {
 // 은 FAILED 로 복구된다(인메모리 큐는 휘발). 상태값: PENDING | RUNNING | SUCCESS | FAILED | CANCELLED
 model SchedulerRunLog {
   runId        BigInt    @id @default(autoincrement())
-  jobName      String    @db.VarChar(100) // 작업 이름 (예: "station-sync", "train-time-sync")
-  status       String    @db.VarChar(20) // 실행 상태
-  startYmd     String    @db.VarChar(10) // 대상 시작일 (YYYYMMDD). 날짜 개념이 없는 작업은 실행일.
-  endYmd       String    @db.VarChar(10) // 대상 종료일 (YYYYMMDD)
-  startedAt    DateTime  @default(now()) // 적재(대기 시작) 시각
-  endedAt      DateTime? // 종료(성공/실패/취소) 시각
-  errorMessage String?   @db.Text // 실패 사유
-  metadata     Json? // 실행 결과 요약 (동기화 결과 객체)
+  jobName      String    @db.VarChar(100)
+  status       String    @db.VarChar(20)
+  startYmd     String    @db.VarChar(10)
+  endYmd       String    @db.VarChar(10)
+  startedAt    DateTime  @default(now())
+  endedAt      DateTime?
+  errorMessage String?   @db.Text
+  metadata     Json?
+  triggeredBy  BigInt?   // 수동 실행한 어드민 idx, 자동 실행이면 null
+  params       Json?     // 수동 실행 시 전달된 파라미터
 
   @@index([jobName, startYmd, endYmd])
   @@index([status])
   @@map("scheduler_run_log")
+}
+
+model AdminAuditLog {
+  id         BigInt   @id @default(autoincrement())
+  actorIdx   BigInt
+  action     String   @db.VarChar(50)
+  targetType String   @db.VarChar(30)
+  targetId   String   @db.VarChar(64)
+  before     Json?
+  after      Json?
+  reason     String?  @db.VarChar(255)
+  ip         String?  @db.VarChar(45)
+  createdAt  DateTime @default(now())
+
+  @@index([actorIdx, createdAt])
+  @@index([targetType, targetId, createdAt])
+  @@index([action, createdAt])
+  @@map("admin_audit_logs")
 }
 
 model CarLayout {

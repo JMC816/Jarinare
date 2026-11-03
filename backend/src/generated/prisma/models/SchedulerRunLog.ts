@@ -28,10 +28,12 @@ export type AggregateSchedulerRunLog = {
 
 export type SchedulerRunLogAvgAggregateOutputType = {
   runId: number | null
+  triggeredBy: number | null
 }
 
 export type SchedulerRunLogSumAggregateOutputType = {
   runId: bigint | null
+  triggeredBy: bigint | null
 }
 
 export type SchedulerRunLogMinAggregateOutputType = {
@@ -43,6 +45,7 @@ export type SchedulerRunLogMinAggregateOutputType = {
   startedAt: Date | null
   endedAt: Date | null
   errorMessage: string | null
+  triggeredBy: bigint | null
 }
 
 export type SchedulerRunLogMaxAggregateOutputType = {
@@ -54,6 +57,7 @@ export type SchedulerRunLogMaxAggregateOutputType = {
   startedAt: Date | null
   endedAt: Date | null
   errorMessage: string | null
+  triggeredBy: bigint | null
 }
 
 export type SchedulerRunLogCountAggregateOutputType = {
@@ -66,16 +70,20 @@ export type SchedulerRunLogCountAggregateOutputType = {
   endedAt: number
   errorMessage: number
   metadata: number
+  triggeredBy: number
+  params: number
   _all: number
 }
 
 
 export type SchedulerRunLogAvgAggregateInputType = {
   runId?: true
+  triggeredBy?: true
 }
 
 export type SchedulerRunLogSumAggregateInputType = {
   runId?: true
+  triggeredBy?: true
 }
 
 export type SchedulerRunLogMinAggregateInputType = {
@@ -87,6 +95,7 @@ export type SchedulerRunLogMinAggregateInputType = {
   startedAt?: true
   endedAt?: true
   errorMessage?: true
+  triggeredBy?: true
 }
 
 export type SchedulerRunLogMaxAggregateInputType = {
@@ -98,6 +107,7 @@ export type SchedulerRunLogMaxAggregateInputType = {
   startedAt?: true
   endedAt?: true
   errorMessage?: true
+  triggeredBy?: true
 }
 
 export type SchedulerRunLogCountAggregateInputType = {
@@ -110,6 +120,8 @@ export type SchedulerRunLogCountAggregateInputType = {
   endedAt?: true
   errorMessage?: true
   metadata?: true
+  triggeredBy?: true
+  params?: true
   _all?: true
 }
 
@@ -209,6 +221,8 @@ export type SchedulerRunLogGroupByOutputType = {
   endedAt: Date | null
   errorMessage: string | null
   metadata: runtime.JsonValue | null
+  triggeredBy: bigint | null
+  params: runtime.JsonValue | null
   _count: SchedulerRunLogCountAggregateOutputType | null
   _avg: SchedulerRunLogAvgAggregateOutputType | null
   _sum: SchedulerRunLogSumAggregateOutputType | null
@@ -244,6 +258,8 @@ export type SchedulerRunLogWhereInput = {
   endedAt?: Prisma.DateTimeNullableFilter<"SchedulerRunLog"> | Date | string | null
   errorMessage?: Prisma.StringNullableFilter<"SchedulerRunLog"> | string | null
   metadata?: Prisma.JsonNullableFilter<"SchedulerRunLog">
+  triggeredBy?: Prisma.BigIntNullableFilter<"SchedulerRunLog"> | bigint | number | null
+  params?: Prisma.JsonNullableFilter<"SchedulerRunLog">
 }
 
 export type SchedulerRunLogOrderByWithRelationInput = {
@@ -256,6 +272,8 @@ export type SchedulerRunLogOrderByWithRelationInput = {
   endedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
+  triggeredBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  params?: Prisma.SortOrderInput | Prisma.SortOrder
   _relevance?: Prisma.SchedulerRunLogOrderByRelevanceInput
 }
 
@@ -272,6 +290,8 @@ export type SchedulerRunLogWhereUniqueInput = Prisma.AtLeast<{
   endedAt?: Prisma.DateTimeNullableFilter<"SchedulerRunLog"> | Date | string | null
   errorMessage?: Prisma.StringNullableFilter<"SchedulerRunLog"> | string | null
   metadata?: Prisma.JsonNullableFilter<"SchedulerRunLog">
+  triggeredBy?: Prisma.BigIntNullableFilter<"SchedulerRunLog"> | bigint | number | null
+  params?: Prisma.JsonNullableFilter<"SchedulerRunLog">
 }, "runId">
 
 export type SchedulerRunLogOrderByWithAggregationInput = {
@@ -284,6 +304,8 @@ export type SchedulerRunLogOrderByWithAggregationInput = {
   endedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
+  triggeredBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  params?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SchedulerRunLogCountOrderByAggregateInput
   _avg?: Prisma.SchedulerRunLogAvgOrderByAggregateInput
   _max?: Prisma.SchedulerRunLogMaxOrderByAggregateInput
@@ -304,6 +326,8 @@ export type SchedulerRunLogScalarWhereWithAggregatesInput = {
   endedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SchedulerRunLog"> | Date | string | null
   errorMessage?: Prisma.StringNullableWithAggregatesFilter<"SchedulerRunLog"> | string | null
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"SchedulerRunLog">
+  triggeredBy?: Prisma.BigIntNullableWithAggregatesFilter<"SchedulerRunLog"> | bigint | number | null
+  params?: Prisma.JsonNullableWithAggregatesFilter<"SchedulerRunLog">
 }
 
 export type SchedulerRunLogCreateInput = {
@@ -316,6 +340,8 @@ export type SchedulerRunLogCreateInput = {
   endedAt?: Date | string | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  triggeredBy?: bigint | number | null
+  params?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type SchedulerRunLogUncheckedCreateInput = {
@@ -328,6 +354,8 @@ export type SchedulerRunLogUncheckedCreateInput = {
   endedAt?: Date | string | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  triggeredBy?: bigint | number | null
+  params?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type SchedulerRunLogUpdateInput = {
@@ -340,6 +368,8 @@ export type SchedulerRunLogUpdateInput = {
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  triggeredBy?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  params?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type SchedulerRunLogUncheckedUpdateInput = {
@@ -352,6 +382,8 @@ export type SchedulerRunLogUncheckedUpdateInput = {
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  triggeredBy?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  params?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type SchedulerRunLogCreateManyInput = {
@@ -364,6 +396,8 @@ export type SchedulerRunLogCreateManyInput = {
   endedAt?: Date | string | null
   errorMessage?: string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  triggeredBy?: bigint | number | null
+  params?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type SchedulerRunLogUpdateManyMutationInput = {
@@ -376,6 +410,8 @@ export type SchedulerRunLogUpdateManyMutationInput = {
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  triggeredBy?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  params?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type SchedulerRunLogUncheckedUpdateManyInput = {
@@ -388,6 +424,8 @@ export type SchedulerRunLogUncheckedUpdateManyInput = {
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  triggeredBy?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  params?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type SchedulerRunLogOrderByRelevanceInput = {
@@ -406,10 +444,13 @@ export type SchedulerRunLogCountOrderByAggregateInput = {
   endedAt?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
+  triggeredBy?: Prisma.SortOrder
+  params?: Prisma.SortOrder
 }
 
 export type SchedulerRunLogAvgOrderByAggregateInput = {
   runId?: Prisma.SortOrder
+  triggeredBy?: Prisma.SortOrder
 }
 
 export type SchedulerRunLogMaxOrderByAggregateInput = {
@@ -421,6 +462,7 @@ export type SchedulerRunLogMaxOrderByAggregateInput = {
   startedAt?: Prisma.SortOrder
   endedAt?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
+  triggeredBy?: Prisma.SortOrder
 }
 
 export type SchedulerRunLogMinOrderByAggregateInput = {
@@ -432,10 +474,12 @@ export type SchedulerRunLogMinOrderByAggregateInput = {
   startedAt?: Prisma.SortOrder
   endedAt?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrder
+  triggeredBy?: Prisma.SortOrder
 }
 
 export type SchedulerRunLogSumOrderByAggregateInput = {
   runId?: Prisma.SortOrder
+  triggeredBy?: Prisma.SortOrder
 }
 
 
@@ -450,6 +494,8 @@ export type SchedulerRunLogSelect<ExtArgs extends runtime.Types.Extensions.Inter
   endedAt?: boolean
   errorMessage?: boolean
   metadata?: boolean
+  triggeredBy?: boolean
+  params?: boolean
 }, ExtArgs["result"]["schedulerRunLog"]>
 
 
@@ -464,9 +510,11 @@ export type SchedulerRunLogSelectScalar = {
   endedAt?: boolean
   errorMessage?: boolean
   metadata?: boolean
+  triggeredBy?: boolean
+  params?: boolean
 }
 
-export type SchedulerRunLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"runId" | "jobName" | "status" | "startYmd" | "endYmd" | "startedAt" | "endedAt" | "errorMessage" | "metadata", ExtArgs["result"]["schedulerRunLog"]>
+export type SchedulerRunLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"runId" | "jobName" | "status" | "startYmd" | "endYmd" | "startedAt" | "endedAt" | "errorMessage" | "metadata" | "triggeredBy" | "params", ExtArgs["result"]["schedulerRunLog"]>
 
 export type $SchedulerRunLogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SchedulerRunLog"
@@ -481,6 +529,8 @@ export type $SchedulerRunLogPayload<ExtArgs extends runtime.Types.Extensions.Int
     endedAt: Date | null
     errorMessage: string | null
     metadata: runtime.JsonValue | null
+    triggeredBy: bigint | null
+    params: runtime.JsonValue | null
   }, ExtArgs["result"]["schedulerRunLog"]>
   composites: {}
 }
@@ -859,6 +909,8 @@ export interface SchedulerRunLogFieldRefs {
   readonly endedAt: Prisma.FieldRef<"SchedulerRunLog", 'DateTime'>
   readonly errorMessage: Prisma.FieldRef<"SchedulerRunLog", 'String'>
   readonly metadata: Prisma.FieldRef<"SchedulerRunLog", 'Json'>
+  readonly triggeredBy: Prisma.FieldRef<"SchedulerRunLog", 'BigInt'>
+  readonly params: Prisma.FieldRef<"SchedulerRunLog", 'Json'>
 }
     
 

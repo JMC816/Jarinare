@@ -24,6 +24,10 @@ export interface EnqueueParams {
   force?: boolean;
   /** true 면 중복 시 예외 대신 null 을 반환한다. (크론이 사용) */
   skipIfRunning?: boolean;
+  /** 수동 실행한 어드민 idx. 크론 자동 실행이면 undefined. */
+  triggeredBy?: bigint;
+  /** 수동 실행 파라미터 (예: { days: 7 }). */
+  params?: unknown;
   /** 워커가 실행할 실제 작업. 반환값(있으면)은 metadata 로 저장된다. */
   jobFn: (runId: bigint) => Promise<unknown>;
 }

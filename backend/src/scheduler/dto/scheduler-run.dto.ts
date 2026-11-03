@@ -30,6 +30,12 @@ export class SchedulerRunQueryDto {
   @IsOptional()
   @IsString()
   status?: string;
+
+  @ApiPropertyOptional({ description: "수동 실행한 어드민 idx 필터" })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  triggeredBy?: number;
 }
 
 /** 큐 적재 결과. 실제 실행은 비동기(배치 워커)로 진행된다. */
@@ -70,11 +76,14 @@ export class SchedulerRunLogItemDto {
   @ApiProperty({ nullable: true })
   errorMessage!: string | null;
 
-  @ApiProperty({
-    nullable: true,
-    description: "실행 결과 요약(JSON)",
-  })
+  @ApiProperty({ nullable: true, description: "실행 결과 요약(JSON)" })
   metadata: unknown;
+
+  @ApiProperty({ nullable: true, description: "수동 실행한 어드민 idx" })
+  triggeredBy!: string | null;
+
+  @ApiProperty({ nullable: true, description: "수동 실행 파라미터(JSON)" })
+  params: unknown;
 }
 
 /** 작업 취소 결과. */

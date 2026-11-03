@@ -22,8 +22,26 @@ const fileFormat = winston.format.combine(
   }),
 );
 
+// AUDIT 컨텍스트 로그만 통과시키는 필터
+const auditOnly = winston.format((info) =>
+  (info.context as string) === "AUDIT" ? info : false,
+)();
+
+// 감사 로그 파일 포맷: 한 줄 JSON (timestamp + 메시지 페이로드)
+const auditFileFormat = winston.format.combine(
+  winston.format.timestamp(),
+  auditOnly,
+  winston.format.printf((info) => {
+    try {
+      const payload = JSON.parse(info.message as string) as Record<string, unknown>;
+      return JSON.stringify({ timestamp: info.timestamp, ...payload });
+    } catch {
+      return JSON.stringify({ timestamp: info.timestamp, message: info.message });
+    }
+  }),
+);
+
 export const winstonConfig: WinstonModuleOptions = {
-  // 개발 편의를 위해 콘솔에도 함께 출력
   transports: [
     new winston.transports.Console({
       level: process.env.LOG_LEVEL ?? "info",
@@ -36,11 +54,6 @@ export const winstonConfig: WinstonModuleOptions = {
       ),
     }),
 
-    // backend-yyyymmdd.log 형태로 날짜별 파일 생성.
-    // 압축/보관은 winston-daily-rotate-file 이 직접 관리한다.
-    //  - zippedArchive: 회전된(어제까지의) 파일을 gzip 으로 압축(.log.gz)
-    //  - maxFiles: 보관 기간. '37d' = 원본 7일 + 압축 30일에 해당하는 총 수명.
-    //              (원하면 '30d' 등으로 조정)
     new winston.transports.DailyRotateFile({
       dirname: LOG_DIR,
       filename: "backend-%DATE%.log",
@@ -49,6 +62,19 @@ export const winstonConfig: WinstonModuleOptions = {
       maxFiles: process.env.LOG_MAX_FILES ?? "37d",
       level: process.env.LOG_LEVEL ?? "info",
       format: fileFormat,
+    }),
+
+    // AUDIT 전용 파일 — AUDIT 컨텍스트 로그만 JSON 한 줄씩 기록.
+    // 개인정보 접속기록 보관 의무(1년 이상, 100만 명↑ 또는 정보통신서비스 제공자는 2년) 대비
+    // 기본값 400일(13개월)로 두고, 환경변수 AUDIT_LOG_MAX_FILES 로 조정 가능.
+    new winston.transports.DailyRotateFile({
+      dirname: LOG_DIR,
+      filename: "audit-%DATE%.log",
+      datePattern: "YYYYMMDD",
+      zippedArchive: true,
+      maxFiles: process.env.AUDIT_LOG_MAX_FILES ?? "400d",
+      level: "info",
+      format: auditFileFormat,
     }),
   ],
 };

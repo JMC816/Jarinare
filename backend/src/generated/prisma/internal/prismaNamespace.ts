@@ -396,6 +396,7 @@ export const ModelName = {
   StationTime: 'StationTime',
   SyncLock: 'SyncLock',
   SchedulerRunLog: 'SchedulerRunLog',
+  AdminAuditLog: 'AdminAuditLog',
   CarLayout: 'CarLayout',
   SeatSlot: 'SeatSlot',
   TrainTrip: 'TrainTrip',
@@ -422,7 +423,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket" | "adminRole"
+    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "adminAuditLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket" | "adminRole"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1215,6 +1216,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.SchedulerRunLogCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.SchedulerRunLogCountAggregateOutputType> | number
+        }
+      }
+    }
+    AdminAuditLog: {
+      payload: Prisma.$AdminAuditLogPayload<ExtArgs>
+      fields: Prisma.AdminAuditLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AdminAuditLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AdminAuditLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>
+        }
+        findFirst: {
+          args: Prisma.AdminAuditLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AdminAuditLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>
+        }
+        findMany: {
+          args: Prisma.AdminAuditLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>[]
+        }
+        create: {
+          args: Prisma.AdminAuditLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>
+        }
+        createMany: {
+          args: Prisma.AdminAuditLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.AdminAuditLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>
+        }
+        update: {
+          args: Prisma.AdminAuditLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.AdminAuditLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AdminAuditLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.AdminAuditLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AdminAuditLogPayload>
+        }
+        aggregate: {
+          args: Prisma.AdminAuditLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAdminAuditLog>
+        }
+        groupBy: {
+          args: Prisma.AdminAuditLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdminAuditLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AdminAuditLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AdminAuditLogCountAggregateOutputType> | number
         }
       }
     }
@@ -2134,10 +2201,28 @@ export const SchedulerRunLogScalarFieldEnum = {
   startedAt: 'startedAt',
   endedAt: 'endedAt',
   errorMessage: 'errorMessage',
-  metadata: 'metadata'
+  metadata: 'metadata',
+  triggeredBy: 'triggeredBy',
+  params: 'params'
 } as const
 
 export type SchedulerRunLogScalarFieldEnum = (typeof SchedulerRunLogScalarFieldEnum)[keyof typeof SchedulerRunLogScalarFieldEnum]
+
+
+export const AdminAuditLogScalarFieldEnum = {
+  id: 'id',
+  actorIdx: 'actorIdx',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  before: 'before',
+  after: 'after',
+  reason: 'reason',
+  ip: 'ip',
+  createdAt: 'createdAt'
+} as const
+
+export type AdminAuditLogScalarFieldEnum = (typeof AdminAuditLogScalarFieldEnum)[keyof typeof AdminAuditLogScalarFieldEnum]
 
 
 export const CarLayoutScalarFieldEnum = {
@@ -2411,6 +2496,17 @@ export const SchedulerRunLogOrderByRelevanceFieldEnum = {
 } as const
 
 export type SchedulerRunLogOrderByRelevanceFieldEnum = (typeof SchedulerRunLogOrderByRelevanceFieldEnum)[keyof typeof SchedulerRunLogOrderByRelevanceFieldEnum]
+
+
+export const AdminAuditLogOrderByRelevanceFieldEnum = {
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  reason: 'reason',
+  ip: 'ip'
+} as const
+
+export type AdminAuditLogOrderByRelevanceFieldEnum = (typeof AdminAuditLogOrderByRelevanceFieldEnum)[keyof typeof AdminAuditLogOrderByRelevanceFieldEnum]
 
 
 export const CarLayoutOrderByRelevanceFieldEnum = {
@@ -2700,6 +2796,7 @@ export type GlobalOmitConfig = {
   stationTime?: Prisma.StationTimeOmit
   syncLock?: Prisma.SyncLockOmit
   schedulerRunLog?: Prisma.SchedulerRunLogOmit
+  adminAuditLog?: Prisma.AdminAuditLogOmit
   carLayout?: Prisma.CarLayoutOmit
   seatSlot?: Prisma.SeatSlotOmit
   trainTrip?: Prisma.TrainTripOmit

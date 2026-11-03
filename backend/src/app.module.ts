@@ -21,6 +21,7 @@ import { SeatModule } from "./seat/seat.module";
 import { StationsModule } from "./stations/stations.module";
 import { TrainsModule } from "./trains/trains.module";
 import { UsersModule } from "./users/users.module";
+import { AuditModule } from "./audit/audit.module";
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UsersModule } from "./users/users.module";
     SchedulerModule,
     AuthModule,
     // 도메인 모듈
+    AuditModule,
     UsersModule,
     BoardModule,
     CommentModule,

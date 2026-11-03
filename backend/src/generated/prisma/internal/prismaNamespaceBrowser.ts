@@ -63,6 +63,7 @@ export const ModelName = {
   StationTime: 'StationTime',
   SyncLock: 'SyncLock',
   SchedulerRunLog: 'SchedulerRunLog',
+  AdminAuditLog: 'AdminAuditLog',
   CarLayout: 'CarLayout',
   SeatSlot: 'SeatSlot',
   TrainTrip: 'TrainTrip',
@@ -243,10 +244,28 @@ export const SchedulerRunLogScalarFieldEnum = {
   startedAt: 'startedAt',
   endedAt: 'endedAt',
   errorMessage: 'errorMessage',
-  metadata: 'metadata'
+  metadata: 'metadata',
+  triggeredBy: 'triggeredBy',
+  params: 'params'
 } as const
 
 export type SchedulerRunLogScalarFieldEnum = (typeof SchedulerRunLogScalarFieldEnum)[keyof typeof SchedulerRunLogScalarFieldEnum]
+
+
+export const AdminAuditLogScalarFieldEnum = {
+  id: 'id',
+  actorIdx: 'actorIdx',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  before: 'before',
+  after: 'after',
+  reason: 'reason',
+  ip: 'ip',
+  createdAt: 'createdAt'
+} as const
+
+export type AdminAuditLogScalarFieldEnum = (typeof AdminAuditLogScalarFieldEnum)[keyof typeof AdminAuditLogScalarFieldEnum]
 
 
 export const CarLayoutScalarFieldEnum = {
@@ -520,6 +539,17 @@ export const SchedulerRunLogOrderByRelevanceFieldEnum = {
 } as const
 
 export type SchedulerRunLogOrderByRelevanceFieldEnum = (typeof SchedulerRunLogOrderByRelevanceFieldEnum)[keyof typeof SchedulerRunLogOrderByRelevanceFieldEnum]
+
+
+export const AdminAuditLogOrderByRelevanceFieldEnum = {
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  reason: 'reason',
+  ip: 'ip'
+} as const
+
+export type AdminAuditLogOrderByRelevanceFieldEnum = (typeof AdminAuditLogOrderByRelevanceFieldEnum)[keyof typeof AdminAuditLogOrderByRelevanceFieldEnum]
 
 
 export const CarLayoutOrderByRelevanceFieldEnum = {

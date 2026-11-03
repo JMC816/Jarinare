@@ -100,6 +100,11 @@ export type SyncLock = Prisma.SyncLockModel
  */
 export type SchedulerRunLog = Prisma.SchedulerRunLogModel
 /**
+ * Model AdminAuditLog
+ * 
+ */
+export type AdminAuditLog = Prisma.AdminAuditLogModel
+/**
  * Model CarLayout
  * 
  */

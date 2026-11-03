@@ -48,7 +48,19 @@ export class AdminSchedulerController {
       limit: query.limit ?? 50,
       jobName: query.jobName,
       status: query.status,
+      triggeredBy:
+        query.triggeredBy !== undefined ? BigInt(query.triggeredBy) : undefined,
     });
+  }
+
+  @Permissions("scheduler:run")
+  @Get("runs/:runId")
+  @ApiOperation({ summary: "스케줄러 실행 로그 상세 (관리자)" })
+  @ApiOkResponse({ type: SchedulerRunLogItemDto })
+  async getOne(@Param("runId") runId: string): Promise<SchedulerRunLogItem> {
+    if (!/^\d+$/.test(runId))
+      throw new BadRequestException("runId 는 숫자여야 합니다.");
+    return this.runLog.get(BigInt(runId));
   }
 
   @Permissions("scheduler:run")

@@ -1,10 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, HttpCode, HttpStatus, Post, Req } from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import type { Request } from "express";
+import { AuditService } from "../audit/audit.service";
+import { CurrentUser } from "../auth/decorators/current-user.decorator";
+import type { AuthUser } from "../auth/interfaces/auth-user.interface";
 import { Permissions } from "../auth/decorators/permissions.decorator";
 import { EnqueueResultDto } from "../scheduler/dto/scheduler-run.dto";
 import { TrainTimeSyncRangeDto } from "./dto/train-time-sync.dto";
@@ -18,7 +22,10 @@ import { TrainTimeSyncService } from "./train-time-sync.service";
 @ApiBearerAuth()
 @Controller("admin/trains")
 export class AdminTrainsController {
-  constructor(private readonly trainTimeSync: TrainTimeSyncService) {}
+  constructor(
+    private readonly trainTimeSync: TrainTimeSyncService,
+    private readonly audit: AuditService,
+  ) {}
 
   @Permissions("scheduler:run")
   @Post("times/sync")
@@ -31,8 +38,20 @@ export class AdminTrainsController {
       "동일 기간이 이미 진행 중이면 409.",
   })
   @ApiResponse({ status: 202, type: EnqueueResultDto })
-  async sync(@Body() dto: TrainTimeSyncRangeDto): Promise<EnqueueResultDto> {
-    const runId = await this.trainTimeSync.enqueueRange(dto);
+  async sync(
+    @Body() dto: TrainTimeSyncRangeDto,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ): Promise<EnqueueResultDto> {
+    const runId = await this.trainTimeSync.enqueueRange(dto, BigInt(user.idx));
+    this.audit.log({
+      actorIdx: user.idx,
+      action: "scheduler.run",
+      targetType: "scheduler",
+      targetId: "train-time-sync",
+      after: { runId: runId.toString(), ...dto },
+      ip: req.ip,
+    });
     return {
       runId: runId.toString(),
       jobName: "train-time-sync",

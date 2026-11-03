@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { AuditModule } from "../audit/audit.module";
 import { ExternalModule } from "../external/external.module";
 import { SchedulerModule } from "../scheduler/scheduler.module";
 import { AdminTrainsController } from "./admin-trains.controller";
@@ -7,7 +8,7 @@ import { TrainsService } from "./trains.service";
 import { TrainTimeSyncService } from "./train-time-sync.service";
 
 @Module({
-  imports: [ExternalModule, SchedulerModule],
+  imports: [ExternalModule, SchedulerModule, AuditModule],
   controllers: [TrainsController, AdminTrainsController],
   providers: [TrainsService, TrainTimeSyncService],
 })

@@ -89,13 +89,15 @@ export class TrainTimeSyncService implements OnModuleInit {
    * 날짜 검증을 선행하므로 잘못된 요청은 즉시 400 으로 응답한다(비동기 실패로 숨지 않음).
    * 동일 기간이 이미 진행 중이면 409.
    */
-  async enqueueRange(dto: TrainTimeSyncRangeDto): Promise<bigint> {
+  async enqueueRange(dto: TrainTimeSyncRangeDto, triggeredBy?: bigint): Promise<bigint> {
     const dates = this.resolveRangeDates(dto); // 유효하지 않으면 여기서 예외
     const runId = await this.jobQueue.enqueue({
       jobName: CRON_JOB_NAME,
       startYmd: dates[0],
       endYmd: dates[dates.length - 1],
       skipIfRunning: false,
+      triggeredBy,
+      params: dto,
       jobFn: () => this.syncRange(dto),
     });
     // skipIfRunning=false 이므로 중복 시 이미 예외가 발생한다 → 여기서는 항상 non-null.

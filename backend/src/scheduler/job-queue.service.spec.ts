@@ -15,6 +15,8 @@ interface Row {
   endedAt: Date | null;
   errorMessage: string | null;
   metadata: unknown;
+  triggeredBy?: bigint | null;
+  params?: unknown;
 }
 
 /** scheduler_run_log 를 흉내내는 최소 인메모리 Prisma 목. */
@@ -215,6 +217,23 @@ describe("JobQueueService", () => {
 
     expect(runId).toBe(1n);
     expect(jobFn).toHaveBeenCalledTimes(1);
+  });
+
+  it("enqueue: triggeredBy/params 를 DB row 에 저장한다", async () => {
+    const jobFn = jest.fn(() => Promise.resolve());
+    await service.enqueue({
+      jobName: "manual-job",
+      startYmd: "20260101",
+      endYmd: "20260101",
+      triggeredBy: 7n,
+      params: { days: 3 },
+      jobFn,
+    });
+    await flush();
+
+    const row = prisma._rows[0];
+    expect(row.triggeredBy).toBe(7n);
+    expect(row.params).toEqual({ days: 3 });
   });
 
   it("cancelPending: PENDING 작업을 CANCELLED 로 바꾸고, 이미 종료된 작업엔 false", async () => {

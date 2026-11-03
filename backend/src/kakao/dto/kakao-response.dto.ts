@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-/** 프론트엔드 호환 카카오 토큰 응답. (Firebase OAuthProvider('oidc.kakao') 흐름 유지용) */
+/** 카카오 인가 코드 교환 응답. */
 export class KakaoTokenResponseDto {
   @ApiProperty({ description: "카카오 액세스 토큰" })
   access_token: string;

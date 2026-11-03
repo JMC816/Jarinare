@@ -19,7 +19,7 @@ export class KakaoController {
   @ApiOperation({
     summary: "카카오 인가 코드 → 토큰 교환",
     description:
-      "client_secret 을 서버에서만 사용해 토큰을 교환한다. 기존 Firebase OAuthProvider 흐름과 호환.",
+      "client_secret 을 서버에서만 사용해 카카오 토큰을 교환한다.",
   })
   @ApiOkResponse({ type: KakaoTokenResponseDto })
   token(@Body() dto: KakaoTokenDto): Promise<KakaoTokenResponseDto> {
@@ -30,9 +30,9 @@ export class KakaoController {
   @Post("login")
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: "카카오 로그인 (Firebase Custom Token 발급)",
+    summary: "카카오 로그인 (JWT 발급)",
     description:
-      "id_token 을 검증한 뒤 Firebase Custom Token 을 발급하고, 사용자 기본 데이터를 보장한다.",
+      "id_token 을 검증한 뒤 JWT 액세스 토큰을 발급하고, 사용자 기본 데이터를 보장한다.",
   })
   @ApiOkResponse({ type: KakaoLoginResponseDto })
   login(@Body() dto: KakaoTokenDto): Promise<KakaoLoginResponseDto> {

@@ -7,7 +7,6 @@ import { UsersModule } from "../users/users.module";
 import { PrismaModule } from "../prisma/prisma.module";
 import { RolePermissionsModule } from "../role-permissions/role-permissions.module";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
-import { RolesGuard } from "./guards/roles.guard";
 import { PermissionsGuard } from "./guards/permissions.guard";
 import { OAuthController } from "./oauth.controller";
 import { AuthService } from "./auth.service";
@@ -31,7 +30,6 @@ import { AuthService } from "./auth.service";
   providers: [
     AuthService,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
-    { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_GUARD, useClass: PermissionsGuard },
   ],
 })

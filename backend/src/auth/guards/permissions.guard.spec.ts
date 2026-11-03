@@ -3,7 +3,14 @@ import { Reflector } from "@nestjs/core";
 import { PermissionsGuard } from "./permissions.guard";
 import type { AuthUser } from "../interfaces/auth-user.interface";
 import type { RolePermissionsService } from "../../role-permissions/role-permissions.service";
-import { ROLE_PERMISSIONS } from "../permission.types";
+
+const TEST_PERMISSIONS: Record<string, string[]> = {
+  user: [],
+  cs: ["dashboard:view", "user:view", "report:view", "reservation:view", "membership:view", "card:view", "scheduler:view"],
+  marketer: ["dashboard:view", "membership:view", "membership:manage", "card:view", "card:manage", "board:create", "notification:send"],
+  operator: ["dashboard:view", "user:view", "user:suspend", "report:view", "report:resolve", "board:delete", "board:create", "scheduler:view", "scheduler:run", "reservation:view"],
+  super_admin: ["user:view", "user:suspend", "user:delete", "report:view", "report:resolve", "report:delete", "board:delete", "board:create", "membership:view", "membership:manage", "card:view", "card:manage", "scheduler:view", "scheduler:run", "dashboard:view", "notification:send", "reservation:view", "admin:manage"],
+};
 
 function mockContext(user: AuthUser | undefined): ExecutionContext {
   return {
@@ -17,7 +24,7 @@ function mockContext(user: AuthUser | undefined): ExecutionContext {
 
 function mockRolePermissions(): jest.Mocked<RolePermissionsService> {
   return {
-    getPermissions: jest.fn(async (role: string) => ROLE_PERMISSIONS[role] ?? []),
+    getPermissions: jest.fn(async (role: string) => TEST_PERMISSIONS[role] ?? []),
     hasPermission: jest.fn(),
     invalidate: jest.fn(),
   } as unknown as jest.Mocked<RolePermissionsService>;

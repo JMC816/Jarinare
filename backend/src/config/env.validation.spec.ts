@@ -5,9 +5,6 @@ const requiredEnv = {
   TRAIN_API_SERVICE_KEY: "key",
   KAKAO_CLIENT_ID: "cid",
   KAKAO_CLIENT_SECRET: "csecret",
-  FIREBASE_PROJECT_ID: "pid",
-  FIREBASE_CLIENT_EMAIL: "svc@example.com",
-  FIREBASE_PRIVATE_KEY: "pk",
   JWT_SECRET: "test-secret",
 };
 
@@ -24,7 +21,7 @@ describe("validateEnv", () => {
 
   it("오류 메시지에 실제 시크릿 값을 포함하지 않는다", () => {
     const rest: Record<string, string> = { ...requiredEnv };
-    delete rest.FIREBASE_PRIVATE_KEY;
+    delete rest.JWT_SECRET;
     try {
       validateEnv({ ...rest, TRAIN_API_SERVICE_KEY: "super-secret-value" });
       throw new Error("should have thrown");

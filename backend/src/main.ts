@@ -16,6 +16,12 @@ async function bootstrap() {
   // NestJS 기본 로거를 winston 로거로 교체
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
+  // 프록시(Vercel rewrite, ngrok 등) 뒤에서 실제 접속자 IP 를 얻기 위한 설정.
+  // TRUST_PROXY=1: 프록시 1단계(기본값). true 로 열면 X-Forwarded-For 위조 가능하므로 금지.
+  // 프록시 단계가 늘어나면 환경변수 값을 맞게 조정할 것.
+  const trustProxy = process.env.TRUST_PROXY ?? "1";
+  app.set("trust proxy", isNaN(Number(trustProxy)) ? trustProxy : Number(trustProxy));
+
   // 모든 라우트에 /api 프리픽스 적용 (oauth 경로 제외)
   app.setGlobalPrefix("api", {
     exclude: [

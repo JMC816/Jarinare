@@ -46,7 +46,7 @@ export class AdminTrainsController {
     const runId = await this.trainTimeSync.enqueueRange(dto, BigInt(user.idx));
     this.audit.log({
       actorIdx: user.idx,
-      action: "scheduler.run",
+      action: "scheduler.train_time_sync",
       targetType: "scheduler",
       targetId: "train-time-sync",
       after: { runId: runId.toString(), ...dto },

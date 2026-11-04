@@ -85,6 +85,33 @@ describe("AuditService", () => {
         service.log({ actorIdx: 2, action: "b", targetType: "t", targetId: "99" }),
       ).not.toThrow();
     });
+
+    it("before에 BigInt가 포함돼도 예외를 던지지 않는다", async () => {
+      expect(() =>
+        service.log({
+          actorIdx: 1,
+          action: "user.suspend",
+          targetType: "user",
+          targetId: "1",
+          before: { idx: BigInt(42), name: "홍길동" },
+        }),
+      ).not.toThrow();
+      await Promise.resolve();
+      expect(prisma.adminAuditLog.create).toHaveBeenCalledTimes(1);
+    });
+
+    it("before의 BigInt가 문자열로 직렬화돼 Winston에 기록된다", () => {
+      service.log({
+        actorIdx: 1,
+        action: "user.suspend",
+        targetType: "user",
+        targetId: "1",
+        before: { idx: BigInt(42) },
+      });
+      expect(logSpy).toHaveBeenCalledWith(
+        expect.stringContaining('"idx":"42"'),
+      );
+    });
   });
 
   // ──────────────── list() ────────────────

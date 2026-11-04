@@ -20,6 +20,15 @@ export interface AuditLogEntry {
   ip?: string;
 }
 
+// Prisma 행 등에 포함된 BigInt 를 문자열로 직렬화해 JSON.stringify 오류 방지
+function bigIntReplacer(_key: string, value: unknown): unknown {
+  return typeof value === "bigint" ? value.toString() : value;
+}
+
+function toJsonValue(v: unknown): Prisma.InputJsonValue {
+  return JSON.parse(JSON.stringify(v, bigIntReplacer)) as Prisma.InputJsonValue;
+}
+
 @Injectable()
 export class AuditService {
   private readonly logger = new Logger("AUDIT");
@@ -30,34 +39,35 @@ export class AuditService {
    * 감사 로그를 기록한다.
    *  1) Winston AUDIT 컨텍스트로 JSON 한 줄 — audit-YYYYMMDD.log 에 라우팅됨.
    *  2) admin_audit_logs DB 저장 — fire-and-forget. 실패해도 어드민 작업 자체는 막지 않는다.
+   *  전체를 try/catch 로 감싸 어떤 경우에도 예외가 호출부로 나가지 않는다.
    */
   log(entry: AuditLogEntry): void {
-    this.logger.log(JSON.stringify(entry));
+    try {
+      this.logger.log(JSON.stringify(entry, bigIntReplacer));
 
-    this.prisma.adminAuditLog
-      .create({
-        data: {
-          actorIdx: BigInt(entry.actorIdx),
-          action: entry.action,
-          targetType: entry.targetType,
-          targetId: entry.targetId,
-          before:
-            entry.before !== undefined
-              ? (entry.before as Prisma.InputJsonValue)
-              : undefined,
-          after:
-            entry.after !== undefined
-              ? (entry.after as Prisma.InputJsonValue)
-              : undefined,
-          reason: entry.reason,
-          ip: entry.ip,
-        },
-      })
-      .catch((err: Error) => {
-        this.logger.error(
-          `audit DB 저장 실패 [${entry.action}]: ${err.message}`,
-        );
-      });
+      this.prisma.adminAuditLog
+        .create({
+          data: {
+            actorIdx: BigInt(entry.actorIdx),
+            action: entry.action,
+            targetType: entry.targetType,
+            targetId: entry.targetId,
+            before: entry.before !== undefined ? toJsonValue(entry.before) : undefined,
+            after:  entry.after  !== undefined ? toJsonValue(entry.after)  : undefined,
+            reason: entry.reason,
+            ip: entry.ip,
+          },
+        })
+        .catch((err: Error) => {
+          this.logger.error(
+            `audit DB 저장 실패 [${entry.action}]: ${err.message}`,
+          );
+        });
+    } catch (err) {
+      this.logger.error(
+        `audit 로그 실패 [${entry.action}]: ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
   }
 
   async list(query: AuditLogQueryDto): Promise<AuditLogListResponseDto> {

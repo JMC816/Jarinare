@@ -282,6 +282,7 @@ model TrainTrip {
   arrPlandTime String   @db.VarChar(14)
   depName      String   @db.VarChar(100)
   arrName      String   @db.VarChar(100)
+  adultcharge  Int      @default(0) // 성인 1인 기준 운임 (서버 가격 계산에 사용)
   createdAt    DateTime @default(now())
 
   holds          SeatHold[]
@@ -291,6 +292,32 @@ model TrainTrip {
   @@unique([trainNo, depPlaceId, arrPlaceId, depPlandTime])
   @@index([depPlandTime])
   @@map("train_trips")
+}
+
+model CardDiscount {
+  id           Int      @id @default(autoincrement())
+  cardName     String   @unique @db.VarChar(30)
+  discountRate Decimal  @default(0) @db.Decimal(5, 4) // 즉시 할인율 (예: 0.1000 = 10%)
+  paybackRate  Decimal  @default(0) @db.Decimal(5, 4) // 포인트 페이백율 (예: 0.2000 = 20%)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("card_discounts")
+}
+
+model SeasonEvent {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(50)                  // 계절 이름 (봄/여름/가을/겨울)
+  discountRate Decimal  @default(0.1) @db.Decimal(5, 4)  // 할인율 (예: 0.1000 = 10%)
+  startMonth   Int      @db.TinyInt                      // 시작 월 (1~12)
+  endMonth     Int      @db.TinyInt                      // 종료 월 (1~12, 겨울처럼 연도 경계 가능)
+  stations     Json                                       // 적용 역 목록 string[]
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("season_events")
 }
 
 model SeatHold {

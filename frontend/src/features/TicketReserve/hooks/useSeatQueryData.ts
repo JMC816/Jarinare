@@ -40,6 +40,7 @@ export const useSeatQueryData = () => {
     selectTrainType,
     selectAdult,
     selectKid,
+    selectPay,
     startStationForView,
     endStationForView,
     trainNo,
@@ -95,6 +96,7 @@ export const useSeatQueryData = () => {
       arrPlandTime: String(selectEndTime).substring(0, 12),
       depName: startStationForView,
       arrName: endStationForView,
+      adultcharge: selectPay,
     })
       .then((trip) => setTripId(trip.tripId))
       .catch((e) => console.error('[upsertTrip 실패]', e?.response?.data ?? e));
@@ -342,7 +344,7 @@ export const useSeatQueryData = () => {
     setIsMutating(false);
   };
 
-  const createSelectedSeats = async (finalPrice: number, usedPoint = 0, paybackPoint = 0) => {
+  const createSelectedSeats = async (usedPoint = 0, selectedCard: string | null = null, paymentMethod = '') => {
     if (!localStorage.getItem(ACCESS_TOKEN_KEY) || !tripId) return;
     if (isMutating) return;
     setIsMutating(true);
@@ -368,6 +370,7 @@ export const useSeatQueryData = () => {
       endStationForView: arrName,
       selectKid: kid,
       selectAdult: adult,
+      selectPay: adultcharge,
       tripId: currentTripId,
       startDayForView: dayView,
     } = trainDataStore.getState();
@@ -389,6 +392,7 @@ export const useSeatQueryData = () => {
           arrPlandTime: String(arrTime).substring(0, 12),
           depName,
           arrName,
+          adultcharge,
         });
         currentTripId2 = trip.tripId;
         setTripId(trip.tripId);
@@ -405,9 +409,9 @@ export const useSeatQueryData = () => {
         seatIds: filtered,
         adult,
         kid,
-        totalPrice: finalPrice,
         usedPoint,
-        paybackPoint,
+        selectedCard,
+        paymentMethod,
         startDayForView: dayView,
       });
 

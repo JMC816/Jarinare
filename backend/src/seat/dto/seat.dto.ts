@@ -80,6 +80,11 @@ export class UpsertTripDto {
   @IsString()
   @Length(1, 100)
   arrName!: string;
+
+  @ApiProperty({ example: 59800, description: "성인 1인 기준 운임" })
+  @IsInt()
+  @Min(0)
+  adultcharge!: number;
 }
 
 export class SeatSelectionDto {
@@ -131,7 +136,7 @@ export class ReleaseHoldDto {
 }
 
 /**
- * 예매 확정. 기존 프론트의 selectAdult / selectKid / selectPay 를 그대로 받는다.
+ * 예매 확정. 카드사·포인트만 받고 최종 금액은 서버가 계산한다.
  * 성인 + 아동 수는 좌석 수와 같아야 한다.
  */
 export class CreateReservationDto extends SeatSelectionDto {
@@ -147,31 +152,11 @@ export class CreateReservationDto extends SeatSelectionDto {
   @Max(MAX_SEATS_PER_ORDER)
   kid!: number;
 
-  @ApiProperty({
-    example: 98000,
-    description:
-      "결제 최종 금액 (기존 finalPrice). 좌석별로 나눠 저장하되 합계는 그대로 보존",
-  })
-  @IsInt()
-  @Min(0)
-  totalPrice!: number;
-
-  // ── 아래는 기존 결제 화면(usePayModal)이 계산해 Firestore 에 따로 쓰던 값 ──
-
-  @ApiPropertyOptional({ example: 1000, description: "사용한 포인트" })
+  @ApiPropertyOptional({ example: 1000, description: "사용할 포인트" })
   @IsOptional()
   @IsInt()
   @Min(0)
   usedPoint?: number;
-
-  @ApiPropertyOptional({
-    example: 980,
-    description: "카드 페이백으로 적립할 포인트",
-  })
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  paybackPoint?: number;
 
   @ApiPropertyOptional({ example: "신용카드", description: "결제 수단" })
   @IsOptional()

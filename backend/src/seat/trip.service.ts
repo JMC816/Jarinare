@@ -18,6 +18,7 @@ export interface TripDto {
   arrPlandTime: string;
   depName: string;
   arrName: string;
+  adultcharge: number;
 }
 
 export const toTripDto = (t: TrainTrip): TripDto => ({
@@ -30,6 +31,7 @@ export const toTripDto = (t: TrainTrip): TripDto => ({
   arrPlandTime: t.arrPlandTime,
   depName: t.depName,
   arrName: t.arrName,
+  adultcharge: t.adultcharge,
 });
 
 @Injectable()
@@ -55,10 +57,12 @@ export class TripService {
     } catch (e) {
       if (!isUniqueViolation(e)) throw e;
     }
-    const existing = await this.prisma.trainTrip.findUnique({
+    // 운임은 시간에 따라 바뀔 수 있으므로 충돌 시에도 갱신한다
+    const updated = await this.prisma.trainTrip.update({
       where: { trainNo_depPlaceId_arrPlaceId_depPlandTime: key },
+      data: { adultcharge: dto.adultcharge },
     });
-    return toTripDto(existing!);
+    return toTripDto(updated);
   }
 
   async get(tripId: number | bigint): Promise<TrainTrip> {

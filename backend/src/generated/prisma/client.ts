@@ -120,6 +120,16 @@ export type SeatSlot = Prisma.SeatSlotModel
  */
 export type TrainTrip = Prisma.TrainTripModel
 /**
+ * Model CardDiscount
+ * 
+ */
+export type CardDiscount = Prisma.CardDiscountModel
+/**
+ * Model SeasonEvent
+ * 
+ */
+export type SeasonEvent = Prisma.SeasonEventModel
+/**
  * Model SeatHold
  * 
  */

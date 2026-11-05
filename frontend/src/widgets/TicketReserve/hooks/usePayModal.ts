@@ -130,7 +130,7 @@ export const usePayModal = () => {
   };
 
   const handlePay = async () => {
-    await createSelectedSeats(finalPrice, checked ? pointValue : 0, cardPayback);
+    await createSelectedSeats(checked ? pointValue : 0, selectedCard, selectedPaymentMethod ?? '');
     closeModal('PayModal');
   };
 

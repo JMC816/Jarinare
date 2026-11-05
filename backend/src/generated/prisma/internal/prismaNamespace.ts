@@ -400,6 +400,8 @@ export const ModelName = {
   CarLayout: 'CarLayout',
   SeatSlot: 'SeatSlot',
   TrainTrip: 'TrainTrip',
+  CardDiscount: 'CardDiscount',
+  SeasonEvent: 'SeasonEvent',
   SeatHold: 'SeatHold',
   Reservation: 'Reservation',
   SeatChangeRequest: 'SeatChangeRequest',
@@ -423,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "adminAuditLog" | "carLayout" | "seatSlot" | "trainTrip" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket" | "adminRole"
+    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "adminAuditLog" | "carLayout" | "seatSlot" | "trainTrip" | "cardDiscount" | "seasonEvent" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket" | "adminRole"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1483,6 +1485,138 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    CardDiscount: {
+      payload: Prisma.$CardDiscountPayload<ExtArgs>
+      fields: Prisma.CardDiscountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.CardDiscountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.CardDiscountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload>
+        }
+        findFirst: {
+          args: Prisma.CardDiscountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.CardDiscountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload>
+        }
+        findMany: {
+          args: Prisma.CardDiscountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload>[]
+        }
+        create: {
+          args: Prisma.CardDiscountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload>
+        }
+        createMany: {
+          args: Prisma.CardDiscountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.CardDiscountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload>
+        }
+        update: {
+          args: Prisma.CardDiscountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload>
+        }
+        deleteMany: {
+          args: Prisma.CardDiscountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.CardDiscountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.CardDiscountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$CardDiscountPayload>
+        }
+        aggregate: {
+          args: Prisma.CardDiscountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateCardDiscount>
+        }
+        groupBy: {
+          args: Prisma.CardDiscountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CardDiscountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.CardDiscountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.CardDiscountCountAggregateOutputType> | number
+        }
+      }
+    }
+    SeasonEvent: {
+      payload: Prisma.$SeasonEventPayload<ExtArgs>
+      fields: Prisma.SeasonEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SeasonEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SeasonEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload>
+        }
+        findFirst: {
+          args: Prisma.SeasonEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SeasonEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload>
+        }
+        findMany: {
+          args: Prisma.SeasonEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload>[]
+        }
+        create: {
+          args: Prisma.SeasonEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload>
+        }
+        createMany: {
+          args: Prisma.SeasonEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.SeasonEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload>
+        }
+        update: {
+          args: Prisma.SeasonEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.SeasonEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SeasonEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.SeasonEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SeasonEventPayload>
+        }
+        aggregate: {
+          args: Prisma.SeasonEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSeasonEvent>
+        }
+        groupBy: {
+          args: Prisma.SeasonEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SeasonEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SeasonEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SeasonEventCountAggregateOutputType> | number
+        }
+      }
+    }
     SeatHold: {
       payload: Prisma.$SeatHoldPayload<ExtArgs>
       fields: Prisma.SeatHoldFieldRefs
@@ -2259,10 +2393,39 @@ export const TrainTripScalarFieldEnum = {
   arrPlandTime: 'arrPlandTime',
   depName: 'depName',
   arrName: 'arrName',
+  adultcharge: 'adultcharge',
   createdAt: 'createdAt'
 } as const
 
 export type TrainTripScalarFieldEnum = (typeof TrainTripScalarFieldEnum)[keyof typeof TrainTripScalarFieldEnum]
+
+
+export const CardDiscountScalarFieldEnum = {
+  id: 'id',
+  cardName: 'cardName',
+  discountRate: 'discountRate',
+  paybackRate: 'paybackRate',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CardDiscountScalarFieldEnum = (typeof CardDiscountScalarFieldEnum)[keyof typeof CardDiscountScalarFieldEnum]
+
+
+export const SeasonEventScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  discountRate: 'discountRate',
+  startMonth: 'startMonth',
+  endMonth: 'endMonth',
+  stations: 'stations',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SeasonEventScalarFieldEnum = (typeof SeasonEventScalarFieldEnum)[keyof typeof SeasonEventScalarFieldEnum]
 
 
 export const SeatHoldScalarFieldEnum = {
@@ -2539,6 +2702,20 @@ export const TrainTripOrderByRelevanceFieldEnum = {
 export type TrainTripOrderByRelevanceFieldEnum = (typeof TrainTripOrderByRelevanceFieldEnum)[keyof typeof TrainTripOrderByRelevanceFieldEnum]
 
 
+export const CardDiscountOrderByRelevanceFieldEnum = {
+  cardName: 'cardName'
+} as const
+
+export type CardDiscountOrderByRelevanceFieldEnum = (typeof CardDiscountOrderByRelevanceFieldEnum)[keyof typeof CardDiscountOrderByRelevanceFieldEnum]
+
+
+export const SeasonEventOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type SeasonEventOrderByRelevanceFieldEnum = (typeof SeasonEventOrderByRelevanceFieldEnum)[keyof typeof SeasonEventOrderByRelevanceFieldEnum]
+
+
 export const SeatHoldOrderByRelevanceFieldEnum = {
   seatId: 'seatId'
 } as const
@@ -2800,6 +2977,8 @@ export type GlobalOmitConfig = {
   carLayout?: Prisma.CarLayoutOmit
   seatSlot?: Prisma.SeatSlotOmit
   trainTrip?: Prisma.TrainTripOmit
+  cardDiscount?: Prisma.CardDiscountOmit
+  seasonEvent?: Prisma.SeasonEventOmit
   seatHold?: Prisma.SeatHoldOmit
   reservation?: Prisma.ReservationOmit
   seatChangeRequest?: Prisma.SeatChangeRequestOmit

@@ -28,10 +28,12 @@ export type AggregateTrainTrip = {
 
 export type TrainTripAvgAggregateOutputType = {
   id: number | null
+  adultcharge: number | null
 }
 
 export type TrainTripSumAggregateOutputType = {
   id: bigint | null
+  adultcharge: number | null
 }
 
 export type TrainTripMinAggregateOutputType = {
@@ -44,6 +46,7 @@ export type TrainTripMinAggregateOutputType = {
   arrPlandTime: string | null
   depName: string | null
   arrName: string | null
+  adultcharge: number | null
   createdAt: Date | null
 }
 
@@ -57,6 +60,7 @@ export type TrainTripMaxAggregateOutputType = {
   arrPlandTime: string | null
   depName: string | null
   arrName: string | null
+  adultcharge: number | null
   createdAt: Date | null
 }
 
@@ -70,6 +74,7 @@ export type TrainTripCountAggregateOutputType = {
   arrPlandTime: number
   depName: number
   arrName: number
+  adultcharge: number
   createdAt: number
   _all: number
 }
@@ -77,10 +82,12 @@ export type TrainTripCountAggregateOutputType = {
 
 export type TrainTripAvgAggregateInputType = {
   id?: true
+  adultcharge?: true
 }
 
 export type TrainTripSumAggregateInputType = {
   id?: true
+  adultcharge?: true
 }
 
 export type TrainTripMinAggregateInputType = {
@@ -93,6 +100,7 @@ export type TrainTripMinAggregateInputType = {
   arrPlandTime?: true
   depName?: true
   arrName?: true
+  adultcharge?: true
   createdAt?: true
 }
 
@@ -106,6 +114,7 @@ export type TrainTripMaxAggregateInputType = {
   arrPlandTime?: true
   depName?: true
   arrName?: true
+  adultcharge?: true
   createdAt?: true
 }
 
@@ -119,6 +128,7 @@ export type TrainTripCountAggregateInputType = {
   arrPlandTime?: true
   depName?: true
   arrName?: true
+  adultcharge?: true
   createdAt?: true
   _all?: true
 }
@@ -219,6 +229,7 @@ export type TrainTripGroupByOutputType = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge: number
   createdAt: Date
   _count: TrainTripCountAggregateOutputType | null
   _avg: TrainTripAvgAggregateOutputType | null
@@ -255,6 +266,7 @@ export type TrainTripWhereInput = {
   arrPlandTime?: Prisma.StringFilter<"TrainTrip"> | string
   depName?: Prisma.StringFilter<"TrainTrip"> | string
   arrName?: Prisma.StringFilter<"TrainTrip"> | string
+  adultcharge?: Prisma.IntFilter<"TrainTrip"> | number
   createdAt?: Prisma.DateTimeFilter<"TrainTrip"> | Date | string
   holds?: Prisma.SeatHoldListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
@@ -271,6 +283,7 @@ export type TrainTripOrderByWithRelationInput = {
   arrPlandTime?: Prisma.SortOrder
   depName?: Prisma.SortOrder
   arrName?: Prisma.SortOrder
+  adultcharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   holds?: Prisma.SeatHoldOrderByRelationAggregateInput
   reservations?: Prisma.ReservationOrderByRelationAggregateInput
@@ -292,6 +305,7 @@ export type TrainTripWhereUniqueInput = Prisma.AtLeast<{
   arrPlandTime?: Prisma.StringFilter<"TrainTrip"> | string
   depName?: Prisma.StringFilter<"TrainTrip"> | string
   arrName?: Prisma.StringFilter<"TrainTrip"> | string
+  adultcharge?: Prisma.IntFilter<"TrainTrip"> | number
   createdAt?: Prisma.DateTimeFilter<"TrainTrip"> | Date | string
   holds?: Prisma.SeatHoldListRelationFilter
   reservations?: Prisma.ReservationListRelationFilter
@@ -308,6 +322,7 @@ export type TrainTripOrderByWithAggregationInput = {
   arrPlandTime?: Prisma.SortOrder
   depName?: Prisma.SortOrder
   arrName?: Prisma.SortOrder
+  adultcharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.TrainTripCountOrderByAggregateInput
   _avg?: Prisma.TrainTripAvgOrderByAggregateInput
@@ -329,6 +344,7 @@ export type TrainTripScalarWhereWithAggregatesInput = {
   arrPlandTime?: Prisma.StringWithAggregatesFilter<"TrainTrip"> | string
   depName?: Prisma.StringWithAggregatesFilter<"TrainTrip"> | string
   arrName?: Prisma.StringWithAggregatesFilter<"TrainTrip"> | string
+  adultcharge?: Prisma.IntWithAggregatesFilter<"TrainTrip"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TrainTrip"> | Date | string
 }
 
@@ -342,6 +358,7 @@ export type TrainTripCreateInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
   holds?: Prisma.SeatHoldCreateNestedManyWithoutTripInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTripInput
@@ -358,6 +375,7 @@ export type TrainTripUncheckedCreateInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
   holds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutTripInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTripInput
@@ -374,6 +392,7 @@ export type TrainTripUpdateInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   holds?: Prisma.SeatHoldUpdateManyWithoutTripNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTripNestedInput
@@ -390,6 +409,7 @@ export type TrainTripUncheckedUpdateInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   holds?: Prisma.SeatHoldUncheckedUpdateManyWithoutTripNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTripNestedInput
@@ -406,6 +426,7 @@ export type TrainTripCreateManyInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
 }
 
@@ -419,6 +440,7 @@ export type TrainTripUpdateManyMutationInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -432,6 +454,7 @@ export type TrainTripUncheckedUpdateManyInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -458,11 +481,13 @@ export type TrainTripCountOrderByAggregateInput = {
   arrPlandTime?: Prisma.SortOrder
   depName?: Prisma.SortOrder
   arrName?: Prisma.SortOrder
+  adultcharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TrainTripAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  adultcharge?: Prisma.SortOrder
 }
 
 export type TrainTripMaxOrderByAggregateInput = {
@@ -475,6 +500,7 @@ export type TrainTripMaxOrderByAggregateInput = {
   arrPlandTime?: Prisma.SortOrder
   depName?: Prisma.SortOrder
   arrName?: Prisma.SortOrder
+  adultcharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -488,11 +514,13 @@ export type TrainTripMinOrderByAggregateInput = {
   arrPlandTime?: Prisma.SortOrder
   depName?: Prisma.SortOrder
   arrName?: Prisma.SortOrder
+  adultcharge?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type TrainTripSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  adultcharge?: Prisma.SortOrder
 }
 
 export type TrainTripScalarRelationFilter = {
@@ -552,6 +580,7 @@ export type TrainTripCreateWithoutHoldsInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
   reservations?: Prisma.ReservationCreateNestedManyWithoutTripInput
   changeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutTripInput
@@ -567,6 +596,7 @@ export type TrainTripUncheckedCreateWithoutHoldsInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTripInput
   changeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTripInput
@@ -598,6 +628,7 @@ export type TrainTripUpdateWithoutHoldsInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reservations?: Prisma.ReservationUpdateManyWithoutTripNestedInput
   changeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutTripNestedInput
@@ -613,6 +644,7 @@ export type TrainTripUncheckedUpdateWithoutHoldsInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTripNestedInput
   changeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTripNestedInput
@@ -628,6 +660,7 @@ export type TrainTripCreateWithoutReservationsInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
   holds?: Prisma.SeatHoldCreateNestedManyWithoutTripInput
   changeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutTripInput
@@ -643,6 +676,7 @@ export type TrainTripUncheckedCreateWithoutReservationsInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
   holds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutTripInput
   changeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTripInput
@@ -674,6 +708,7 @@ export type TrainTripUpdateWithoutReservationsInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   holds?: Prisma.SeatHoldUpdateManyWithoutTripNestedInput
   changeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutTripNestedInput
@@ -689,6 +724,7 @@ export type TrainTripUncheckedUpdateWithoutReservationsInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   holds?: Prisma.SeatHoldUncheckedUpdateManyWithoutTripNestedInput
   changeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTripNestedInput
@@ -704,6 +740,7 @@ export type TrainTripCreateWithoutChangeRequestsInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
   holds?: Prisma.SeatHoldCreateNestedManyWithoutTripInput
   reservations?: Prisma.ReservationCreateNestedManyWithoutTripInput
@@ -719,6 +756,7 @@ export type TrainTripUncheckedCreateWithoutChangeRequestsInput = {
   arrPlandTime: string
   depName: string
   arrName: string
+  adultcharge?: number
   createdAt?: Date | string
   holds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutTripInput
   reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutTripInput
@@ -750,6 +788,7 @@ export type TrainTripUpdateWithoutChangeRequestsInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   holds?: Prisma.SeatHoldUpdateManyWithoutTripNestedInput
   reservations?: Prisma.ReservationUpdateManyWithoutTripNestedInput
@@ -765,6 +804,7 @@ export type TrainTripUncheckedUpdateWithoutChangeRequestsInput = {
   arrPlandTime?: Prisma.StringFieldUpdateOperationsInput | string
   depName?: Prisma.StringFieldUpdateOperationsInput | string
   arrName?: Prisma.StringFieldUpdateOperationsInput | string
+  adultcharge?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   holds?: Prisma.SeatHoldUncheckedUpdateManyWithoutTripNestedInput
   reservations?: Prisma.ReservationUncheckedUpdateManyWithoutTripNestedInput
@@ -829,6 +869,7 @@ export type TrainTripSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   arrPlandTime?: boolean
   depName?: boolean
   arrName?: boolean
+  adultcharge?: boolean
   createdAt?: boolean
   holds?: boolean | Prisma.TrainTrip$holdsArgs<ExtArgs>
   reservations?: boolean | Prisma.TrainTrip$reservationsArgs<ExtArgs>
@@ -848,10 +889,11 @@ export type TrainTripSelectScalar = {
   arrPlandTime?: boolean
   depName?: boolean
   arrName?: boolean
+  adultcharge?: boolean
   createdAt?: boolean
 }
 
-export type TrainTripOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "trainNo" | "trainType" | "depPlaceId" | "arrPlaceId" | "depPlandTime" | "arrPlandTime" | "depName" | "arrName" | "createdAt", ExtArgs["result"]["trainTrip"]>
+export type TrainTripOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "trainNo" | "trainType" | "depPlaceId" | "arrPlaceId" | "depPlandTime" | "arrPlandTime" | "depName" | "arrName" | "adultcharge" | "createdAt", ExtArgs["result"]["trainTrip"]>
 export type TrainTripInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   holds?: boolean | Prisma.TrainTrip$holdsArgs<ExtArgs>
   reservations?: boolean | Prisma.TrainTrip$reservationsArgs<ExtArgs>
@@ -876,6 +918,7 @@ export type $TrainTripPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     arrPlandTime: string
     depName: string
     arrName: string
+    adultcharge: number
     createdAt: Date
   }, ExtArgs["result"]["trainTrip"]>
   composites: {}
@@ -1258,6 +1301,7 @@ export interface TrainTripFieldRefs {
   readonly arrPlandTime: Prisma.FieldRef<"TrainTrip", 'String'>
   readonly depName: Prisma.FieldRef<"TrainTrip", 'String'>
   readonly arrName: Prisma.FieldRef<"TrainTrip", 'String'>
+  readonly adultcharge: Prisma.FieldRef<"TrainTrip", 'Int'>
   readonly createdAt: Prisma.FieldRef<"TrainTrip", 'DateTime'>
 }
     

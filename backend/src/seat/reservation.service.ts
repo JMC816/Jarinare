@@ -18,6 +18,7 @@ import { SeatLayoutService } from "./seat-layout.service";
 import { PointService } from "../point/point.service";
 import { OrderHistoryService } from "../point/order-history.service";
 import { TravelStatService } from "../travel-stat/travel-stat.service";
+import { PriceCalculationService } from "./price-calculation.service";
 import type {
   CancelReservationDto,
   CreateReservationDto,
@@ -51,6 +52,7 @@ export class ReservationService {
     private readonly points: PointService,
     private readonly orderHistories: OrderHistoryService,
     private readonly travelStats: TravelStatService,
+    private readonly priceCalc: PriceCalculationService,
   ) {}
 
   /**
@@ -82,7 +84,17 @@ export class ReservationService {
     const me = BigInt(user.idx);
     const now = new Date();
     const orderId = randomUUID();
-    const prices = splitPrice(dto.totalPrice, seatIds.length);
+
+    const { finalPrice, paybackPoint, usedPoint: validUsedPoint } =
+      await this.priceCalc.calculate({
+        adultcharge: trip.adultcharge,
+        seatCount: seatIds.length,
+        arrName: trip.arrName,
+        selectedCard: dto.selectedCard,
+        usedPoint: dto.usedPoint ?? 0,
+      });
+
+    const prices = splitPrice(finalPrice, seatIds.length);
 
     try {
       await withDeadlockRetry(() =>
@@ -130,8 +142,8 @@ export class ReservationService {
           await this.points.applyPayment(
             tx,
             me,
-            dto.usedPoint ?? 0,
-            dto.paybackPoint ?? 0,
+            validUsedPoint,
+            paybackPoint,
           );
 
           await this.orderHistories.record(tx, {
@@ -146,9 +158,9 @@ export class ReservationService {
             selectAdult: dto.adult,
             selectKid: dto.kid,
             seatCount: seatIds.length,
-            finalPrice: dto.totalPrice,
-            usedPoint: dto.usedPoint ?? 0,
-            paybackPoint: dto.paybackPoint ?? 0,
+            finalPrice,
+            usedPoint: validUsedPoint,
+            paybackPoint,
             paymentMethod: dto.paymentMethod ?? "",
             selectedCard: dto.selectedCard ?? null,
             isReturn: false,

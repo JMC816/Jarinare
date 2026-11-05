@@ -67,6 +67,8 @@ export const ModelName = {
   CarLayout: 'CarLayout',
   SeatSlot: 'SeatSlot',
   TrainTrip: 'TrainTrip',
+  CardDiscount: 'CardDiscount',
+  SeasonEvent: 'SeasonEvent',
   SeatHold: 'SeatHold',
   Reservation: 'Reservation',
   SeatChangeRequest: 'SeatChangeRequest',
@@ -302,10 +304,39 @@ export const TrainTripScalarFieldEnum = {
   arrPlandTime: 'arrPlandTime',
   depName: 'depName',
   arrName: 'arrName',
+  adultcharge: 'adultcharge',
   createdAt: 'createdAt'
 } as const
 
 export type TrainTripScalarFieldEnum = (typeof TrainTripScalarFieldEnum)[keyof typeof TrainTripScalarFieldEnum]
+
+
+export const CardDiscountScalarFieldEnum = {
+  id: 'id',
+  cardName: 'cardName',
+  discountRate: 'discountRate',
+  paybackRate: 'paybackRate',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CardDiscountScalarFieldEnum = (typeof CardDiscountScalarFieldEnum)[keyof typeof CardDiscountScalarFieldEnum]
+
+
+export const SeasonEventScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  discountRate: 'discountRate',
+  startMonth: 'startMonth',
+  endMonth: 'endMonth',
+  stations: 'stations',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SeasonEventScalarFieldEnum = (typeof SeasonEventScalarFieldEnum)[keyof typeof SeasonEventScalarFieldEnum]
 
 
 export const SeatHoldScalarFieldEnum = {
@@ -580,6 +611,20 @@ export const TrainTripOrderByRelevanceFieldEnum = {
 } as const
 
 export type TrainTripOrderByRelevanceFieldEnum = (typeof TrainTripOrderByRelevanceFieldEnum)[keyof typeof TrainTripOrderByRelevanceFieldEnum]
+
+
+export const CardDiscountOrderByRelevanceFieldEnum = {
+  cardName: 'cardName'
+} as const
+
+export type CardDiscountOrderByRelevanceFieldEnum = (typeof CardDiscountOrderByRelevanceFieldEnum)[keyof typeof CardDiscountOrderByRelevanceFieldEnum]
+
+
+export const SeasonEventOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type SeasonEventOrderByRelevanceFieldEnum = (typeof SeasonEventOrderByRelevanceFieldEnum)[keyof typeof SeasonEventOrderByRelevanceFieldEnum]
 
 
 export const SeatHoldOrderByRelevanceFieldEnum = {

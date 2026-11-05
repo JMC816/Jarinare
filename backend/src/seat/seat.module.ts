@@ -10,6 +10,7 @@ import { SeatQueryService } from "./seat-query.service";
 import { SeatHoldService } from "./seat-hold.service";
 import { ReservationService } from "./reservation.service";
 import { SeatChangeService } from "./seat-change.service";
+import { PriceCalculationService } from "./price-calculation.service";
 
 @Module({
   imports: [NotificationModule, PointModule, TravelStatModule],
@@ -21,6 +22,7 @@ import { SeatChangeService } from "./seat-change.service";
     SeatHoldService,
     ReservationService,
     SeatChangeService,
+    PriceCalculationService,
   ],
 })
 export class SeatModule {}

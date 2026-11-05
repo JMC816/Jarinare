@@ -90,6 +90,7 @@ export const upsertTrip = async (dto: {
   arrPlandTime: string;
   depName: string;
   arrName: string;
+  adultcharge: number;
 }): Promise<TripDto> => {
   const { data } = await backendClient.post<TripDto>('/api/seats/trips', dto);
   return data;
@@ -106,9 +107,7 @@ export const createReservation = async (dto: {
   seatIds: string[];
   adult: number;
   kid: number;
-  totalPrice: number;
   usedPoint?: number;
-  paybackPoint?: number;
   paymentMethod?: string;
   selectedCard?: string | null;
   startDayForView?: string;

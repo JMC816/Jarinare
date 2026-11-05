@@ -29,6 +29,7 @@ const TRIP = {
   arrPlandTime: "202610101130",
   depName: "서울",
   arrName: "부산",
+  adultcharge: 59800,
   createdAt: new Date(),
 };
 
@@ -188,6 +189,7 @@ describe("ReservationService.create", () => {
       {} as never,
       {} as never,
       {} as never,
+      {} as never,
     );
     await expect(
       service.create(
@@ -197,7 +199,6 @@ describe("ReservationService.create", () => {
           seatIds: ["A1", "B1"],
           adult: 1,
           kid: 0,
-          totalPrice: 10,
         },
         user(1),
       ),
@@ -217,6 +218,16 @@ describe("ReservationService.create", () => {
     const layouts = {
       assertSeatsExist: jest.fn(),
     } as unknown as SeatLayoutService;
+    const priceCalc = {
+      calculate: jest.fn().mockResolvedValue({
+        basePrice: 59800,
+        seasonDiscountApplied: false,
+        cardDiscountAmount: 0,
+        usedPoint: 0,
+        finalPrice: 59800,
+        paybackPoint: 0,
+      }),
+    };
     const service = new ReservationService(
       prisma as never,
       trips,
@@ -224,6 +235,7 @@ describe("ReservationService.create", () => {
       {} as never,
       {} as never,
       {} as never,
+      priceCalc as never,
     );
 
     await expect(
@@ -234,7 +246,6 @@ describe("ReservationService.create", () => {
           seatIds: ["A1"],
           adult: 1,
           kid: 0,
-          totalPrice: 10,
         },
         user(1),
       ),

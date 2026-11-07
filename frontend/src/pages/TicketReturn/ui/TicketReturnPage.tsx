@@ -29,22 +29,24 @@ const TicketReturnPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 lg:hidden">
         <BackWardPageButton />
-        <span className="mt-5 w-full text-lg font-bold">승차권 반환</span>
-        {!isLoggedIn ? (
-          <div className="mt-12">
-            <LoginRequiredBlock
-              description="로그인 후 승차권 반환을 이용할 수 있어요"
-              onLogin={handleLoginNavigate}
-              size="md"
-            />
-          </div>
-        ) : (
-          <div className="mt-5 flex w-full flex-col gap-y-5 pb-[100px]">
-            <MiniTicket />
-          </div>
-        )}
+        <div className="flex w-full flex-1 flex-col items-center px-[28px]">
+          <span className="mt-5 w-full text-lg font-bold">승차권 반환</span>
+          {!isLoggedIn ? (
+            <div className="mt-12">
+              <LoginRequiredBlock
+                description="로그인 후 승차권 반환을 이용할 수 있어요"
+                onLogin={handleLoginNavigate}
+                size="md"
+              />
+            </div>
+          ) : (
+            <div className="mt-5 flex w-full flex-col gap-y-5 pb-[100px]">
+              <MiniTicket />
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

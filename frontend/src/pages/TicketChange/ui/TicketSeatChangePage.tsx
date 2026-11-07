@@ -44,11 +44,9 @@ const TicketSeatChangePage = memo(() => {
   } = useTicketDetail(seats);
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 px-6 pb-8">
-      <div className="w-full">
-        <BackWardPageButton title="좌석 상세" />
-      </div>
-
+    <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 pb-8">
+      <BackWardPageButton title="좌석 상세" />
+      <div className="flex w-full flex-1 flex-col items-center px-6">
       {/* 전환 버튼 */}
       <div className="mb-3 mt-3 flex w-full rounded-2xl bg-white p-1 shadow-sm">
         <button
@@ -122,6 +120,7 @@ const TicketSeatChangePage = memo(() => {
         >
           좌석 변경
         </button>
+      </div>
       </div>
     </div>
   );

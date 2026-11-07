@@ -34,9 +34,7 @@ const SettingPage = () => {
         </div>
         {/* 모바일 */}
         <div className="flex min-h-screen w-full flex-col bg-gray-50 lg:hidden">
-          <div className="bg-gray-50 px-[28px]">
-            <BackWardPageButton title="설정" />
-          </div>
+          <BackWardPageButton title="설정" />
           <div className="flex flex-1 items-center justify-center pb-20">
             <LoginRequiredBlock
               description="로그인 후 설정을 이용할 수 있어요"
@@ -104,10 +102,7 @@ const SettingPage = () => {
 
       {/* 모바일 */}
       <div className="flex min-h-screen w-full flex-col bg-gray-50 lg:hidden">
-        <div className="bg-gray-50 px-[28px]">
-          <BackWardPageButton title="설정" />
-        </div>
-
+        <BackWardPageButton title="설정" />
         <div className="mt-[16px] flex flex-col gap-3 px-[28px]">
           <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
             <div className="flex items-center justify-between px-5 py-4">

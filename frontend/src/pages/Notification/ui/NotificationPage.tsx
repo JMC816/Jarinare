@@ -14,16 +14,17 @@ const NotificationPage = () => {
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center bg-gray-50">
-      <div className="flex w-full items-center px-[28px] pt-[20px]">
+      <div className="flex w-full items-center bg-white/80 px-[28px] pb-[4px] pt-[20px] backdrop-blur-md">
         <div className="flex items-center gap-3">
           <img
             onClick={goBack}
             src={backward}
             className="h-[20px] w-[12px] cursor-pointer"
           />
-          <span className="text-base font-bold">알림</span>
+          <span className="text-lg font-bold">알림</span>
         </div>
       </div>
+      <div className="h-2 w-full border-b border-gray-200/50 bg-white/80" />
       <div className="mt-[16px] flex w-full items-center justify-between px-[28px]">
         <p className="text-xs text-gray-400">
           이전 달부터 이번 달까지의 알림을 표시합니다.

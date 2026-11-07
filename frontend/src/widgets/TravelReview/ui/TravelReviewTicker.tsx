@@ -89,7 +89,13 @@ const cityImageMap: Record<string, string> = {
 // 슬라이더 div = 200%, 카드 10장 × 10% = 100%, translateX(-50%) = 컨테이너 1폭 이동 후 루프
 const CARD_HEIGHT = 200;
 
-const TravelReviewTicker = ({ title = '여행지 후기' }: { title?: string }) => {
+const TravelReviewTicker = ({
+  title = '여행지 후기',
+  square = false,
+}: {
+  title?: string;
+  square?: boolean;
+}) => {
   const navigate = useNavigate();
   const { summaries, isLoaded } = useDestinationRatings();
   const { tickerItems, loopItems } = useTravelReviewTicker(summaries);
@@ -101,12 +107,12 @@ const TravelReviewTicker = ({ title = '여행지 후기' }: { title?: string }) 
           <div className="h-4 w-20 animate-pulse rounded bg-gray-200" />
           <div className="h-4 w-10 animate-pulse rounded bg-gray-200" />
         </div>
-        <div className="flex overflow-hidden">
-          {Array.from({ length: 5 }).map((_, i) => (
+        <div className="flex overflow-hidden" style={square ? { alignItems: 'flex-start' } : undefined}>
+          {Array.from({ length: square ? 2 : 5 }).map((_, i) => (
             <div
               key={i}
               className="overflow-hidden rounded-2xl border-x-[6px] border-gray-50 bg-white"
-              style={{ width: '20%', height: CARD_HEIGHT }}
+              style={square ? { width: '50%', aspectRatio: '1' } : { width: '20%', height: CARD_HEIGHT }}
             >
               <div
                 className="animate-pulse bg-gray-200"
@@ -194,9 +200,10 @@ const TravelReviewTicker = ({ title = '여행지 후기' }: { title?: string }) 
         <div
           className="flex"
           style={{
-            width: '200%',
+            width: square ? '500%' : '200%',
             animation: 'ticker-loop 30s linear infinite',
             willChange: 'transform',
+            ...(square ? { alignItems: 'flex-start' } : {}),
           }}
         >
           {loopItems.map(({ city, averageRating, reviewCount }, idx) =>
@@ -204,7 +211,7 @@ const TravelReviewTicker = ({ title = '여행지 후기' }: { title?: string }) 
               <div
                 key={`${city}-${idx}`}
                 className="shrink-0 px-[6px]"
-                style={{ width: '10%', height: CARD_HEIGHT }}
+                style={square ? { width: '10%', aspectRatio: '1' } : { width: '10%', height: CARD_HEIGHT }}
               >
                 <div
                   onClick={() => navigate('/travel/review/list')}
@@ -231,7 +238,7 @@ const TravelReviewTicker = ({ title = '여행지 후기' }: { title?: string }) 
               <div
                 key={`${city}-${idx}`}
                 className="shrink-0 px-[6px]"
-                style={{ width: '10%', height: CARD_HEIGHT }}
+                style={square ? { width: '10%', aspectRatio: '1' } : { width: '10%', height: CARD_HEIGHT }}
               >
                 <div
                   onClick={() =>

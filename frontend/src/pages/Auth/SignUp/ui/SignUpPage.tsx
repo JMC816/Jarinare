@@ -89,19 +89,21 @@ const SignUpPage = () => {
       {/* 모바일 버전 */}
       <FormProvider {...mobileMethod}>
         <div className="flex h-screen w-full items-center justify-center lg:hidden">
-          <div className="flex h-[667px] w-[375px] flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
+          <div className="flex h-[667px] w-[375px] flex-col items-center bg-lightestGray">
             <BackWardPageButton title="회원가입" step="Step 1 of 4" />
-            <EmailForm />
-            <SignUpStageLine stage={1} />
-            <div className="mb-[45px] flex flex-col">
-              <button
-                type="button"
-                onClick={mobileHandleNextClick}
-                disabled={isChecking}
-                className="relative flex h-12 w-[300px] items-center justify-center rounded-md border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:bg-lightBlueImpossible disabled:opacity-50"
-              >
-                {isChecking ? '확인 중...' : '다음'}
-              </button>
+            <div className="flex w-full flex-1 flex-col items-center px-[28px]">
+              <EmailForm />
+              <SignUpStageLine stage={1} />
+              <div className="mb-[45px] flex flex-col">
+                <button
+                  type="button"
+                  onClick={mobileHandleNextClick}
+                  disabled={isChecking}
+                  className="relative flex h-12 w-[300px] items-center justify-center rounded-md border border-lightGray bg-blue text-base font-bold text-white shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95 disabled:bg-lightBlueImpossible disabled:opacity-50"
+                >
+                  {isChecking ? '확인 중...' : '다음'}
+                </button>
+              </div>
             </div>
             {isShow == false || modalType == undefined ? null : <Modal />}
           </div>

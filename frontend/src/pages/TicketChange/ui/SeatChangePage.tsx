@@ -42,8 +42,9 @@ const SeatChangePage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full min-w-[375px] flex-col items-center bg-gray-50 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full min-w-[375px] flex-col items-center bg-gray-50 lg:hidden">
         <BackWardPageButton title="좌석 변경" />
+        <div className="flex w-full flex-1 flex-col items-center px-[28px]">
         <div className="mt-4 w-full overflow-hidden rounded-2xl bg-white px-4 py-4 shadow-sm">
           <SeatChangeMenu />
           <SeatChangeList />
@@ -71,6 +72,7 @@ const SeatChangePage = () => {
               ? `요청 기다리는 중.. ${remaining !== null ? `(${String(Math.floor(remaining / 60)).padStart(2, '0')}:${String(remaining % 60).padStart(2, '0')})` : ''}`
               : `${seatsTarget.length} / ${mySeats.length} 선택`}
           </button>
+        </div>
         </div>
         {isShow == false || modalType == undefined ? null : <Modal />}
       </div>

@@ -11,14 +11,15 @@ const MenuPage = () => {
   const { onClick: goBack } = useBackButton();
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-gray-50 px-[28px]">
-      <div className="flex w-full items-center pt-[20px]">
+    <div className="flex min-h-screen w-full flex-col bg-gray-50">
+      <div className="flex w-full items-center bg-white/80 px-[28px] pb-[4px] pt-[20px] backdrop-blur-md">
         <div className="flex items-center gap-3">
           <img onClick={goBack} src={backward} className="h-[20px] w-[12px] cursor-pointer" />
-          <span className="text-base font-bold">메뉴</span>
+          <span className="text-lg font-bold">메뉴</span>
         </div>
       </div>
-      <div className="mt-[20px] flex w-full flex-col">
+      <div className="h-2 w-full border-b border-gray-200/50 bg-white/80" />
+      <div className="mt-[20px] flex w-full flex-col px-[28px]">
         {MenuConstants().map(({ text, link, subItems }, idx) => {
           if (subItems) {
             return (

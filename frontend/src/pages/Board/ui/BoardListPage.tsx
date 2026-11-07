@@ -14,16 +14,17 @@ const BoardListPage = () => {
       </div>
       <div className="flex h-screen w-full flex-col bg-gray-50 lg:hidden">
         {/* 헤더 */}
-        <div className="flex w-full items-center px-[28px] pt-[20px]">
+        <div className="flex w-full items-center bg-white/80 px-[28px] pb-[4px] pt-[20px] backdrop-blur-md">
           <div className="flex items-center gap-3">
             <img
               onClick={() => navigate(-1)}
               src={backward}
               className="h-[20px] w-[12px] cursor-pointer"
             />
-            <span className="text-base font-bold">자유게시판</span>
+            <span className="text-lg font-bold">자유게시판</span>
           </div>
         </div>
+        <div className="h-2 w-full border-b border-gray-200/50 bg-white/80" />
 
         <div className="flex-1 overflow-y-auto pb-[80px]">
           <Board />

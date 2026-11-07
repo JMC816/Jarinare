@@ -34,16 +34,18 @@ const TrainCheckPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full flex-col items-center overflow-y-hidden bg-gray-50 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full flex-col items-center overflow-y-hidden bg-gray-50 lg:hidden">
         <BackWardPageButton title="열차 조회" />
-        <div className="mt-4 w-full">
-          <span className="text-xs text-gray-400">출발 날짜</span>
-          <p className="text-lg font-bold text-gray-900">{startDayForView}</p>
-          <span className="text-xs text-gray-400">{startStationForView} → {endStationForView}</span>
+        <div className="flex w-full flex-1 flex-col items-center px-[28px]">
+          <div className="mt-4 w-full">
+            <span className="text-xs text-gray-400">출발 날짜</span>
+            <p className="text-lg font-bold text-gray-900">{startDayForView}</p>
+            <span className="text-xs text-gray-400">{startStationForView} → {endStationForView}</span>
+          </div>
+          <TrainCheckTitle />
+          <TrainCheckMenu />
+          <TrainList />
         </div>
-        <TrainCheckTitle />
-        <TrainCheckMenu />
-        <TrainList />
       </div>
 
       {/* PC/모바일 공통 모달 */}

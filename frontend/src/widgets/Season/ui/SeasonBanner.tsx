@@ -49,7 +49,7 @@ const SeasonBanner = () => {
 
           {/* 텍스트 영역 */}
           <div className="flex flex-1 flex-col justify-center">
-            <p className="text-xs font-black text-white lg:text-lg">
+            <p className="text-base font-black text-white lg:text-lg">
               {season} 특별 기차여행 할인 이벤트
             </p>
             <p className="mt-0.5 text-[10px] text-white/80 lg:text-xs">

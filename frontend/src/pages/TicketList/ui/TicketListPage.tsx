@@ -42,27 +42,29 @@ const TicketListPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full flex-col items-center bg-gray-50 lg:hidden">
         <BackWardPageButton />
-        <div className="mt-5 flex w-full items-baseline justify-between">
-          <span className="text-base font-bold">내 승차권</span>
-          {!isEmpty && (
-            <span className="text-sm text-gray-400">예정된 승차권 {upcomingCount}권</span>
+        <div className="flex w-full flex-1 flex-col items-center px-[28px]">
+          <div className="mt-5 flex w-full items-baseline justify-between">
+            <span className="text-lg font-bold">내 승차권</span>
+            {!isEmpty && (
+              <span className="text-sm text-gray-400">예정된 승차권 {upcomingCount}권</span>
+            )}
+          </div>
+          {!isLoggedIn ? (
+            <div className="mt-12">
+              <LoginRequiredBlock
+                description="로그인 후 내 승차권을 확인할 수 있어요"
+                onLogin={() => navigate('/auth/login')}
+                size="md"
+              />
+            </div>
+          ) : (
+            <div className="mt-5 flex w-full flex-col gap-y-5 pb-[100px]">
+              <MiniTicket items={items} isEmpty={isEmpty} />
+            </div>
           )}
         </div>
-        {!isLoggedIn ? (
-          <div className="mt-12">
-            <LoginRequiredBlock
-              description="로그인 후 내 승차권을 확인할 수 있어요"
-              onLogin={() => navigate('/auth/login')}
-              size="md"
-            />
-          </div>
-        ) : (
-          <div className="mt-5 flex w-full flex-col gap-y-5 pb-[100px]">
-            <MiniTicket items={items} isEmpty={isEmpty} />
-          </div>
-        )}
       </div>
     </>
   );

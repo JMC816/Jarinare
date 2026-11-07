@@ -51,9 +51,9 @@ const SeatCheckPage = () => {
       </div>
 
       {/* 모바일 버전 */}
-      <div className="flex min-h-screen w-full min-w-[375px] flex-col items-center overflow-y-auto bg-gray-50 pb-4 pl-[28px] pr-[27px] lg:hidden">
+      <div className="flex min-h-screen w-full min-w-[375px] flex-col items-center overflow-y-auto bg-gray-50 pb-4 lg:hidden">
         <BackWardPageButton title="좌석 선택" />
-
+        <div className="flex w-full flex-1 flex-col items-center px-[28px]">
         {/* 타이틀 */}
         <div className="mt-3 w-full">
           <div className="flex items-center justify-between">
@@ -129,6 +129,7 @@ const SeatCheckPage = () => {
               </button>
             </div>
           </div>
+        </div>
         </div>
       </div>
 

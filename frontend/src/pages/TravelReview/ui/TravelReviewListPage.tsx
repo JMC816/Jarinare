@@ -90,14 +90,14 @@ const TravelReviewListPage = () => {
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden bg-gray-50">
       {/* 헤더 */}
-      <div className="flex w-full shrink-0 items-center justify-between bg-gray-50 px-[28px] pb-4 pt-[20px]">
+      <div className="flex w-full shrink-0 items-center justify-between bg-white/80 px-[28px] pb-[4px] pt-[20px] backdrop-blur-md">
         <div className="flex items-center gap-3">
           <img
             onClick={() => navigate(-1)}
             src={backward}
             className="h-[20px] w-[12px] cursor-pointer"
           />
-          <span className="text-base font-bold">여행지 후기</span>
+          <span className="text-lg font-bold">여행지 후기</span>
         </div>
         <button
           onClick={() => setShowForm((v) => !v)}
@@ -106,6 +106,7 @@ const TravelReviewListPage = () => {
           {showForm ? '취소' : '후기 작성'}
         </button>
       </div>
+      <div className="h-2 w-full border-b border-gray-200/50 bg-white/80" />
 
       {/* 검색 바 */}
       {!showForm && (

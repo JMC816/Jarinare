@@ -127,25 +127,27 @@ const LoginPage = () => {
       {/* 모바일 버전 */}
       <FormProvider {...mobileMethod}>
         <div className="flex h-screen w-full items-center justify-center lg:hidden">
-          <div className="relative flex h-[667px] w-[375px] flex-col items-center bg-lightestGray pl-[38px] pr-[37px]">
+          <div className="relative flex h-[667px] w-[375px] flex-col items-center bg-lightestGray">
             <BackWardPageButton title="로그인" step="Step 1 of 2" />
-            <div className="mt-[35px]">
-              <LoginList />
-            </div>
-            <div className="before:content-[' '] after:content-[' '] mb-[30px] mt-[30px] flex w-full items-center gap-[10px] text-xs text-mediumGray before:h-[1px] before:flex-grow before:bg-mediumGray after:h-[1px] after:flex-grow after:bg-mediumGray">
-              또는
-            </div>
-            <SocialLoginList />
-            <div className="mt-[30px] flex w-full flex-col items-center gap-y-2">
-              <span className="text-sm text-mediumGray">
-                회원이 아니신가요?
-              </span>
-              <Link
-                className="relative flex h-12 w-[300px] items-center justify-center rounded-md border border-lightGray bg-white text-base font-bold text-blue shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
-                to={'/auth/signup'}
-              >
-                회원가입
-              </Link>
+            <div className="flex w-full flex-1 flex-col items-center px-[28px]">
+              <div className="mt-[35px]">
+                <LoginList />
+              </div>
+              <div className="before:content-[' '] after:content-[' '] mb-[30px] mt-[30px] flex w-full items-center gap-[10px] text-xs text-mediumGray before:h-[1px] before:flex-grow before:bg-mediumGray after:h-[1px] after:flex-grow after:bg-mediumGray">
+                또는
+              </div>
+              <SocialLoginList />
+              <div className="mt-[30px] flex w-full flex-col items-center gap-y-2">
+                <span className="text-sm text-mediumGray">
+                  회원이 아니신가요?
+                </span>
+                <Link
+                  className="relative flex h-12 w-[300px] items-center justify-center rounded-md border border-lightGray bg-white text-base font-bold text-blue shadow-sm transition-all hover:border-mediumGray hover:shadow-md active:brightness-95"
+                  to={'/auth/signup'}
+                >
+                  회원가입
+                </Link>
+              </div>
             </div>
             <div className="absolute inset-0">
               <Modal />

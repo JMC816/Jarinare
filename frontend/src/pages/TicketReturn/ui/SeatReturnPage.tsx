@@ -17,9 +17,9 @@ const SeatReturnPage = () => {
   const filtred = seats.map((id) => id.seatId);
 
   return (
-    <div className="flex w-full flex-col items-center pl-[28px] pr-[27px]">
+    <div className="flex w-full flex-col items-center">
       <BackWardPageButton />
-      <div className="mt-[30px] w-full pl-[10px] pr-[10px]">
+      <div className="mt-[30px] w-full px-[28px]">
         <div className="flex justify-center text-lg font-bold">
           <span>{seats[0].startStationForView}</span>
           <img src={arrow} width={25} height={20} className="mx-[30px]" />

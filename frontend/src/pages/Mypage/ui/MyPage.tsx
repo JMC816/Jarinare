@@ -21,10 +21,7 @@ const MyPage = () => {
 
       {/* 모바일 버전 */}
       <div className="flex h-screen w-full flex-col overflow-y-auto bg-gray-50 lg:hidden">
-        {/* 상단 헤더 */}
-        <div className="flex w-full flex-col px-[28px]">
-          <BackWardPageButton title="마이페이지" />
-        </div>
+        <BackWardPageButton title="마이페이지" />
 
         <div className="flex flex-col gap-y-3 px-[18px] pt-[20px]">
           {/* 유저 정보 카드 */}

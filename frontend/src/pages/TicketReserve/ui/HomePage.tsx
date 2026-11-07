@@ -53,10 +53,10 @@ const HomePage = () => {
 
       {/* 모바일 버전 */}
       <div
-        className={`flex h-screen w-full flex-col bg-gray-100 lg:hidden ${isShow === true ? 'overflow-hidden' : ''}`}
+        className={`flex h-screen w-full flex-col bg-gray-50 lg:hidden ${isShow === true ? 'overflow-hidden' : ''}`}
       >
         {/* 상단 헤더 */}
-        <div className="flex w-full items-center justify-between px-[28px] pb-[4px] pt-[20px]">
+        <div className="flex w-full items-center justify-between bg-white/80 px-[28px] pb-[4px] pt-[20px] backdrop-blur-md">
           <span className="text-lg font-black tracking-widest text-blue">
             JARINARE
           </span>
@@ -72,7 +72,8 @@ const HomePage = () => {
             </Link>
           </div>
         </div>
-        <div className="mt-2 w-full border-b border-gray-200" />
+
+        <div className="h-2 w-full border-b border-gray-200/50 bg-white/80" />
 
         {/* 인디케이터 — 상단 */}
         {!isScrolledBottom && (

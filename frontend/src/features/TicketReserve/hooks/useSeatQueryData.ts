@@ -78,9 +78,7 @@ export const useSeatQueryData = () => {
       !selectEndTime ||
       !selectTrainType ||
       !startStation ||
-      !endStation ||
-      !startStationForView ||
-      !endStationForView
+      !endStation
     )
       return;
     const parts = selectTrainType.split('-');
@@ -93,8 +91,6 @@ export const useSeatQueryData = () => {
       arrPlaceId: endStation,
       depPlandTime: String(selectStartTime).substring(0, 12),
       arrPlandTime: String(selectEndTime).substring(0, 12),
-      depName: startStationForView,
-      arrName: endStationForView,
     })
       .then((trip) => setTripId(trip.tripId))
       .catch((e) => console.error('[upsertTrip 실패]', e?.response?.data ?? e));
@@ -104,8 +100,6 @@ export const useSeatQueryData = () => {
     selectTrainType,
     startStation,
     endStation,
-    startStationForView,
-    endStationForView,
   ]);
 
   // tripId 세팅되면 즉시 클릭 활성화 (fetchCarSeats 완료 대기 불필요)
@@ -364,8 +358,8 @@ export const useSeatQueryData = () => {
       trainNo: tNo,
       startStation: dep,
       endStation: arr,
-      startStationForView: depName,
-      endStationForView: arrName,
+      startStationForView: _depName,
+      endStationForView: _arrName,
       selectKid: kid,
       selectAdult: adult,
       tripId: currentTripId,
@@ -387,8 +381,6 @@ export const useSeatQueryData = () => {
           arrPlaceId: arr,
           depPlandTime: String(depTime).substring(0, 12),
           arrPlandTime: String(arrTime).substring(0, 12),
-          depName,
-          arrName,
         });
         currentTripId2 = trip.tripId;
         setTripId(trip.tripId);

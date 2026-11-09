@@ -88,8 +88,6 @@ export const upsertTrip = async (dto: {
   arrPlaceId: string;
   depPlandTime: string;
   arrPlandTime: string;
-  depName: string;
-  arrName: string;
 }): Promise<TripDto> => {
   const { data } = await backendClient.post<TripDto>('/api/seats/trips', dto);
   return data;

@@ -53,7 +53,7 @@ export class TripService {
    * 먼저 INSERT 하고 UNIQUE 에 걸리면 이긴 쪽이 만든 행을 읽는다.
    */
   async upsert(dto: UpsertTripDto): Promise<TripDto> {
-    const adultcharge = await this.resolveAdultcharge(dto);
+    const { adultcharge, depName, arrName } = await this.resolveFromCache(dto);
 
     const key = {
       trainNo: dto.trainNo,
@@ -63,24 +63,29 @@ export class TripService {
     };
     try {
       return toTripDto(
-        await this.prisma.trainTrip.create({ data: { ...dto, adultcharge } }),
+        await this.prisma.trainTrip.create({
+          data: { ...dto, adultcharge, depName, arrName },
+        }),
       );
     } catch (e) {
       if (!isUniqueViolation(e)) throw e;
     }
-    // 운임은 시간에 따라 바뀔 수 있으므로 충돌 시에도 갱신한다
+    // 운임·역명은 시간에 따라 바뀔 수 있으므로 충돌 시에도 갱신한다
     const updated = await this.prisma.trainTrip.update({
       where: { trainNo_depPlaceId_arrPlaceId_depPlandTime: key },
-      data: { adultcharge },
+      data: { adultcharge, depName, arrName },
     });
     return toTripDto(updated);
   }
 
   /**
-   * stations_times 캐시에서 해당 열차의 adultcharge 를 조회한다.
+   * stations_times 캐시에서 해당 열차의 운임·역명을 조회한다.
    * 캐시 미스 시 외부 API 를 호출하며, 운임이 없거나 0 이면 예매를 거부한다.
+   * depName·arrName 은 프론트 조작을 막기 위해 서버가 직접 채운다.
    */
-  private async resolveAdultcharge(dto: UpsertTripDto): Promise<number> {
+  private async resolveFromCache(
+    dto: UpsertTripDto,
+  ): Promise<{ adultcharge: number; depName: string; arrName: string }> {
     const trains = await this.trains.getTrainTimes({
       depPlaceId: dto.depPlaceId,
       arrPlaceId: dto.arrPlaceId,
@@ -105,7 +110,11 @@ export class TripService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    return matched.adultcharge;
+    return {
+      adultcharge: matched.adultcharge,
+      depName: matched.depplacename,
+      arrName: matched.arrplacename,
+    };
   }
 
   async get(tripId: number | bigint): Promise<TrainTrip> {

@@ -71,15 +71,6 @@ export class UpsertTripDto {
   })
   arrPlandTime!: string;
 
-  @ApiProperty({ example: "서울" })
-  @IsString()
-  @Length(1, 100)
-  depName!: string;
-
-  @ApiProperty({ example: "부산" })
-  @IsString()
-  @Length(1, 100)
-  arrName!: string;
 }
 
 export class SeatSelectionDto {

@@ -4,14 +4,14 @@
  */
 import { useSearchParams } from 'react-router-dom';
 import BoardDetailPage from './BoardDetailPage';
-import PCNoticeDetailPage from './PCNoticeDetailPage';
+import NoticeDetailPage from './NoticeDetailPage';
 import EventDetailPage from './EventDetailPage';
 
 const BoardByIdPage = () => {
   const [searchParams] = useSearchParams();
   const type = searchParams.get('type') ?? 'free';
 
-  if (type === 'notice') return <PCNoticeDetailPage />;
+  if (type === 'notice') return <NoticeDetailPage />;
   if (type === 'event') return <EventDetailPage />;
   return <BoardDetailPage />;
 };

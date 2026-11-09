@@ -3,6 +3,7 @@ import { Module } from "@nestjs/common";
 import { NotificationModule } from "../notification/notification.module";
 import { PointModule } from "../point/point.module";
 import { TravelStatModule } from "../travel-stat/travel-stat.module";
+import { TrainsModule } from "../trains/trains.module";
 import { SeatController } from "./seat.controller";
 import { TripService } from "./trip.service";
 import { SeatLayoutService } from "./seat-layout.service";
@@ -13,7 +14,7 @@ import { SeatChangeService } from "./seat-change.service";
 import { PriceCalculationService } from "./price-calculation.service";
 
 @Module({
-  imports: [NotificationModule, PointModule, TravelStatModule],
+  imports: [NotificationModule, PointModule, TravelStatModule, TrainsModule],
   controllers: [SeatController],
   providers: [
     TripService,

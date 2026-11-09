@@ -70,6 +70,12 @@ export const trainDataStore = create(
     {
       name: 'trainTiem-storage',
       storage: createJSONStorage(() => sessionStorage),
+      // 열차 선택 결과는 새로고침 시 재선택해야 하므로 persist 제외
+      partialize: (state) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { selectStartTime, selectEndTime, selectTrainType, tripId, ...rest } = state;
+        return rest as typeof state;
+      },
     },
   ),
 );

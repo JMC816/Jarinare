@@ -144,7 +144,7 @@ export class SeatController {
     @Body() { reservationIds }: InspectReservationDto,
     @CurrentUser() user: AuthUser,
   ) {
-    return this.reservations.inspect(reservationIds as number[], user);
+    return this.reservations.inspect(reservationIds, user);
   }
 
   @ApiBearerAuth()

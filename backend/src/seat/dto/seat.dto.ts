@@ -80,11 +80,6 @@ export class UpsertTripDto {
   @IsString()
   @Length(1, 100)
   arrName!: string;
-
-  @ApiProperty({ example: 59800, description: "성인 1인 기준 운임" })
-  @IsInt()
-  @Min(0)
-  adultcharge!: number;
 }
 
 export class SeatSelectionDto {

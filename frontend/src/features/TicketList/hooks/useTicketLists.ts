@@ -2,8 +2,12 @@
  * @role: features/hooks
  * @rule: 내 예매 목록 가공만 담당. 만료된 티켓 삭제는 백엔드가 처리
  */
+import { useState } from 'react';
 import { SeatType } from '@/entities/Seat/types/seatType';
-import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
+import {
+  getCachedAllSeats,
+  useAllSeatsInfo,
+} from '@/features/TicketReserve/hooks/useAllSeatsInfo';
 
 const parseEndTime = (endTime: number): Date => {
   const s = String(endTime);
@@ -17,7 +21,8 @@ const parseEndTime = (endTime: number): Date => {
 };
 
 export const useTicketLists = () => {
-  const { seatsAllInfo } = useSeatQueryData();
+  const [seatsAllInfo, setSeatsAllInfo] = useState<SeatType[]>(getCachedAllSeats());
+  useAllSeatsInfo((seats) => setSeatsAllInfo(seats));
 
   const filtered = seatsAllInfo.filter(
     (item) =>

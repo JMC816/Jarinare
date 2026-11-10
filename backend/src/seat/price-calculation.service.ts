@@ -33,6 +33,15 @@ export class PriceCalculationService {
     usedPoint: number;
   }): Promise<PriceCalcResult> {
     const { adultcharge, seatCount, arrName, paymentMethod, selectedCard, usedPoint } = params;
+
+    if (adultcharge <= 0) {
+      throw new AppException(
+        ErrorCode.TRAIN_FARE_UNAVAILABLE,
+        "운임 정보를 확인할 수 없거나 매진된 열차입니다.",
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
     const isCreditCard = paymentMethod === "신용카드";
     // UTC 서버에서도 KST(+9) 기준으로 월을 판단
     const kstNow = new Date(Date.now() + 9 * 60 * 60 * 1000);

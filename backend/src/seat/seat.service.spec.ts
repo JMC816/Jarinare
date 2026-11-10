@@ -13,6 +13,7 @@ import { ageBucket } from "../travel-stat/travel-stat.service";
 import { PointService } from "../point/point.service";
 import { DEFAULT_LAYOUT, SeatState } from "./seat.constants";
 import { PriceCalculationService } from "./price-calculation.service";
+import { TrainsService } from "../trains/trains.service";
 
 const user = (idx: number): AuthUser => ({
   idx,
@@ -560,16 +561,14 @@ describe("PriceCalculationService", () => {
     expect(result.usedPoint).toBe(10000);
   });
 
-  it("[조작] adultcharge 0 — basePrice 0, finalPrice 0", async () => {
+  it("[조작] adultcharge 0 — TRAIN_FARE_UNAVAILABLE 422 거부", async () => {
     const svc = build();
-    const result = await svc.calculate({
-      adultcharge: 0,
-      seatCount: 2,
-      arrName: "부산",
-      usedPoint: 0,
+    await expect(
+      svc.calculate({ adultcharge: 0, seatCount: 2, arrName: "부산", usedPoint: 0 }),
+    ).rejects.toMatchObject({
+      code: ErrorCode.TRAIN_FARE_UNAVAILABLE,
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
     });
-    expect(result.basePrice).toBe(0);
-    expect(result.finalPrice).toBe(0);
   });
 
   it("[조작] 계절 할인 대상 아닌 역 — 할인 미적용", async () => {
@@ -612,5 +611,63 @@ describe("PriceCalculationService", () => {
     });
     expect(result.cardDiscountAmount).toBe(0);
     expect(result.finalPrice).toBe(100000);
+  });
+});
+
+describe("TripService.resolveFromCache (via verifyAndRefreshFare)", () => {
+  const TRAIN_TRIP = {
+    id: 7n,
+    trainNo: "101",
+    trainType: "00",
+    depPlaceId: "NAT010000",
+    arrPlaceId: "NAT014445",
+    depPlandTime: "202610100900",
+    arrPlandTime: "202610101130",
+    depName: "서울",
+    arrName: "부산",
+    adultcharge: 59800,
+    createdAt: new Date(),
+  };
+
+  const TRAIN_ROW = {
+    trainno: 101,
+    depplandtime: 202610100900,
+    adultcharge: 59800,
+    depplacename: "서울",
+    arrplacename: "부산",
+  };
+
+  function buildService(trainRows: object[]) {
+    const trains = {
+      getTrainTimes: jest.fn().mockResolvedValue(trainRows),
+    } as unknown as TrainsService;
+    const prisma = {
+      trainTrip: { update: jest.fn().mockResolvedValue(TRAIN_TRIP) },
+    };
+    return new TripService(prisma as never, trains);
+  }
+
+  it("열차를 찾지 못하면 TRAIN_FARE_UNAVAILABLE 422", async () => {
+    const svc = buildService([]);
+    await expect(svc.verifyAndRefreshFare(TRAIN_TRIP as never)).rejects.toMatchObject({
+      code: ErrorCode.TRAIN_FARE_UNAVAILABLE,
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+    });
+  });
+
+  it("열차를 찾았지만 adultcharge 0 이면 TRAIN_FARE_UNAVAILABLE 422", async () => {
+    const svc = buildService([{ ...TRAIN_ROW, adultcharge: 0 }]);
+    await expect(svc.verifyAndRefreshFare(TRAIN_TRIP as never)).rejects.toMatchObject({
+      code: ErrorCode.TRAIN_FARE_UNAVAILABLE,
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+    });
+  });
+
+  it("14자리 출발시각(YYYYMMDDHHmmSS)도 12자리로 정규화해 매칭", async () => {
+    // 공공 API 가 가끔 초(SS) 포함 14자리로 반환하는 경우
+    const svc = buildService([{ ...TRAIN_ROW, depplandtime: 20261010090000 }]);
+    const result = await svc.verifyAndRefreshFare(TRAIN_TRIP as never);
+    expect(result.adultcharge).toBe(59800);
+    expect(result.arrName).toBe("부산");
   });
 });

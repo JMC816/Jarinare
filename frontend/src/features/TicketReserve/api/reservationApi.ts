@@ -81,6 +81,25 @@ export const orderDtoToSeatTypes = (orders: OrderDto[], userId: string): SeatTyp
     }));
   });
 
+export interface PricePreviewResult {
+  basePrice: number;
+  seasonDiscountApplied: boolean;
+  cardDiscountAmount: number;
+  usedPoint: number;
+  finalPrice: number;
+  paybackPoint: number;
+}
+
+export const fetchPricePreview = async (dto: {
+  tripId: number;
+  seatCount: number;
+  selectedCard?: string | null;
+  usedPoint?: number;
+}): Promise<PricePreviewResult> => {
+  const { data } = await backendClient.post<PricePreviewResult>('/api/seats/price-preview', dto);
+  return data;
+};
+
 export const upsertTrip = async (dto: {
   trainNo: string;
   trainType: string;

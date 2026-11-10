@@ -96,6 +96,29 @@ export class SeatSelectionDto {
   seatIds!: string[];
 }
 
+export class PricePreviewDto {
+  @ApiProperty({ example: 1 })
+  @IsInt()
+  @Min(1)
+  tripId!: number;
+
+  @ApiProperty({ example: 2, description: "예매할 좌석 수 (성인 + 아동)" })
+  @IsInt()
+  @Min(1)
+  seatCount!: number;
+
+  @ApiPropertyOptional({ example: "신한" })
+  @IsOptional()
+  @IsString()
+  selectedCard?: string | null;
+
+  @ApiPropertyOptional({ example: 1000 })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  usedPoint?: number;
+}
+
 export class ReleaseHoldDto {
   @ApiProperty()
   @IsInt()

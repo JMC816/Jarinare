@@ -59,23 +59,15 @@ const PayModal = () => {
   const {
     checked,
     value,
-    eventSelected,
-    isEventOpen,
-    eventDropdownRef,
-    handleToggleEventDropdown,
-    handleSelectEvent,
-    isDiscountEligible,
     basePrice,
-    discountedBase,
-    cardDiscount,
+    seasonDiscountApplied,
+    cardDiscountAmount,
     cardPayback,
     cardDiscountRate,
     cardPaybackRate,
     bannerText,
     finalPrice,
     point,
-    season,
-    style,
     selectedPaymentMethod,
     selectedCard,
     selectedCardData,
@@ -89,6 +81,12 @@ const PayModal = () => {
     handleClose,
     handlePay,
   } = usePayModal();
+
+  // 계절 할인 금액 = 서버 반환값으로 역산
+  const usedPointDisplay = checked ? (value ?? 0) : 0;
+  const seasonDiscountAmount = seasonDiscountApplied
+    ? basePrice - finalPrice - usedPointDisplay - cardDiscountAmount
+    : 0;
 
   return (
     <div
@@ -138,60 +136,13 @@ const PayModal = () => {
           {basePrice.toLocaleString('ko-KR')}원
         </p>
 
-        {/* 이벤트 드롭다운 */}
-        <div className="mb-3">
-          <p className="mb-1 text-xs font-bold text-gray-500">이벤트 선택</p>
-          <div ref={eventDropdownRef} className="relative">
-            <button
-              type="button"
-              onClick={handleToggleEventDropdown}
-              className={`flex w-full items-center justify-between rounded-lg border px-3 py-2.5 text-sm outline-none transition-colors ${
-                eventSelected === 'season'
-                  ? `border-current ${style.color} font-bold`
-                  : 'border-lightGray text-gray-600'
-              }`}
-            >
-              <span>
-                {eventSelected === 'season'
-                  ? `${style.emoji} ${season} 계절 10% 할인`
-                  : '선택안함'}
-              </span>
-              <svg
-                className={`text-gray-400 transition-transform ${isEventOpen ? 'rotate-180' : ''}`}
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </button>
-            {isEventOpen && (
-              <div className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-lightGray bg-white shadow-md">
-                <button
-                  type="button"
-                  onClick={() => handleSelectEvent('none')}
-                  className="flex w-full items-center px-3 py-2.5 text-sm text-gray-900 transition-colors hover:bg-gray-50"
-                >
-                  선택안함
-                </button>
-                {isDiscountEligible && (
-                  <button
-                    type="button"
-                    onClick={() => handleSelectEvent('season')}
-                    className={`flex w-full items-center px-3 py-2.5 text-sm font-bold transition-colors hover:bg-gray-50 ${style.color}`}
-                  >
-                    {style.emoji} {season} 계절 10% 할인
-                  </button>
-                )}
-              </div>
-            )}
+        {/* 계절 할인 자동 적용 표시 */}
+        {seasonDiscountApplied && (
+          <div className="mb-3 flex items-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-sm font-bold text-orange-500">
+            <span>🎉</span>
+            <span>계절 할인 자동 적용됨</span>
           </div>
-        </div>
+        )}
 
         {/* 포인트 사용 */}
         <div className="mb-3 flex items-center gap-2">
@@ -351,13 +302,11 @@ const PayModal = () => {
                 {basePrice.toLocaleString('ko-KR')}원
               </span>
             </div>
-            {eventSelected === 'season' && isDiscountEligible && (
+            {seasonDiscountApplied && seasonDiscountAmount > 0 && (
               <div className="flex justify-between">
-                <span className="text-gray-400">
-                  {style.emoji} {season} 계절 할인 (10%)
-                </span>
+                <span className="text-gray-400">🎉 계절 할인</span>
                 <span className="text-orange-500">
-                  -{(basePrice - discountedBase).toLocaleString('ko-KR')}원
+                  -{seasonDiscountAmount.toLocaleString('ko-KR')}원
                 </span>
               </div>
             )}
@@ -369,14 +318,14 @@ const PayModal = () => {
                 </span>
               </div>
             )}
-            {cardDiscount > 0 && (
+            {cardDiscountAmount > 0 && (
               <div className="flex justify-between">
                 <span className="flex items-center gap-1 text-gray-400">
                   <span>💳</span>
                   {selectedCard} 카드 할인 ({cardDiscountRate}%)
                 </span>
                 <span className="text-blue">
-                  -{cardDiscount.toLocaleString('ko-KR')}원
+                  -{cardDiscountAmount.toLocaleString('ko-KR')}원
                 </span>
               </div>
             )}

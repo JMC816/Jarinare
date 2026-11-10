@@ -29,6 +29,7 @@ import {
   ChangeRequestListQueryDto,
   CreateChangeRequestDto,
   CreateReservationDto,
+  PricePreviewDto,
   ReleaseHoldDto,
   SeatLayoutQueryDto,
   SeatSelectionDto,
@@ -63,6 +64,17 @@ export class SeatController {
   })
   getLayout(@Query() q: SeatLayoutQueryDto) {
     return this.layouts.getCars(q.trainType, q.carNo);
+  }
+
+  @ApiBearerAuth()
+  @Post("price-preview")
+  @ApiOperation({
+    summary: "결제 금액 미리보기",
+    description:
+      "카드·포인트 선택에 따른 최종 금액을 계산해 반환한다. 실제 예매 전 UI 표시용.",
+  })
+  pricePreview(@Body() dto: PricePreviewDto) {
+    return this.reservations.previewPrice(dto);
   }
 
   @ApiBearerAuth()

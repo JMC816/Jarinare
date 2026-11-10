@@ -8,7 +8,6 @@ import useModalStore from '../../model/ReserveStore';
 import { useSeatQueryData } from '@/features/TicketReserve/hooks/useSeatQueryData';
 import { useGetPoint } from '@/features/Point/hooks/useGetPoint';
 import { seatsStateCountStore } from '@/features/TicketReserve/model/seatsStateCountStore';
-import { useCurrentSeason } from '@/features/Season/hooks/useCurrentSeason';
 import welcomeTourStore from '@/shared/models/welcomeTourStore';
 import {
   PAYMENT_METHODS,
@@ -16,56 +15,70 @@ import {
   type PaymentMethod,
   type CardName,
 } from '../constants/payModalConstants';
+import { fetchPricePreview, type PricePreviewResult } from '@/features/TicketReserve/api/reservationApi';
 
 export const usePayModal = () => {
   const { closeModal } = useModalStore();
   const {
-    selectPay: rawSelectPay,
     selectAdult: rawSelectAdult,
     selectKid: rawSelectKid,
-    endStationForView,
+    tripId,
   } = trainDataStore();
   const { createSelectedSeats } = useSeatQueryData();
   const { point: rawPoint } = useGetPoint();
   const { seatsStateCount: rawSeatsStateCount } = seatsStateCountStore();
   const { isActive: isTourActive } = welcomeTourStore();
-  const selectPay = isTourActive ? 59800 : rawSelectPay;
+
   const selectAdult = isTourActive ? 1 : rawSelectAdult;
   const selectKid = isTourActive ? 0 : rawSelectKid;
   const seatsStateCount = isTourActive ? selectAdult + selectKid : rawSeatsStateCount;
   const point = isTourActive ? 5000 : rawPoint;
-  const { season, style, isSeasonStation } = useCurrentSeason();
 
   const [checked, setChecked] = useState(isTourActive);
   const [value, setValue] = useState<number | null>(isTourActive ? 3000 : null);
-  const [eventSelected, setEventSelected] = useState<'none' | 'season'>('none');
   const [isEventOpen, setIsEventOpen] = useState(false);
   const eventDropdownRef = useRef<HTMLDivElement>(null);
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<PaymentMethod | null>(isTourActive ? '신용카드' : null);
   const [selectedCard, setSelectedCard] = useState<CardName | null>(isTourActive ? '국민' : null);
 
-  const isDiscountEligible = isSeasonStation(endStationForView);
-  const basePrice = selectPay * seatsStateCount;
-  const discountedBase =
-    eventSelected === 'season' && isDiscountEligible
-      ? Math.floor(basePrice * 0.9)
-      : basePrice;
+  const [preview, setPreview] = useState<PricePreviewResult | null>(null);
+
   const pointValue = Number(value);
+  const usedPointForPreview = checked ? pointValue : 0;
+
+  // 카드·포인트 변경 시 서버에서 금액 미리보기
+  useEffect(() => {
+    if (isTourActive || !tripId) return;
+    fetchPricePreview({
+      tripId,
+      seatCount: seatsStateCount,
+      selectedCard: selectedPaymentMethod === '신용카드' ? selectedCard : null,
+      usedPoint: usedPointForPreview,
+    })
+      .then(setPreview)
+      .catch(() => {});
+  }, [tripId, seatsStateCount, selectedCard, selectedPaymentMethod, usedPointForPreview, isTourActive]);
+
+  // 투어 모드 미리보기 고정값
+  const tourPreview: PricePreviewResult = {
+    basePrice: 59800,
+    seasonDiscountApplied: false,
+    cardDiscountAmount: Math.floor(59800 * 0.05),
+    usedPoint: 3000,
+    finalPrice: 59800 - Math.floor(59800 * 0.05) - 3000,
+    paybackPoint: Math.floor((59800 - Math.floor(59800 * 0.05) - 3000) * 0.03),
+  };
+
+  const activePreview = isTourActive ? tourPreview : preview;
+
+  const basePrice = activePreview?.basePrice ?? 0;
+  const seasonDiscountApplied = activePreview?.seasonDiscountApplied ?? false;
+  const cardDiscountAmount = activePreview?.cardDiscountAmount ?? 0;
+  const finalPrice = activePreview?.finalPrice ?? 0;
+  const cardPayback = activePreview?.paybackPoint ?? 0;
 
   const selectedCardData = CARD_LIST.find((c) => c.name === selectedCard);
-  const cardDiscount =
-    selectedPaymentMethod === '신용카드' && selectedCardData
-      ? Math.floor(discountedBase * selectedCardData.discount)
-      : 0;
-
-  const finalPrice = discountedBase - pointValue - cardDiscount;
-
-  const cardPayback =
-    selectedPaymentMethod === '신용카드' && selectedCardData
-      ? Math.floor(finalPrice * selectedCardData.payback)
-      : 0;
-
   const cardDiscountRate = Math.round((selectedCardData?.discount ?? 0) * 100);
   const cardPaybackRate = Math.round((selectedCardData?.payback ?? 0) * 100);
 
@@ -100,10 +113,6 @@ export const usePayModal = () => {
   }, [isEventOpen]);
 
   const handleToggleEventDropdown = () => setIsEventOpen((prev) => !prev);
-  const handleSelectEvent = (val: 'none' | 'season') => {
-    setEventSelected(val);
-    setIsEventOpen(false);
-  };
 
   const handleTogglePoint = () => setChecked((prev) => !prev);
   const handleUseAllPoint = () => setValue(point);
@@ -121,10 +130,7 @@ export const usePayModal = () => {
   const handlePointInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value.replace(/,/g, '');
     const numValue = inputValue === '' ? 0 : Number(inputValue);
-    if (
-      discountedBase &&
-      (inputValue === '' || (point >= numValue && numValue >= 0))
-    ) {
+    if (inputValue === '' || (point >= numValue && numValue >= 0)) {
       setValue(numValue);
     }
   };
@@ -137,21 +143,15 @@ export const usePayModal = () => {
   return {
     checked,
     value,
-    eventSelected,
     isEventOpen,
     eventDropdownRef,
     handleToggleEventDropdown,
-    handleSelectEvent,
-    isDiscountEligible,
+    seasonDiscountApplied,
     basePrice,
-    discountedBase,
-    pointValue,
-    cardDiscount,
+    cardDiscountAmount,
     cardPayback,
     finalPrice,
     point,
-    season,
-    style,
     selectedPaymentMethod,
     selectedCard,
     selectedCardData,

@@ -22,7 +22,9 @@ import { PriceCalculationService } from "./price-calculation.service";
 import type {
   CancelReservationDto,
   CreateReservationDto,
+  PricePreviewDto,
 } from "./dto/seat.dto";
+import type { PriceCalcResult } from "./price-calculation.service";
 
 export interface TicketDto {
   reservationId: number;
@@ -333,6 +335,17 @@ export class ReservationService {
       });
     }
     return [...orders.values()];
+  }
+
+  async previewPrice(dto: PricePreviewDto): Promise<PriceCalcResult> {
+    const trip = await this.trips.get(dto.tripId);
+    return this.priceCalc.calculate({
+      adultcharge: trip.adultcharge,
+      seatCount: dto.seatCount,
+      arrName: trip.arrName,
+      selectedCard: dto.selectedCard,
+      usedPoint: dto.usedPoint ?? 0,
+    });
   }
 }
 

@@ -207,6 +207,41 @@ describe("ReservationService.create", () => {
     expect(prisma.$transaction).not.toHaveBeenCalled();
   });
 
+  it("캐시에서 운임 재조회 실패 시 TRAIN_FARE_UNAVAILABLE 422", async () => {
+    const fareErr = new AppException(
+      ErrorCode.TRAIN_FARE_UNAVAILABLE,
+      "운임 정보를 확인할 수 없거나 매진된 열차입니다.",
+      HttpStatus.UNPROCESSABLE_ENTITY,
+    );
+    const trips = {
+      get: jest.fn().mockResolvedValue(TRIP),
+      verifyAndRefreshFare: jest.fn().mockRejectedValue(fareErr),
+    } as unknown as TripService;
+    const layouts = {
+      assertSeatsExist: jest.fn(),
+    } as unknown as SeatLayoutService;
+    const prisma = { $transaction: jest.fn() };
+    const service = new ReservationService(
+      prisma as never,
+      trips,
+      layouts,
+      {} as never,
+      {} as never,
+      {} as never,
+      {} as never,
+    );
+    await expect(
+      service.create(
+        { tripId: 7, carNo: 1, seatIds: ["A1"], adult: 1, kid: 0 },
+        user(1),
+      ),
+    ).rejects.toMatchObject({
+      code: ErrorCode.TRAIN_FARE_UNAVAILABLE,
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+    });
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
   it("UNIQUE 위반은 409 SEAT_ALREADY_RESERVED 로 바뀐다", async () => {
     const dup = new Prisma.PrismaClientKnownRequestError("dup", {
       code: "P2002",
@@ -215,6 +250,9 @@ describe("ReservationService.create", () => {
     const prisma = { $transaction: jest.fn().mockRejectedValue(dup) };
     const trips = {
       get: jest.fn().mockResolvedValue(TRIP),
+      verifyAndRefreshFare: jest
+        .fn()
+        .mockResolvedValue({ adultcharge: TRIP.adultcharge, arrName: TRIP.arrName }),
     } as unknown as TripService;
     const layouts = {
       assertSeatsExist: jest.fn(),

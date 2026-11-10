@@ -83,15 +83,19 @@ export class ReservationService {
     const trip = await this.trips.get(dto.tripId);
     await this.layouts.assertSeatsExist(trip.trainType, dto.carNo, seatIds);
 
+    // 예매 시점 운임 재확인 — 캐시에서 최신 운임 재조회 후 DB 갱신
+    const { adultcharge, arrName } =
+      await this.trips.verifyAndRefreshFare(trip);
+
     const me = BigInt(user.idx);
     const now = new Date();
     const orderId = randomUUID();
 
     const { finalPrice, paybackPoint, usedPoint: validUsedPoint } =
       await this.priceCalc.calculate({
-        adultcharge: trip.adultcharge,
+        adultcharge,
         seatCount: seatIds.length,
-        arrName: trip.arrName,
+        arrName,
         paymentMethod: dto.paymentMethod,
         selectedCard: dto.selectedCard,
         usedPoint: dto.usedPoint ?? 0,

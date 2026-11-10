@@ -117,6 +117,28 @@ export class TripService {
     };
   }
 
+  /**
+   * 예매 시점에 공공 API 캐시에서 운임을 재조회하고 DB 도 최신값으로 갱신한다.
+   * 캐시 미스이거나 adultcharge === 0 이면 TRAIN_FARE_UNAVAILABLE 422 를 던진다.
+   */
+  async verifyAndRefreshFare(
+    trip: TrainTrip,
+  ): Promise<{ adultcharge: number; arrName: string }> {
+    const { adultcharge, depName, arrName } = await this.resolveFromCache({
+      trainNo: trip.trainNo,
+      trainType: trip.trainType,
+      depPlaceId: trip.depPlaceId,
+      arrPlaceId: trip.arrPlaceId,
+      depPlandTime: trip.depPlandTime,
+      arrPlandTime: trip.arrPlandTime,
+    });
+    await this.prisma.trainTrip.update({
+      where: { id: trip.id },
+      data: { adultcharge, depName, arrName },
+    });
+    return { adultcharge, arrName };
+  }
+
   async get(tripId: number | bigint): Promise<TrainTrip> {
     const trip = await this.prisma.trainTrip.findUnique({
       where: { id: BigInt(tripId) },

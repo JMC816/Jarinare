@@ -93,6 +93,7 @@ export interface PricePreviewResult {
 export const fetchPricePreview = async (dto: {
   tripId: number;
   seatCount: number;
+  paymentMethod?: string | null;
   selectedCard?: string | null;
   usedPoint?: number;
 }): Promise<PricePreviewResult> => {

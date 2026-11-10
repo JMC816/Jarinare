@@ -107,6 +107,11 @@ export class PricePreviewDto {
   @Min(1)
   seatCount!: number;
 
+  @ApiPropertyOptional({ example: "신용카드" })
+  @IsOptional()
+  @IsString()
+  paymentMethod?: string | null;
+
   @ApiPropertyOptional({ example: "신한" })
   @IsOptional()
   @IsString()

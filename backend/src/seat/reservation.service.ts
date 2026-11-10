@@ -92,6 +92,7 @@ export class ReservationService {
         adultcharge: trip.adultcharge,
         seatCount: seatIds.length,
         arrName: trip.arrName,
+        paymentMethod: dto.paymentMethod,
         selectedCard: dto.selectedCard,
         usedPoint: dto.usedPoint ?? 0,
       });
@@ -343,6 +344,7 @@ export class ReservationService {
       adultcharge: trip.adultcharge,
       seatCount: dto.seatCount,
       arrName: trip.arrName,
+      paymentMethod: dto.paymentMethod,
       selectedCard: dto.selectedCard,
       usedPoint: dto.usedPoint ?? 0,
     });

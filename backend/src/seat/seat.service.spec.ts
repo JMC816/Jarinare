@@ -440,8 +440,15 @@ describe("PriceCalculationService", () => {
 
   const mockCard: CardRow = { discountRate: 0.1, paybackRate: 0.05 };
 
+  // KST 월을 고정하는 헬퍼 — Date.now()를 해당 월 15일 00:00 UTC 로 mock
+  function mockKstMonth(month: number) {
+    const utcMonth = month - 1; // JS month index
+    const d = new Date(Date.UTC(2026, utcMonth, 15, 0, 0, 0));
+    jest.spyOn(Date, "now").mockReturnValue(d.getTime());
+  }
+
   it("계절 할인 대상 역·기간 — 할인 적용", async () => {
-    jest.spyOn(Date.prototype, "getMonth").mockReturnValue(0); // 1월
+    mockKstMonth(1); // 1월
     const svc = build([winterSeason]);
     const result = await svc.calculate({
       adultcharge: 100000,
@@ -456,7 +463,7 @@ describe("PriceCalculationService", () => {
   });
 
   it("계절 할인 비대상 역 — 할인 미적용", async () => {
-    jest.spyOn(Date.prototype, "getMonth").mockReturnValue(0);
+    mockKstMonth(1);
     const svc = build([winterSeason]);
     const result = await svc.calculate({
       adultcharge: 100000,
@@ -472,24 +479,25 @@ describe("PriceCalculationService", () => {
   it("겨울 기간 경계(12월·1월·2월) — 모두 할인 적용, 3월은 미적용", async () => {
     const svc = build([winterSeason]);
     for (const month of [12, 1, 2]) {
-      jest.spyOn(Date.prototype, "getMonth").mockReturnValue(month - 1);
+      mockKstMonth(month);
       const r = await svc.calculate({ adultcharge: 10000, seatCount: 1, arrName: "강릉", usedPoint: 0 });
       expect(r.seasonDiscountApplied).toBe(true);
       jest.restoreAllMocks();
     }
-    jest.spyOn(Date.prototype, "getMonth").mockReturnValue(2); // 3월
+    mockKstMonth(3); // 3월
     const r = await build([winterSeason]).calculate({ adultcharge: 10000, seatCount: 1, arrName: "강릉", usedPoint: 0 });
     expect(r.seasonDiscountApplied).toBe(false);
     jest.restoreAllMocks();
   });
 
   it("카드 할인·페이백 — 계절 할인 후 카드 할인, 최종가에 페이백", async () => {
-    jest.spyOn(Date.prototype, "getMonth").mockReturnValue(6); // 7월
+    mockKstMonth(7); // 7월
     const svc = build([summerSeason], mockCard);
     const result = await svc.calculate({
       adultcharge: 100000,
       seatCount: 1,
       arrName: "여수",
+      paymentMethod: "신용카드",
       selectedCard: "신한",
       usedPoint: 0,
     });
@@ -527,12 +535,12 @@ describe("PriceCalculationService", () => {
   });
 
   it("[조작] 계절 할인 대상 아닌 역 — 할인 미적용", async () => {
-    jest.spyOn(Date.prototype, "getMonth").mockReturnValue(0);
+    mockKstMonth(1);
     const svc = build([winterSeason]);
     const result = await svc.calculate({
       adultcharge: 100000,
       seatCount: 1,
-      arrName: "부산", // 강릉이 아님
+      arrName: "부산",
       usedPoint: 0,
     });
     expect(result.seasonDiscountApplied).toBe(false);
@@ -540,17 +548,31 @@ describe("PriceCalculationService", () => {
     jest.restoreAllMocks();
   });
 
-  it("[조작] 없는 카드명 — 카드 할인 0, 페이백 0", async () => {
-    const svc = build([], null); // findFirst → null
+  it("[조작] 없는 카드명 — 신용카드 결제 시 400 거부", async () => {
+    const svc = build([], null);
+    await expect(
+      svc.calculate({
+        adultcharge: 100000,
+        seatCount: 1,
+        arrName: "부산",
+        paymentMethod: "신용카드",
+        selectedCard: "가짜카드",
+        usedPoint: 0,
+      }),
+    ).rejects.toMatchObject({ code: ErrorCode.INVALID_CARD });
+  });
+
+  it("[조작] 신용카드 아닌 결제수단에 카드명 포함 — 카드 할인 무시", async () => {
+    const svc = build([], mockCard);
     const result = await svc.calculate({
       adultcharge: 100000,
       seatCount: 1,
       arrName: "부산",
-      selectedCard: "가짜카드",
+      paymentMethod: "간편결제",
+      selectedCard: "신한",
       usedPoint: 0,
     });
     expect(result.cardDiscountAmount).toBe(0);
-    expect(result.paybackPoint).toBe(0);
     expect(result.finalPrice).toBe(100000);
   });
 });

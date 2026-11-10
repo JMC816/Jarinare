@@ -53,6 +53,7 @@ export const usePayModal = () => {
     fetchPricePreview({
       tripId,
       seatCount: seatsStateCount,
+      paymentMethod: selectedPaymentMethod,
       selectedCard: selectedPaymentMethod === '신용카드' ? selectedCard : null,
       usedPoint: usedPointForPreview,
     })

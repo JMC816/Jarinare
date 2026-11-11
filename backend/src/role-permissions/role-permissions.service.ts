@@ -33,7 +33,7 @@ export class RolePermissionsService {
       const perms = Array.isArray(row.permissions)
         ? (row.permissions as string[])
         : (JSON.parse(row.permissions as string) as string[]);
-      map.set(row.role, perms);
+      map.set(row.code, perms);
     }
     this.cache = map;
     this.cacheExpiry = Date.now() + CACHE_TTL;

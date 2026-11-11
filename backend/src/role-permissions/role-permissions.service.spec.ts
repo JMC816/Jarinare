@@ -12,8 +12,8 @@ describe("RolePermissionsService", () => {
 
   const seedRoles = () =>
     prisma.adminRole.findMany.mockResolvedValueOnce([
-      { role: "cs", permissions: ["user:view", "report:view"] },
-      { role: "super_admin", permissions: ["admin:manage", "user:view"] },
+      { code: "cs", permissions: ["user:view", "report:view"] },
+      { code: "super_admin", permissions: ["admin:manage", "user:view"] },
     ]);
 
   beforeEach(() => {

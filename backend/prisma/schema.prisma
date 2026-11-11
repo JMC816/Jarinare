@@ -32,20 +32,29 @@ model User {
   refreshTokenExpiresAt  DateTime?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
+  adminRoleId            BigInt?
+  status                 String    @default("active") @db.VarChar(20) // active | suspended | withdrawn
+  suspendedUntil         DateTime?
+  suspendReason          String?   @db.VarChar(255)
+  membershipTierId       BigInt?
 
-  boards        Board[]
-  comments      Comment[]
-  boardLikes      BoardLike[]
-  boardReads      BoardRead[]
-  boardBookmarks  BoardBookmark[]
-  boardShares     BoardShare[]
-  seatHolds              SeatHold[]
-  reservations           Reservation[]
-  seatChangeRequests     SeatChangeRequest[] @relation("SeatChangeRequester")
-  seatChangeReceived     SeatChangeRequest[] @relation("SeatChangeTarget")
-  pointHistories         PointHistory[]
-  orderHistories         OrderHistory[]
+  boards               Board[]
+  comments             Comment[]
+  boardLikes           BoardLike[]
+  boardReads           BoardRead[]
+  boardBookmarks       BoardBookmark[]
+  boardShares          BoardShare[]
+  seatHolds            SeatHold[]
+  reservations         Reservation[]
+  seatChangeRequests   SeatChangeRequest[] @relation("SeatChangeRequester")
+  seatChangeReceived   SeatChangeRequest[] @relation("SeatChangeTarget")
+  pointHistories       PointHistory[]
+  orderHistories       OrderHistory[]
+  adminRole            AdminRole?      @relation(fields: [adminRoleId], references: [id])
+  membershipTier       MembershipTier? @relation(fields: [membershipTierId], references: [id])
+
   @@index([userId])
+  @@index([status])
   @@map("users")
 }
 
@@ -61,11 +70,15 @@ model Board {
   liked        BigInt    @default(0)
   shareCount   Int       @default(0)
   viewCount    Int       @default(0)
+  isHidden     Boolean   @default(false)
+  isPinned     Boolean   @default(false)
+  visibleFrom  DateTime?
+  visibleUntil DateTime?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
-  author   User        @relation(fields: [authorIdx], references: [idx])
-  comments Comment[]
+  author    User          @relation(fields: [authorIdx], references: [idx])
+  comments  Comment[]
   likes     BoardLike[]
   reads     BoardRead[]
   bookmarks BoardBookmark[]
@@ -73,6 +86,7 @@ model Board {
 
   @@index([type])
   @@index([authorIdx])
+  @@index([isPinned, type])
   @@map("boards")
 }
 
@@ -84,6 +98,7 @@ model Comment {
   parentId    BigInt?
   liked       BigInt   @default(0)
   likedById   Json     @default("[]")
+  isHidden    Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -295,14 +310,22 @@ model TrainTrip {
 }
 
 model CardDiscount {
-  id           Int      @id @default(autoincrement())
-  cardName     String   @unique @db.VarChar(30)
-  discountRate Decimal  @default(0) @db.Decimal(5, 4) // 즉시 할인율 (예: 0.1000 = 10%)
-  paybackRate  Decimal  @default(0) @db.Decimal(5, 4) // 포인트 페이백율 (예: 0.2000 = 20%)
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id           BigInt    @id @default(autoincrement())
+  cardCode     String    @db.VarChar(30) // reservations.selectedCard 와 같은 코드
+  cardName     String    @db.VarChar(50)
+  discountType String    @default("rate") @db.VarChar(10) // rate | amount
+  value        Int       @default(0)                      // rate: 1/10000 단위 정수(예: 1000 = 10%), amount: 원
+  maxDiscount  Int?
+  minPayment   Int       @default(0)
+  discountRate Decimal   @default(0) @db.Decimal(5, 4) // 하위 호환 — PriceCalculationService 가 사용
+  paybackRate  Decimal   @default(0) @db.Decimal(5, 4) // 포인트 페이백율
+  startsAt     DateTime?
+  endsAt       DateTime?
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
+  @@index([cardCode, isActive])
   @@map("card_discounts")
 }
 
@@ -447,9 +470,59 @@ model TravelStatBucket {
 }
 
 model AdminRole {
-  role        String   @id @db.VarChar(20)
-  permissions Json
+  id          BigInt   @id @default(autoincrement())
+  code        String   @unique @db.VarChar(30) // SUPER_ADMIN, OPERATOR, CS, MARKETER
+  name        String   @db.VarChar(50)
+  permissions Json     // ["user:read", "report:resolve", ...]
+  createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  users User[]
   @@map("admin_roles")
+}
+
+model Report {
+  id          BigInt    @id @default(autoincrement())
+  reporterIdx BigInt
+  targetType  String    @db.VarChar(20)  // board | comment | review | user
+  targetId    BigInt
+  reasonCode  String    @db.VarChar(30)  // spam | abuse | obscene | etc
+  detail      String?   @db.VarChar(500)
+  status      String    @default("RECEIVED") @db.VarChar(20) // RECEIVED | REVIEWING | RESOLVED | REJECTED
+  action      String?   @db.VarChar(30)  // hide | delete | warn | suspend
+  handlerIdx  BigInt?
+  handlerMemo String?   @db.VarChar(500)
+  handledAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@unique([reporterIdx, targetType, targetId])
+  @@index([status, createdAt])
+  @@index([targetType, targetId])
+  @@map("reports")
+}
+
+model MembershipTier {
+  id              BigInt   @id @default(autoincrement())
+  name            String   @db.VarChar(30)
+  sortOrder       Int
+  minTotalPaid    Int      @default(0)
+  minRideCount    Int      @default(0)
+  discountRate    Decimal  @default(0) @db.Decimal(5, 2)
+  pointRate       Decimal  @default(0) @db.Decimal(5, 2)
+  freeSeatChanges Int      @default(0)
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  users User[]
+  @@map("membership_tiers")
+}
+
+model SchedulerJobSetting {
+  name      String   @id @db.VarChar(64)
+  isActive  Boolean  @default(true)
+  updatedBy BigInt?
+  updatedAt DateTime @updatedAt
+
+  @@map("scheduler_job_settings")
 }

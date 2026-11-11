@@ -79,6 +79,7 @@ describe("UsersService", () => {
     const profile = await service.getMe(authUser);
     expect(prisma.user.findUnique).toHaveBeenCalledWith({
       where: { idx: BigInt(authUser.idx) },
+      include: { adminRole: true },
     });
     expect(profile.idx).toBe(1);
     expect(profile.point).toBe(0);

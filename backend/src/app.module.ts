@@ -22,6 +22,7 @@ import { StationsModule } from "./stations/stations.module";
 import { TrainsModule } from "./trains/trains.module";
 import { UsersModule } from "./users/users.module";
 import { AuditModule } from "./audit/audit.module";
+import { DashboardModule } from "./dashboard/dashboard.module";
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AuditModule } from "./audit/audit.module";
     AuthModule,
     // 도메인 모듈
     AuditModule,
+    DashboardModule,
     UsersModule,
     BoardModule,
     CommentModule,

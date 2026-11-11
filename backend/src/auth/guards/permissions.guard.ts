@@ -31,7 +31,9 @@ export class PermissionsGuard implements CanActivate {
 
     if (!user) throw new ForbiddenException("접근 권한이 없습니다.");
 
-    const perms = await this.rolePermissions.getPermissions(user.role);
+    const perms = await this.rolePermissions.getPermissions(
+      user.adminRoleCode ?? user.role,
+    );
     const allowed = required.every((p) => perms.includes(p));
     if (!allowed) throw new ForbiddenException("접근 권한이 없습니다.");
     return true;

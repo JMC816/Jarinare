@@ -18,18 +18,30 @@ export class AuthService {
     private readonly config: AppConfigService,
   ) {}
 
-  generateAccessToken(user: Pick<User, "idx" | "email" | "role">): string {
+  generateAccessToken(
+    user: Pick<User, "idx" | "email" | "role">,
+    adminRoleCode?: string | null,
+  ): string {
     return this.jwtService.sign({
       sub: Number(user.idx),
       email: user.email,
       role: user.role,
+      ...(adminRoleCode ? { adminRoleCode } : {}),
     });
   }
 
   async generateTokenPair(
-    user: Pick<User, "idx" | "email" | "role">,
+    user: Pick<User, "idx" | "email" | "role" | "adminRoleId">,
   ): Promise<TokenPair> {
-    const accessToken = this.generateAccessToken(user);
+    let adminRoleCode: string | null = null;
+    if (user.adminRoleId) {
+      const role = await this.prisma.adminRole.findUnique({
+        where: { id: user.adminRoleId },
+        select: { code: true },
+      });
+      adminRoleCode = role?.code ?? null;
+    }
+    const accessToken = this.generateAccessToken(user, adminRoleCode);
     const refreshToken = await this.createRefreshToken(user.idx);
     return { accessToken, refreshToken };
   }

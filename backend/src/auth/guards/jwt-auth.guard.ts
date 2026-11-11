@@ -36,6 +36,7 @@ export class JwtAuthGuard implements CanActivate {
         sub: number;
         email: string;
         role: string;
+        adminRoleCode?: string;
       }>(token);
       const knownRoles: UserRole[] = [
         "user", "cs", "marketer", "operator", "super_admin",
@@ -43,7 +44,12 @@ export class JwtAuthGuard implements CanActivate {
       const role: UserRole = knownRoles.includes(payload.role as UserRole)
         ? (payload.role as UserRole)
         : "user";
-      request.user = { idx: payload.sub, email: payload.email, role };
+      request.user = {
+        idx: payload.sub,
+        email: payload.email,
+        role,
+        adminRoleCode: payload.adminRoleCode,
+      };
       return true;
     } catch {
       throw new UnauthorizedException("유효하지 않거나 만료된 토큰입니다.");

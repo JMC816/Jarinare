@@ -2,6 +2,7 @@ export interface AuthUser {
   idx: number;
   email: string;
   role: UserRole;
+  adminRoleCode?: string;
 }
 
 export type UserRole =

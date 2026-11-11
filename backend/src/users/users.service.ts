@@ -19,6 +19,7 @@ export class UsersService {
   async getMe(authUser: AuthUser): Promise<UserProfileDto> {
     const user = await this.prisma.user.findUnique({
       where: { idx: BigInt(authUser.idx) },
+      include: { adminRole: true },
     });
     if (!user)
       throw new AppException(
@@ -26,7 +27,9 @@ export class UsersService {
         "사용자를 찾을 수 없습니다.",
         HttpStatus.NOT_FOUND,
       );
-    const permissions = await this.rolePermissions.getPermissions(user.role);
+    const permissions = await this.rolePermissions.getPermissions(
+      user.adminRole?.code ?? user.role,
+    );
     return this.toProfile(user, permissions);
   }
 
@@ -89,8 +92,11 @@ export class UsersService {
         ...(dto.gender !== undefined ? { gender: dto.gender } : {}),
         ...(dto.email !== undefined ? { email: dto.email } : {}),
       },
+      include: { adminRole: true },
     });
-    const permissions = await this.rolePermissions.getPermissions(user.role);
+    const permissions = await this.rolePermissions.getPermissions(
+      user.adminRole?.code ?? user.role,
+    );
     return this.toProfile(user, permissions);
   }
 
@@ -108,8 +114,11 @@ export class UsersService {
           ? { notifResponse: dto.notifResponse }
           : {}),
       },
+      include: { adminRole: true },
     });
-    const permissions = await this.rolePermissions.getPermissions(user.role);
+    const permissions = await this.rolePermissions.getPermissions(
+      user.adminRole?.code ?? user.role,
+    );
     return this.toProfile(user, permissions);
   }
 
@@ -160,7 +169,12 @@ export class UsersService {
   }
 
   async toProfilePublic(user: User): Promise<UserProfileDto> {
-    const permissions = await this.rolePermissions.getPermissions(user.role);
+    const adminRole = user.adminRoleId
+      ? await this.prisma.adminRole.findUnique({ where: { id: user.adminRoleId } })
+      : null;
+    const permissions = await this.rolePermissions.getPermissions(
+      adminRole?.code ?? user.role,
+    );
     return this.toProfile(user, permissions);
   }
 

@@ -194,7 +194,7 @@ export class BoardService {
   ): Promise<CreateBoardResponseDto> {
     if (
       (dto.type === BoardType.NOTICE || dto.type === BoardType.EVENT) &&
-      !await this.rolePermissions.hasPermission(user.role, "board:create")
+      !await this.rolePermissions.hasPermission(user.role, "board:manage")
     ) {
       throw new ForbiddenException(
         "공지사항/이벤트는 관리자만 작성할 수 있습니다.",
@@ -235,7 +235,7 @@ export class BoardService {
       );
     }
 
-    if (board.authorIdx !== BigInt(user.idx) && !await this.rolePermissions.hasPermission(user.role, "board:delete")) {
+    if (board.authorIdx !== BigInt(user.idx) && !await this.rolePermissions.hasPermission(user.role, "board:manage")) {
       throw new ForbiddenException(
         "본인이 작성한 게시물만 수정할 수 있습니다.",
       );
@@ -279,7 +279,7 @@ export class BoardService {
       );
     }
 
-    if (board.authorIdx !== BigInt(user.idx) && !await this.rolePermissions.hasPermission(user.role, "board:delete")) {
+    if (board.authorIdx !== BigInt(user.idx) && !await this.rolePermissions.hasPermission(user.role, "board:manage")) {
       throw new ForbiddenException(
         "본인이 작성한 게시물만 삭제할 수 있습니다.",
       );

@@ -55,6 +55,10 @@ export type BoardMinAggregateOutputType = {
   liked: bigint | null
   shareCount: number | null
   viewCount: number | null
+  isHidden: boolean | null
+  isPinned: boolean | null
+  visibleFrom: Date | null
+  visibleUntil: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -70,6 +74,10 @@ export type BoardMaxAggregateOutputType = {
   liked: bigint | null
   shareCount: number | null
   viewCount: number | null
+  isHidden: boolean | null
+  isPinned: boolean | null
+  visibleFrom: Date | null
+  visibleUntil: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -86,6 +94,10 @@ export type BoardCountAggregateOutputType = {
   liked: number
   shareCount: number
   viewCount: number
+  isHidden: number
+  isPinned: number
+  visibleFrom: number
+  visibleUntil: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -121,6 +133,10 @@ export type BoardMinAggregateInputType = {
   liked?: true
   shareCount?: true
   viewCount?: true
+  isHidden?: true
+  isPinned?: true
+  visibleFrom?: true
+  visibleUntil?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -136,6 +152,10 @@ export type BoardMaxAggregateInputType = {
   liked?: true
   shareCount?: true
   viewCount?: true
+  isHidden?: true
+  isPinned?: true
+  visibleFrom?: true
+  visibleUntil?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -152,6 +172,10 @@ export type BoardCountAggregateInputType = {
   liked?: true
   shareCount?: true
   viewCount?: true
+  isHidden?: true
+  isPinned?: true
+  visibleFrom?: true
+  visibleUntil?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -255,6 +279,10 @@ export type BoardGroupByOutputType = {
   liked: bigint
   shareCount: number
   viewCount: number
+  isHidden: boolean
+  isPinned: boolean
+  visibleFrom: Date | null
+  visibleUntil: Date | null
   createdAt: Date
   updatedAt: Date
   _count: BoardCountAggregateOutputType | null
@@ -294,6 +322,10 @@ export type BoardWhereInput = {
   liked?: Prisma.BigIntFilter<"Board"> | bigint | number
   shareCount?: Prisma.IntFilter<"Board"> | number
   viewCount?: Prisma.IntFilter<"Board"> | number
+  isHidden?: Prisma.BoolFilter<"Board"> | boolean
+  isPinned?: Prisma.BoolFilter<"Board"> | boolean
+  visibleFrom?: Prisma.DateTimeNullableFilter<"Board"> | Date | string | null
+  visibleUntil?: Prisma.DateTimeNullableFilter<"Board"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -316,6 +348,10 @@ export type BoardOrderByWithRelationInput = {
   liked?: Prisma.SortOrder
   shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  isHidden?: Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  visibleFrom?: Prisma.SortOrderInput | Prisma.SortOrder
+  visibleUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
@@ -342,6 +378,10 @@ export type BoardWhereUniqueInput = Prisma.AtLeast<{
   liked?: Prisma.BigIntFilter<"Board"> | bigint | number
   shareCount?: Prisma.IntFilter<"Board"> | number
   viewCount?: Prisma.IntFilter<"Board"> | number
+  isHidden?: Prisma.BoolFilter<"Board"> | boolean
+  isPinned?: Prisma.BoolFilter<"Board"> | boolean
+  visibleFrom?: Prisma.DateTimeNullableFilter<"Board"> | Date | string | null
+  visibleUntil?: Prisma.DateTimeNullableFilter<"Board"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -364,6 +404,10 @@ export type BoardOrderByWithAggregationInput = {
   liked?: Prisma.SortOrder
   shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  isHidden?: Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  visibleFrom?: Prisma.SortOrderInput | Prisma.SortOrder
+  visibleUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.BoardCountOrderByAggregateInput
@@ -388,6 +432,10 @@ export type BoardScalarWhereWithAggregatesInput = {
   liked?: Prisma.BigIntWithAggregatesFilter<"Board"> | bigint | number
   shareCount?: Prisma.IntWithAggregatesFilter<"Board"> | number
   viewCount?: Prisma.IntWithAggregatesFilter<"Board"> | number
+  isHidden?: Prisma.BoolWithAggregatesFilter<"Board"> | boolean
+  isPinned?: Prisma.BoolWithAggregatesFilter<"Board"> | boolean
+  visibleFrom?: Prisma.DateTimeNullableWithAggregatesFilter<"Board"> | Date | string | null
+  visibleUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"Board"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Board"> | Date | string
 }
@@ -403,6 +451,10 @@ export type BoardCreateInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
@@ -425,6 +477,10 @@ export type BoardUncheckedCreateInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
@@ -445,6 +501,10 @@ export type BoardUpdateInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
@@ -467,6 +527,10 @@ export type BoardUncheckedUpdateInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
@@ -488,6 +552,10 @@ export type BoardCreateManyInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -503,6 +571,10 @@ export type BoardUpdateManyMutationInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -519,6 +591,10 @@ export type BoardUncheckedUpdateManyInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -551,6 +627,10 @@ export type BoardCountOrderByAggregateInput = {
   liked?: Prisma.SortOrder
   shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  isHidden?: Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  visibleFrom?: Prisma.SortOrder
+  visibleUntil?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -575,6 +655,10 @@ export type BoardMaxOrderByAggregateInput = {
   liked?: Prisma.SortOrder
   shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  isHidden?: Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  visibleFrom?: Prisma.SortOrder
+  visibleUntil?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -590,6 +674,10 @@ export type BoardMinOrderByAggregateInput = {
   liked?: Prisma.SortOrder
   shareCount?: Prisma.SortOrder
   viewCount?: Prisma.SortOrder
+  isHidden?: Prisma.SortOrder
+  isPinned?: Prisma.SortOrder
+  visibleFrom?: Prisma.SortOrder
+  visibleUntil?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -739,6 +827,10 @@ export type BoardCreateWithoutAuthorInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentCreateNestedManyWithoutBoardInput
@@ -759,6 +851,10 @@ export type BoardUncheckedCreateWithoutAuthorInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
@@ -809,6 +905,10 @@ export type BoardScalarWhereInput = {
   liked?: Prisma.BigIntFilter<"Board"> | bigint | number
   shareCount?: Prisma.IntFilter<"Board"> | number
   viewCount?: Prisma.IntFilter<"Board"> | number
+  isHidden?: Prisma.BoolFilter<"Board"> | boolean
+  isPinned?: Prisma.BoolFilter<"Board"> | boolean
+  visibleFrom?: Prisma.DateTimeNullableFilter<"Board"> | Date | string | null
+  visibleUntil?: Prisma.DateTimeNullableFilter<"Board"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Board"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Board"> | Date | string
 }
@@ -824,6 +924,10 @@ export type BoardCreateWithoutCommentsInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
@@ -845,6 +949,10 @@ export type BoardUncheckedCreateWithoutCommentsInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   likes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutBoardInput
@@ -880,6 +988,10 @@ export type BoardUpdateWithoutCommentsInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
@@ -901,6 +1013,10 @@ export type BoardUncheckedUpdateWithoutCommentsInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   likes?: Prisma.BoardLikeUncheckedUpdateManyWithoutBoardNestedInput
@@ -920,6 +1036,10 @@ export type BoardCreateWithoutReadsInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
@@ -941,6 +1061,10 @@ export type BoardUncheckedCreateWithoutReadsInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
@@ -976,6 +1100,10 @@ export type BoardUpdateWithoutReadsInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
@@ -997,6 +1125,10 @@ export type BoardUncheckedUpdateWithoutReadsInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
@@ -1016,6 +1148,10 @@ export type BoardCreateWithoutLikesInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
@@ -1037,6 +1173,10 @@ export type BoardUncheckedCreateWithoutLikesInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
@@ -1072,6 +1212,10 @@ export type BoardUpdateWithoutLikesInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
@@ -1093,6 +1237,10 @@ export type BoardUncheckedUpdateWithoutLikesInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
@@ -1112,6 +1260,10 @@ export type BoardCreateWithoutBookmarksInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
@@ -1133,6 +1285,10 @@ export type BoardUncheckedCreateWithoutBookmarksInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
@@ -1168,6 +1324,10 @@ export type BoardUpdateWithoutBookmarksInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
@@ -1189,6 +1349,10 @@ export type BoardUncheckedUpdateWithoutBookmarksInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
@@ -1208,6 +1372,10 @@ export type BoardCreateWithoutSharesInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutBoardsInput
@@ -1229,6 +1397,10 @@ export type BoardUncheckedCreateWithoutSharesInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutBoardInput
@@ -1264,6 +1436,10 @@ export type BoardUpdateWithoutSharesInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutBoardsNestedInput
@@ -1285,6 +1461,10 @@ export type BoardUncheckedUpdateWithoutSharesInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
@@ -1304,6 +1484,10 @@ export type BoardCreateManyAuthorInput = {
   liked?: bigint | number
   shareCount?: number
   viewCount?: number
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: Date | string | null
+  visibleUntil?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1319,6 +1503,10 @@ export type BoardUpdateWithoutAuthorInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUpdateManyWithoutBoardNestedInput
@@ -1339,6 +1527,10 @@ export type BoardUncheckedUpdateWithoutAuthorInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   comments?: Prisma.CommentUncheckedUpdateManyWithoutBoardNestedInput
@@ -1359,6 +1551,10 @@ export type BoardUncheckedUpdateManyWithoutAuthorInput = {
   liked?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   shareCount?: Prisma.IntFieldUpdateOperationsInput | number
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isHidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPinned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visibleFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  visibleUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1442,6 +1638,10 @@ export type BoardSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   liked?: boolean
   shareCount?: boolean
   viewCount?: boolean
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: boolean
+  visibleUntil?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1467,11 +1667,15 @@ export type BoardSelectScalar = {
   liked?: boolean
   shareCount?: boolean
   viewCount?: boolean
+  isHidden?: boolean
+  isPinned?: boolean
+  visibleFrom?: boolean
+  visibleUntil?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type BoardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "title" | "content" | "authorIdx" | "imageUrl" | "tags" | "rating" | "liked" | "shareCount" | "viewCount" | "createdAt" | "updatedAt", ExtArgs["result"]["board"]>
+export type BoardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "title" | "content" | "authorIdx" | "imageUrl" | "tags" | "rating" | "liked" | "shareCount" | "viewCount" | "isHidden" | "isPinned" | "visibleFrom" | "visibleUntil" | "createdAt" | "updatedAt", ExtArgs["result"]["board"]>
 export type BoardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   comments?: boolean | Prisma.Board$commentsArgs<ExtArgs>
@@ -1504,6 +1708,10 @@ export type $BoardPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     liked: bigint
     shareCount: number
     viewCount: number
+    isHidden: boolean
+    isPinned: boolean
+    visibleFrom: Date | null
+    visibleUntil: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["board"]>
@@ -1892,6 +2100,10 @@ export interface BoardFieldRefs {
   readonly liked: Prisma.FieldRef<"Board", 'BigInt'>
   readonly shareCount: Prisma.FieldRef<"Board", 'Int'>
   readonly viewCount: Prisma.FieldRef<"Board", 'Int'>
+  readonly isHidden: Prisma.FieldRef<"Board", 'Boolean'>
+  readonly isPinned: Prisma.FieldRef<"Board", 'Boolean'>
+  readonly visibleFrom: Prisma.FieldRef<"Board", 'DateTime'>
+  readonly visibleUntil: Prisma.FieldRef<"Board", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Board", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Board", 'DateTime'>
 }

@@ -76,7 +76,10 @@ export const ModelName = {
   OrderHistory: 'OrderHistory',
   TravelStat: 'TravelStat',
   TravelStatBucket: 'TravelStatBucket',
-  AdminRole: 'AdminRole'
+  AdminRole: 'AdminRole',
+  Report: 'Report',
+  MembershipTier: 'MembershipTier',
+  SchedulerJobSetting: 'SchedulerJobSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -111,7 +114,12 @@ export const UserScalarFieldEnum = {
   refreshToken: 'refreshToken',
   refreshTokenExpiresAt: 'refreshTokenExpiresAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  adminRoleId: 'adminRoleId',
+  status: 'status',
+  suspendedUntil: 'suspendedUntil',
+  suspendReason: 'suspendReason',
+  membershipTierId: 'membershipTierId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -129,6 +137,10 @@ export const BoardScalarFieldEnum = {
   liked: 'liked',
   shareCount: 'shareCount',
   viewCount: 'viewCount',
+  isHidden: 'isHidden',
+  isPinned: 'isPinned',
+  visibleFrom: 'visibleFrom',
+  visibleUntil: 'visibleUntil',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -144,6 +156,7 @@ export const CommentScalarFieldEnum = {
   parentId: 'parentId',
   liked: 'liked',
   likedById: 'likedById',
+  isHidden: 'isHidden',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -313,9 +326,16 @@ export type TrainTripScalarFieldEnum = (typeof TrainTripScalarFieldEnum)[keyof t
 
 export const CardDiscountScalarFieldEnum = {
   id: 'id',
+  cardCode: 'cardCode',
   cardName: 'cardName',
+  discountType: 'discountType',
+  value: 'value',
+  maxDiscount: 'maxDiscount',
+  minPayment: 'minPayment',
   discountRate: 'discountRate',
   paybackRate: 'paybackRate',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -442,12 +462,60 @@ export type TravelStatBucketScalarFieldEnum = (typeof TravelStatBucketScalarFiel
 
 
 export const AdminRoleScalarFieldEnum = {
-  role: 'role',
+  id: 'id',
+  code: 'code',
+  name: 'name',
   permissions: 'permissions',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type AdminRoleScalarFieldEnum = (typeof AdminRoleScalarFieldEnum)[keyof typeof AdminRoleScalarFieldEnum]
+
+
+export const ReportScalarFieldEnum = {
+  id: 'id',
+  reporterIdx: 'reporterIdx',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  reasonCode: 'reasonCode',
+  detail: 'detail',
+  status: 'status',
+  action: 'action',
+  handlerIdx: 'handlerIdx',
+  handlerMemo: 'handlerMemo',
+  handledAt: 'handledAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]
+
+
+export const MembershipTierScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  minTotalPaid: 'minTotalPaid',
+  minRideCount: 'minRideCount',
+  discountRate: 'discountRate',
+  pointRate: 'pointRate',
+  freeSeatChanges: 'freeSeatChanges',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MembershipTierScalarFieldEnum = (typeof MembershipTierScalarFieldEnum)[keyof typeof MembershipTierScalarFieldEnum]
+
+
+export const SchedulerJobSettingScalarFieldEnum = {
+  name: 'name',
+  isActive: 'isActive',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SchedulerJobSettingScalarFieldEnum = (typeof SchedulerJobSettingScalarFieldEnum)[keyof typeof SchedulerJobSettingScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -488,7 +556,9 @@ export const UserOrderByRelevanceFieldEnum = {
   password: 'password',
   gender: 'gender',
   role: 'role',
-  refreshToken: 'refreshToken'
+  refreshToken: 'refreshToken',
+  status: 'status',
+  suspendReason: 'suspendReason'
 } as const
 
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -614,7 +684,9 @@ export type TrainTripOrderByRelevanceFieldEnum = (typeof TrainTripOrderByRelevan
 
 
 export const CardDiscountOrderByRelevanceFieldEnum = {
-  cardName: 'cardName'
+  cardCode: 'cardCode',
+  cardName: 'cardName',
+  discountType: 'discountType'
 } as const
 
 export type CardDiscountOrderByRelevanceFieldEnum = (typeof CardDiscountOrderByRelevanceFieldEnum)[keyof typeof CardDiscountOrderByRelevanceFieldEnum]
@@ -688,8 +760,35 @@ export type TravelStatBucketOrderByRelevanceFieldEnum = (typeof TravelStatBucket
 
 
 export const AdminRoleOrderByRelevanceFieldEnum = {
-  role: 'role'
+  code: 'code',
+  name: 'name'
 } as const
 
 export type AdminRoleOrderByRelevanceFieldEnum = (typeof AdminRoleOrderByRelevanceFieldEnum)[keyof typeof AdminRoleOrderByRelevanceFieldEnum]
+
+
+export const ReportOrderByRelevanceFieldEnum = {
+  targetType: 'targetType',
+  reasonCode: 'reasonCode',
+  detail: 'detail',
+  status: 'status',
+  action: 'action',
+  handlerMemo: 'handlerMemo'
+} as const
+
+export type ReportOrderByRelevanceFieldEnum = (typeof ReportOrderByRelevanceFieldEnum)[keyof typeof ReportOrderByRelevanceFieldEnum]
+
+
+export const MembershipTierOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type MembershipTierOrderByRelevanceFieldEnum = (typeof MembershipTierOrderByRelevanceFieldEnum)[keyof typeof MembershipTierOrderByRelevanceFieldEnum]
+
+
+export const SchedulerJobSettingOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type SchedulerJobSettingOrderByRelevanceFieldEnum = (typeof SchedulerJobSettingOrderByRelevanceFieldEnum)[keyof typeof SchedulerJobSettingOrderByRelevanceFieldEnum]
 

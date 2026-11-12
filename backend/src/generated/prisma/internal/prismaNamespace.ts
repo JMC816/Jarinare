@@ -409,7 +409,10 @@ export const ModelName = {
   OrderHistory: 'OrderHistory',
   TravelStat: 'TravelStat',
   TravelStatBucket: 'TravelStatBucket',
-  AdminRole: 'AdminRole'
+  AdminRole: 'AdminRole',
+  Report: 'Report',
+  MembershipTier: 'MembershipTier',
+  SchedulerJobSetting: 'SchedulerJobSetting'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -425,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "adminAuditLog" | "carLayout" | "seatSlot" | "trainTrip" | "cardDiscount" | "seasonEvent" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket" | "adminRole"
+    modelProps: "user" | "board" | "comment" | "boardRead" | "boardLike" | "boardBookmark" | "boardShare" | "notification" | "station" | "stationTime" | "syncLock" | "schedulerRunLog" | "adminAuditLog" | "carLayout" | "seatSlot" | "trainTrip" | "cardDiscount" | "seasonEvent" | "seatHold" | "reservation" | "seatChangeRequest" | "pointHistory" | "orderHistory" | "travelStat" | "travelStatBucket" | "adminRole" | "report" | "membershipTier" | "schedulerJobSetting"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2145,6 +2148,204 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Report: {
+      payload: Prisma.$ReportPayload<ExtArgs>
+      fields: Prisma.ReportFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ReportFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ReportFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        findFirst: {
+          args: Prisma.ReportFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ReportFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        findMany: {
+          args: Prisma.ReportFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>[]
+        }
+        create: {
+          args: Prisma.ReportCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        createMany: {
+          args: Prisma.ReportCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ReportDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        update: {
+          args: Prisma.ReportUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        deleteMany: {
+          args: Prisma.ReportDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ReportUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ReportUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ReportPayload>
+        }
+        aggregate: {
+          args: Prisma.ReportAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateReport>
+        }
+        groupBy: {
+          args: Prisma.ReportGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReportGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ReportCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ReportCountAggregateOutputType> | number
+        }
+      }
+    }
+    MembershipTier: {
+      payload: Prisma.$MembershipTierPayload<ExtArgs>
+      fields: Prisma.MembershipTierFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MembershipTierFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MembershipTierFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload>
+        }
+        findFirst: {
+          args: Prisma.MembershipTierFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MembershipTierFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload>
+        }
+        findMany: {
+          args: Prisma.MembershipTierFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload>[]
+        }
+        create: {
+          args: Prisma.MembershipTierCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload>
+        }
+        createMany: {
+          args: Prisma.MembershipTierCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MembershipTierDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload>
+        }
+        update: {
+          args: Prisma.MembershipTierUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload>
+        }
+        deleteMany: {
+          args: Prisma.MembershipTierDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MembershipTierUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MembershipTierUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipTierPayload>
+        }
+        aggregate: {
+          args: Prisma.MembershipTierAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMembershipTier>
+        }
+        groupBy: {
+          args: Prisma.MembershipTierGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MembershipTierGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MembershipTierCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MembershipTierCountAggregateOutputType> | number
+        }
+      }
+    }
+    SchedulerJobSetting: {
+      payload: Prisma.$SchedulerJobSettingPayload<ExtArgs>
+      fields: Prisma.SchedulerJobSettingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SchedulerJobSettingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SchedulerJobSettingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload>
+        }
+        findFirst: {
+          args: Prisma.SchedulerJobSettingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SchedulerJobSettingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload>
+        }
+        findMany: {
+          args: Prisma.SchedulerJobSettingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload>[]
+        }
+        create: {
+          args: Prisma.SchedulerJobSettingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload>
+        }
+        createMany: {
+          args: Prisma.SchedulerJobSettingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.SchedulerJobSettingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload>
+        }
+        update: {
+          args: Prisma.SchedulerJobSettingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload>
+        }
+        deleteMany: {
+          args: Prisma.SchedulerJobSettingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SchedulerJobSettingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.SchedulerJobSettingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SchedulerJobSettingPayload>
+        }
+        aggregate: {
+          args: Prisma.SchedulerJobSettingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSchedulerJobSetting>
+        }
+        groupBy: {
+          args: Prisma.SchedulerJobSettingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SchedulerJobSettingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SchedulerJobSettingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SchedulerJobSettingCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2200,7 +2401,12 @@ export const UserScalarFieldEnum = {
   refreshToken: 'refreshToken',
   refreshTokenExpiresAt: 'refreshTokenExpiresAt',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  adminRoleId: 'adminRoleId',
+  status: 'status',
+  suspendedUntil: 'suspendedUntil',
+  suspendReason: 'suspendReason',
+  membershipTierId: 'membershipTierId'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -2218,6 +2424,10 @@ export const BoardScalarFieldEnum = {
   liked: 'liked',
   shareCount: 'shareCount',
   viewCount: 'viewCount',
+  isHidden: 'isHidden',
+  isPinned: 'isPinned',
+  visibleFrom: 'visibleFrom',
+  visibleUntil: 'visibleUntil',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2233,6 +2443,7 @@ export const CommentScalarFieldEnum = {
   parentId: 'parentId',
   liked: 'liked',
   likedById: 'likedById',
+  isHidden: 'isHidden',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2402,9 +2613,16 @@ export type TrainTripScalarFieldEnum = (typeof TrainTripScalarFieldEnum)[keyof t
 
 export const CardDiscountScalarFieldEnum = {
   id: 'id',
+  cardCode: 'cardCode',
   cardName: 'cardName',
+  discountType: 'discountType',
+  value: 'value',
+  maxDiscount: 'maxDiscount',
+  minPayment: 'minPayment',
   discountRate: 'discountRate',
   paybackRate: 'paybackRate',
+  startsAt: 'startsAt',
+  endsAt: 'endsAt',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -2531,12 +2749,60 @@ export type TravelStatBucketScalarFieldEnum = (typeof TravelStatBucketScalarFiel
 
 
 export const AdminRoleScalarFieldEnum = {
-  role: 'role',
+  id: 'id',
+  code: 'code',
+  name: 'name',
   permissions: 'permissions',
+  createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type AdminRoleScalarFieldEnum = (typeof AdminRoleScalarFieldEnum)[keyof typeof AdminRoleScalarFieldEnum]
+
+
+export const ReportScalarFieldEnum = {
+  id: 'id',
+  reporterIdx: 'reporterIdx',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  reasonCode: 'reasonCode',
+  detail: 'detail',
+  status: 'status',
+  action: 'action',
+  handlerIdx: 'handlerIdx',
+  handlerMemo: 'handlerMemo',
+  handledAt: 'handledAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ReportScalarFieldEnum = (typeof ReportScalarFieldEnum)[keyof typeof ReportScalarFieldEnum]
+
+
+export const MembershipTierScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  sortOrder: 'sortOrder',
+  minTotalPaid: 'minTotalPaid',
+  minRideCount: 'minRideCount',
+  discountRate: 'discountRate',
+  pointRate: 'pointRate',
+  freeSeatChanges: 'freeSeatChanges',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type MembershipTierScalarFieldEnum = (typeof MembershipTierScalarFieldEnum)[keyof typeof MembershipTierScalarFieldEnum]
+
+
+export const SchedulerJobSettingScalarFieldEnum = {
+  name: 'name',
+  isActive: 'isActive',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SchedulerJobSettingScalarFieldEnum = (typeof SchedulerJobSettingScalarFieldEnum)[keyof typeof SchedulerJobSettingScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2577,7 +2843,9 @@ export const UserOrderByRelevanceFieldEnum = {
   password: 'password',
   gender: 'gender',
   role: 'role',
-  refreshToken: 'refreshToken'
+  refreshToken: 'refreshToken',
+  status: 'status',
+  suspendReason: 'suspendReason'
 } as const
 
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -2703,7 +2971,9 @@ export type TrainTripOrderByRelevanceFieldEnum = (typeof TrainTripOrderByRelevan
 
 
 export const CardDiscountOrderByRelevanceFieldEnum = {
-  cardName: 'cardName'
+  cardCode: 'cardCode',
+  cardName: 'cardName',
+  discountType: 'discountType'
 } as const
 
 export type CardDiscountOrderByRelevanceFieldEnum = (typeof CardDiscountOrderByRelevanceFieldEnum)[keyof typeof CardDiscountOrderByRelevanceFieldEnum]
@@ -2777,10 +3047,37 @@ export type TravelStatBucketOrderByRelevanceFieldEnum = (typeof TravelStatBucket
 
 
 export const AdminRoleOrderByRelevanceFieldEnum = {
-  role: 'role'
+  code: 'code',
+  name: 'name'
 } as const
 
 export type AdminRoleOrderByRelevanceFieldEnum = (typeof AdminRoleOrderByRelevanceFieldEnum)[keyof typeof AdminRoleOrderByRelevanceFieldEnum]
+
+
+export const ReportOrderByRelevanceFieldEnum = {
+  targetType: 'targetType',
+  reasonCode: 'reasonCode',
+  detail: 'detail',
+  status: 'status',
+  action: 'action',
+  handlerMemo: 'handlerMemo'
+} as const
+
+export type ReportOrderByRelevanceFieldEnum = (typeof ReportOrderByRelevanceFieldEnum)[keyof typeof ReportOrderByRelevanceFieldEnum]
+
+
+export const MembershipTierOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type MembershipTierOrderByRelevanceFieldEnum = (typeof MembershipTierOrderByRelevanceFieldEnum)[keyof typeof MembershipTierOrderByRelevanceFieldEnum]
+
+
+export const SchedulerJobSettingOrderByRelevanceFieldEnum = {
+  name: 'name'
+} as const
+
+export type SchedulerJobSettingOrderByRelevanceFieldEnum = (typeof SchedulerJobSettingOrderByRelevanceFieldEnum)[keyof typeof SchedulerJobSettingOrderByRelevanceFieldEnum]
 
 
 
@@ -2987,6 +3284,9 @@ export type GlobalOmitConfig = {
   travelStat?: Prisma.TravelStatOmit
   travelStatBucket?: Prisma.TravelStatBucketOmit
   adminRole?: Prisma.AdminRoleOmit
+  report?: Prisma.ReportOmit
+  membershipTier?: Prisma.MembershipTierOmit
+  schedulerJobSetting?: Prisma.SchedulerJobSettingOmit
 }
 
 /* Types for Logging */

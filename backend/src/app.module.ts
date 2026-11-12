@@ -23,6 +23,9 @@ import { TrainsModule } from "./trains/trains.module";
 import { UsersModule } from "./users/users.module";
 import { AuditModule } from "./audit/audit.module";
 import { DashboardModule } from "./dashboard/dashboard.module";
+import { AdminUsersModule } from "./admin-users/admin-users.module";
+import { AdminRolesModule } from "./admin-roles/admin-roles.module";
+import { AdminReportsModule } from "./admin-reports/admin-reports.module";
 
 @Module({
   imports: [
@@ -37,6 +40,9 @@ import { DashboardModule } from "./dashboard/dashboard.module";
     // 도메인 모듈
     AuditModule,
     DashboardModule,
+    AdminUsersModule,
+    AdminRolesModule,
+    AdminReportsModule,
     UsersModule,
     BoardModule,
     CommentModule,

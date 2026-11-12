@@ -147,3 +147,18 @@ export type TravelStatBucket = Prisma.TravelStatBucketModel
  * 
  */
 export type AdminRole = Prisma.AdminRoleModel
+/**
+ * Model Report
+ * 
+ */
+export type Report = Prisma.ReportModel
+/**
+ * Model MembershipTier
+ * 
+ */
+export type MembershipTier = Prisma.MembershipTierModel
+/**
+ * Model SchedulerJobSetting
+ * 
+ */
+export type SchedulerJobSetting = Prisma.SchedulerJobSettingModel

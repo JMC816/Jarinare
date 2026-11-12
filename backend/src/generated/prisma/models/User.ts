@@ -31,6 +31,8 @@ export type UserAvgAggregateOutputType = {
   age: number | null
   seatChageCount: number | null
   point: number | null
+  adminRoleId: number | null
+  membershipTierId: number | null
 }
 
 export type UserSumAggregateOutputType = {
@@ -38,6 +40,8 @@ export type UserSumAggregateOutputType = {
   age: number | null
   seatChageCount: number | null
   point: number | null
+  adminRoleId: bigint | null
+  membershipTierId: bigint | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -57,6 +61,11 @@ export type UserMinAggregateOutputType = {
   refreshTokenExpiresAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  adminRoleId: bigint | null
+  status: string | null
+  suspendedUntil: Date | null
+  suspendReason: string | null
+  membershipTierId: bigint | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -76,6 +85,11 @@ export type UserMaxAggregateOutputType = {
   refreshTokenExpiresAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
+  adminRoleId: bigint | null
+  status: string | null
+  suspendedUntil: Date | null
+  suspendReason: string | null
+  membershipTierId: bigint | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -95,6 +109,11 @@ export type UserCountAggregateOutputType = {
   refreshTokenExpiresAt: number
   createdAt: number
   updatedAt: number
+  adminRoleId: number
+  status: number
+  suspendedUntil: number
+  suspendReason: number
+  membershipTierId: number
   _all: number
 }
 
@@ -104,6 +123,8 @@ export type UserAvgAggregateInputType = {
   age?: true
   seatChageCount?: true
   point?: true
+  adminRoleId?: true
+  membershipTierId?: true
 }
 
 export type UserSumAggregateInputType = {
@@ -111,6 +132,8 @@ export type UserSumAggregateInputType = {
   age?: true
   seatChageCount?: true
   point?: true
+  adminRoleId?: true
+  membershipTierId?: true
 }
 
 export type UserMinAggregateInputType = {
@@ -130,6 +153,11 @@ export type UserMinAggregateInputType = {
   refreshTokenExpiresAt?: true
   createdAt?: true
   updatedAt?: true
+  adminRoleId?: true
+  status?: true
+  suspendedUntil?: true
+  suspendReason?: true
+  membershipTierId?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -149,6 +177,11 @@ export type UserMaxAggregateInputType = {
   refreshTokenExpiresAt?: true
   createdAt?: true
   updatedAt?: true
+  adminRoleId?: true
+  status?: true
+  suspendedUntil?: true
+  suspendReason?: true
+  membershipTierId?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -168,6 +201,11 @@ export type UserCountAggregateInputType = {
   refreshTokenExpiresAt?: true
   createdAt?: true
   updatedAt?: true
+  adminRoleId?: true
+  status?: true
+  suspendedUntil?: true
+  suspendReason?: true
+  membershipTierId?: true
   _all?: true
 }
 
@@ -274,6 +312,11 @@ export type UserGroupByOutputType = {
   refreshTokenExpiresAt: Date | null
   createdAt: Date
   updatedAt: Date
+  adminRoleId: bigint | null
+  status: string
+  suspendedUntil: Date | null
+  suspendReason: string | null
+  membershipTierId: bigint | null
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -316,6 +359,11 @@ export type UserWhereInput = {
   refreshTokenExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  adminRoleId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+  status?: Prisma.StringFilter<"User"> | string
+  suspendedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  suspendReason?: Prisma.StringNullableFilter<"User"> | string | null
+  membershipTierId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
   boards?: Prisma.BoardListRelationFilter
   comments?: Prisma.CommentListRelationFilter
   boardLikes?: Prisma.BoardLikeListRelationFilter
@@ -328,6 +376,8 @@ export type UserWhereInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestListRelationFilter
   pointHistories?: Prisma.PointHistoryListRelationFilter
   orderHistories?: Prisma.OrderHistoryListRelationFilter
+  adminRole?: Prisma.XOR<Prisma.AdminRoleNullableScalarRelationFilter, Prisma.AdminRoleWhereInput> | null
+  membershipTier?: Prisma.XOR<Prisma.MembershipTierNullableScalarRelationFilter, Prisma.MembershipTierWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -347,6 +397,11 @@ export type UserOrderByWithRelationInput = {
   refreshTokenExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  adminRoleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  suspendedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  suspendReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  membershipTierId?: Prisma.SortOrderInput | Prisma.SortOrder
   boards?: Prisma.BoardOrderByRelationAggregateInput
   comments?: Prisma.CommentOrderByRelationAggregateInput
   boardLikes?: Prisma.BoardLikeOrderByRelationAggregateInput
@@ -359,6 +414,8 @@ export type UserOrderByWithRelationInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestOrderByRelationAggregateInput
   pointHistories?: Prisma.PointHistoryOrderByRelationAggregateInput
   orderHistories?: Prisma.OrderHistoryOrderByRelationAggregateInput
+  adminRole?: Prisma.AdminRoleOrderByWithRelationInput
+  membershipTier?: Prisma.MembershipTierOrderByWithRelationInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
 
@@ -382,6 +439,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   refreshTokenExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  adminRoleId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+  status?: Prisma.StringFilter<"User"> | string
+  suspendedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  suspendReason?: Prisma.StringNullableFilter<"User"> | string | null
+  membershipTierId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
   boards?: Prisma.BoardListRelationFilter
   comments?: Prisma.CommentListRelationFilter
   boardLikes?: Prisma.BoardLikeListRelationFilter
@@ -394,6 +456,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   seatChangeReceived?: Prisma.SeatChangeRequestListRelationFilter
   pointHistories?: Prisma.PointHistoryListRelationFilter
   orderHistories?: Prisma.OrderHistoryListRelationFilter
+  adminRole?: Prisma.XOR<Prisma.AdminRoleNullableScalarRelationFilter, Prisma.AdminRoleWhereInput> | null
+  membershipTier?: Prisma.XOR<Prisma.MembershipTierNullableScalarRelationFilter, Prisma.MembershipTierWhereInput> | null
 }, "idx" | "email" | "refreshToken">
 
 export type UserOrderByWithAggregationInput = {
@@ -413,6 +477,11 @@ export type UserOrderByWithAggregationInput = {
   refreshTokenExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  adminRoleId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  suspendedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  suspendReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  membershipTierId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -440,6 +509,11 @@ export type UserScalarWhereWithAggregatesInput = {
   refreshTokenExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  adminRoleId?: Prisma.BigIntNullableWithAggregatesFilter<"User"> | bigint | number | null
+  status?: Prisma.StringWithAggregatesFilter<"User"> | string
+  suspendedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  suspendReason?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  membershipTierId?: Prisma.BigIntNullableWithAggregatesFilter<"User"> | bigint | number | null
 }
 
 export type UserCreateInput = {
@@ -459,6 +533,9 @@ export type UserCreateInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -471,6 +548,8 @@ export type UserCreateInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -490,6 +569,11 @@ export type UserUncheckedCreateInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -521,6 +605,9 @@ export type UserUpdateInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -533,6 +620,8 @@ export type UserUpdateInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -552,6 +641,11 @@ export type UserUncheckedUpdateInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -583,6 +677,11 @@ export type UserCreateManyInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
 }
 
 export type UserUpdateManyMutationInput = {
@@ -602,6 +701,9 @@ export type UserUpdateManyMutationInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -621,6 +723,11 @@ export type UserUncheckedUpdateManyInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
 }
 
 export type UserOrderByRelevanceInput = {
@@ -646,6 +753,11 @@ export type UserCountOrderByAggregateInput = {
   refreshTokenExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  adminRoleId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  suspendedUntil?: Prisma.SortOrder
+  suspendReason?: Prisma.SortOrder
+  membershipTierId?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -653,6 +765,8 @@ export type UserAvgOrderByAggregateInput = {
   age?: Prisma.SortOrder
   seatChageCount?: Prisma.SortOrder
   point?: Prisma.SortOrder
+  adminRoleId?: Prisma.SortOrder
+  membershipTierId?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -672,6 +786,11 @@ export type UserMaxOrderByAggregateInput = {
   refreshTokenExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  adminRoleId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  suspendedUntil?: Prisma.SortOrder
+  suspendReason?: Prisma.SortOrder
+  membershipTierId?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -691,6 +810,11 @@ export type UserMinOrderByAggregateInput = {
   refreshTokenExpiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  adminRoleId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  suspendedUntil?: Prisma.SortOrder
+  suspendReason?: Prisma.SortOrder
+  membershipTierId?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -698,11 +822,23 @@ export type UserSumOrderByAggregateInput = {
   age?: Prisma.SortOrder
   seatChageCount?: Prisma.SortOrder
   point?: Prisma.SortOrder
+  adminRoleId?: Prisma.SortOrder
+  membershipTierId?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserListRelationFilter = {
+  every?: Prisma.UserWhereInput
+  some?: Prisma.UserWhereInput
+  none?: Prisma.UserWhereInput
+}
+
+export type UserOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type BigIntFieldUpdateOperationsInput = {
@@ -747,6 +883,14 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type NullableBigIntFieldUpdateOperationsInput = {
+  set?: bigint | number | null
+  increment?: bigint | number
+  decrement?: bigint | number
+  multiply?: bigint | number
+  divide?: bigint | number
 }
 
 export type UserCreateNestedOneWithoutBoardsInput = {
@@ -917,6 +1061,90 @@ export type UserUpdateOneRequiredWithoutOrderHistoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOrderHistoriesInput, Prisma.UserUpdateWithoutOrderHistoriesInput>, Prisma.UserUncheckedUpdateWithoutOrderHistoriesInput>
 }
 
+export type UserCreateNestedManyWithoutAdminRoleInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdminRoleInput, Prisma.UserUncheckedCreateWithoutAdminRoleInput> | Prisma.UserCreateWithoutAdminRoleInput[] | Prisma.UserUncheckedCreateWithoutAdminRoleInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminRoleInput | Prisma.UserCreateOrConnectWithoutAdminRoleInput[]
+  createMany?: Prisma.UserCreateManyAdminRoleInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutAdminRoleInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdminRoleInput, Prisma.UserUncheckedCreateWithoutAdminRoleInput> | Prisma.UserCreateWithoutAdminRoleInput[] | Prisma.UserUncheckedCreateWithoutAdminRoleInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminRoleInput | Prisma.UserCreateOrConnectWithoutAdminRoleInput[]
+  createMany?: Prisma.UserCreateManyAdminRoleInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateManyWithoutAdminRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdminRoleInput, Prisma.UserUncheckedCreateWithoutAdminRoleInput> | Prisma.UserCreateWithoutAdminRoleInput[] | Prisma.UserUncheckedCreateWithoutAdminRoleInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminRoleInput | Prisma.UserCreateOrConnectWithoutAdminRoleInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutAdminRoleInput | Prisma.UserUpsertWithWhereUniqueWithoutAdminRoleInput[]
+  createMany?: Prisma.UserCreateManyAdminRoleInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutAdminRoleInput | Prisma.UserUpdateWithWhereUniqueWithoutAdminRoleInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutAdminRoleInput | Prisma.UserUpdateManyWithWhereWithoutAdminRoleInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutAdminRoleNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAdminRoleInput, Prisma.UserUncheckedCreateWithoutAdminRoleInput> | Prisma.UserCreateWithoutAdminRoleInput[] | Prisma.UserUncheckedCreateWithoutAdminRoleInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAdminRoleInput | Prisma.UserCreateOrConnectWithoutAdminRoleInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutAdminRoleInput | Prisma.UserUpsertWithWhereUniqueWithoutAdminRoleInput[]
+  createMany?: Prisma.UserCreateManyAdminRoleInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutAdminRoleInput | Prisma.UserUpdateWithWhereUniqueWithoutAdminRoleInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutAdminRoleInput | Prisma.UserUpdateManyWithWhereWithoutAdminRoleInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserCreateNestedManyWithoutMembershipTierInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMembershipTierInput, Prisma.UserUncheckedCreateWithoutMembershipTierInput> | Prisma.UserCreateWithoutMembershipTierInput[] | Prisma.UserUncheckedCreateWithoutMembershipTierInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMembershipTierInput | Prisma.UserCreateOrConnectWithoutMembershipTierInput[]
+  createMany?: Prisma.UserCreateManyMembershipTierInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutMembershipTierInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMembershipTierInput, Prisma.UserUncheckedCreateWithoutMembershipTierInput> | Prisma.UserCreateWithoutMembershipTierInput[] | Prisma.UserUncheckedCreateWithoutMembershipTierInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMembershipTierInput | Prisma.UserCreateOrConnectWithoutMembershipTierInput[]
+  createMany?: Prisma.UserCreateManyMembershipTierInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateManyWithoutMembershipTierNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMembershipTierInput, Prisma.UserUncheckedCreateWithoutMembershipTierInput> | Prisma.UserCreateWithoutMembershipTierInput[] | Prisma.UserUncheckedCreateWithoutMembershipTierInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMembershipTierInput | Prisma.UserCreateOrConnectWithoutMembershipTierInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutMembershipTierInput | Prisma.UserUpsertWithWhereUniqueWithoutMembershipTierInput[]
+  createMany?: Prisma.UserCreateManyMembershipTierInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutMembershipTierInput | Prisma.UserUpdateWithWhereUniqueWithoutMembershipTierInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutMembershipTierInput | Prisma.UserUpdateManyWithWhereWithoutMembershipTierInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutMembershipTierNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMembershipTierInput, Prisma.UserUncheckedCreateWithoutMembershipTierInput> | Prisma.UserCreateWithoutMembershipTierInput[] | Prisma.UserUncheckedCreateWithoutMembershipTierInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMembershipTierInput | Prisma.UserCreateOrConnectWithoutMembershipTierInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutMembershipTierInput | Prisma.UserUpsertWithWhereUniqueWithoutMembershipTierInput[]
+  createMany?: Prisma.UserCreateManyMembershipTierInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutMembershipTierInput | Prisma.UserUpdateWithWhereUniqueWithoutMembershipTierInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutMembershipTierInput | Prisma.UserUpdateManyWithWhereWithoutMembershipTierInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
 export type UserCreateWithoutBoardsInput = {
   idx?: bigint | number
   userId: string
@@ -934,6 +1162,9 @@ export type UserCreateWithoutBoardsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
   boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
@@ -945,6 +1176,8 @@ export type UserCreateWithoutBoardsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutBoardsInput = {
@@ -964,6 +1197,11 @@ export type UserUncheckedCreateWithoutBoardsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
   boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
@@ -1010,6 +1248,9 @@ export type UserUpdateWithoutBoardsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
   boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
@@ -1021,6 +1262,8 @@ export type UserUpdateWithoutBoardsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardsInput = {
@@ -1040,6 +1283,11 @@ export type UserUncheckedUpdateWithoutBoardsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
   boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
@@ -1070,6 +1318,9 @@ export type UserCreateWithoutCommentsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
   boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
@@ -1081,6 +1332,8 @@ export type UserCreateWithoutCommentsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1100,6 +1353,11 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
   boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
@@ -1146,6 +1404,9 @@ export type UserUpdateWithoutCommentsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
   boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
@@ -1157,6 +1418,8 @@ export type UserUpdateWithoutCommentsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1176,6 +1439,11 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
   boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
@@ -1206,6 +1474,9 @@ export type UserCreateWithoutBoardReadsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -1217,6 +1488,8 @@ export type UserCreateWithoutBoardReadsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutBoardReadsInput = {
@@ -1236,6 +1509,11 @@ export type UserUncheckedCreateWithoutBoardReadsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -1282,6 +1560,9 @@ export type UserUpdateWithoutBoardReadsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -1293,6 +1574,8 @@ export type UserUpdateWithoutBoardReadsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardReadsInput = {
@@ -1312,6 +1595,11 @@ export type UserUncheckedUpdateWithoutBoardReadsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -1342,6 +1630,9 @@ export type UserCreateWithoutBoardLikesInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
@@ -1353,6 +1644,8 @@ export type UserCreateWithoutBoardLikesInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutBoardLikesInput = {
@@ -1372,6 +1665,11 @@ export type UserUncheckedCreateWithoutBoardLikesInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
@@ -1418,6 +1716,9 @@ export type UserUpdateWithoutBoardLikesInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
@@ -1429,6 +1730,8 @@ export type UserUpdateWithoutBoardLikesInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardLikesInput = {
@@ -1448,6 +1751,11 @@ export type UserUncheckedUpdateWithoutBoardLikesInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
@@ -1478,6 +1786,9 @@ export type UserCreateWithoutBoardBookmarksInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -1489,6 +1800,8 @@ export type UserCreateWithoutBoardBookmarksInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutBoardBookmarksInput = {
@@ -1508,6 +1821,11 @@ export type UserUncheckedCreateWithoutBoardBookmarksInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -1554,6 +1872,9 @@ export type UserUpdateWithoutBoardBookmarksInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -1565,6 +1886,8 @@ export type UserUpdateWithoutBoardBookmarksInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardBookmarksInput = {
@@ -1584,6 +1907,11 @@ export type UserUncheckedUpdateWithoutBoardBookmarksInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -1614,6 +1942,9 @@ export type UserCreateWithoutBoardSharesInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -1625,6 +1956,8 @@ export type UserCreateWithoutBoardSharesInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutBoardSharesInput = {
@@ -1644,6 +1977,11 @@ export type UserUncheckedCreateWithoutBoardSharesInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -1690,6 +2028,9 @@ export type UserUpdateWithoutBoardSharesInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -1701,6 +2042,8 @@ export type UserUpdateWithoutBoardSharesInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBoardSharesInput = {
@@ -1720,6 +2063,11 @@ export type UserUncheckedUpdateWithoutBoardSharesInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -1750,6 +2098,9 @@ export type UserCreateWithoutSeatHoldsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -1761,6 +2112,8 @@ export type UserCreateWithoutSeatHoldsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutSeatHoldsInput = {
@@ -1780,6 +2133,11 @@ export type UserUncheckedCreateWithoutSeatHoldsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -1826,6 +2184,9 @@ export type UserUpdateWithoutSeatHoldsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -1837,6 +2198,8 @@ export type UserUpdateWithoutSeatHoldsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSeatHoldsInput = {
@@ -1856,6 +2219,11 @@ export type UserUncheckedUpdateWithoutSeatHoldsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -1886,6 +2254,9 @@ export type UserCreateWithoutReservationsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -1897,6 +2268,8 @@ export type UserCreateWithoutReservationsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutReservationsInput = {
@@ -1916,6 +2289,11 @@ export type UserUncheckedCreateWithoutReservationsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -1962,6 +2340,9 @@ export type UserUpdateWithoutReservationsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -1973,6 +2354,8 @@ export type UserUpdateWithoutReservationsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReservationsInput = {
@@ -1992,6 +2375,11 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -2022,6 +2410,9 @@ export type UserCreateWithoutSeatChangeRequestsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -2033,6 +2424,8 @@ export type UserCreateWithoutSeatChangeRequestsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutSeatChangeRequestsInput = {
@@ -2052,6 +2445,11 @@ export type UserUncheckedCreateWithoutSeatChangeRequestsInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -2087,6 +2485,9 @@ export type UserCreateWithoutSeatChangeReceivedInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -2098,6 +2499,8 @@ export type UserCreateWithoutSeatChangeReceivedInput = {
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutSeatChangeReceivedInput = {
@@ -2117,6 +2520,11 @@ export type UserUncheckedCreateWithoutSeatChangeReceivedInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -2163,6 +2571,9 @@ export type UserUpdateWithoutSeatChangeRequestsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -2174,6 +2585,8 @@ export type UserUpdateWithoutSeatChangeRequestsInput = {
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSeatChangeRequestsInput = {
@@ -2193,6 +2606,11 @@ export type UserUncheckedUpdateWithoutSeatChangeRequestsInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -2234,6 +2652,9 @@ export type UserUpdateWithoutSeatChangeReceivedInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -2245,6 +2666,8 @@ export type UserUpdateWithoutSeatChangeReceivedInput = {
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSeatChangeReceivedInput = {
@@ -2264,6 +2687,11 @@ export type UserUncheckedUpdateWithoutSeatChangeReceivedInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -2294,6 +2722,9 @@ export type UserCreateWithoutPointHistoriesInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -2305,6 +2736,8 @@ export type UserCreateWithoutPointHistoriesInput = {
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutPointHistoriesInput = {
@@ -2324,6 +2757,11 @@ export type UserUncheckedCreateWithoutPointHistoriesInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -2370,6 +2808,9 @@ export type UserUpdateWithoutPointHistoriesInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -2381,6 +2822,8 @@ export type UserUpdateWithoutPointHistoriesInput = {
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPointHistoriesInput = {
@@ -2400,6 +2843,11 @@ export type UserUncheckedUpdateWithoutPointHistoriesInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -2430,6 +2878,9 @@ export type UserCreateWithoutOrderHistoriesInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
   boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
@@ -2441,6 +2892,8 @@ export type UserCreateWithoutOrderHistoriesInput = {
   seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
   seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
   pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
 }
 
 export type UserUncheckedCreateWithoutOrderHistoriesInput = {
@@ -2460,6 +2913,11 @@ export type UserUncheckedCreateWithoutOrderHistoriesInput = {
   refreshTokenExpiresAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
   boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
   comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
   boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
@@ -2506,6 +2964,9 @@ export type UserUpdateWithoutOrderHistoriesInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
@@ -2517,6 +2978,8 @@ export type UserUpdateWithoutOrderHistoriesInput = {
   seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrderHistoriesInput = {
@@ -2536,6 +2999,11 @@ export type UserUncheckedUpdateWithoutOrderHistoriesInput = {
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
   comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
   boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -2547,6 +3015,457 @@ export type UserUncheckedUpdateWithoutOrderHistoriesInput = {
   seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
   seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
   pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutAdminRoleInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
+  boardBookmarks?: Prisma.BoardBookmarkCreateNestedManyWithoutUserInput
+  boardShares?: Prisma.BoardShareCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  membershipTier?: Prisma.MembershipTierCreateNestedOneWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutAdminRoleInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
+  boardBookmarks?: Prisma.BoardBookmarkUncheckedCreateNestedManyWithoutUserInput
+  boardShares?: Prisma.BoardShareUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutAdminRoleInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdminRoleInput, Prisma.UserUncheckedCreateWithoutAdminRoleInput>
+}
+
+export type UserCreateManyAdminRoleInputEnvelope = {
+  data: Prisma.UserCreateManyAdminRoleInput | Prisma.UserCreateManyAdminRoleInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithWhereUniqueWithoutAdminRoleInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAdminRoleInput, Prisma.UserUncheckedUpdateWithoutAdminRoleInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAdminRoleInput, Prisma.UserUncheckedCreateWithoutAdminRoleInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutAdminRoleInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAdminRoleInput, Prisma.UserUncheckedUpdateWithoutAdminRoleInput>
+}
+
+export type UserUpdateManyWithWhereWithoutAdminRoleInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutAdminRoleInput>
+}
+
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  idx?: Prisma.BigIntFilter<"User"> | bigint | number
+  userId?: Prisma.StringFilter<"User"> | string
+  name?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringNullableFilter<"User"> | string | null
+  password?: Prisma.StringNullableFilter<"User"> | string | null
+  age?: Prisma.IntNullableFilter<"User"> | number | null
+  gender?: Prisma.StringNullableFilter<"User"> | string | null
+  seatChageCount?: Prisma.IntFilter<"User"> | number
+  point?: Prisma.IntFilter<"User"> | number
+  notifiChange?: Prisma.BoolFilter<"User"> | boolean
+  notifResponse?: Prisma.BoolFilter<"User"> | boolean
+  role?: Prisma.StringFilter<"User"> | string
+  refreshToken?: Prisma.StringNullableFilter<"User"> | string | null
+  refreshTokenExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  adminRoleId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+  status?: Prisma.StringFilter<"User"> | string
+  suspendedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  suspendReason?: Prisma.StringNullableFilter<"User"> | string | null
+  membershipTierId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
+}
+
+export type UserCreateWithoutMembershipTierInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  boards?: Prisma.BoardCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadCreateNestedManyWithoutUserInput
+  boardBookmarks?: Prisma.BoardBookmarkCreateNestedManyWithoutUserInput
+  boardShares?: Prisma.BoardShareCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryCreateNestedManyWithoutUserInput
+  adminRole?: Prisma.AdminRoleCreateNestedOneWithoutUsersInput
+}
+
+export type UserUncheckedCreateWithoutMembershipTierInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  boards?: Prisma.BoardUncheckedCreateNestedManyWithoutAuthorInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutAuthorInput
+  boardLikes?: Prisma.BoardLikeUncheckedCreateNestedManyWithoutUserInput
+  boardReads?: Prisma.BoardReadUncheckedCreateNestedManyWithoutUserInput
+  boardBookmarks?: Prisma.BoardBookmarkUncheckedCreateNestedManyWithoutUserInput
+  boardShares?: Prisma.BoardShareUncheckedCreateNestedManyWithoutUserInput
+  seatHolds?: Prisma.SeatHoldUncheckedCreateNestedManyWithoutUserInput
+  reservations?: Prisma.ReservationUncheckedCreateNestedManyWithoutUserInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutRequesterInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedCreateNestedManyWithoutTargetInput
+  pointHistories?: Prisma.PointHistoryUncheckedCreateNestedManyWithoutUserInput
+  orderHistories?: Prisma.OrderHistoryUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMembershipTierInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMembershipTierInput, Prisma.UserUncheckedCreateWithoutMembershipTierInput>
+}
+
+export type UserCreateManyMembershipTierInputEnvelope = {
+  data: Prisma.UserCreateManyMembershipTierInput | Prisma.UserCreateManyMembershipTierInput[]
+  skipDuplicates?: boolean
+}
+
+export type UserUpsertWithWhereUniqueWithoutMembershipTierInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMembershipTierInput, Prisma.UserUncheckedUpdateWithoutMembershipTierInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMembershipTierInput, Prisma.UserUncheckedCreateWithoutMembershipTierInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutMembershipTierInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMembershipTierInput, Prisma.UserUncheckedUpdateWithoutMembershipTierInput>
+}
+
+export type UserUpdateManyWithWhereWithoutMembershipTierInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutMembershipTierInput>
+}
+
+export type UserCreateManyAdminRoleInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+  membershipTierId?: bigint | number | null
+}
+
+export type UserUpdateWithoutAdminRoleInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
+  boardBookmarks?: Prisma.BoardBookmarkUpdateManyWithoutUserNestedInput
+  boardShares?: Prisma.BoardShareUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  membershipTier?: Prisma.MembershipTierUpdateOneWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAdminRoleInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
+  boardBookmarks?: Prisma.BoardBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  boardShares?: Prisma.BoardShareUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutAdminRoleInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  membershipTierId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+}
+
+export type UserCreateManyMembershipTierInput = {
+  idx?: bigint | number
+  userId: string
+  name?: string
+  email?: string | null
+  password?: string | null
+  age?: number | null
+  gender?: string | null
+  seatChageCount?: number
+  point?: number
+  notifiChange?: boolean
+  notifResponse?: boolean
+  role?: string
+  refreshToken?: string | null
+  refreshTokenExpiresAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adminRoleId?: bigint | number | null
+  status?: string
+  suspendedUntil?: Date | string | null
+  suspendReason?: string | null
+}
+
+export type UserUpdateWithoutMembershipTierInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  boards?: Prisma.BoardUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUpdateManyWithoutUserNestedInput
+  boardBookmarks?: Prisma.BoardBookmarkUpdateManyWithoutUserNestedInput
+  boardShares?: Prisma.BoardShareUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUpdateManyWithoutUserNestedInput
+  adminRole?: Prisma.AdminRoleUpdateOneWithoutUsersNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMembershipTierInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  boards?: Prisma.BoardUncheckedUpdateManyWithoutAuthorNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutAuthorNestedInput
+  boardLikes?: Prisma.BoardLikeUncheckedUpdateManyWithoutUserNestedInput
+  boardReads?: Prisma.BoardReadUncheckedUpdateManyWithoutUserNestedInput
+  boardBookmarks?: Prisma.BoardBookmarkUncheckedUpdateManyWithoutUserNestedInput
+  boardShares?: Prisma.BoardShareUncheckedUpdateManyWithoutUserNestedInput
+  seatHolds?: Prisma.SeatHoldUncheckedUpdateManyWithoutUserNestedInput
+  reservations?: Prisma.ReservationUncheckedUpdateManyWithoutUserNestedInput
+  seatChangeRequests?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutRequesterNestedInput
+  seatChangeReceived?: Prisma.SeatChangeRequestUncheckedUpdateManyWithoutTargetNestedInput
+  pointHistories?: Prisma.PointHistoryUncheckedUpdateManyWithoutUserNestedInput
+  orderHistories?: Prisma.OrderHistoryUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutMembershipTierInput = {
+  idx?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  gender?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seatChageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  point?: Prisma.IntFieldUpdateOperationsInput | number
+  notifiChange?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notifResponse?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  suspendedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  suspendReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -2696,6 +3615,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   refreshTokenExpiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  adminRoleId?: boolean
+  status?: boolean
+  suspendedUntil?: boolean
+  suspendReason?: boolean
+  membershipTierId?: boolean
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   boardLikes?: boolean | Prisma.User$boardLikesArgs<ExtArgs>
@@ -2708,6 +3632,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   seatChangeReceived?: boolean | Prisma.User$seatChangeReceivedArgs<ExtArgs>
   pointHistories?: boolean | Prisma.User$pointHistoriesArgs<ExtArgs>
   orderHistories?: boolean | Prisma.User$orderHistoriesArgs<ExtArgs>
+  adminRole?: boolean | Prisma.User$adminRoleArgs<ExtArgs>
+  membershipTier?: boolean | Prisma.User$membershipTierArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2730,9 +3656,14 @@ export type UserSelectScalar = {
   refreshTokenExpiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  adminRoleId?: boolean
+  status?: boolean
+  suspendedUntil?: boolean
+  suspendReason?: boolean
+  membershipTierId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"idx" | "userId" | "name" | "email" | "password" | "age" | "gender" | "seatChageCount" | "point" | "notifiChange" | "notifResponse" | "role" | "refreshToken" | "refreshTokenExpiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"idx" | "userId" | "name" | "email" | "password" | "age" | "gender" | "seatChageCount" | "point" | "notifiChange" | "notifResponse" | "role" | "refreshToken" | "refreshTokenExpiresAt" | "createdAt" | "updatedAt" | "adminRoleId" | "status" | "suspendedUntil" | "suspendReason" | "membershipTierId", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
@@ -2746,6 +3677,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   seatChangeReceived?: boolean | Prisma.User$seatChangeReceivedArgs<ExtArgs>
   pointHistories?: boolean | Prisma.User$pointHistoriesArgs<ExtArgs>
   orderHistories?: boolean | Prisma.User$orderHistoriesArgs<ExtArgs>
+  adminRole?: boolean | Prisma.User$adminRoleArgs<ExtArgs>
+  membershipTier?: boolean | Prisma.User$membershipTierArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -2764,6 +3697,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     seatChangeReceived: Prisma.$SeatChangeRequestPayload<ExtArgs>[]
     pointHistories: Prisma.$PointHistoryPayload<ExtArgs>[]
     orderHistories: Prisma.$OrderHistoryPayload<ExtArgs>[]
+    adminRole: Prisma.$AdminRolePayload<ExtArgs> | null
+    membershipTier: Prisma.$MembershipTierPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     idx: bigint
@@ -2782,6 +3717,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     refreshTokenExpiresAt: Date | null
     createdAt: Date
     updatedAt: Date
+    adminRoleId: bigint | null
+    status: string
+    suspendedUntil: Date | null
+    suspendReason: string | null
+    membershipTierId: bigint | null
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -3134,6 +4074,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   seatChangeReceived<T extends Prisma.User$seatChangeReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$seatChangeReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SeatChangeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pointHistories<T extends Prisma.User$pointHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pointHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PointHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   orderHistories<T extends Prisma.User$orderHistoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$orderHistoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  adminRole<T extends Prisma.User$adminRoleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$adminRoleArgs<ExtArgs>>): Prisma.Prisma__AdminRoleClient<runtime.Types.Result.GetResult<Prisma.$AdminRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  membershipTier<T extends Prisma.User$membershipTierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$membershipTierArgs<ExtArgs>>): Prisma.Prisma__MembershipTierClient<runtime.Types.Result.GetResult<Prisma.$MembershipTierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3179,6 +4121,11 @@ export interface UserFieldRefs {
   readonly refreshTokenExpiresAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly adminRoleId: Prisma.FieldRef<"User", 'BigInt'>
+  readonly status: Prisma.FieldRef<"User", 'String'>
+  readonly suspendedUntil: Prisma.FieldRef<"User", 'DateTime'>
+  readonly suspendReason: Prisma.FieldRef<"User", 'String'>
+  readonly membershipTierId: Prisma.FieldRef<"User", 'BigInt'>
 }
     
 
@@ -3812,6 +4759,44 @@ export type User$orderHistoriesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.OrderHistoryScalarFieldEnum | Prisma.OrderHistoryScalarFieldEnum[]
+}
+
+/**
+ * User.adminRole
+ */
+export type User$adminRoleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the AdminRole
+   */
+  select?: Prisma.AdminRoleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the AdminRole
+   */
+  omit?: Prisma.AdminRoleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdminRoleInclude<ExtArgs> | null
+  where?: Prisma.AdminRoleWhereInput
+}
+
+/**
+ * User.membershipTier
+ */
+export type User$membershipTierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MembershipTier
+   */
+  select?: Prisma.MembershipTierSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MembershipTier
+   */
+  omit?: Prisma.MembershipTierOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MembershipTierInclude<ExtArgs> | null
+  where?: Prisma.MembershipTierWhereInput
 }
 
 /**

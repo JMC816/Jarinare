@@ -28,31 +28,51 @@ export type AggregateCardDiscount = {
 
 export type CardDiscountAvgAggregateOutputType = {
   id: number | null
+  value: number | null
+  maxDiscount: number | null
+  minPayment: number | null
   discountRate: runtime.Decimal | null
   paybackRate: runtime.Decimal | null
 }
 
 export type CardDiscountSumAggregateOutputType = {
-  id: number | null
+  id: bigint | null
+  value: number | null
+  maxDiscount: number | null
+  minPayment: number | null
   discountRate: runtime.Decimal | null
   paybackRate: runtime.Decimal | null
 }
 
 export type CardDiscountMinAggregateOutputType = {
-  id: number | null
+  id: bigint | null
+  cardCode: string | null
   cardName: string | null
+  discountType: string | null
+  value: number | null
+  maxDiscount: number | null
+  minPayment: number | null
   discountRate: runtime.Decimal | null
   paybackRate: runtime.Decimal | null
+  startsAt: Date | null
+  endsAt: Date | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type CardDiscountMaxAggregateOutputType = {
-  id: number | null
+  id: bigint | null
+  cardCode: string | null
   cardName: string | null
+  discountType: string | null
+  value: number | null
+  maxDiscount: number | null
+  minPayment: number | null
   discountRate: runtime.Decimal | null
   paybackRate: runtime.Decimal | null
+  startsAt: Date | null
+  endsAt: Date | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -60,9 +80,16 @@ export type CardDiscountMaxAggregateOutputType = {
 
 export type CardDiscountCountAggregateOutputType = {
   id: number
+  cardCode: number
   cardName: number
+  discountType: number
+  value: number
+  maxDiscount: number
+  minPayment: number
   discountRate: number
   paybackRate: number
+  startsAt: number
+  endsAt: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -72,21 +99,34 @@ export type CardDiscountCountAggregateOutputType = {
 
 export type CardDiscountAvgAggregateInputType = {
   id?: true
+  value?: true
+  maxDiscount?: true
+  minPayment?: true
   discountRate?: true
   paybackRate?: true
 }
 
 export type CardDiscountSumAggregateInputType = {
   id?: true
+  value?: true
+  maxDiscount?: true
+  minPayment?: true
   discountRate?: true
   paybackRate?: true
 }
 
 export type CardDiscountMinAggregateInputType = {
   id?: true
+  cardCode?: true
   cardName?: true
+  discountType?: true
+  value?: true
+  maxDiscount?: true
+  minPayment?: true
   discountRate?: true
   paybackRate?: true
+  startsAt?: true
+  endsAt?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -94,9 +134,16 @@ export type CardDiscountMinAggregateInputType = {
 
 export type CardDiscountMaxAggregateInputType = {
   id?: true
+  cardCode?: true
   cardName?: true
+  discountType?: true
+  value?: true
+  maxDiscount?: true
+  minPayment?: true
   discountRate?: true
   paybackRate?: true
+  startsAt?: true
+  endsAt?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -104,9 +151,16 @@ export type CardDiscountMaxAggregateInputType = {
 
 export type CardDiscountCountAggregateInputType = {
   id?: true
+  cardCode?: true
   cardName?: true
+  discountType?: true
+  value?: true
+  maxDiscount?: true
+  minPayment?: true
   discountRate?: true
   paybackRate?: true
+  startsAt?: true
+  endsAt?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -200,10 +254,17 @@ export type CardDiscountGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 export type CardDiscountGroupByOutputType = {
-  id: number
+  id: bigint
+  cardCode: string
   cardName: string
+  discountType: string
+  value: number
+  maxDiscount: number | null
+  minPayment: number
   discountRate: runtime.Decimal
   paybackRate: runtime.Decimal
+  startsAt: Date | null
+  endsAt: Date | null
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -233,10 +294,17 @@ export type CardDiscountWhereInput = {
   AND?: Prisma.CardDiscountWhereInput | Prisma.CardDiscountWhereInput[]
   OR?: Prisma.CardDiscountWhereInput[]
   NOT?: Prisma.CardDiscountWhereInput | Prisma.CardDiscountWhereInput[]
-  id?: Prisma.IntFilter<"CardDiscount"> | number
+  id?: Prisma.BigIntFilter<"CardDiscount"> | bigint | number
+  cardCode?: Prisma.StringFilter<"CardDiscount"> | string
   cardName?: Prisma.StringFilter<"CardDiscount"> | string
+  discountType?: Prisma.StringFilter<"CardDiscount"> | string
+  value?: Prisma.IntFilter<"CardDiscount"> | number
+  maxDiscount?: Prisma.IntNullableFilter<"CardDiscount"> | number | null
+  minPayment?: Prisma.IntFilter<"CardDiscount"> | number
   discountRate?: Prisma.DecimalFilter<"CardDiscount"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: Prisma.DecimalFilter<"CardDiscount"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Prisma.DateTimeNullableFilter<"CardDiscount"> | Date | string | null
+  endsAt?: Prisma.DateTimeNullableFilter<"CardDiscount"> | Date | string | null
   isActive?: Prisma.BoolFilter<"CardDiscount"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CardDiscount"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CardDiscount"> | Date | string
@@ -244,9 +312,16 @@ export type CardDiscountWhereInput = {
 
 export type CardDiscountOrderByWithRelationInput = {
   id?: Prisma.SortOrder
+  cardCode?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  discountType?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  maxDiscount?: Prisma.SortOrderInput | Prisma.SortOrder
+  minPayment?: Prisma.SortOrder
   discountRate?: Prisma.SortOrder
   paybackRate?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  endsAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -254,23 +329,37 @@ export type CardDiscountOrderByWithRelationInput = {
 }
 
 export type CardDiscountWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
-  cardName?: string
+  id?: bigint | number
   AND?: Prisma.CardDiscountWhereInput | Prisma.CardDiscountWhereInput[]
   OR?: Prisma.CardDiscountWhereInput[]
   NOT?: Prisma.CardDiscountWhereInput | Prisma.CardDiscountWhereInput[]
+  cardCode?: Prisma.StringFilter<"CardDiscount"> | string
+  cardName?: Prisma.StringFilter<"CardDiscount"> | string
+  discountType?: Prisma.StringFilter<"CardDiscount"> | string
+  value?: Prisma.IntFilter<"CardDiscount"> | number
+  maxDiscount?: Prisma.IntNullableFilter<"CardDiscount"> | number | null
+  minPayment?: Prisma.IntFilter<"CardDiscount"> | number
   discountRate?: Prisma.DecimalFilter<"CardDiscount"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: Prisma.DecimalFilter<"CardDiscount"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Prisma.DateTimeNullableFilter<"CardDiscount"> | Date | string | null
+  endsAt?: Prisma.DateTimeNullableFilter<"CardDiscount"> | Date | string | null
   isActive?: Prisma.BoolFilter<"CardDiscount"> | boolean
   createdAt?: Prisma.DateTimeFilter<"CardDiscount"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CardDiscount"> | Date | string
-}, "id" | "cardName">
+}, "id">
 
 export type CardDiscountOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
+  cardCode?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  discountType?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  maxDiscount?: Prisma.SortOrderInput | Prisma.SortOrder
+  minPayment?: Prisma.SortOrder
   discountRate?: Prisma.SortOrder
   paybackRate?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  endsAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -285,77 +374,136 @@ export type CardDiscountScalarWhereWithAggregatesInput = {
   AND?: Prisma.CardDiscountScalarWhereWithAggregatesInput | Prisma.CardDiscountScalarWhereWithAggregatesInput[]
   OR?: Prisma.CardDiscountScalarWhereWithAggregatesInput[]
   NOT?: Prisma.CardDiscountScalarWhereWithAggregatesInput | Prisma.CardDiscountScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"CardDiscount"> | number
+  id?: Prisma.BigIntWithAggregatesFilter<"CardDiscount"> | bigint | number
+  cardCode?: Prisma.StringWithAggregatesFilter<"CardDiscount"> | string
   cardName?: Prisma.StringWithAggregatesFilter<"CardDiscount"> | string
+  discountType?: Prisma.StringWithAggregatesFilter<"CardDiscount"> | string
+  value?: Prisma.IntWithAggregatesFilter<"CardDiscount"> | number
+  maxDiscount?: Prisma.IntNullableWithAggregatesFilter<"CardDiscount"> | number | null
+  minPayment?: Prisma.IntWithAggregatesFilter<"CardDiscount"> | number
   discountRate?: Prisma.DecimalWithAggregatesFilter<"CardDiscount"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: Prisma.DecimalWithAggregatesFilter<"CardDiscount"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CardDiscount"> | Date | string | null
+  endsAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CardDiscount"> | Date | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"CardDiscount"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CardDiscount"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CardDiscount"> | Date | string
 }
 
 export type CardDiscountCreateInput = {
+  id?: bigint | number
+  cardCode: string
   cardName: string
+  discountType?: string
+  value?: number
+  maxDiscount?: number | null
+  minPayment?: number
   discountRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CardDiscountUncheckedCreateInput = {
-  id?: number
+  id?: bigint | number
+  cardCode: string
   cardName: string
+  discountType?: string
+  value?: number
+  maxDiscount?: number | null
+  minPayment?: number
   discountRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CardDiscountUpdateInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  cardCode?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  discountType?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.IntFieldUpdateOperationsInput | number
+  maxDiscount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  minPayment?: Prisma.IntFieldUpdateOperationsInput | number
   discountRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CardDiscountUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  cardCode?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  discountType?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.IntFieldUpdateOperationsInput | number
+  maxDiscount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  minPayment?: Prisma.IntFieldUpdateOperationsInput | number
   discountRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CardDiscountCreateManyInput = {
-  id?: number
+  id?: bigint | number
+  cardCode: string
   cardName: string
+  discountType?: string
+  value?: number
+  maxDiscount?: number | null
+  minPayment?: number
   discountRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Date | string | null
+  endsAt?: Date | string | null
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CardDiscountUpdateManyMutationInput = {
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  cardCode?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  discountType?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.IntFieldUpdateOperationsInput | number
+  maxDiscount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  minPayment?: Prisma.IntFieldUpdateOperationsInput | number
   discountRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CardDiscountUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  cardCode?: Prisma.StringFieldUpdateOperationsInput | string
   cardName?: Prisma.StringFieldUpdateOperationsInput | string
+  discountType?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.IntFieldUpdateOperationsInput | number
+  maxDiscount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  minPayment?: Prisma.IntFieldUpdateOperationsInput | number
   discountRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   paybackRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  startsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -369,9 +517,16 @@ export type CardDiscountOrderByRelevanceInput = {
 
 export type CardDiscountCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  cardCode?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  discountType?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  maxDiscount?: Prisma.SortOrder
+  minPayment?: Prisma.SortOrder
   discountRate?: Prisma.SortOrder
   paybackRate?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -379,15 +534,25 @@ export type CardDiscountCountOrderByAggregateInput = {
 
 export type CardDiscountAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  maxDiscount?: Prisma.SortOrder
+  minPayment?: Prisma.SortOrder
   discountRate?: Prisma.SortOrder
   paybackRate?: Prisma.SortOrder
 }
 
 export type CardDiscountMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  cardCode?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  discountType?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  maxDiscount?: Prisma.SortOrder
+  minPayment?: Prisma.SortOrder
   discountRate?: Prisma.SortOrder
   paybackRate?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -395,9 +560,16 @@ export type CardDiscountMaxOrderByAggregateInput = {
 
 export type CardDiscountMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  cardCode?: Prisma.SortOrder
   cardName?: Prisma.SortOrder
+  discountType?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  maxDiscount?: Prisma.SortOrder
+  minPayment?: Prisma.SortOrder
   discountRate?: Prisma.SortOrder
   paybackRate?: Prisma.SortOrder
+  startsAt?: Prisma.SortOrder
+  endsAt?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -405,6 +577,9 @@ export type CardDiscountMinOrderByAggregateInput = {
 
 export type CardDiscountSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  maxDiscount?: Prisma.SortOrder
+  minPayment?: Prisma.SortOrder
   discountRate?: Prisma.SortOrder
   paybackRate?: Prisma.SortOrder
 }
@@ -421,9 +596,16 @@ export type DecimalFieldUpdateOperationsInput = {
 
 export type CardDiscountSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  cardCode?: boolean
   cardName?: boolean
+  discountType?: boolean
+  value?: boolean
+  maxDiscount?: boolean
+  minPayment?: boolean
   discountRate?: boolean
   paybackRate?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -433,24 +615,38 @@ export type CardDiscountSelect<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type CardDiscountSelectScalar = {
   id?: boolean
+  cardCode?: boolean
   cardName?: boolean
+  discountType?: boolean
+  value?: boolean
+  maxDiscount?: boolean
+  minPayment?: boolean
   discountRate?: boolean
   paybackRate?: boolean
+  startsAt?: boolean
+  endsAt?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CardDiscountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardName" | "discountRate" | "paybackRate" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["cardDiscount"]>
+export type CardDiscountOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cardCode" | "cardName" | "discountType" | "value" | "maxDiscount" | "minPayment" | "discountRate" | "paybackRate" | "startsAt" | "endsAt" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["cardDiscount"]>
 
 export type $CardDiscountPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CardDiscount"
   objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: bigint
+    cardCode: string
     cardName: string
+    discountType: string
+    value: number
+    maxDiscount: number | null
+    minPayment: number
     discountRate: runtime.Decimal
     paybackRate: runtime.Decimal
+    startsAt: Date | null
+    endsAt: Date | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -823,10 +1019,17 @@ export interface Prisma__CardDiscountClient<T, Null = never, ExtArgs extends run
  * Fields of the CardDiscount model
  */
 export interface CardDiscountFieldRefs {
-  readonly id: Prisma.FieldRef<"CardDiscount", 'Int'>
+  readonly id: Prisma.FieldRef<"CardDiscount", 'BigInt'>
+  readonly cardCode: Prisma.FieldRef<"CardDiscount", 'String'>
   readonly cardName: Prisma.FieldRef<"CardDiscount", 'String'>
+  readonly discountType: Prisma.FieldRef<"CardDiscount", 'String'>
+  readonly value: Prisma.FieldRef<"CardDiscount", 'Int'>
+  readonly maxDiscount: Prisma.FieldRef<"CardDiscount", 'Int'>
+  readonly minPayment: Prisma.FieldRef<"CardDiscount", 'Int'>
   readonly discountRate: Prisma.FieldRef<"CardDiscount", 'Decimal'>
   readonly paybackRate: Prisma.FieldRef<"CardDiscount", 'Decimal'>
+  readonly startsAt: Prisma.FieldRef<"CardDiscount", 'DateTime'>
+  readonly endsAt: Prisma.FieldRef<"CardDiscount", 'DateTime'>
   readonly isActive: Prisma.FieldRef<"CardDiscount", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"CardDiscount", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CardDiscount", 'DateTime'>

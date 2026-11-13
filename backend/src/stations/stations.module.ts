@@ -10,6 +10,6 @@ import { StationsSyncService } from "./stations-sync.service";
   imports: [ExternalModule, AuditModule],
   controllers: [StationsController, AdminStationsController],
   providers: [StationsService, StationsSyncService],
-  exports: [StationsService],
+  exports: [StationsService, StationsSyncService],
 })
 export class StationsModule {}

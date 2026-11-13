@@ -11,6 +11,6 @@ import { TrainTimeSyncService } from "./train-time-sync.service";
   imports: [ExternalModule, SchedulerModule, AuditModule],
   controllers: [TrainsController, AdminTrainsController],
   providers: [TrainsService, TrainTimeSyncService],
-  exports: [TrainsService],
+  exports: [TrainsService, TrainTimeSyncService],
 })
 export class TrainsModule {}

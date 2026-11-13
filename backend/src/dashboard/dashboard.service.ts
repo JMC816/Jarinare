@@ -27,6 +27,16 @@ export class DashboardService {
     const now = new Date();
     const h24ago = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
+    // 오래된 작업 감지: job별 마지막 성공 시각과 최대 허용 경과시간(ms)
+    const STALE_THRESHOLDS: Record<string, number> = {
+      "station-sync":        26 * 60 * 60 * 1000,   // 26시간 (일 1회)
+      "train-time-sync":     26 * 60 * 60 * 1000,   // 26시간 (일 1회)
+      "notification-rotate": 33 * 24 * 60 * 60 * 1000, // 33일 (월 1회)
+      "notification-drop":   33 * 24 * 60 * 60 * 1000, // 33일 (월 1회)
+      "seat-change-expire":  10 * 60 * 1000,         // 10분 (분 1회)
+      "seat-hold-expire":    10 * 60 * 1000,         // 10분 (분 1회)
+    };
+
     const [
       reservationStats,
       cancelStats,
@@ -35,6 +45,7 @@ export class DashboardService {
       seatChangeStats,
       pendingReports,
       schedulerFailures,
+      lastSuccessLogs,
       popularDestinations,
     ] = await Promise.all([
       // 기간 내 예매 수·매출 (활성)
@@ -81,6 +92,17 @@ export class DashboardService {
         where: { status: "FAILED", startedAt: { gte: h24ago } },
       }),
 
+      // job별 마지막 성공 로그
+      this.prisma.schedulerRunLog.findMany({
+        where: {
+          jobName: { in: Object.keys(STALE_THRESHOLDS) },
+          status: "SUCCESS",
+        },
+        orderBy: { runId: "desc" },
+        distinct: ["jobName"],
+        select: { jobName: true, endedAt: true },
+      }),
+
       // 인기 목적지 top 5
       this.travelStats.list(),
     ]);
@@ -91,6 +113,17 @@ export class DashboardService {
     const cancelRate = totalForCancel > 0
       ? Math.round((cancelStats / totalForCancel) * 100 * 10) / 10
       : 0;
+
+    const lastSuccessMap = new Map(
+      lastSuccessLogs.map((l) => [l.jobName, l.endedAt]),
+    );
+    const staleJobs = Object.entries(STALE_THRESHOLDS)
+      .filter(([jobName, maxMs]) => {
+        const lastSuccess = lastSuccessMap.get(jobName);
+        if (!lastSuccess) return true; // 한 번도 성공한 적 없음
+        return now.getTime() - lastSuccess.getTime() > maxMs;
+      })
+      .map(([jobName]) => jobName);
 
     const changeTotal = seatChangeStats.reduce((s, g) => s + g._count.id, 0);
     const changeAccepted = seatChangeStats.find((g) => g.status === "ACCEPTED")?._count.id ?? 0;
@@ -115,7 +148,10 @@ export class DashboardService {
         acceptRate: changeAcceptRate,
       },
       pendingReports,
-      schedulerFailures24h: schedulerFailures,
+      scheduler: {
+        failures24h: schedulerFailures,
+        staleJobs,
+      },
       popularDestinations: popularDestinations.slice(0, 5).map((s) => ({
         destination: s.destination,
         count: s.totalCount,

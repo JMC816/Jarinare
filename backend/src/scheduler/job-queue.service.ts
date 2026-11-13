@@ -3,10 +3,12 @@ import {
   Injectable,
   Logger,
   OnModuleInit,
+  Optional,
 } from "@nestjs/common";
 import { Prisma } from "../generated/prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
 import { EnqueueParams, JobEntry, JobStatus } from "./interfaces/job.interface";
+import { SchedulerAlertService } from "./scheduler-alert.service";
 
 /**
  * 전역 단일 FIFO 작업 큐.
@@ -24,7 +26,10 @@ export class JobQueueService implements OnModuleInit {
   private readonly queue: JobEntry[] = [];
   private processing = false;
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly alert?: SchedulerAlertService,
+  ) {}
 
   /** 서버 시작 시 이전 실행에서 중단된 PENDING/RUNNING 행을 FAILED 로 정리한다. */
   async onModuleInit(): Promise<void> {
@@ -167,7 +172,7 @@ export class JobQueueService implements OnModuleInit {
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : String(e);
       this.logger.error(`작업 실패 (runId=${runId}): ${errorMessage}`);
-      await this.prisma.schedulerRunLog.update({
+      const log = await this.prisma.schedulerRunLog.update({
         where: { runId },
         data: {
           status: JobStatus.FAILED,
@@ -175,6 +180,7 @@ export class JobQueueService implements OnModuleInit {
           errorMessage,
         },
       });
+      void this.alert?.notifyAdminsOnFailure(log.jobName, runId, errorMessage);
     }
   }
 }

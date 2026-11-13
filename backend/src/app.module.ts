@@ -31,6 +31,7 @@ import { AdminDiscountModule } from "./admin-discount/admin-discount.module";
 import { AdminBoardModule } from "./admin-board/admin-board.module";
 import { AdminReservationModule } from "./admin-reservation/admin-reservation.module";
 import { AdminNotificationModule } from "./admin-notification/admin-notification.module";
+import { AdminSchedulerRunnerModule } from "./scheduler/admin-scheduler-runner.module";
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { AdminNotificationModule } from "./admin-notification/admin-notification
     AdminBoardModule,
     AdminReservationModule,
     AdminNotificationModule,
+    AdminSchedulerRunnerModule,
     UsersModule,
     BoardModule,
     CommentModule,

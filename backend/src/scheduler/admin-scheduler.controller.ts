@@ -34,6 +34,7 @@ import {
   SchedulerRunLogItem,
   SchedulerRunLogService,
 } from "./scheduler-run-log.service";
+import { SchedulerJobsService } from "./scheduler-jobs.service";
 
 /**
  * 관리자 전용 스케줄러 큐 관측/제어 API.
@@ -48,7 +49,15 @@ export class AdminSchedulerController {
     private readonly queue: JobQueueService,
     private readonly audit: AuditService,
     private readonly prisma: PrismaService,
+    private readonly jobs: SchedulerJobsService,
   ) {}
+
+  @Permissions("scheduler:read")
+  @Get("jobs")
+  @ApiOperation({ summary: "등록된 잡 목록 (다음 실행 시각·마지막 결과·활성 상태)" })
+  listJobs() {
+    return this.jobs.listJobs();
+  }
 
   @Permissions("scheduler:run")
   @Get("runs")

@@ -25,5 +25,6 @@ import { PriceCalculationService } from "./price-calculation.service";
     SeatChangeService,
     PriceCalculationService,
   ],
+  exports: [SeatHoldService, SeatChangeService],
 })
 export class SeatModule {}

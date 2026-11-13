@@ -1,20 +1,29 @@
 import { Module } from "@nestjs/common";
 import { AuditModule } from "../audit/audit.module";
+import { NotificationModule } from "../notification/notification.module";
 import { AdminSchedulerController } from "./admin-scheduler.controller";
 import { JobQueueService } from "./job-queue.service";
 import { SchedulerRunLogService } from "./scheduler-run-log.service";
+import { SchedulerJobsService } from "./scheduler-jobs.service";
+import { SchedulerAlertService } from "./scheduler-alert.service";
 
 /**
  * 스케줄러 작업 큐 인프라 모듈.
  *  - JobQueueService: 전역 단일 FIFO 큐 엔진 (다른 모듈에서 주입해 enqueue). export.
  *  - SchedulerRunLogService / AdminSchedulerController: 실행 로그 관측·취소 API.
+ *  - SchedulerAlertService: 잡 실패 시 어드민에게 알림 발송.
  *
  * 도메인 의존이 없어(PrismaModule 은 전역) 어느 도메인 모듈에서든 안전하게 import 할 수 있다.
  */
 @Module({
-  imports: [AuditModule],
+  imports: [AuditModule, NotificationModule],
   controllers: [AdminSchedulerController],
-  providers: [JobQueueService, SchedulerRunLogService],
+  providers: [
+    JobQueueService,
+    SchedulerRunLogService,
+    SchedulerJobsService,
+    SchedulerAlertService,
+  ],
   exports: [JobQueueService],
 })
 export class SchedulerModule {}

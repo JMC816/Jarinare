@@ -85,6 +85,40 @@ describe("JobQueueService", () => {
     service = new JobQueueService(prisma as never);
   });
 
+  it("jobFn 실패 시 SchedulerAlertService.notifyAdminsOnFailure 가 호출된다", async () => {
+    const alert = { notifyAdminsOnFailure: jest.fn(() => Promise.resolve()) };
+    const svc = new JobQueueService(prisma as never, alert as never);
+
+    await svc.enqueue({
+      jobName: "station-sync",
+      startYmd: "20261114",
+      endYmd: "20261114",
+      jobFn: () => Promise.reject(new Error("외부 API 오류")),
+    });
+    await flush();
+
+    expect(alert.notifyAdminsOnFailure).toHaveBeenCalledTimes(1);
+    expect(alert.notifyAdminsOnFailure).toHaveBeenCalledWith(
+      "station-sync",
+      expect.any(BigInt),
+      "외부 API 오류",
+    );
+  });
+
+  it("alert 가 없어도(undefined) 잡 실패 처리는 정상 동작한다", async () => {
+    // alert 없이 생성한 기본 service (beforeEach 에서 만든 것)
+    const jobFn = jest.fn(() => Promise.reject(new Error("boom")));
+    await service.enqueue({
+      jobName: "j",
+      startYmd: "d",
+      endYmd: "d",
+      jobFn,
+    });
+    await flush();
+
+    expect(prisma._rows[0].status).toBe("FAILED");
+  });
+
   it("enqueue → 워커가 실행하고 SUCCESS + metadata 를 저장한다", async () => {
     const jobFn = jest.fn(() => Promise.resolve({ ok: true, count: 3 }));
     const runId = await service.enqueue({

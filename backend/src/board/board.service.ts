@@ -56,6 +56,7 @@ export class BoardService {
 
     const where: Prisma.BoardWhereInput = {
       type: query.type,
+      isHidden: { not: true },
       ...(query.search
         ? {
             OR: [
@@ -110,7 +111,7 @@ export class BoardService {
   ): Promise<BoardDetailDto> {
     const [board] = await this.prisma.$transaction([
       this.prisma.board.update({
-        where: { id: BigInt(id) },
+        where: { id: BigInt(id), isHidden: { not: true } },
         data: { viewCount: { increment: 1 } },
         include: {
           author: { select: { name: true } },

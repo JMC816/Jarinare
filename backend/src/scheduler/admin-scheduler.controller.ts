@@ -1,10 +1,12 @@
 import {
   BadRequestException,
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -17,6 +19,7 @@ import {
 } from "@nestjs/swagger";
 import type { Request } from "express";
 import { AuditService } from "../audit/audit.service";
+import { PrismaService } from "../prisma/prisma.service";
 import { CurrentUser } from "../auth/decorators/current-user.decorator";
 import type { AuthUser } from "../auth/interfaces/auth-user.interface";
 import { Permissions } from "../auth/decorators/permissions.decorator";
@@ -24,6 +27,7 @@ import {
   CancelResultDto,
   SchedulerRunLogItemDto,
   SchedulerRunQueryDto,
+  UpdateJobSettingDto,
 } from "./dto/scheduler-run.dto";
 import { JobQueueService } from "./job-queue.service";
 import {
@@ -43,6 +47,7 @@ export class AdminSchedulerController {
     private readonly runLog: SchedulerRunLogService,
     private readonly queue: JobQueueService,
     private readonly audit: AuditService,
+    private readonly prisma: PrismaService,
   ) {}
 
   @Permissions("scheduler:run")
@@ -103,5 +108,40 @@ export class AdminSchedulerController {
       ip: req.ip,
     });
     return { runId, cancelled };
+  }
+
+  @Permissions("scheduler:read")
+  @Get("settings")
+  @ApiOperation({ summary: "잡 설정 목록" })
+  async listSettings() {
+    const settings = await this.prisma.schedulerJobSetting.findMany({ orderBy: { name: "asc" } });
+    return settings.map((s) => ({ ...s, updatedBy: s.updatedBy?.toString() ?? null }));
+  }
+
+  @Permissions("scheduler:run")
+  @Patch("settings/:name")
+  @ApiOperation({ summary: "잡 활성화·비활성화" })
+  async updateSetting(
+    @Param("name") name: string,
+    @Body() dto: UpdateJobSettingDto,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ) {
+    const setting = await this.prisma.schedulerJobSetting.upsert({
+      where: { name },
+      update: { isActive: dto.isActive, updatedBy: BigInt(user.idx) },
+      create: { name, isActive: dto.isActive, updatedBy: BigInt(user.idx) },
+    });
+
+    this.audit.log({
+      actorIdx: user.idx,
+      action: "scheduler.setting_update",
+      targetType: "scheduler",
+      targetId: name,
+      after: { isActive: dto.isActive },
+      ip: req.ip,
+    });
+
+    return { ...setting, updatedBy: setting.updatedBy?.toString() ?? null };
   }
 }

@@ -8,6 +8,7 @@ export const NOTIFICATION_TYPES = [
   "seat_change_request",
   "seat_change_accepted",
   "seat_change_rejected",
+  "announcement",
 ] as const;
 
 export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

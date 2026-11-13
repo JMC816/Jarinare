@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsInt, IsOptional, IsString, Max, Min } from "class-validator";
+import { IsBoolean, IsInt, IsOptional, IsString, Max, Min } from "class-validator";
 
 /** 실행 로그 목록 조회 쿼리. */
 export class SchedulerRunQueryDto {
@@ -84,6 +84,13 @@ export class SchedulerRunLogItemDto {
 
   @ApiProperty({ nullable: true, description: "수동 실행 파라미터(JSON)" })
   params: unknown;
+}
+
+/** 잡 설정 수정 DTO */
+export class UpdateJobSettingDto {
+  @ApiProperty({ example: true, description: "잡 활성화 여부" })
+  @IsBoolean()
+  isActive!: boolean;
 }
 
 /** 작업 취소 결과. */

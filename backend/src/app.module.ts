@@ -26,6 +26,11 @@ import { DashboardModule } from "./dashboard/dashboard.module";
 import { AdminUsersModule } from "./admin-users/admin-users.module";
 import { AdminRolesModule } from "./admin-roles/admin-roles.module";
 import { AdminReportsModule } from "./admin-reports/admin-reports.module";
+import { AdminMembershipModule } from "./admin-membership/admin-membership.module";
+import { AdminDiscountModule } from "./admin-discount/admin-discount.module";
+import { AdminBoardModule } from "./admin-board/admin-board.module";
+import { AdminReservationModule } from "./admin-reservation/admin-reservation.module";
+import { AdminNotificationModule } from "./admin-notification/admin-notification.module";
 
 @Module({
   imports: [
@@ -43,6 +48,11 @@ import { AdminReportsModule } from "./admin-reports/admin-reports.module";
     AdminUsersModule,
     AdminRolesModule,
     AdminReportsModule,
+    AdminMembershipModule,
+    AdminDiscountModule,
+    AdminBoardModule,
+    AdminReservationModule,
+    AdminNotificationModule,
     UsersModule,
     BoardModule,
     CommentModule,

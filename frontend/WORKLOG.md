@@ -1,5 +1,26 @@
 # WORKLOG
 
+## 2026-11-14 — 어드민 스케줄러 프론트엔드 구현
+
+### 작업 개요
+
+어드민 스케줄러 관리 화면을 구현했다. `/admin/scheduler` 접속 시 작업 목록·실행 로그 두 탭으로 구성된 PC 전용 페이지가 표시된다.
+
+---
+
+### 프론트엔드
+
+- **`features/Admin/Scheduler/api/schedulerAdminApi.ts`** — 잡 목록·수동 실행·실행 로그·취소·재실행·설정 변경·대시보드 API 호출
+- **`features/Admin/Scheduler/hooks/useSchedulerJobs.ts`** — 잡 목록 조회. RUNNING/PENDING 잡 있으면 5초 폴링
+- **`features/Admin/Scheduler/hooks/useSchedulerRuns.ts`** — 실행 로그 조회·취소·재실행
+- **`features/Admin/Scheduler/ui/JobListTab.tsx`** — 작업 목록 테이블. 행마다 [지금 실행] 버튼·활성 토글. 실행 중이면 버튼 잠금
+- **`features/Admin/Scheduler/ui/RunLogsTab.tsx`** — 실행 로그 테이블. 상태·작업·건수 필터. 행 클릭 시 오류·결과 상세 펼침. PENDING → [취소], FAILED/CANCELLED → [재실행]
+- **`features/Admin/Scheduler/ui/RunJobModal.tsx`** — 수동 실행 확인 모달. train-time-sync는 기간(startDate/endDate) 입력 UI 포함
+- **`pages/Admin/Scheduler/ui/AdminSchedulerPage.tsx`** — 메인 페이지. 24h 실패·오래된 잡 경고 배너, 탭 전환
+- **`app/routes.tsx`** — `/admin/scheduler` 라우트 추가
+
+---
+
 ## 2026-11-14 — 스케줄러 화면 스펙 백엔드 구현 (1~5번)
 
 ### 작업 개요

@@ -1,3 +1,4 @@
+import AdminSchedulerPage from '@/pages/Admin/Scheduler/ui/AdminSchedulerPage';
 import GithubRedirect from '@/features/Auth/SocialLogin/ui/GithubRedirect';
 import GoogleRedirect from '@/features/Auth/SocialLogin/ui/GoogleRedirect';
 import KakaoRedirect from '@/features/Auth/SocialLogin/ui/KakaoRedirect';
@@ -52,6 +53,7 @@ const Router = () => {
       <ModalRouteReset />
       <div className="relative w-full">
         <Routes>
+          <Route path="/admin/scheduler" element={<AdminSchedulerPage />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />
           <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />

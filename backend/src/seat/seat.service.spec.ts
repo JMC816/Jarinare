@@ -529,6 +529,16 @@ describe("PriceCalculationService", () => {
     jest.restoreAllMocks();
   });
 
+  it("KST 경계 — UTC 11/30 15:00 (= KST 12/1 00:00) 에 겨울 할인 적용", async () => {
+    // UTC 기준으로는 11월이지만 KST 로는 자정을 넘겨 12월 → 겨울 할인 적용되어야 함
+    const utcNov30_15 = new Date(Date.UTC(2026, 10, 30, 15, 0, 0)); // UTC 11/30 15:00
+    jest.spyOn(Date, "now").mockReturnValue(utcNov30_15.getTime());
+    const svc = build([winterSeason]);
+    const r = await svc.calculate({ adultcharge: 10000, seatCount: 1, arrName: "강릉", usedPoint: 0 });
+    expect(r.seasonDiscountApplied).toBe(true);
+    jest.restoreAllMocks();
+  });
+
   it("카드 할인·페이백 — 계절 할인 후 카드 할인, 최종가에 페이백", async () => {
     mockKstMonth(7); // 7월
     const svc = build([summerSeason], mockCard);

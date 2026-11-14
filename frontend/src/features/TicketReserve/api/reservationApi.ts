@@ -84,6 +84,7 @@ export const orderDtoToSeatTypes = (orders: OrderDto[], userId: string): SeatTyp
 export interface PricePreviewResult {
   basePrice: number;
   seasonDiscountApplied: boolean;
+  seasonDiscountAmount: number;
   cardDiscountAmount: number;
   usedPoint: number;
   finalPrice: number;

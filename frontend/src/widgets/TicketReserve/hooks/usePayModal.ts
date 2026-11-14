@@ -43,28 +43,53 @@ export const usePayModal = () => {
   const [selectedCard, setSelectedCard] = useState<CardName | null>(isTourActive ? '국민' : null);
 
   const [preview, setPreview] = useState<PricePreviewResult | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState(false);
 
   const pointValue = Number(value);
   const usedPointForPreview = checked ? pointValue : 0;
 
-  // 카드·포인트 변경 시 서버에서 금액 미리보기
+  // 카드·포인트 변경 시 서버에서 금액 미리보기 (300ms debounce + cleanup으로 순서 꼬임 방지)
   useEffect(() => {
     if (isTourActive || !tripId) return;
-    fetchPricePreview({
-      tripId,
-      seatCount: seatsStateCount,
-      paymentMethod: selectedPaymentMethod,
-      selectedCard: selectedPaymentMethod === '신용카드' ? selectedCard : null,
-      usedPoint: usedPointForPreview,
-    })
-      .then(setPreview)
-      .catch(() => {});
+    let cancelled = false;
+    setPreviewLoading(true);
+    setPreviewError(false);
+    const timer = setTimeout(() => {
+      fetchPricePreview({
+        tripId,
+        seatCount: seatsStateCount,
+        paymentMethod: selectedPaymentMethod,
+        selectedCard: selectedPaymentMethod === '신용카드' ? selectedCard : null,
+        usedPoint: usedPointForPreview,
+      })
+        .then((result) => {
+          if (!cancelled) {
+            setPreview(result);
+            setPreviewError(false);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setPreview(null);
+            setPreviewError(true);
+          }
+        })
+        .finally(() => {
+          if (!cancelled) setPreviewLoading(false);
+        });
+    }, 300);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [tripId, seatsStateCount, selectedCard, selectedPaymentMethod, usedPointForPreview, isTourActive]);
 
   // 투어 모드 미리보기 고정값
   const tourPreview: PricePreviewResult = {
     basePrice: 59800,
     seasonDiscountApplied: false,
+    seasonDiscountAmount: 0,
     cardDiscountAmount: Math.floor(59800 * 0.05),
     usedPoint: 3000,
     finalPrice: 59800 - Math.floor(59800 * 0.05) - 3000,
@@ -75,7 +100,9 @@ export const usePayModal = () => {
 
   const basePrice = activePreview?.basePrice ?? 0;
   const seasonDiscountApplied = activePreview?.seasonDiscountApplied ?? false;
+  const seasonDiscountAmount = activePreview?.seasonDiscountAmount ?? 0;
   const cardDiscountAmount = activePreview?.cardDiscountAmount ?? 0;
+  const usedPointDisplay = activePreview?.usedPoint ?? 0;
   const finalPrice = activePreview?.finalPrice ?? 0;
   const cardPayback = activePreview?.paybackPoint ?? 0;
 
@@ -136,7 +163,10 @@ export const usePayModal = () => {
     }
   };
 
+  const isPayDisabled = !isTourActive && (previewLoading || previewError || !preview);
+
   const handlePay = async () => {
+    if (isPayDisabled) return;
     await createSelectedSeats(checked ? pointValue : 0, selectedCard, selectedPaymentMethod ?? '');
     closeModal('PayModal');
   };
@@ -148,11 +178,16 @@ export const usePayModal = () => {
     eventDropdownRef,
     handleToggleEventDropdown,
     seasonDiscountApplied,
+    seasonDiscountAmount,
     basePrice,
     cardDiscountAmount,
+    usedPointDisplay,
     cardPayback,
     finalPrice,
     point,
+    previewLoading,
+    previewError,
+    isPayDisabled,
     selectedPaymentMethod,
     selectedCard,
     selectedCardData,

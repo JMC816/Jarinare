@@ -61,13 +61,18 @@ const PayModal = () => {
     value,
     basePrice,
     seasonDiscountApplied,
+    seasonDiscountAmount,
     cardDiscountAmount,
+    usedPointDisplay,
     cardPayback,
     cardDiscountRate,
     cardPaybackRate,
     bannerText,
     finalPrice,
     point,
+    previewLoading,
+    previewError,
+    isPayDisabled,
     selectedPaymentMethod,
     selectedCard,
     selectedCardData,
@@ -81,12 +86,6 @@ const PayModal = () => {
     handleClose,
     handlePay,
   } = usePayModal();
-
-  // 계절 할인 금액 = 서버 반환값으로 역산
-  const usedPointDisplay = checked ? (value ?? 0) : 0;
-  const seasonDiscountAmount = seasonDiscountApplied
-    ? basePrice - finalPrice - usedPointDisplay - cardDiscountAmount
-    : 0;
 
   return (
     <div
@@ -310,11 +309,11 @@ const PayModal = () => {
                 </span>
               </div>
             )}
-            {checked && (
+            {checked && usedPointDisplay > 0 && (
               <div className="flex justify-between">
                 <span className="text-gray-400">포인트 사용</span>
                 <span className="text-blue">
-                  {value === null ? 0 : '-' + value.toLocaleString('ko-KR')}원
+                  -{usedPointDisplay.toLocaleString('ko-KR')}원
                 </span>
               </div>
             )}
@@ -342,6 +341,13 @@ const PayModal = () => {
           </div>
         </div>
 
+        {/* 미리보기 에러 안내 */}
+        {previewError && (
+          <p className="mb-3 text-center text-xs text-red-500">
+            금액 조회에 실패했습니다. 잠시 후 다시 시도해 주세요.
+          </p>
+        )}
+
         {/* 버튼 */}
         <div className="flex gap-3">
           <button
@@ -352,9 +358,10 @@ const PayModal = () => {
           </button>
           <button
             onClick={handlePay}
-            className="flex-[2] rounded-xl bg-blue py-3.5 text-base font-bold text-white transition-colors hover:bg-blue/90 active:brightness-95"
+            disabled={isPayDisabled}
+            className="flex-[2] rounded-xl bg-blue py-3.5 text-base font-bold text-white transition-colors hover:bg-blue/90 active:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            결제
+            {previewLoading ? '계산 중...' : '결제'}
           </button>
         </div>
       </div>

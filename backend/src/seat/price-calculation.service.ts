@@ -14,6 +14,7 @@ function isCurrentMonth(start: number, end: number, current: number): boolean {
 export interface PriceCalcResult {
   basePrice: number;
   seasonDiscountApplied: boolean;
+  seasonDiscountAmount: number;
   cardDiscountAmount: number;
   usedPoint: number;
   finalPrice: number;
@@ -92,9 +93,12 @@ export class PriceCalculationService {
     // 5. 카드 페이백
     const paybackPoint = Math.floor(finalPrice * paybackRate);
 
+    const seasonDiscountAmount = basePrice - afterSeasonPrice;
+
     return {
       basePrice,
       seasonDiscountApplied,
+      seasonDiscountAmount,
       cardDiscountAmount,
       usedPoint: pointDeduction,
       finalPrice,

@@ -1,5 +1,60 @@
 # WORKLOG
 
+## 2026-11-14 — 결제 모달 화면 금액 표시 오류 수정
+
+### 작업 개요
+
+서버가 최종 금액을 재계산하므로 돈이 새는 건 아니지만, 화면 표시 금액과 실제 결제 금액이 어긋나는 경우 4건을 수정했다.
+
+---
+
+### 프론트엔드
+
+**미리보기 실패 처리**
+- 기존 `.catch(() => {})` → 실패 시 `preview` 초기화 + 에러 문구 표시
+- 미리보기 로딩 중·실패 시 결제 버튼 비활성화
+
+**응답 순서 꼬임 방지**
+- 포인트 입력 시 글자마다 요청 나가던 문제 → 300ms debounce 적용
+- `cancelled` 플래그로 stale 응답 무시 (useEffect cleanup)
+
+**포인트·계절 할인 역산 제거**
+- 기존: 입력값(`value`)으로 직접 계산 → 서버 차감 한도와 어긋남
+- 수정: `preview.usedPoint`, `preview.seasonDiscountAmount` 서버 응답값 사용
+
+---
+
+### 백엔드
+
+**`seasonDiscountAmount` 응답 추가**
+- `PriceCalcResult`에 `seasonDiscountAmount` 필드 추가
+- 프론트가 역산 없이 서버 계산값을 그대로 쓸 수 있게
+
+**KST 경계 테스트 추가**
+- 기존 테스트는 매달 15일 고정 → UTC/KST 경계 미검증
+- UTC 11/30 15:00 (= KST 12/1 00:00) 겨울 할인 적용 케이스 추가
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `seat/price-calculation.service.ts` | seasonDiscountAmount 필드 추가 |
+| `seat/seat.service.spec.ts` | KST 경계 테스트 추가 |
+| `TicketReserve/api/reservationApi.ts` | PricePreviewResult 타입 필드 추가 |
+| `TicketReserve/hooks/usePayModal.ts` | debounce·에러 처리·서버값 사용 |
+| `TicketReserve/ui/PayModal.tsx` | 에러 문구·버튼 비활성화·서버값 표시 |
+
+---
+
+### 현재 상태
+
+- 전체 테스트 169개 통과
+- 프론트 빌드 성공
+
+---
+
 ## 2026-11-14 — 어드민 API 누락 엔드포인트 추가 · 경로 스펙 통일
 
 ### 작업 개요

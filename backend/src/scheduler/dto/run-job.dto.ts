@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { IsOptional, IsString, Matches } from "class-validator";
+import { IsBoolean, IsOptional, IsString, Matches } from "class-validator";
 
 /** POST /admin/scheduler/jobs/:name/run 요청 바디. */
 export class RunJobDto {
@@ -27,6 +27,15 @@ export class RunJobDto {
   })
   @IsOptional()
   days?: number;
+
+  @ApiPropertyOptional({
+    description:
+      "되돌릴 수 없는 작업(notification-drop) 실행 시 반드시 true 로 설정해야 한다.",
+    example: true,
+  })
+  @IsOptional()
+  @IsBoolean()
+  confirm?: boolean;
 }
 
 /** POST /admin/scheduler/jobs/:name/run 응답. */

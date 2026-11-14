@@ -536,20 +536,37 @@ export class SeatChangeService {
    * 만료되므로 따로 풀 필요가 없다. 같은 행을 같은 값으로 바꿀 뿐이라
    * 여러 인스턴스가 동시에 돌아도 된다.
    */
-  @Cron(CronExpression.EVERY_MINUTE)
   async expireStale(): Promise<number> {
+    const res = await this.prisma.seatChangeRequest.updateMany({
+      where: {
+        status: ChangeRequestStatus.PENDING,
+        expiresAt: { lt: new Date() },
+      },
+      data: { status: ChangeRequestStatus.EXPIRED },
+    });
+    return res.count;
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  private async runExpireStaleCron(): Promise<void> {
     try {
-      const res = await this.prisma.seatChangeRequest.updateMany({
-        where: {
-          status: ChangeRequestStatus.PENDING,
-          expiresAt: { lt: new Date() },
-        },
-        data: { status: ChangeRequestStatus.EXPIRED },
-      });
-      return res.count;
+      await this.expireStale();
     } catch (e) {
+      const ymd = new Date()
+        .toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })
+        .replace(/-/g, "");
       this.logger.warn(`만료 신청 정리 실패: ${String(e)}`);
-      return 0;
+      await this.prisma.schedulerRunLog.create({
+        data: {
+          jobName: "seat-change-expire",
+          status: "FAILED",
+          startYmd: ymd,
+          endYmd: ymd,
+          startedAt: new Date(),
+          endedAt: new Date(),
+          errorMessage: e instanceof Error ? e.message : String(e),
+        },
+      });
     }
   }
 

@@ -76,7 +76,7 @@ describe("SchedulerAlertService", () => {
 
     await service.notifyAdminsOnFailure("station-sync", 1n, longMsg);
 
-    const payload = notification.create.mock.calls[0][2] as Record<string, unknown>;
+    const payload = (notification.create.mock.calls[0] as unknown[])[2] as Record<string, unknown>;
     expect((payload.errorMessage as string).length).toBe(200);
   });
 });

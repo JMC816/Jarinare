@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  ForbiddenException,
   HttpCode,
   HttpStatus,
   Param,
@@ -46,6 +47,19 @@ export class AdminSchedulerRunnerController {
     @CurrentUser() user: AuthUser,
     @Req() req: Request,
   ): Promise<RunJobResultDto> {
+    if (name === "notification-drop") {
+      if (user.adminRoleCode !== "SUPER_ADMIN") {
+        throw new ForbiddenException(
+          "notification-drop 은 SUPER_ADMIN 만 실행할 수 있습니다.",
+        );
+      }
+      if (!dto.confirm) {
+        throw new BadRequestException(
+          "notification-drop 은 되돌릴 수 없습니다. body 에 confirm: true 를 포함하세요.",
+        );
+      }
+    }
+
     const result = await this.runner.runJob(name, dto, BigInt(user.idx));
 
     this.audit.log({

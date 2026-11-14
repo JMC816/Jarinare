@@ -1,5 +1,53 @@
 # WORKLOG
 
+## 2026-11-14 — @Cron 실행 로그 DB 저장 · notification-drop SUPER_ADMIN 가드 추가
+
+### 작업 개요
+
+스케줄러 백엔드 추가 스펙 4번·5번을 구현했다. @Cron 기반 잡들이 `scheduler_run_log`에 기록되지 않던 문제를 해결하고, 알림 파티션 삭제에 SUPER_ADMIN 전용 실행 가드를 추가했다.
+
+---
+
+### 백엔드
+
+**@Cron 실행 로그 추가**
+
+- `notification.service.ts` — `runWithLog()` 헬퍼 추가, `runDropOldPartitionCron` / `runCreateNextMonthPartitionCron` private 래퍼로 분리. 성공/실패 모두 `scheduler_run_log`에 기록
+- `seat-hold.service.ts` — `purgeExpired()` 로직 분리 (throws), `runPurgeExpiredCron()` private 래퍼에서 실패 시에만 로그 기록
+- `seat-change.service.ts` — 동일 패턴 적용
+
+**notification-drop SUPER_ADMIN 가드**
+
+- `run-job.dto.ts` — `confirm?: boolean` 필드 추가
+- `admin-scheduler-runner.controller.ts` — `notification-drop` 실행 시 `adminRoleCode !== 'SUPER_ADMIN'` → 403, `confirm !== true` → 400
+
+**테스트**
+
+- `scheduler-alert.service.spec.ts` — 4개 테스트 (어드민 수만큼 알림 발송, 없으면 미발송, 발송 실패 시 예외 전파 안 함, 200자 초과 truncate)
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `src/notification/notification.service.ts` | runWithLog() 헬퍼, private cron 래퍼 2개 |
+| `src/seat/seat-hold.service.ts` | purgeExpired() 분리, cron 래퍼 실패 로그 |
+| `src/seat/seat-change.service.ts` | expireStale() 분리, cron 래퍼 실패 로그 |
+| `src/scheduler/dto/run-job.dto.ts` | confirm 필드 추가 |
+| `src/scheduler/admin-scheduler-runner.controller.ts` | notification-drop 가드 추가 |
+| `src/scheduler/scheduler-alert.service.spec.ts` | 신규 — 4개 테스트 |
+
+---
+
+### 현재 상태
+
+- 모든 @Cron 잡 실행 결과 scheduler_run_log 기록 완료
+- notification-drop: SUPER_ADMIN + confirm: true 없이 실행 불가
+- 전체 테스트 15개 통과
+
+---
+
 ## 2026-11-14 — 어드민 스케줄러 프론트엔드 구현
 
 ### 작업 개요

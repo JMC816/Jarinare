@@ -177,7 +177,6 @@ export class NotificationService {
   }
 
   // 매월 1일 00:10 — 2달 전 파티션 DROP (이전달 + 이번달만 유지)
-  @Cron("10 0 1 * *")
   async dropOldPartition(): Promise<void> {
     const now = new Date();
     const target = new Date(now.getFullYear(), now.getMonth() - 2, 1);
@@ -191,8 +190,12 @@ export class NotificationService {
     }
   }
 
+  @Cron("10 0 1 * *")
+  private async runDropOldPartitionCron(): Promise<void> {
+    await this.runWithLog("notification-drop", () => this.dropOldPartition());
+  }
+
   // 매월 1일 00:05 — 다음달 파티션을 ADD PARTITION으로 미리 생성
-  @Cron("5 0 1 * *")
   async createNextMonthPartition(): Promise<void> {
     const now = new Date();
     const target = new Date(now.getFullYear(), now.getMonth() + 1, 1);
@@ -216,6 +219,36 @@ export class NotificationService {
       `);
     } catch {
       // 이미 존재하는 파티션이면 무시
+    }
+  }
+
+  @Cron("5 0 1 * *")
+  private async runCreateNextMonthPartitionCron(): Promise<void> {
+    await this.runWithLog("notification-rotate", () => this.createNextMonthPartition());
+  }
+
+  private async runWithLog(jobName: string, fn: () => Promise<void>): Promise<void> {
+    const ymd = new Date()
+      .toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })
+      .replace(/-/g, "");
+    const log = await this.prisma.schedulerRunLog.create({
+      data: { jobName, status: "RUNNING", startYmd: ymd, endYmd: ymd, startedAt: new Date() },
+    });
+    try {
+      await fn();
+      await this.prisma.schedulerRunLog.update({
+        where: { runId: log.runId },
+        data: { status: "SUCCESS", endedAt: new Date() },
+      });
+    } catch (e) {
+      await this.prisma.schedulerRunLog.update({
+        where: { runId: log.runId },
+        data: {
+          status: "FAILED",
+          endedAt: new Date(),
+          errorMessage: e instanceof Error ? e.message : String(e),
+        },
+      });
     }
   }
 

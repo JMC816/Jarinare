@@ -221,16 +221,33 @@ export class SeatHoldService {
    * 이 작업은 정합성이 아니라 테이블 크기를 위한 것이다. 여러 인스턴스가 동시에
    * 돌아도 같은 행을 지울 뿐이라 분산 락이 필요 없다.
    */
-  @Cron(CronExpression.EVERY_MINUTE)
   async purgeExpired(): Promise<number> {
+    const res = await this.prisma.seatHold.deleteMany({
+      where: { expiresAt: { lt: new Date() } },
+    });
+    return res.count;
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  private async runPurgeExpiredCron(): Promise<void> {
     try {
-      const res = await this.prisma.seatHold.deleteMany({
-        where: { expiresAt: { lt: new Date() } },
-      });
-      return res.count;
+      await this.purgeExpired();
     } catch (e) {
+      const ymd = new Date()
+        .toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })
+        .replace(/-/g, "");
       this.logger.warn(`만료 선점 정리 실패: ${String(e)}`);
-      return 0;
+      await this.prisma.schedulerRunLog.create({
+        data: {
+          jobName: "seat-hold-expire",
+          status: "FAILED",
+          startYmd: ymd,
+          endYmd: ymd,
+          startedAt: new Date(),
+          endedAt: new Date(),
+          errorMessage: e instanceof Error ? e.message : String(e),
+        },
+      });
     }
   }
 }

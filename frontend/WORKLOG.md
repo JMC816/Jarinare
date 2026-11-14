@@ -1,5 +1,21 @@
 # WORKLOG
 
+## 2026-11-14 — 어드민 역할 변경 API 경로 스펙 통일
+
+### 작업 개요
+
+`PATCH /admin/admins/:idx` 경로를 스펙 기준인 `PATCH /admin/users/:idx/role` 로 변경했다. 기능은 동일하고 경로만 수정.
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `admin-roles/admin-roles.controller.ts` | `admins/:idx` → `users/:idx/role` |
+
+---
+
 ## 2026-11-14 — 결제 모달 화면 금액 표시 오류 수정
 
 ### 작업 개요

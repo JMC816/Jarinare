@@ -76,7 +76,7 @@ export class AdminRolesController {
     return this.adminRoles.assignAdmin(dto, req.user, req.ip);
   }
 
-  @Patch("admins/:idx")
+  @Patch("users/:idx/role")
   @ApiOperation({ summary: "어드민 역할 변경" })
   @Permissions("admin:manage")
   updateAdminRole(

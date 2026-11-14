@@ -4,7 +4,7 @@ import { Request } from "express";
 import { Permissions } from "../auth/decorators/permissions.decorator";
 import type { AuthUser } from "../auth/interfaces/auth-user.interface";
 import { AdminReportsService } from "./admin-reports.service";
-import { ReportListQueryDto, ResolveReportDto } from "./dto/admin-reports.dto";
+import { RejectReportDto, ReportListQueryDto, ResolveReportDto } from "./dto/admin-reports.dto";
 
 @ApiBearerAuth()
 @ApiTags("Admin - 신고 처리")
@@ -27,7 +27,7 @@ export class AdminReportsController {
   }
 
   @Post(":id/resolve")
-  @ApiOperation({ summary: "신고 처리 (RESOLVED/REJECTED + action)" })
+  @ApiOperation({ summary: "신고 처리 완료 (action, memo)" })
   @Permissions("report:resolve")
   resolveReport(
     @Param("id") id: string,
@@ -35,5 +35,16 @@ export class AdminReportsController {
     @Req() req: Request & { user: AuthUser },
   ) {
     return this.adminReports.resolveReport(BigInt(id), dto, req.user, req.ip);
+  }
+
+  @Post(":id/reject")
+  @ApiOperation({ summary: "신고 거절" })
+  @Permissions("report:resolve")
+  rejectReport(
+    @Param("id") id: string,
+    @Body() dto: RejectReportDto,
+    @Req() req: Request & { user: AuthUser },
+  ) {
+    return this.adminReports.rejectReport(BigInt(id), dto.memo, req.user, req.ip);
   }
 }

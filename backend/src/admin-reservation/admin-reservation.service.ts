@@ -119,6 +119,26 @@ export class AdminReservationService {
     return { success: true };
   }
 
+  // ── 좌석 선점 ─────────────────────────────────────────
+
+  async deleteSeatHold(id: bigint, actor: AuthUser, ip: string | undefined) {
+    const hold = await this.prisma.seatHold.findUnique({ where: { id } });
+    if (!hold) throw new AppException(ErrorCode.NOT_FOUND, "좌석 선점 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+
+    await this.prisma.seatHold.delete({ where: { id } });
+
+    this.audit.log({
+      actorIdx: actor.idx,
+      action: "seat_hold.force_delete",
+      targetType: "seat_hold",
+      targetId: id.toString(),
+      before: { userIdx: hold.userIdx.toString(), tripId: hold.tripId.toString(), seatId: hold.seatId },
+      ip,
+    });
+
+    return { success: true };
+  }
+
   // ── 좌석 변경 요청 ────────────────────────────────────
 
   async listSeatChanges(query: SeatChangeListQueryDto) {

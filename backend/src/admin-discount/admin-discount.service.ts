@@ -29,6 +29,19 @@ export class AdminDiscountService {
     return discounts.map((d) => serializeDiscount(d as unknown as Record<string, unknown>));
   }
 
+  async listActiveDiscounts() {
+    const now = new Date();
+    const discounts = await this.prisma.cardDiscount.findMany({
+      where: {
+        isActive: true,
+        OR: [{ startsAt: null }, { startsAt: { lte: now } }],
+        AND: [{ OR: [{ endsAt: null }, { endsAt: { gte: now } }] }],
+      },
+      orderBy: { cardCode: "asc" },
+    });
+    return discounts.map((d) => serializeDiscount(d as unknown as Record<string, unknown>));
+  }
+
   async getDiscount(id: bigint) {
     const discount = await this.prisma.cardDiscount.findUnique({ where: { id } });
     if (!discount) throw new AppException(ErrorCode.NOT_FOUND, "카드 할인을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);

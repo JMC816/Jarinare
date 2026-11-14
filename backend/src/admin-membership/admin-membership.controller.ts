@@ -8,7 +8,7 @@ import { CreateMembershipTierDto, UpdateMembershipTierDto } from "./dto/admin-me
 
 @ApiBearerAuth()
 @ApiTags("Admin - 멤버십")
-@Controller("admin/membership")
+@Controller("admin/membership-tiers")
 export class AdminMembershipController {
   constructor(private readonly adminMembership: AdminMembershipService) {}
 

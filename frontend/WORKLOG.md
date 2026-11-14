@@ -1,5 +1,73 @@
 # WORKLOG
 
+## 2026-11-14 — 어드민 API 누락 엔드포인트 추가 · 경로 스펙 통일
+
+### 작업 개요
+
+API 목록 스펙과 현재 구현을 대조해 누락된 엔드포인트 5개를 추가하고, 경로 불일치 3건을 스펙 기준으로 정정했다.
+
+---
+
+### 백엔드
+
+**경로 정정**
+
+- `/admin/membership` → `/admin/membership-tiers`
+- `/admin/discounts` → `/admin/card-discounts`
+- `POST /admin/notifications/send` → `broadcast`
+
+**누락 엔드포인트 추가**
+
+- `POST /reports` — 사용자 신고 접수 (로그인 필수, 중복 신고 방지)
+- `POST /admin/reports/:id/reject` — 신고 거절 (기존 resolve에서 분리)
+- `PATCH /admin/users/:idx/membership` — 회원 멤버십 등급 직접 변경·해제
+- `GET /card-discounts/active` — 활성 카드 할인 공개 조회 (사용자 결제 화면용, @Public)
+- `DELETE /admin/seat-holds/:id` — 좌석 선점 강제 해제
+
+**`/users/me` 응답 개선**
+
+- `adminRole: { id, code, name } | null` 추가 — 프론트 메뉴 노출 판단용
+
+---
+
+### 프론트엔드
+
+- `UserProfile` 타입에 `adminRole` 필드 추가
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `admin-membership/admin-membership.controller.ts` | 경로 변경 |
+| `admin-discount/admin-discount.controller.ts` | 경로 변경 |
+| `admin-discount/admin-discount.module.ts` | CardDiscountsController 추가 |
+| `admin-discount/admin-discount.service.ts` | listActiveDiscounts() 추가 |
+| `admin-notification/admin-notification.controller.ts` | send → broadcast |
+| `admin-reports/admin-reports.controller.ts` | /reject 엔드포인트 추가 |
+| `admin-reports/admin-reports.module.ts` | ReportsController 추가 |
+| `admin-reports/admin-reports.service.ts` | createReport, rejectReport 추가 |
+| `admin-reports/dto/admin-reports.dto.ts` | CreateReportDto, RejectReportDto 추가 |
+| `admin-reservation/admin-reservation.module.ts` | AdminSeatHoldsController 추가 |
+| `admin-reservation/admin-reservation.service.ts` | deleteSeatHold() 추가 |
+| `admin-users/admin-users.controller.ts` | /membership 엔드포인트 추가 |
+| `admin-users/admin-users.service.ts` | updateMembership() 추가 |
+| `admin-users/dto/admin-users.dto.ts` | UpdateMembershipDto 추가 |
+| `users/dto/user-response.dto.ts` | adminRole 필드 추가 |
+| `users/users.service.ts` | toProfile() adminRole 포함 |
+| `frontend/.../useCurrentUser.ts` | AdminRole 타입·필드 추가 |
+
+---
+
+### 현재 상태
+
+- 전체 테스트 168개 통과
+- 프론트 빌드 성공
+- 추가된 API 전체 프론트 미구현 상태 (백엔드만 완성)
+
+---
+
 ## 2026-11-14 — @Cron 실행 로그 DB 저장 · notification-drop SUPER_ADMIN 가드 추가
 
 ### 작업 개요

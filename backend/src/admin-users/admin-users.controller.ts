@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -16,6 +17,7 @@ import {
   AdminUserListQueryDto,
   AdjustPointDto,
   SuspendUserDto,
+  UpdateMembershipDto,
 } from "./dto/admin-users.dto";
 
 @ApiBearerAuth()
@@ -83,5 +85,16 @@ export class AdminUsersController {
     @Req() req: Request & { user: AuthUser },
   ) {
     return this.adminUsers.adjustPoints(BigInt(idx), dto, req.user, req.ip);
+  }
+
+  @Patch(":idx/membership")
+  @ApiOperation({ summary: "회원 멤버십 등급 직접 변경 (null 이면 해제)" })
+  @Permissions("membership:manage")
+  updateMembership(
+    @Param("idx") idx: string,
+    @Body() dto: UpdateMembershipDto,
+    @Req() req: Request & { user: AuthUser },
+  ) {
+    return this.adminUsers.updateMembership(BigInt(idx), dto, req.user, req.ip);
   }
 }

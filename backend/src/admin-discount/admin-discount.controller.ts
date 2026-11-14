@@ -8,7 +8,7 @@ import { CreateCardDiscountDto, UpdateCardDiscountDto } from "./dto/admin-discou
 
 @ApiBearerAuth()
 @ApiTags("Admin - 카드 할인")
-@Controller("admin/discounts")
+@Controller("admin/card-discounts")
 export class AdminDiscountController {
   constructor(private readonly adminDiscount: AdminDiscountService) {}
 

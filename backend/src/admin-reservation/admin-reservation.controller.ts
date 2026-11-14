@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Query, Req } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Post, Query, Req } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { Request } from "express";
 import { Permissions } from "../auth/decorators/permissions.decorator";

@@ -5,6 +5,12 @@ import { ACCESS_TOKEN_KEY, backendClient } from '@/shared/api/backendClient';
 
 export type UserRole = 'user' | 'cs' | 'marketer' | 'operator' | 'super_admin';
 
+export type AdminRole = {
+  id: string;
+  code: string;
+  name: string;
+};
+
 export type UserProfile = {
   idx: number;
   userId: string;
@@ -18,6 +24,7 @@ export type UserProfile = {
   notifResponse: boolean;
   role: UserRole;
   permissions: string[];
+  adminRole: AdminRole | null;
 };
 
 

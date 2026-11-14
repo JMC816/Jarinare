@@ -51,3 +51,10 @@ export class AdjustPointDto {
   @MinLength(1)
   reason!: string;
 }
+
+export class UpdateMembershipDto {
+  @ApiPropertyOptional({ description: "멤버십 등급 ID. null 이면 등급 해제.", nullable: true })
+  @IsOptional()
+  @IsInt()
+  membershipTierId!: number | null;
+}

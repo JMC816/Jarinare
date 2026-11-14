@@ -12,7 +12,7 @@ import { SendNotificationDto } from "./dto/admin-notification.dto";
 export class AdminNotificationController {
   constructor(private readonly adminNotification: AdminNotificationService) {}
 
-  @Post("send")
+  @Post("broadcast")
   @ApiOperation({ summary: "알림 발송 (targetUserIdxList 비우면 전체 발송)" })
   @Permissions("notification:send")
   send(@Body() dto: SendNotificationDto, @Req() req: Request & { user: AuthUser }) {

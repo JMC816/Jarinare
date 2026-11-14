@@ -4,7 +4,7 @@ import { AppException } from "../common/errors/app.exception";
 import { ErrorCode } from "../common/errors/error-code";
 import { AuditService } from "../audit/audit.service";
 import type { AuthUser } from "../auth/interfaces/auth-user.interface";
-import type { ReportListQueryDto, ResolveReportDto } from "./dto/admin-reports.dto";
+import type { CreateReportDto, ReportListQueryDto, ResolveReportDto } from "./dto/admin-reports.dto";
 
 const PAGE_SIZE = 20;
 
@@ -24,6 +24,27 @@ export class AdminReportsService {
     private readonly prisma: PrismaService,
     private readonly audit: AuditService,
   ) {}
+
+  async createReport(dto: CreateReportDto, reporterIdx: bigint) {
+    const existing = await this.prisma.report.findFirst({
+      where: { reporterIdx, targetType: dto.targetType, targetId: BigInt(dto.targetId) },
+    });
+    if (existing) {
+      throw new AppException(ErrorCode.CONFLICT, "이미 신고한 대상입니다.", HttpStatus.CONFLICT);
+    }
+
+    const report = await this.prisma.report.create({
+      data: {
+        reporterIdx,
+        targetType: dto.targetType,
+        targetId: BigInt(dto.targetId),
+        reasonCode: dto.reasonCode,
+        detail: dto.detail ?? null,
+      },
+    });
+
+    return serializeReport(report as unknown as Record<string, unknown>);
+  }
 
   async listReports(query: ReportListQueryDto) {
     const page = query.page ?? 1;
@@ -90,6 +111,10 @@ export class AdminReportsService {
     });
 
     return serializeReport(updated as unknown as Record<string, unknown>);
+  }
+
+  async rejectReport(id: bigint, memo: string | undefined, actor: AuthUser, ip: string | undefined) {
+    return this.resolveReport(id, { status: "REJECTED", memo }, actor, ip);
   }
 
   private async applyHide(targetType: string, targetId: bigint) {

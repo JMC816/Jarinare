@@ -4,7 +4,7 @@ import { AppException } from "../common/errors/app.exception";
 import { ErrorCode } from "../common/errors/error-code";
 import { AuditService } from "../audit/audit.service";
 import type { AuthUser } from "../auth/interfaces/auth-user.interface";
-import type { AdminUserListQueryDto, AdjustPointDto, SuspendUserDto } from "./dto/admin-users.dto";
+import type { AdminUserListQueryDto, AdjustPointDto, SuspendUserDto, UpdateMembershipDto } from "./dto/admin-users.dto";
 
 const PAGE_SIZE = 20;
 
@@ -179,6 +179,35 @@ export class AdminUsersService {
       action: "user.force_logout",
       targetType: "user",
       targetId: targetIdx.toString(),
+      ip,
+    });
+
+    return { success: true };
+  }
+
+  async updateMembership(targetIdx: bigint, dto: UpdateMembershipDto, actor: AuthUser, ip: string | undefined) {
+    const user = await this.prisma.user.findUnique({ where: { idx: targetIdx } });
+    if (!user) throw new AppException(ErrorCode.USER_NOT_FOUND, "사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+
+    if (dto.membershipTierId !== null) {
+      const tier = await this.prisma.membershipTier.findUnique({ where: { id: BigInt(dto.membershipTierId) } });
+      if (!tier) throw new AppException(ErrorCode.NOT_FOUND, "존재하지 않는 멤버십 등급입니다.", HttpStatus.NOT_FOUND);
+    }
+
+    const before = { membershipTierId: user.membershipTierId ? user.membershipTierId.toString() : null };
+
+    await this.prisma.user.update({
+      where: { idx: targetIdx },
+      data: { membershipTierId: dto.membershipTierId !== null ? BigInt(dto.membershipTierId) : null },
+    });
+
+    this.audit.log({
+      actorIdx: actor.idx,
+      action: "user.membership_update",
+      targetType: "user",
+      targetId: targetIdx.toString(),
+      before,
+      after: { membershipTierId: dto.membershipTierId },
       ip,
     });
 

@@ -178,7 +178,10 @@ export class UsersService {
     return this.toProfile(user, permissions);
   }
 
-  private toProfile(user: User, permissions: string[] = []): UserProfileDto {
+  private toProfile(
+    user: User & { adminRole?: { id: bigint; code: string; name: string } | null },
+    permissions: string[] = [],
+  ): UserProfileDto {
     return {
       idx: Number(user.idx),
       userId: user.userId,
@@ -192,6 +195,9 @@ export class UsersService {
       notifResponse: user.notifResponse,
       role: user.role,
       permissions,
+      adminRole: user.adminRole
+        ? { id: user.adminRole.id.toString(), code: user.adminRole.code, name: user.adminRole.name }
+        : null,
     };
   }
 }

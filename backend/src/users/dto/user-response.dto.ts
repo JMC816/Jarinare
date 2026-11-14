@@ -40,6 +40,9 @@ export class UserProfileDto {
 
   @ApiProperty({ description: "보유 권한 목록", type: [String] })
   permissions: string[];
+
+  @ApiProperty({ description: "어드민 역할 (일반 사용자는 null)", nullable: true })
+  adminRole: { id: string; code: string; name: string } | null;
 }
 
 export class PublicUserDto {

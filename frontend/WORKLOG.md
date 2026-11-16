@@ -1,5 +1,39 @@
 # WORKLOG
 
+## 2026-11-17 — 대시보드 예매 수 집계 기준 통일
+
+### 작업 개요
+
+대시보드 summary는 `reservations` 테이블 기준 좌석 수(취소 제외), 시간대별은 `order_histories` 기준 주문 수(취소 포함)로 서로 달랐다. 둘 다 주문 수(`order_histories`) 기준으로 통일했다. 재검토에서 취소 수도 좌석 단위(reservations 행 수)여서 주문 단위와 혼재됨을 발견해 함께 수정했다.
+
+---
+
+### 백엔드
+
+**`dashboard/dashboard.service.ts`**
+
+- 예매 수·매출: `reservations.aggregate` → `orderHistory.aggregate` (isReturn: false)
+- 매출 필드: `price` → `finalPrice`
+- 취소 수: `reservations.count` → `reservations.findMany(distinct orderId).length` (좌석 수 → 주문 수)
+- `cancelRate` 분자·분모 모두 주문 단위로 통일
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboard/dashboard.service.ts` | 예매 수·매출·취소 수 집계 기준 변경 |
+
+---
+
+### 현재 상태
+
+- tsc 오류 없음
+- API 검증 완료 (count 17, cancelCount 1, cancelRate 5.6 — KST 기준 정상)
+
+---
+
 ## 2026-11-17 — 대시보드 인기 노선 추가
 
 ### 작업 개요

@@ -54,19 +54,21 @@ export class DashboardService {
       popularRoutes,
       popularDestinations,
     ] = await Promise.all([
-      // 기간 내 예매 수·매출 (활성)
-      this.prisma.reservation.aggregate({
-        where: { createdAt: { gte: start, lte: end }, canceledAt: ACTIVE },
+      // 기간 내 예매 수·매출 (주문 기준, 왕복 제외)
+      this.prisma.orderHistory.aggregate({
+        where: { isReturn: false, createdAt: { gte: start, lte: end } },
         _count: { id: true },
-        _sum: { price: true },
+        _sum: { finalPrice: true },
       }),
 
-      // 기간 내 취소 수
-      this.prisma.reservation.count({
-        where: {
-          canceledAt: { gt: ACTIVE, gte: start, lte: end },
-        },
-      }),
+      // 기간 내 취소 주문 수 (orderId distinct — 주문 단위로 totalReservations와 기준 통일)
+      this.prisma.reservation
+        .findMany({
+          where: { canceledAt: { gt: ACTIVE, gte: start, lte: end } },
+          select: { orderId: true },
+          distinct: ["orderId"],
+        })
+        .then((rows) => rows.length),
 
       // 기간 내 신규 가입
       this.prisma.user.count({
@@ -129,7 +131,7 @@ export class DashboardService {
     ]);
 
     const totalReservations = reservationStats._count.id;
-    const totalRevenue = reservationStats._sum.price ?? 0;
+    const totalRevenue = reservationStats._sum.finalPrice ?? 0;
     const totalForCancel = totalReservations + cancelStats;
     const cancelRate = totalForCancel > 0
       ? Math.round((cancelStats / totalForCancel) * 100 * 10) / 10

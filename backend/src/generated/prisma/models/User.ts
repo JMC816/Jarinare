@@ -59,6 +59,7 @@ export type UserMinAggregateOutputType = {
   role: string | null
   refreshToken: string | null
   refreshTokenExpiresAt: Date | null
+  lastLoginAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
   adminRoleId: bigint | null
@@ -83,6 +84,7 @@ export type UserMaxAggregateOutputType = {
   role: string | null
   refreshToken: string | null
   refreshTokenExpiresAt: Date | null
+  lastLoginAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
   adminRoleId: bigint | null
@@ -107,6 +109,7 @@ export type UserCountAggregateOutputType = {
   role: number
   refreshToken: number
   refreshTokenExpiresAt: number
+  lastLoginAt: number
   createdAt: number
   updatedAt: number
   adminRoleId: number
@@ -151,6 +154,7 @@ export type UserMinAggregateInputType = {
   role?: true
   refreshToken?: true
   refreshTokenExpiresAt?: true
+  lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
   adminRoleId?: true
@@ -175,6 +179,7 @@ export type UserMaxAggregateInputType = {
   role?: true
   refreshToken?: true
   refreshTokenExpiresAt?: true
+  lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
   adminRoleId?: true
@@ -199,6 +204,7 @@ export type UserCountAggregateInputType = {
   role?: true
   refreshToken?: true
   refreshTokenExpiresAt?: true
+  lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
   adminRoleId?: true
@@ -310,6 +316,7 @@ export type UserGroupByOutputType = {
   role: string
   refreshToken: string | null
   refreshTokenExpiresAt: Date | null
+  lastLoginAt: Date | null
   createdAt: Date
   updatedAt: Date
   adminRoleId: bigint | null
@@ -357,6 +364,7 @@ export type UserWhereInput = {
   role?: Prisma.StringFilter<"User"> | string
   refreshToken?: Prisma.StringNullableFilter<"User"> | string | null
   refreshTokenExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   adminRoleId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
@@ -395,6 +403,7 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshTokenExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adminRoleId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -437,6 +446,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifResponse?: Prisma.BoolFilter<"User"> | boolean
   role?: Prisma.StringFilter<"User"> | string
   refreshTokenExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   adminRoleId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
@@ -475,6 +485,7 @@ export type UserOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   refreshTokenExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adminRoleId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -507,6 +518,7 @@ export type UserScalarWhereWithAggregatesInput = {
   role?: Prisma.StringWithAggregatesFilter<"User"> | string
   refreshToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   refreshTokenExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   adminRoleId?: Prisma.BigIntNullableWithAggregatesFilter<"User"> | bigint | number | null
@@ -531,6 +543,7 @@ export type UserCreateInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -567,6 +580,7 @@ export type UserUncheckedCreateInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -603,6 +617,7 @@ export type UserUpdateInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -639,6 +654,7 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -675,6 +691,7 @@ export type UserCreateManyInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -699,6 +716,7 @@ export type UserUpdateManyMutationInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -721,6 +739,7 @@ export type UserUncheckedUpdateManyInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -751,6 +770,7 @@ export type UserCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
   refreshTokenExpiresAt?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adminRoleId?: Prisma.SortOrder
@@ -784,6 +804,7 @@ export type UserMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
   refreshTokenExpiresAt?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adminRoleId?: Prisma.SortOrder
@@ -808,6 +829,7 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   refreshToken?: Prisma.SortOrder
   refreshTokenExpiresAt?: Prisma.SortOrder
+  lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adminRoleId?: Prisma.SortOrder
@@ -1160,6 +1182,7 @@ export type UserCreateWithoutBoardsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -1195,6 +1218,7 @@ export type UserUncheckedCreateWithoutBoardsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -1246,6 +1270,7 @@ export type UserUpdateWithoutBoardsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1281,6 +1306,7 @@ export type UserUncheckedUpdateWithoutBoardsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -1316,6 +1342,7 @@ export type UserCreateWithoutCommentsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -1351,6 +1378,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -1402,6 +1430,7 @@ export type UserUpdateWithoutCommentsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1437,6 +1466,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -1472,6 +1502,7 @@ export type UserCreateWithoutBoardReadsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -1507,6 +1538,7 @@ export type UserUncheckedCreateWithoutBoardReadsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -1558,6 +1590,7 @@ export type UserUpdateWithoutBoardReadsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1593,6 +1626,7 @@ export type UserUncheckedUpdateWithoutBoardReadsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -1628,6 +1662,7 @@ export type UserCreateWithoutBoardLikesInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -1663,6 +1698,7 @@ export type UserUncheckedCreateWithoutBoardLikesInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -1714,6 +1750,7 @@ export type UserUpdateWithoutBoardLikesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1749,6 +1786,7 @@ export type UserUncheckedUpdateWithoutBoardLikesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -1784,6 +1822,7 @@ export type UserCreateWithoutBoardBookmarksInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -1819,6 +1858,7 @@ export type UserUncheckedCreateWithoutBoardBookmarksInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -1870,6 +1910,7 @@ export type UserUpdateWithoutBoardBookmarksInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1905,6 +1946,7 @@ export type UserUncheckedUpdateWithoutBoardBookmarksInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -1940,6 +1982,7 @@ export type UserCreateWithoutBoardSharesInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -1975,6 +2018,7 @@ export type UserUncheckedCreateWithoutBoardSharesInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -2026,6 +2070,7 @@ export type UserUpdateWithoutBoardSharesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2061,6 +2106,7 @@ export type UserUncheckedUpdateWithoutBoardSharesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -2096,6 +2142,7 @@ export type UserCreateWithoutSeatHoldsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -2131,6 +2178,7 @@ export type UserUncheckedCreateWithoutSeatHoldsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -2182,6 +2230,7 @@ export type UserUpdateWithoutSeatHoldsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2217,6 +2266,7 @@ export type UserUncheckedUpdateWithoutSeatHoldsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -2252,6 +2302,7 @@ export type UserCreateWithoutReservationsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -2287,6 +2338,7 @@ export type UserUncheckedCreateWithoutReservationsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -2338,6 +2390,7 @@ export type UserUpdateWithoutReservationsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2373,6 +2426,7 @@ export type UserUncheckedUpdateWithoutReservationsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -2408,6 +2462,7 @@ export type UserCreateWithoutSeatChangeRequestsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -2443,6 +2498,7 @@ export type UserUncheckedCreateWithoutSeatChangeRequestsInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -2483,6 +2539,7 @@ export type UserCreateWithoutSeatChangeReceivedInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -2518,6 +2575,7 @@ export type UserUncheckedCreateWithoutSeatChangeReceivedInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -2569,6 +2627,7 @@ export type UserUpdateWithoutSeatChangeRequestsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2604,6 +2663,7 @@ export type UserUncheckedUpdateWithoutSeatChangeRequestsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -2650,6 +2710,7 @@ export type UserUpdateWithoutSeatChangeReceivedInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2685,6 +2746,7 @@ export type UserUncheckedUpdateWithoutSeatChangeReceivedInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -2720,6 +2782,7 @@ export type UserCreateWithoutPointHistoriesInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -2755,6 +2818,7 @@ export type UserUncheckedCreateWithoutPointHistoriesInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -2806,6 +2870,7 @@ export type UserUpdateWithoutPointHistoriesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2841,6 +2906,7 @@ export type UserUncheckedUpdateWithoutPointHistoriesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -2876,6 +2942,7 @@ export type UserCreateWithoutOrderHistoriesInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -2911,6 +2978,7 @@ export type UserUncheckedCreateWithoutOrderHistoriesInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -2962,6 +3030,7 @@ export type UserUpdateWithoutOrderHistoriesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2997,6 +3066,7 @@ export type UserUncheckedUpdateWithoutOrderHistoriesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -3032,6 +3102,7 @@ export type UserCreateWithoutAdminRoleInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -3067,6 +3138,7 @@ export type UserUncheckedCreateWithoutAdminRoleInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -3131,6 +3203,7 @@ export type UserScalarWhereInput = {
   role?: Prisma.StringFilter<"User"> | string
   refreshToken?: Prisma.StringNullableFilter<"User"> | string | null
   refreshTokenExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   adminRoleId?: Prisma.BigIntNullableFilter<"User"> | bigint | number | null
@@ -3155,6 +3228,7 @@ export type UserCreateWithoutMembershipTierInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -3190,6 +3264,7 @@ export type UserUncheckedCreateWithoutMembershipTierInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -3251,6 +3326,7 @@ export type UserCreateManyAdminRoleInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   status?: string
@@ -3274,6 +3350,7 @@ export type UserUpdateWithoutAdminRoleInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3309,6 +3386,7 @@ export type UserUncheckedUpdateWithoutAdminRoleInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3344,6 +3422,7 @@ export type UserUncheckedUpdateManyWithoutAdminRoleInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3367,6 +3446,7 @@ export type UserCreateManyMembershipTierInput = {
   role?: string
   refreshToken?: string | null
   refreshTokenExpiresAt?: Date | string | null
+  lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   adminRoleId?: bigint | number | null
@@ -3390,6 +3470,7 @@ export type UserUpdateWithoutMembershipTierInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3425,6 +3506,7 @@ export type UserUncheckedUpdateWithoutMembershipTierInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -3460,6 +3542,7 @@ export type UserUncheckedUpdateManyWithoutMembershipTierInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   refreshTokenExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminRoleId?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
@@ -3613,6 +3696,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   refreshToken?: boolean
   refreshTokenExpiresAt?: boolean
+  lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   adminRoleId?: boolean
@@ -3654,6 +3738,7 @@ export type UserSelectScalar = {
   role?: boolean
   refreshToken?: boolean
   refreshTokenExpiresAt?: boolean
+  lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   adminRoleId?: boolean
@@ -3663,7 +3748,7 @@ export type UserSelectScalar = {
   membershipTierId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"idx" | "userId" | "name" | "email" | "password" | "age" | "gender" | "seatChageCount" | "point" | "notifiChange" | "notifResponse" | "role" | "refreshToken" | "refreshTokenExpiresAt" | "createdAt" | "updatedAt" | "adminRoleId" | "status" | "suspendedUntil" | "suspendReason" | "membershipTierId", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"idx" | "userId" | "name" | "email" | "password" | "age" | "gender" | "seatChageCount" | "point" | "notifiChange" | "notifResponse" | "role" | "refreshToken" | "refreshTokenExpiresAt" | "lastLoginAt" | "createdAt" | "updatedAt" | "adminRoleId" | "status" | "suspendedUntil" | "suspendReason" | "membershipTierId", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   boards?: boolean | Prisma.User$boardsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
@@ -3715,6 +3800,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     role: string
     refreshToken: string | null
     refreshTokenExpiresAt: Date | null
+    lastLoginAt: Date | null
     createdAt: Date
     updatedAt: Date
     adminRoleId: bigint | null
@@ -4119,6 +4205,7 @@ export interface UserFieldRefs {
   readonly role: Prisma.FieldRef<"User", 'String'>
   readonly refreshToken: Prisma.FieldRef<"User", 'String'>
   readonly refreshTokenExpiresAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly adminRoleId: Prisma.FieldRef<"User", 'BigInt'>

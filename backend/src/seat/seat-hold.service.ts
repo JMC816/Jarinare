@@ -232,11 +232,6 @@ export class SeatHoldService {
   private async runPurgeExpiredCron(): Promise<void> {
     try {
       await this.purgeExpired();
-      await this.prisma.schedulerJobSetting.upsert({
-        where: { name: "seat-hold-expire" },
-        update: { lastSuccessAt: new Date() },
-        create: { name: "seat-hold-expire", lastSuccessAt: new Date() },
-      });
     } catch (e) {
       const ymd = new Date()
         .toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })
@@ -253,6 +248,13 @@ export class SeatHoldService {
           errorMessage: e instanceof Error ? e.message : String(e),
         },
       });
+      return;
     }
+    // 잡 성공 시 lastSuccessAt 갱신 (로그 행 미생성)
+    await this.prisma.schedulerJobSetting.upsert({
+      where: { name: "seat-hold-expire" },
+      update: { lastSuccessAt: new Date() },
+      create: { name: "seat-hold-expire", lastSuccessAt: new Date() },
+    }).catch((e) => this.logger.warn(`seat-hold-expire lastSuccessAt 갱신 실패: ${String(e)}`));
   }
 }

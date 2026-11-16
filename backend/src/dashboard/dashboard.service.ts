@@ -72,11 +72,11 @@ export class DashboardService {
         where: { createdAt: { gte: start, lte: end } },
       }),
 
-      // 활성 사용자 (기간 내 예매 or 로그인한 유저)
+      // 활성 사용자 (기간 내 로그인한 유저)
       this.prisma.user.count({
         where: {
           status: "active",
-          updatedAt: { gte: start, lte: end },
+          lastLoginAt: { gte: start, lte: end },
         },
       }),
 

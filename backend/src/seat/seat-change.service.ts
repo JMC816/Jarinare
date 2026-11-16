@@ -551,11 +551,6 @@ export class SeatChangeService {
   private async runExpireStaleCron(): Promise<void> {
     try {
       await this.expireStale();
-      await this.prisma.schedulerJobSetting.upsert({
-        where: { name: "seat-change-expire" },
-        update: { lastSuccessAt: new Date() },
-        create: { name: "seat-change-expire", lastSuccessAt: new Date() },
-      });
     } catch (e) {
       const ymd = new Date()
         .toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })
@@ -572,7 +567,14 @@ export class SeatChangeService {
           errorMessage: e instanceof Error ? e.message : String(e),
         },
       });
+      return;
     }
+    // 잡 성공 시 lastSuccessAt 갱신 (로그 행 미생성)
+    await this.prisma.schedulerJobSetting.upsert({
+      where: { name: "seat-change-expire" },
+      update: { lastSuccessAt: new Date() },
+      create: { name: "seat-change-expire", lastSuccessAt: new Date() },
+    }).catch((e) => this.logger.warn(`seat-change-expire lastSuccessAt 갱신 실패: ${String(e)}`));
   }
 
   /** 거절·철회 공통: 신청 행 하나만 잠그고 상태를 바꾼 뒤, 잡아 둔 빈 좌석을 놓는다. */

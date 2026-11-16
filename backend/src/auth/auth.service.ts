@@ -55,7 +55,7 @@ export class AuthService {
 
     await this.prisma.user.update({
       where: { idx: userIdx },
-      data: { refreshToken: token, refreshTokenExpiresAt: expiresAt },
+      data: { refreshToken: token, refreshTokenExpiresAt: expiresAt, lastLoginAt: new Date() },
     });
 
     return token;

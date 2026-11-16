@@ -30,6 +30,7 @@ model User {
   role                   String    @default("user") @db.VarChar(20)
   refreshToken           String?   @unique @db.VarChar(512)
   refreshTokenExpiresAt  DateTime?
+  lastLoginAt            DateTime?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
   adminRoleId            BigInt?

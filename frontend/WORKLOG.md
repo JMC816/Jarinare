@@ -1,5 +1,56 @@
 # WORKLOG
 
+## 2026-11-17 — 활성 사용자 집계 기준 수정 · seat 잡 upsert 오탐 수정
+
+### 작업 개요
+
+대시보드 활성 사용자 집계가 `users.updatedAt` 기준이라 포인트 변동·프로필 수정·어드민 조작도 활성으로 잡히던 문제를 수정했다. `lastLoginAt` 컬럼을 추가해 로그인·토큰 갱신 시 갱신하고, 대시보드는 이 값을 기준으로 집계한다. 아울러 재검토에서 발견한 seat 잡 upsert 오탐 버그도 함께 수정했다.
+
+---
+
+### 백엔드
+
+**마이그레이션 `20261116000002_add_last_login_at_to_users`**
+
+- `users`에 `lastLoginAt DATETIME(3) NULL` 컬럼 추가
+
+**`auth/auth.service.ts`**
+
+- `createRefreshToken`에서 `lastLoginAt: new Date()` 함께 갱신
+- 일반 로그인·소셜 로그인·토큰 갱신 모두 `generateTokenPair` → `createRefreshToken` 단일 경로를 타므로 별도 처리 불필요
+
+**`dashboard/dashboard.service.ts`**
+
+- 활성 사용자 집계 기준: `updatedAt` → `lastLoginAt`
+
+**`seat/seat-hold.service.ts` / `seat/seat-change.service.ts`**
+
+- upsert를 try 블록 밖으로 분리 — 잡 성공 후 upsert 실패 시 FAILED 로그 오탐 버그 수정
+- upsert 자체 실패는 `.catch()`로 경고 로그만 기록
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `prisma/schema.prisma` | User에 lastLoginAt 필드 추가 |
+| `prisma/migrations/20261116000002_.../migration.sql` | 신규 — lastLoginAt 컬럼 추가 |
+| `auth/auth.service.ts` | createRefreshToken에서 lastLoginAt 갱신 |
+| `dashboard/dashboard.service.ts` | 활성 사용자 집계 기준 변경 |
+| `seat/seat-hold.service.ts` | upsert 오탐 버그 수정 |
+| `seat/seat-change.service.ts` | upsert 오탐 버그 수정 |
+
+---
+
+### 현재 상태
+
+- 마이그레이션 적용 완료
+- admin@gmail.com lastLoginAt 정상 기록 확인
+- tsc 오류 없음
+
+---
+
 ## 2026-11-16 — 분 단위 잡 staleJobs 오탐 수정
 
 ### 작업 개요

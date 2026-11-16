@@ -51,6 +51,7 @@ export class DashboardService {
       schedulerFailures,
       lastSuccessLogs,
       minuteJobSettings,
+      popularRoutes,
       popularDestinations,
     ] = await Promise.all([
       // 기간 내 예매 수·매출 (활성)
@@ -114,6 +115,15 @@ export class DashboardService {
         select: { name: true, lastSuccessAt: true },
       }),
 
+      // 인기 노선 (출발 → 도착) top 5
+      this.prisma.orderHistory.groupBy({
+        by: ["startStationForView", "endStationForView"],
+        where: { isReturn: false, createdAt: { gte: start, lte: end } },
+        _count: { id: true },
+        orderBy: { _count: { id: "desc" } },
+        take: 5,
+      }),
+
       // 인기 목적지 top 5
       this.travelStats.list(),
     ]);
@@ -168,6 +178,11 @@ export class DashboardService {
         failures24h: schedulerFailures,
         staleJobs,
       },
+      popularRoutes: popularRoutes.map((r) => ({
+        dep: r.startStationForView,
+        arr: r.endStationForView,
+        count: r._count.id,
+      })),
       popularDestinations: popularDestinations.slice(0, 5).map((s) => ({
         destination: s.destination,
         count: s.totalCount,

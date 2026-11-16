@@ -1,5 +1,38 @@
 # WORKLOG
 
+## 2026-11-17 — 대시보드 인기 노선 추가
+
+### 작업 개요
+
+대시보드 요약에 목적지 top 5만 있고 출발역 → 도착역 기준 인기 노선이 없어 추가했다. `order_histories`에 `startStationForView`, `endStationForView` 컬럼이 이미 있어 스키마 변경 없이 `groupBy` 쿼리만 추가했다.
+
+---
+
+### 백엔드
+
+**`dashboard/dashboard.service.ts`**
+
+- `Promise.all`에 `orderHistory.groupBy` 쿼리 추가
+  - `isReturn: false` (왕복 제외), 기간 필터, `_count desc`, `take: 5`
+- 응답에 `popularRoutes: [{ dep, arr, count }]` 추가
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboard/dashboard.service.ts` | popularRoutes 쿼리·응답 추가 |
+
+---
+
+### 현재 상태
+
+- tsc 오류 없음
+- 기간 파라미터(`from`, `to`) 없으면 오늘 기준 집계
+
+---
+
 ## 2026-11-17 — 활성 사용자 집계 기준 수정 · seat 잡 upsert 오탐 수정
 
 ### 작업 개요

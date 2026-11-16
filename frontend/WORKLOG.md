@@ -1,5 +1,39 @@
 # WORKLOG
 
+## 2026-11-17 — DashboardService 단위 테스트 추가
+
+### 작업 개요
+
+대시보드 핵심 계산 로직(취소율·수락률·staleJobs·KST 기간 경계)에 대한 단위 테스트를 추가했다.
+
+---
+
+### 백엔드
+
+**`dashboard/dashboard.service.spec.ts`** (신규)
+
+- 취소율: 정상 계산, 0건 나누기 방지, 33.3% 소수 반올림
+- 수락률: ACCEPTED/REJECTED 혼합, 0건 나누기 방지, ACCEPTED 100%
+- staleJobs: 모두 정상, log 기반 stale(30h), 로그 없음 stale, settings 기반 stale(15min), 설정 행 없음 stale
+- KST 경계: `from=20261101` → Prisma start UTC `2026-10-31T15:00:00Z` 검증
+- 날짜 검증: `from > to`, summary 94일 초과, hourly 33일 초과 → BadRequestException
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboard/dashboard.service.spec.ts` | 신규 — 15개 테스트 케이스 |
+
+---
+
+### 현재 상태
+
+- 15 passed, 0 failed
+
+---
+
 ## 2026-11-17 — 대시보드 시간대별 예매 엔드포인트 이름 수정
 
 ### 작업 개요

@@ -1,4 +1,8 @@
+import AdminAccessDeniedPage from '@/pages/Admin/AccessDenied/ui/AdminAccessDeniedPage';
+import AdminDashboardPage from '@/pages/Admin/Dashboard/ui/AdminDashboardPage';
+import AdminLoginPage from '@/pages/Admin/Login/ui/AdminLoginPage';
 import AdminSchedulerPage from '@/pages/Admin/Scheduler/ui/AdminSchedulerPage';
+import AdminGuard from '@/widgets/Admin/Guard/ui/AdminGuard';
 import GithubRedirect from '@/features/Auth/SocialLogin/ui/GithubRedirect';
 import GoogleRedirect from '@/features/Auth/SocialLogin/ui/GoogleRedirect';
 import KakaoRedirect from '@/features/Auth/SocialLogin/ui/KakaoRedirect';
@@ -53,7 +57,10 @@ const Router = () => {
       <ModalRouteReset />
       <div className="relative w-full">
         <Routes>
-          <Route path="/admin/scheduler" element={<AdminSchedulerPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route path="/admin/access-denied" element={<AdminAccessDeniedPage />} />
+          <Route path="/admin/dashboard" element={<AdminGuard><AdminDashboardPage /></AdminGuard>} />
+          <Route path="/admin/scheduler" element={<AdminGuard><AdminSchedulerPage /></AdminGuard>} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />
           <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />

@@ -1,5 +1,100 @@
 # WORKLOG
 
+## 2026-11-17 — 어드민 프론트엔드 구현
+
+### 작업 개요
+
+어드민 전용 로그인·대시보드·스케줄러 페이지와 라우트 보호 가드를 신규 구현했다.
+
+---
+
+### 프론트엔드
+
+**`pages/Admin/Login/ui/AdminLoginPage.tsx`** (신규)
+
+- 이메일·비밀번호 폼, 오류 메시지(`text-red`) 표시
+- 하단 "서비스로 돌아가기" 링크
+
+**`features/Admin/Login/hooks/useAdminLogin.ts`** (신규)
+
+- `/oauth/login` 호출 → JWT 저장 → `/admin/dashboard` 이동
+- 401: 이메일/비밀번호 오류 메시지, 그 외: 일반 오류 메시지
+
+**`pages/Admin/Dashboard/ui/AdminDashboardPage.tsx`** (신규)
+
+- 헤더: 로고·브랜드명·유저 프로필(역할명 포함)
+- 사이드바: 11개 어드민 메뉴 내비게이션
+- 타이틀 영역: 오늘/이번 주 세그먼트 토글, 새로고침, 서비스로 이동 버튼
+- 처리할 일: 미처리 신고·스케줄러 실패 카드
+- 통계 카드 4종: 예매 건수·매출·신규 가입·좌석 변경
+- 시간대별 예매 차트(Recharts BarChart), 현재 시간 강조
+- 인기 노선·인기 목적지 순위 목록
+
+**`features/Admin/Dashboard/api/dashboardAdminApi.ts`** (신규)
+
+- `GET /api/admin/dashboard/summary` (from/to 쿼리)
+- `GET /api/admin/dashboard/reservations/hourly`
+
+**`features/Admin/Dashboard/hooks/useDashboard.ts`** (신규)
+
+- 오늘/이번 주 기간 계산(KST 기준), summary·hourly 병렬 조회
+- `changePeriod`, `refetch` 반환
+
+**`pages/Admin/Scheduler/ui/AdminSchedulerPage.tsx`** (신규)
+
+- 잡 목록 탭·실행 로그 탭 전환
+- RUNNING/PENDING 잡 존재 시 5초 폴링
+
+**`features/Admin/Scheduler/`** (신규)
+
+- `schedulerAdminApi.ts`: 잡 목록·로그·수동 실행 API
+- `useSchedulerJobs.ts`: 잡 목록 조회, 활성 잡 5초 폴링
+- `useSchedulerRuns.ts`: 실행 로그 조회
+- `JobListTab.tsx`, `RunLogsTab.tsx`, `RunJobModal.tsx`: 탭·모달 UI
+
+**`widgets/Admin/Guard/ui/AdminGuard.tsx`** (신규)
+
+- 미로그인 → `/admin/login` 리다이렉트
+- `adminRole` 없음 → `/admin/access-denied` 리다이렉트
+
+**`pages/Admin/AccessDenied/ui/AdminAccessDeniedPage.tsx`** (신규)
+
+- 권한 없음 안내 페이지
+
+**`app/routes.tsx`** (수정)
+
+- 어드민 라우트 등록: `/admin/login`, `/admin/access-denied`, `/admin/dashboard`, `/admin/scheduler`
+- `AdminGuard`로 dashboard·scheduler 보호
+
+**`features/Auth/hooks/useCurrentUser.ts`** (수정)
+
+- `isPending` 반환값 추가 (캐시 복원·최초 fetch 중 true)
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `pages/Admin/Login/ui/AdminLoginPage.tsx` | 신규 |
+| `features/Admin/Login/hooks/useAdminLogin.ts` | 신규 |
+| `pages/Admin/Dashboard/ui/AdminDashboardPage.tsx` | 신규 |
+| `features/Admin/Dashboard/api/dashboardAdminApi.ts` | 신규 |
+| `features/Admin/Dashboard/hooks/useDashboard.ts` | 신규 |
+| `pages/Admin/Scheduler/ui/AdminSchedulerPage.tsx` | 신규 |
+| `features/Admin/Scheduler/api/schedulerAdminApi.ts` | 신규 |
+| `features/Admin/Scheduler/hooks/useSchedulerJobs.ts` | 신규 |
+| `features/Admin/Scheduler/hooks/useSchedulerRuns.ts` | 신규 |
+| `features/Admin/Scheduler/ui/JobListTab.tsx` | 신규 |
+| `features/Admin/Scheduler/ui/RunLogsTab.tsx` | 신규 |
+| `features/Admin/Scheduler/ui/RunJobModal.tsx` | 신규 |
+| `widgets/Admin/Guard/ui/AdminGuard.tsx` | 신규 |
+| `pages/Admin/AccessDenied/ui/AdminAccessDeniedPage.tsx` | 신규 |
+| `app/routes.tsx` | 어드민 라우트 등록 및 Guard 적용 |
+| `features/Auth/hooks/useCurrentUser.ts` | isPending 반환값 추가 |
+
+---
+
 ## 2026-11-17 — DashboardService 단위 테스트 추가
 
 ### 작업 개요

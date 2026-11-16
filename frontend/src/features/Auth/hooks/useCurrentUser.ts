@@ -31,7 +31,7 @@ export type UserProfile = {
 export const useCurrentUser = () => {
   const token = localStorage.getItem(ACCESS_TOKEN_KEY);
 
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading, isPending } = useQuery({
     queryKey: ['currentUser'],
     queryFn: async () => {
       const { data } = await backendClient.get<UserProfile>('/api/users/me');
@@ -44,6 +44,8 @@ export const useCurrentUser = () => {
   return {
     user: token ? (user ?? null) : null,
     isLoading: !!token && isLoading,
+    // 캐시 복원 중(paused)이나 최초 fetch 중(fetching)에 모두 true
+    isPending: !!token && isPending,
     isLoggedIn: !!token,
   };
 };

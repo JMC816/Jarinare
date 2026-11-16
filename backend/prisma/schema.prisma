@@ -519,10 +519,11 @@ model MembershipTier {
 }
 
 model SchedulerJobSetting {
-  name      String   @id @db.VarChar(64)
-  isActive  Boolean  @default(true)
-  updatedBy BigInt?
-  updatedAt DateTime @updatedAt
+  name          String    @id @db.VarChar(64)
+  isActive      Boolean   @default(true)
+  lastSuccessAt DateTime?
+  updatedBy     BigInt?
+  updatedAt     DateTime  @updatedAt
 
   @@map("scheduler_job_settings")
 }

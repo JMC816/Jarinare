@@ -2798,6 +2798,7 @@ export type MembershipTierScalarFieldEnum = (typeof MembershipTierScalarFieldEnu
 export const SchedulerJobSettingScalarFieldEnum = {
   name: 'name',
   isActive: 'isActive',
+  lastSuccessAt: 'lastSuccessAt',
   updatedBy: 'updatedBy',
   updatedAt: 'updatedAt'
 } as const

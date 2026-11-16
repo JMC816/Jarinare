@@ -1,5 +1,53 @@
 # WORKLOG
 
+## 2026-11-16 — 분 단위 잡 staleJobs 오탐 수정
+
+### 작업 개요
+
+`seat-change-expire`, `seat-hold-expire` 두 잡이 실패할 때만 `schedulerRunLog`에 기록하는 구조여서 SUCCESS 행이 존재하지 않았다. 대시보드 stale 검사가 "한 번도 성공한 적 없음"으로 판단해 항상 `staleJobs`에 포함됐다. 매분 성공 로그를 쌓는 건 하루 2,880행이므로 `scheduler_job_settings`에 `lastSuccessAt` 컬럼을 추가해 별도 보관하는 방식으로 해결했다.
+
+---
+
+### 백엔드
+
+**마이그레이션 `20261116000001_add_last_success_at_to_job_settings`**
+
+- `scheduler_job_settings`에 `lastSuccessAt DATETIME(3) NULL` 컬럼 추가
+
+**`seat-hold.service.ts` / `seat-change.service.ts`**
+
+- 성공 시 `schedulerJobSetting.upsert`로 `lastSuccessAt` 갱신 (로그 행 미생성)
+- 실패 시 기존과 동일하게 `schedulerRunLog`에 FAILED 기록
+
+**`dashboard.service.ts`**
+
+- `STALE_THRESHOLDS` 단일 맵을 두 맵으로 분리
+  - `LOG_STALE_THRESHOLDS`: station-sync, train-time-sync, notification-rotate, notification-drop → `schedulerRunLog` 조회
+  - `SETTINGS_STALE_THRESHOLDS`: seat-change-expire, seat-hold-expire → `scheduler_job_settings.lastSuccessAt` 조회
+- `Promise.all`에 `schedulerJobSetting.findMany` 쿼리 추가
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `prisma/schema.prisma` | SchedulerJobSetting에 lastSuccessAt 필드 추가 |
+| `prisma/migrations/20261116000001_.../migration.sql` | 신규 — lastSuccessAt 컬럼 추가 |
+| `seat/seat-hold.service.ts` | 성공 시 lastSuccessAt upsert |
+| `seat/seat-change.service.ts` | 성공 시 lastSuccessAt upsert |
+| `dashboard/dashboard.service.ts` | stale 검사 소스 분리 |
+
+---
+
+### 현재 상태
+
+- 마이그레이션 적용 완료
+- `staleJobs`에서 seat-hold-expire, seat-change-expire 제거 확인
+- tsc 오류 없음
+
+---
+
 ## 2026-11-16 — admin_roles 기본 데이터 마이그레이션 · board:manage 권한명 통일
 
 ### 작업 개요

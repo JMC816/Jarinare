@@ -551,6 +551,11 @@ export class SeatChangeService {
   private async runExpireStaleCron(): Promise<void> {
     try {
       await this.expireStale();
+      await this.prisma.schedulerJobSetting.upsert({
+        where: { name: "seat-change-expire" },
+        update: { lastSuccessAt: new Date() },
+        create: { name: "seat-change-expire", lastSuccessAt: new Date() },
+      });
     } catch (e) {
       const ymd = new Date()
         .toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })

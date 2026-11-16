@@ -37,6 +37,7 @@ export type SchedulerJobSettingSumAggregateOutputType = {
 export type SchedulerJobSettingMinAggregateOutputType = {
   name: string | null
   isActive: boolean | null
+  lastSuccessAt: Date | null
   updatedBy: bigint | null
   updatedAt: Date | null
 }
@@ -44,6 +45,7 @@ export type SchedulerJobSettingMinAggregateOutputType = {
 export type SchedulerJobSettingMaxAggregateOutputType = {
   name: string | null
   isActive: boolean | null
+  lastSuccessAt: Date | null
   updatedBy: bigint | null
   updatedAt: Date | null
 }
@@ -51,6 +53,7 @@ export type SchedulerJobSettingMaxAggregateOutputType = {
 export type SchedulerJobSettingCountAggregateOutputType = {
   name: number
   isActive: number
+  lastSuccessAt: number
   updatedBy: number
   updatedAt: number
   _all: number
@@ -68,6 +71,7 @@ export type SchedulerJobSettingSumAggregateInputType = {
 export type SchedulerJobSettingMinAggregateInputType = {
   name?: true
   isActive?: true
+  lastSuccessAt?: true
   updatedBy?: true
   updatedAt?: true
 }
@@ -75,6 +79,7 @@ export type SchedulerJobSettingMinAggregateInputType = {
 export type SchedulerJobSettingMaxAggregateInputType = {
   name?: true
   isActive?: true
+  lastSuccessAt?: true
   updatedBy?: true
   updatedAt?: true
 }
@@ -82,6 +87,7 @@ export type SchedulerJobSettingMaxAggregateInputType = {
 export type SchedulerJobSettingCountAggregateInputType = {
   name?: true
   isActive?: true
+  lastSuccessAt?: true
   updatedBy?: true
   updatedAt?: true
   _all?: true
@@ -176,6 +182,7 @@ export type SchedulerJobSettingGroupByArgs<ExtArgs extends runtime.Types.Extensi
 export type SchedulerJobSettingGroupByOutputType = {
   name: string
   isActive: boolean
+  lastSuccessAt: Date | null
   updatedBy: bigint | null
   updatedAt: Date
   _count: SchedulerJobSettingCountAggregateOutputType | null
@@ -206,6 +213,7 @@ export type SchedulerJobSettingWhereInput = {
   NOT?: Prisma.SchedulerJobSettingWhereInput | Prisma.SchedulerJobSettingWhereInput[]
   name?: Prisma.StringFilter<"SchedulerJobSetting"> | string
   isActive?: Prisma.BoolFilter<"SchedulerJobSetting"> | boolean
+  lastSuccessAt?: Prisma.DateTimeNullableFilter<"SchedulerJobSetting"> | Date | string | null
   updatedBy?: Prisma.BigIntNullableFilter<"SchedulerJobSetting"> | bigint | number | null
   updatedAt?: Prisma.DateTimeFilter<"SchedulerJobSetting"> | Date | string
 }
@@ -213,6 +221,7 @@ export type SchedulerJobSettingWhereInput = {
 export type SchedulerJobSettingOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  lastSuccessAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _relevance?: Prisma.SchedulerJobSettingOrderByRelevanceInput
@@ -224,6 +233,7 @@ export type SchedulerJobSettingWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.SchedulerJobSettingWhereInput[]
   NOT?: Prisma.SchedulerJobSettingWhereInput | Prisma.SchedulerJobSettingWhereInput[]
   isActive?: Prisma.BoolFilter<"SchedulerJobSetting"> | boolean
+  lastSuccessAt?: Prisma.DateTimeNullableFilter<"SchedulerJobSetting"> | Date | string | null
   updatedBy?: Prisma.BigIntNullableFilter<"SchedulerJobSetting"> | bigint | number | null
   updatedAt?: Prisma.DateTimeFilter<"SchedulerJobSetting"> | Date | string
 }, "name">
@@ -231,6 +241,7 @@ export type SchedulerJobSettingWhereUniqueInput = Prisma.AtLeast<{
 export type SchedulerJobSettingOrderByWithAggregationInput = {
   name?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  lastSuccessAt?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SchedulerJobSettingCountOrderByAggregateInput
@@ -246,6 +257,7 @@ export type SchedulerJobSettingScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SchedulerJobSettingScalarWhereWithAggregatesInput | Prisma.SchedulerJobSettingScalarWhereWithAggregatesInput[]
   name?: Prisma.StringWithAggregatesFilter<"SchedulerJobSetting"> | string
   isActive?: Prisma.BoolWithAggregatesFilter<"SchedulerJobSetting"> | boolean
+  lastSuccessAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SchedulerJobSetting"> | Date | string | null
   updatedBy?: Prisma.BigIntNullableWithAggregatesFilter<"SchedulerJobSetting"> | bigint | number | null
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SchedulerJobSetting"> | Date | string
 }
@@ -253,6 +265,7 @@ export type SchedulerJobSettingScalarWhereWithAggregatesInput = {
 export type SchedulerJobSettingCreateInput = {
   name: string
   isActive?: boolean
+  lastSuccessAt?: Date | string | null
   updatedBy?: bigint | number | null
   updatedAt?: Date | string
 }
@@ -260,6 +273,7 @@ export type SchedulerJobSettingCreateInput = {
 export type SchedulerJobSettingUncheckedCreateInput = {
   name: string
   isActive?: boolean
+  lastSuccessAt?: Date | string | null
   updatedBy?: bigint | number | null
   updatedAt?: Date | string
 }
@@ -267,6 +281,7 @@ export type SchedulerJobSettingUncheckedCreateInput = {
 export type SchedulerJobSettingUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSuccessAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedBy?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -274,6 +289,7 @@ export type SchedulerJobSettingUpdateInput = {
 export type SchedulerJobSettingUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSuccessAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedBy?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -281,6 +297,7 @@ export type SchedulerJobSettingUncheckedUpdateInput = {
 export type SchedulerJobSettingCreateManyInput = {
   name: string
   isActive?: boolean
+  lastSuccessAt?: Date | string | null
   updatedBy?: bigint | number | null
   updatedAt?: Date | string
 }
@@ -288,6 +305,7 @@ export type SchedulerJobSettingCreateManyInput = {
 export type SchedulerJobSettingUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSuccessAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedBy?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -295,6 +313,7 @@ export type SchedulerJobSettingUpdateManyMutationInput = {
 export type SchedulerJobSettingUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastSuccessAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   updatedBy?: Prisma.NullableBigIntFieldUpdateOperationsInput | bigint | number | null
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -308,6 +327,7 @@ export type SchedulerJobSettingOrderByRelevanceInput = {
 export type SchedulerJobSettingCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  lastSuccessAt?: Prisma.SortOrder
   updatedBy?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -319,6 +339,7 @@ export type SchedulerJobSettingAvgOrderByAggregateInput = {
 export type SchedulerJobSettingMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  lastSuccessAt?: Prisma.SortOrder
   updatedBy?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -326,6 +347,7 @@ export type SchedulerJobSettingMaxOrderByAggregateInput = {
 export type SchedulerJobSettingMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  lastSuccessAt?: Prisma.SortOrder
   updatedBy?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -339,6 +361,7 @@ export type SchedulerJobSettingSumOrderByAggregateInput = {
 export type SchedulerJobSettingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   name?: boolean
   isActive?: boolean
+  lastSuccessAt?: boolean
   updatedBy?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["schedulerJobSetting"]>
@@ -348,11 +371,12 @@ export type SchedulerJobSettingSelect<ExtArgs extends runtime.Types.Extensions.I
 export type SchedulerJobSettingSelectScalar = {
   name?: boolean
   isActive?: boolean
+  lastSuccessAt?: boolean
   updatedBy?: boolean
   updatedAt?: boolean
 }
 
-export type SchedulerJobSettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"name" | "isActive" | "updatedBy" | "updatedAt", ExtArgs["result"]["schedulerJobSetting"]>
+export type SchedulerJobSettingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"name" | "isActive" | "lastSuccessAt" | "updatedBy" | "updatedAt", ExtArgs["result"]["schedulerJobSetting"]>
 
 export type $SchedulerJobSettingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "SchedulerJobSetting"
@@ -360,6 +384,7 @@ export type $SchedulerJobSettingPayload<ExtArgs extends runtime.Types.Extensions
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     name: string
     isActive: boolean
+    lastSuccessAt: Date | null
     updatedBy: bigint | null
     updatedAt: Date
   }, ExtArgs["result"]["schedulerJobSetting"]>
@@ -733,6 +758,7 @@ export interface Prisma__SchedulerJobSettingClient<T, Null = never, ExtArgs exte
 export interface SchedulerJobSettingFieldRefs {
   readonly name: Prisma.FieldRef<"SchedulerJobSetting", 'String'>
   readonly isActive: Prisma.FieldRef<"SchedulerJobSetting", 'Boolean'>
+  readonly lastSuccessAt: Prisma.FieldRef<"SchedulerJobSetting", 'DateTime'>
   readonly updatedBy: Prisma.FieldRef<"SchedulerJobSetting", 'BigInt'>
   readonly updatedAt: Prisma.FieldRef<"SchedulerJobSetting", 'DateTime'>
 }

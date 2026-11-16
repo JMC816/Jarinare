@@ -232,6 +232,11 @@ export class SeatHoldService {
   private async runPurgeExpiredCron(): Promise<void> {
     try {
       await this.purgeExpired();
+      await this.prisma.schedulerJobSetting.upsert({
+        where: { name: "seat-hold-expire" },
+        update: { lastSuccessAt: new Date() },
+        create: { name: "seat-hold-expire", lastSuccessAt: new Date() },
+      });
     } catch (e) {
       const ymd = new Date()
         .toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" })

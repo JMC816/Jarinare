@@ -83,10 +83,10 @@ export class DashboardService {
         },
       }),
 
-      // 좌석 변경 요청 수·수락률
+      // 좌석 변경 요청 수·수락률 (PENDING 미결 제외 — 분모는 처리 완료 건만)
       this.prisma.seatChangeRequest.groupBy({
         by: ["status"],
-        where: { createdAt: { gte: start, lte: end } },
+        where: { createdAt: { gte: start, lte: end }, status: { not: "PENDING" } },
         _count: { id: true },
       }),
 

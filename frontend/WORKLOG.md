@@ -1,5 +1,36 @@
 # WORKLOG
 
+## 2026-11-17 — 대시보드 좌석 변경 수락률 분모 수정
+
+### 작업 개요
+
+좌석 변경 수락률 분모에 미결 상태(PENDING)가 포함돼 수락률이 낮게 집계됐다. 처리 완료 건(ACCEPTED·REJECTED·CANCELED·EXPIRED)만 분모에 포함하도록 수정했다.
+
+---
+
+### 백엔드
+
+**`dashboard/dashboard.service.ts`**
+
+- `seatChangeRequest.groupBy` 조건에 `status: { not: "PENDING" }` 추가
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboard/dashboard.service.ts` | 수락률 분모에서 PENDING 제외 |
+
+---
+
+### 현재 상태
+
+- tsc 오류 없음
+- SQL 검증 완료 (total 1, acceptRate 100)
+
+---
+
 ## 2026-11-17 — 대시보드 취소율 계산 기준 수정
 
 ### 작업 개요

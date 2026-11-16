@@ -11,7 +11,7 @@ import { useHasPermission } from '@/features/Auth/hooks/useHasPermission';
 
 const EventListPage = () => {
   const navigate = useNavigate();
-  const isAdmin = useHasPermission('board:create');
+  const isAdmin = useHasPermission('board:manage');
 
   return (
     <>

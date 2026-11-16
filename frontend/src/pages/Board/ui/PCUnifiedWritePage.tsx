@@ -20,7 +20,7 @@ const CATEGORY_LABEL: Record<WriteCategory, string> = {
 
 const PCUnifiedWritePage = () => {
   const { isLoading } = useCurrentUser();
-  const isAdmin = useHasPermission('board:create');
+  const isAdmin = useHasPermission('board:manage');
   const [category, setCategory] = useState<WriteCategory>('board');
 
   const board = useBaordHandler();

@@ -10,7 +10,7 @@ export type EventSortOrder = 'newest' | 'oldest';
 export const usePCEventListPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<EventSortOrder>('newest');
-  const isAdmin = useHasPermission('board:create');
+  const isAdmin = useHasPermission('board:manage');
 
   return { searchQuery, setSearchQuery, sortOrder, setSortOrder, isAdmin };
 };

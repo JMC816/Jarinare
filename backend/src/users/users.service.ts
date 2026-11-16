@@ -175,7 +175,7 @@ export class UsersService {
     const permissions = await this.rolePermissions.getPermissions(
       adminRole?.code ?? user.role,
     );
-    return this.toProfile(user, permissions);
+    return this.toProfile({ ...user, adminRole }, permissions);
   }
 
   private toProfile(

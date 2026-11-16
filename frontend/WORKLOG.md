@@ -1,5 +1,64 @@
 # WORKLOG
 
+## 2026-11-16 — admin_roles 기본 데이터 마이그레이션 · board:manage 권한명 통일
+
+### 작업 개요
+
+`admin_schema_v2` 마이그레이션이 `admin_roles` 테이블을 DROP 후 재생성하면서 INSERT가 없어 테이블이 비어 있었다. 이 상태에서 `@Permissions` 가 붙은 API가 전부 403이 되고, 역할 생성 API 자체도 `admin:manage` 권한이 필요해 복구 불가 상태였다. 새 마이그레이션으로 기본 역할 4개를 주입하고, 기존 어드민 계정을 SUPER_ADMIN 역할에 연결했다. 아울러 프론트가 구 권한명 `board:create`를 그대로 사용하던 불일치도 `board:manage`로 통일했다.
+
+---
+
+### 백엔드
+
+**마이그레이션 `20261116000000_seed_admin_roles`**
+
+- SUPER_ADMIN(15), OPERATOR(10), CS(5), MARKETER(5) INSERT — 새 권한명 기준
+- 기존 CS 권한 3개 → 5개로 보정 (`dashboard:read`, `reservation:read` 누락이었음, `ON DUPLICATE KEY UPDATE`로 처리)
+- `role = 'super_admin'` 기존 어드민 계정의 `adminRoleId` 연결
+
+**`users.service.ts` — 로그인 응답 `adminRole` null 버그 수정**
+
+- `toProfilePublic(user)`에서 `adminRole`을 별도 조회 후 `toProfile(user, permissions)` 호출 시 `user`에 붙이지 않아 로그인 응답의 `adminRole` 항상 null
+- `toProfile({ ...user, adminRole }, permissions)` 로 수정
+
+**테스트 spec 파일 권한명 · role 코드 갱신**
+
+- `permissions.guard.spec.ts` — `TEST_PERMISSIONS` 키를 대문자(`CS`, `SUPER_ADMIN` 등)로, 권한명을 새 이름으로 변경. `AuthUser` mock에 `adminRoleCode` 추가
+- `role-permissions.service.spec.ts` — `seedRoles()` mock 데이터 동일하게 갱신
+
+---
+
+### 프론트엔드
+
+- `board:create` → `board:manage` 6개 파일 일괄 변경
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `prisma/migrations/20261116000000_seed_admin_roles/migration.sql` | 신규 — 기본 역할 4개 INSERT + 어드민 계정 연결 |
+| `users/users.service.ts` | toProfilePublic adminRole null 버그 수정 |
+| `auth/guards/permissions.guard.spec.ts` | 권한명·role 코드 갱신 |
+| `role-permissions/role-permissions.service.spec.ts` | 권한명·role 코드 갱신 |
+| `pages/Board/ui/NoticeWritePage.tsx` | board:create → board:manage |
+| `pages/Board/ui/EventWritePage.tsx` | board:create → board:manage |
+| `pages/Board/ui/PCUnifiedWritePage.tsx` | board:create → board:manage |
+| `pages/Board/ui/EventListPage.tsx` | board:create → board:manage |
+| `pages/Board/hooks/usePCNoticeListPage.ts` | board:create → board:manage |
+| `pages/Board/hooks/usePCEventListPage.ts` | board:create → board:manage |
+
+---
+
+### 현재 상태
+
+- 마이그레이션 적용 완료 (SUPER_ADMIN 15권한, OPERATOR 10권한, CS 5권한, MARKETER 5권한)
+- 로그인 응답 `adminRole` 정상 반환 확인
+- 프론트 빌드 미확인 (board:manage 변경 후)
+
+---
+
 ## 2026-11-14 — 어드민 역할 변경 API 경로 스펙 통일
 
 ### 작업 개요

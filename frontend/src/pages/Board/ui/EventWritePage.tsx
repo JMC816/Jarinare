@@ -14,7 +14,7 @@ import { useHasPermission } from '@/features/Auth/hooks/useHasPermission';
 const EventWirtePage = () => {
   const navigate = useNavigate();
   const { isLoading } = useCurrentUser();
-  const isAdmin = useHasPermission('board:create');
+  const isAdmin = useHasPermission('board:manage');
   const event = useEventHandler({ navigateTo: '/board/eventlist' });
   const { isEditMode } = event;
 

@@ -1,5 +1,44 @@
 # WORKLOG
 
+## 2026-11-17 — 대시보드 날짜 파라미터 검증 추가
+
+### 작업 개요
+
+`from`/`to` 쿼리 파라미터가 8자리 숫자 형식만 검증하고 실제 날짜 유효성을 확인하지 않아 `20261399` 같은 값이 `Invalid Date`로 파싱돼 500이 발생했다. 또한 `from > to`나 조회 기간이 매우 길 경우 `getDailyReservations`가 전체 행을 메모리에 로드하는 문제도 있었다.
+
+---
+
+### 백엔드
+
+**`dashboard/dto/dashboard.dto.ts`**
+
+- `IsValidDate()` 커스텀 데코레이터 추가 — 8자리 형식 통과 후 실제 달력 날짜인지 검증 (`20261399`, `20260229` 등 차단)
+
+**`dashboard/dashboard.service.ts`**
+
+- `toDateRange`에 `maxDays` 파라미터 추가
+- `start > end` → `400 "from 은 to 보다 클 수 없습니다."`
+- 기간 초과 → `400 "조회 기간은 최대 N일입니다."`
+- `getSummary`: 최대 92일
+- `getDailyReservations`: 최대 31일
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboard/dto/dashboard.dto.ts` | IsValidDate 커스텀 데코레이터 추가 |
+| `dashboard/dashboard.service.ts` | from>to 체크, 기간 상한 (summary 92일, 시간대별 31일) |
+
+---
+
+### 현재 상태
+
+- tsc 오류 없음
+
+---
+
 ## 2026-11-17 — 대시보드 좌석 변경 수락률 분모 수정
 
 ### 작업 개요

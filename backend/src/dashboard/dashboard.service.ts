@@ -1,17 +1,26 @@
 // @role: features/dashboard
 // @rule: 어드민 대시보드 집계 쿼리만 담당
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { ACTIVE } from "../seat/seat.constants";
 import { TravelStatService } from "../travel-stat/travel-stat.service";
 
-function toDateRange(from?: string, to?: string): { start: Date; end: Date } {
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+function toDateRange(from: string | undefined, to: string | undefined, maxDays: number): { start: Date; end: Date } {
   const kstNow = new Date(Date.now() + 9 * 60 * 60 * 1000);
   const todayStr = kstNow.toISOString().slice(0, 10).replace(/-/g, "");
   const f = from ?? todayStr;
   const t = to ?? todayStr;
   const start = new Date(`${f.slice(0, 4)}-${f.slice(4, 6)}-${f.slice(6, 8)}T00:00:00+09:00`);
   const end = new Date(`${t.slice(0, 4)}-${t.slice(4, 6)}-${t.slice(6, 8)}T23:59:59+09:00`);
+  if (start > end) {
+    throw new BadRequestException("from 은 to 보다 클 수 없습니다.");
+  }
+  const diffDays = Math.ceil((end.getTime() - start.getTime()) / MS_PER_DAY);
+  if (diffDays > maxDays) {
+    throw new BadRequestException(`조회 기간은 최대 ${maxDays}일입니다.`);
+  }
   return { start, end };
 }
 
@@ -23,7 +32,7 @@ export class DashboardService {
   ) {}
 
   async getSummary(from?: string, to?: string) {
-    const { start, end } = toDateRange(from, to);
+    const { start, end } = toDateRange(from, to, 92);
     const now = new Date();
     const h24ago = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
@@ -192,7 +201,7 @@ export class DashboardService {
   }
 
   async getDailyReservations(from?: string, to?: string) {
-    const { start, end } = toDateRange(from, to);
+    const { start, end } = toDateRange(from, to, 31);
 
     const rows = await this.prisma.orderHistory.findMany({
       where: {

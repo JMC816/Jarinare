@@ -1,5 +1,38 @@
 # WORKLOG
 
+## 2026-11-17 — 대시보드 취소율 계산 기준 수정
+
+### 작업 개요
+
+취소율 계산 기준이 "기간 내 취소된 건(예매일 무관)"이어서 해당 기간에 예매한 주문과 무관한 취소 건이 섞였다. "기간 내 생성된 예매 중 취소된 비율"로 변경했다. 재검토에서 분모 이중 계산 버그도 발견해 함께 수정했다.
+
+---
+
+### 백엔드
+
+**`dashboard/dashboard.service.ts`**
+
+- 취소 건 조회 조건: `canceledAt` 기간 내 → `createdAt` 기간 내 + `canceledAt > ACTIVE`
+- `cancelRate` 분모: `totalReservations + cancelStats` → `totalReservations`
+  - `order_histories`는 취소 후에도 행이 남아 있어 `totalReservations`에 이미 포함됨
+  - `cancelStats`를 더하면 이중 계산이었음
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboard/dashboard.service.ts` | 취소 건 기준 변경, cancelRate 분모 수정 |
+
+---
+
+### 현재 상태
+
+- tsc 오류 없음
+
+---
+
 ## 2026-11-17 — 대시보드 예매 수 집계 기준 통일
 
 ### 작업 개요

@@ -61,10 +61,10 @@ export class DashboardService {
         _sum: { finalPrice: true },
       }),
 
-      // 기간 내 취소 주문 수 (orderId distinct — 주문 단위로 totalReservations와 기준 통일)
+      // 기간 내 생성된 예매 중 취소된 주문 수 (orderId distinct)
       this.prisma.reservation
         .findMany({
-          where: { canceledAt: { gt: ACTIVE, gte: start, lte: end } },
+          where: { createdAt: { gte: start, lte: end }, canceledAt: { gt: ACTIVE } },
           select: { orderId: true },
           distinct: ["orderId"],
         })
@@ -132,9 +132,8 @@ export class DashboardService {
 
     const totalReservations = reservationStats._count.id;
     const totalRevenue = reservationStats._sum.finalPrice ?? 0;
-    const totalForCancel = totalReservations + cancelStats;
-    const cancelRate = totalForCancel > 0
-      ? Math.round((cancelStats / totalForCancel) * 100 * 10) / 10
+    const cancelRate = totalReservations > 0
+      ? Math.round((cancelStats / totalReservations) * 100 * 10) / 10
       : 0;
 
     const logSuccessMap = new Map(lastSuccessLogs.map((l) => [l.jobName, l.endedAt]));

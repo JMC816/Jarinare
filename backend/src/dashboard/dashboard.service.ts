@@ -200,7 +200,7 @@ export class DashboardService {
     };
   }
 
-  async getDailyReservations(from?: string, to?: string) {
+  async getHourlyReservations(from?: string, to?: string) {
     const { start, end } = toDateRange(from, to, 31);
 
     const rows = await this.prisma.orderHistory.findMany({

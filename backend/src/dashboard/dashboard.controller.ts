@@ -19,10 +19,10 @@ export class DashboardController {
     return this.dashboard.getSummary(query.from, query.to);
   }
 
-  @Get("reservations/daily")
+  @Get("reservations/hourly")
   @Permissions("dashboard:read")
   @ApiOperation({ summary: "시간대별 예매 추이" })
-  getDailyReservations(@Query() query: DashboardQueryDto) {
-    return this.dashboard.getDailyReservations(query.from, query.to);
+  getHourlyReservations(@Query() query: DashboardQueryDto) {
+    return this.dashboard.getHourlyReservations(query.from, query.to);
   }
 }

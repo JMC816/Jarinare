@@ -1,5 +1,41 @@
 # WORKLOG
 
+## 2026-11-17 — 대시보드 시간대별 예매 엔드포인트 이름 수정
+
+### 작업 개요
+
+`reservations/daily`는 일별 데이터가 아니라 시간대별(0~23시) 데이터를 반환하므로 이름이 맞지 않았다. 경로와 메서드명을 `hourly`로 변경했다.
+
+---
+
+### 백엔드
+
+**`dashboard/dashboard.controller.ts`**
+
+- `@Get("reservations/daily")` → `@Get("reservations/hourly")`
+- `getDailyReservations` → `getHourlyReservations`
+
+**`dashboard/dashboard.service.ts`**
+
+- `getDailyReservations` → `getHourlyReservations`
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboard/dashboard.controller.ts` | 경로·메서드명 hourly로 변경 |
+| `dashboard/dashboard.service.ts` | 메서드명 hourly로 변경 |
+
+---
+
+### 현재 상태
+
+- tsc 오류 없음
+
+---
+
 ## 2026-11-17 — 대시보드 날짜 파라미터 검증 추가
 
 ### 작업 개요

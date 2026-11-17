@@ -99,10 +99,10 @@ export class DashboardService {
         },
       }),
 
-      // 좌석 변경 요청 수·수락률 (PENDING 미결 제외 — 분모는 처리 완료 건만)
+      // 좌석 변경 요청 수·수락률 (전체 조회 — 요청 수는 PENDING 포함, 수락률 분모는 처리 완료 건만)
       this.prisma.seatChangeRequest.groupBy({
         by: ["status"],
-        where: { createdAt: { gte: start, lte: end }, status: { not: "PENDING" } },
+        where: { createdAt: { gte: start, lte: end } },
         _count: { id: true },
       }),
 
@@ -170,8 +170,10 @@ export class DashboardService {
 
     const changeTotal = seatChangeStats.reduce((s, g) => s + g._count.id, 0);
     const changeAccepted = seatChangeStats.find((g) => g.status === "ACCEPTED")?._count.id ?? 0;
-    const changeAcceptRate = changeTotal > 0
-      ? Math.round((changeAccepted / changeTotal) * 100 * 10) / 10
+    const changeRejected = seatChangeStats.find((g) => g.status === "REJECTED")?._count.id ?? 0;
+    const changeDone = changeAccepted + changeRejected;
+    const changeAcceptRate = changeDone > 0
+      ? Math.round((changeAccepted / changeDone) * 100 * 10) / 10
       : 0;
 
     return {

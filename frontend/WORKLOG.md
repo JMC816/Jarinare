@@ -1,5 +1,31 @@
 # WORKLOG
 
+## 2026-11-18 — 좌석 변경 요청 수 집계 버그 수정
+
+### 작업 개요
+
+대시보드 좌석 변경 요청 통계에서 요청 수 집계 시 PENDING이 제외되던 문제를 수정했다. 요청 수는 전체 status 포함, 수락률 분모는 처리 완료 건(ACCEPTED + REJECTED)만 사용하도록 분리했다.
+
+---
+
+### 백엔드
+
+**`dashboard/dashboard.service.ts`** (수정)
+- 쿼리에서 `status: { not: "PENDING" }` 필터 제거 → 전체 status 조회
+- `changeTotal`: 모든 status 합계 (PENDING·CANCELED·EXPIRED 포함)
+- `changeDone`: ACCEPTED + REJECTED만 (수락률 분모)
+- 수락률: `ACCEPTED / changeDone × 100`
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboard/dashboard.service.ts` | 요청 수 PENDING 포함, 수락률 분모 처리 완료 건만 |
+
+---
+
 ## 2026-11-17 — 정지 계정 로그인 차단 (전면 적용)
 
 ### 작업 개요

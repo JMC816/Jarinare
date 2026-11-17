@@ -217,11 +217,8 @@ const AdminDashboardPage = () => {
           <div className="grid grid-cols-2 gap-4">
             {/* 인기 노선 TOP 5 */}
             <div className="rounded-xl bg-white px-5 py-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-4">
                 <p className="text-base font-semibold text-gray-700">인기 노선 TOP 5</p>
-                <span className="rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-500">
-                  API 추가 예정
-                </span>
               </div>
               {(summary?.popularRoutes?.length ?? 0) === 0 ? (
                 <p className="text-sm text-gray-300">준비 중</p>

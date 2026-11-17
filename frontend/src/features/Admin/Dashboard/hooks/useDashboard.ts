@@ -36,7 +36,7 @@ export const useDashboard = () => {
     setIsLoading(true);
     try {
       const { from, to } = getDateRange(p);
-      const [s, h] = await Promise.all([getDashboardSummaryApi(from, to), getDashboardHourlyApi()]);
+      const [s, h] = await Promise.all([getDashboardSummaryApi(from, to), getDashboardHourlyApi(from, to)]);
       setSummary(s);
       setHourly(h);
       setLastUpdated(new Date());

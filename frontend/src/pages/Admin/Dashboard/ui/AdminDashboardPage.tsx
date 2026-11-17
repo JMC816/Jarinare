@@ -111,9 +111,9 @@ const AdminDashboardPage = () => {
           </div>
         </section>
 
-        {/* 오늘의 숫자 */}
+        {/* 기간별 숫자 */}
         <section className="mb-5">
-          <h2 className="mb-3 text-base font-bold text-gray-700">오늘의 숫자</h2>
+          <h2 className="mb-3 text-base font-bold text-gray-700">{period === 'today' ? '오늘의 숫자' : '이번 주 숫자'}</h2>
           <div className="grid grid-cols-5 gap-4">
             {[
               { label: '예매 수',     value: `${summary?.reservations.count ?? 0}건` },
@@ -138,7 +138,7 @@ const AdminDashboardPage = () => {
             <div className="col-span-2 rounded-xl bg-white px-5 py-4 shadow-sm">
               <div className="mb-3 flex items-center justify-between">
                 <p className="text-base font-semibold text-gray-700">시간대별 예매</p>
-                <span className="text-tiny text-gray-500">0시 ~ 23시</span>
+                <span className="text-tiny text-gray-500">{period === 'today' ? '오늘 0시 ~ 23시' : '이번 주 합계'}</span>
               </div>
               <ResponsiveContainer width="100%" height={160}>
                 <BarChart data={hourlyData} margin={{ top: 0, right: 0, bottom: 0, left: -20 }}>

@@ -1,5 +1,37 @@
 # WORKLOG
 
+## 2026-11-18 — 대시보드 기간 표시 버그 수정
+
+### 작업 개요
+
+"이번 주" 선택 시 제목이 "오늘의 숫자"로 고정되고, 시간대별 차트가 항상 오늘 데이터만 조회하던 문제를 수정했다.
+
+---
+
+### 프론트엔드
+
+**`features/Admin/Dashboard/api/dashboardAdminApi.ts`** (수정)
+- `getDashboardHourlyApi`에 `from`, `to` 파라미터 추가
+
+**`features/Admin/Dashboard/hooks/useDashboard.ts`** (수정)
+- hourly API 호출 시 `from`, `to` 전달 → 이번 주 선택 시 주간 데이터 조회
+
+**`pages/Admin/Dashboard/ui/AdminDashboardPage.tsx`** (수정)
+- 숫자 섹션 제목: `today` → "오늘의 숫자" / `week` → "이번 주 숫자"
+- 차트 레이블: `today` → "오늘 0시 ~ 23시" / `week` → "이번 주 합계"
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `dashboardAdminApi.ts` | hourly API from/to 파라미터 추가 |
+| `useDashboard.ts` | hourly API에 날짜 범위 전달 |
+| `AdminDashboardPage.tsx` | 제목·차트 레이블 period 기반으로 변경 |
+
+---
+
 ## 2026-11-18 — 어드민 공통 레이아웃 분리 · 메뉴 권한 제어
 
 ### 작업 개요

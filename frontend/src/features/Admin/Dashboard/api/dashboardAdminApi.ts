@@ -39,7 +39,7 @@ export const getDashboardSummaryApi = async (from?: string, to?: string): Promis
   return res.data;
 };
 
-export const getDashboardHourlyApi = async (): Promise<DashboardHourly> => {
-  const res = await backendClient.get('/api/admin/dashboard/reservations/hourly');
+export const getDashboardHourlyApi = async (from?: string, to?: string): Promise<DashboardHourly> => {
+  const res = await backendClient.get('/api/admin/dashboard/reservations/hourly', { params: { from, to } });
   return res.data;
 };

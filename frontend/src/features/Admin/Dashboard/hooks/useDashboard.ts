@@ -30,10 +30,12 @@ export const useDashboard = () => {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [hourly, setHourly] = useState<DashboardHourly | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetch = async (p: Period) => {
     setIsLoading(true);
+    setIsError(false);
     try {
       const { from, to } = getDateRange(p);
       const [s, h] = await Promise.all([getDashboardSummaryApi(from, to), getDashboardHourlyApi(from, to)]);
@@ -42,6 +44,7 @@ export const useDashboard = () => {
       setLastUpdated(new Date());
     } catch (e) {
       console.error('[useDashboard]', e);
+      setIsError(true);
     } finally {
       setIsLoading(false);
     }
@@ -54,5 +57,5 @@ export const useDashboard = () => {
     fetch(p);
   };
 
-  return { summary, hourly, isLoading, lastUpdated, period, changePeriod, refetch: () => fetch(period) };
+  return { summary, hourly, isLoading, isError, lastUpdated, period, changePeriod, refetch: () => fetch(period) };
 };

@@ -1,5 +1,34 @@
 # WORKLOG
 
+## 2026-11-18 — 대시보드 조회 실패 처리
+
+### 작업 개요
+
+API 조회 실패 시 `console.error`만 찍고 숫자가 0으로 표시되던 문제를 수정했다. 실패 시 에러 화면을 표시하고 다시 시도할 수 있도록 했다.
+
+---
+
+### 프론트엔드
+
+**`features/Admin/Dashboard/hooks/useDashboard.ts`** (수정)
+- `isError` 상태 추가
+- 조회 실패 시 `isError = true`, 재시도 시 `isError = false` 초기화
+
+**`pages/Admin/Dashboard/ui/AdminDashboardPage.tsx`** (수정)
+- `isError` 시 "데이터를 불러오지 못했습니다." 문구 + "다시 시도" 버튼 표시
+- 에러 화면도 `AdminLayout` 적용 (헤더·사이드바 유지)
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `useDashboard.ts` | isError 상태 추가, 실패 시 세팅 |
+| `AdminDashboardPage.tsx` | 에러 화면 및 다시 시도 버튼 추가 |
+
+---
+
 ## 2026-11-18 — 대시보드 기간 표시 버그 수정
 
 ### 작업 개요

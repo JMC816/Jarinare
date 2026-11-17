@@ -13,7 +13,7 @@ const EMPTY_HOURLY = Array.from({ length: 24 }, (_, h) => ({ hour: h, count: 0, 
 const AdminDashboardPage = () => {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
-  const { summary, hourly, isLoading, lastUpdated, period, changePeriod, refetch } = useDashboard();
+  const { summary, hourly, isLoading, isError, lastUpdated, period, changePeriod, refetch } = useDashboard();
 
   const isSuperAdmin = user?.role === 'super_admin';
   const hasPermission = (p: string) => isSuperAdmin || (user?.permissions ?? []).includes(p);
@@ -26,6 +26,22 @@ const AdminDashboardPage = () => {
   const lastUpdatedStr = lastUpdated
     ? lastUpdated.toLocaleString('ko-KR', { hour: '2-digit', minute: '2-digit' })
     : '-';
+
+  if (isError) {
+    return (
+      <AdminLayout>
+        <div className="flex h-full flex-col items-center justify-center gap-4">
+          <p className="text-sm text-gray-500">데이터를 불러오지 못했습니다.</p>
+          <button
+            onClick={refetch}
+            className="rounded-md border border-gray-200 bg-white px-4 py-2 text-sm text-gray-600 hover:bg-gray-50"
+          >
+            다시 시도
+          </button>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   return (
     <AdminLayout>

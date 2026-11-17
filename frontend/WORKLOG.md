@@ -1,5 +1,58 @@
 # WORKLOG
 
+## 2026-11-17 — 어드민 로그아웃 드롭다운 · 대시보드 매출 버그 수정
+
+### 작업 개요
+
+어드민 대시보드에 로그아웃 드롭다운을 추가하고, 매출 집계에 반환(환불) 금액이 포함되던 버그를 수정했다.
+
+---
+
+### 프론트엔드
+
+**`features/Admin/Login/hooks/useAdminLogout.ts`** (신규)
+
+- `/oauth/logout` 호출 → 토큰 제거 → 쿼리 캐시 초기화 → `/admin/login` 리다이렉트
+
+**`features/Admin/Dashboard/hooks/useProfileDropdown.ts`** (신규)
+
+- 드롭다운 열림/닫힘 상태(`profileOpen`, `toggle`, `close`) 관리 — FSD ui 분리
+
+**`pages/Admin/Dashboard/ui/AdminDashboardPage.tsx`** (수정)
+
+- 프로필 버튼 클릭 시 드롭다운 열림, 바깥 클릭 시 닫힘
+- 드롭다운 내 로그아웃 버튼 (아이콘 + 텍스트)
+
+---
+
+### 백엔드
+
+**`dashboard/dashboard.service.ts`** (수정)
+
+- `returnStats` 쿼리 추가 — 기간 내 `isReturn: true` 행의 `finalPrice` 합계
+- 순매출 = 구매 합계 − 반환 합계로 수정 (기존: 구매 합계만 집계)
+- 주석 `왕복 제외` → `구매 행 / 반환 행`으로 정정 (`isReturn`은 반환(환불) 행)
+
+**`dashboard/dashboard.service.spec.ts`** (수정)
+
+- `makePrisma`에 `purchaseAmount`, `returnAmount` 옵션 추가
+- `aggregate` mock을 `mockResolvedValueOnce` 체이닝으로 수정 (1st: 구매, 2nd: 반환)
+- 매출 테스트 3개 추가: 반환 없음 / 반환 차감 / 모두 null
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `features/Admin/Login/hooks/useAdminLogout.ts` | 신규 |
+| `features/Admin/Dashboard/hooks/useProfileDropdown.ts` | 신규 |
+| `pages/Admin/Dashboard/ui/AdminDashboardPage.tsx` | 로그아웃 드롭다운 추가 |
+| `dashboard/dashboard.service.ts` | 순매출 계산 버그 수정 |
+| `dashboard/dashboard.service.spec.ts` | 매출 테스트 추가 및 mock 수정 |
+
+---
+
 ## 2026-11-17 — 어드민 프론트엔드 구현
 
 ### 작업 개요

@@ -7,6 +7,8 @@ const M = 60 * 1000;
 
 function makePrisma(opts: {
   orderCount?: number;
+  purchaseAmount?: number;
+  returnAmount?: number;
   canceledOrders?: { orderId: bigint }[];
   seatChangeGroups?: { status: string; _count: { id: number } }[];
   logSuccesses?: { jobName: string; endedAt: Date }[];
@@ -14,10 +16,16 @@ function makePrisma(opts: {
 } = {}) {
   return {
     orderHistory: {
-      aggregate: jest.fn().mockResolvedValue({
-        _count: { id: opts.orderCount ?? 0 },
-        _sum: { finalPrice: null },
-      }),
+      // 첫 번째 호출: 구매 행 집계, 두 번째 호출: 반환 행 집계
+      aggregate: jest.fn()
+        .mockResolvedValueOnce({
+          _count: { id: opts.orderCount ?? 0 },
+          _sum: { finalPrice: opts.purchaseAmount ?? null },
+        })
+        .mockResolvedValueOnce({
+          _count: { id: 0 },
+          _sum: { finalPrice: opts.returnAmount ?? null },
+        }),
       groupBy: jest.fn().mockResolvedValue([]),
       findMany: jest.fn().mockResolvedValue([]),
     },
@@ -179,6 +187,29 @@ describe("DashboardService — staleJobs", () => {
     const res = await service.getSummary("20261101", "20261117");
     expect(res.scheduler.staleJobs).toContain("seat-hold-expire");
     expect(res.scheduler.staleJobs).not.toContain("seat-change-expire");
+  });
+});
+
+// ─────────────────────────────────────────────
+// 매출 계산
+// ─────────────────────────────────────────────
+describe("DashboardService — 매출", () => {
+  it("구매 100,000, 반환 없음 → revenue 100,000", async () => {
+    const service = newSvc(makePrisma({ purchaseAmount: 100_000 }));
+    const res = await service.getSummary("20261101", "20261130");
+    expect(res.reservations.revenue).toBe(100_000);
+  });
+
+  it("구매 100,000, 반환 30,000 → revenue 70,000", async () => {
+    const service = newSvc(makePrisma({ purchaseAmount: 100_000, returnAmount: 30_000 }));
+    const res = await service.getSummary("20261101", "20261130");
+    expect(res.reservations.revenue).toBe(70_000);
+  });
+
+  it("구매·반환 모두 null → revenue 0", async () => {
+    const service = newSvc(makePrisma());
+    const res = await service.getSummary("20261101", "20261130");
+    expect(res.reservations.revenue).toBe(0);
   });
 });
 

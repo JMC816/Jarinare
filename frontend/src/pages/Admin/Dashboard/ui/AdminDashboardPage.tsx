@@ -7,6 +7,8 @@ import tapIcon from '@/assets/logo/tap.png';
 import { BarChart, Bar, XAxis, YAxis, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useCurrentUser } from '@/features/Auth/hooks/useCurrentUser';
 import { useDashboard } from '@/features/Admin/Dashboard/hooks/useDashboard';
+import { useAdminLogout } from '@/features/Admin/Login/hooks/useAdminLogout';
+import { useProfileDropdown } from '@/features/Admin/Dashboard/hooks/useProfileDropdown';
 
 const NAV_ITEMS = [
   { label: '대시보드',    path: '/admin/dashboard' },
@@ -29,6 +31,8 @@ const AdminDashboardPage = () => {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { summary, hourly, isLoading, lastUpdated, period, changePeriod, refetch } = useDashboard();
+  const { logout } = useAdminLogout();
+  const { profileOpen, toggle, close } = useProfileDropdown();
 
   const kstHour = new Date(Date.now() + 9 * 60 * 60 * 1000).getUTCHours();
   const hourlyData = hourly?.hourly ?? EMPTY_HOURLY;
@@ -51,17 +55,44 @@ const AdminDashboardPage = () => {
             </div>
 
           <div className="flex items-center gap-2">
-            {/* 사용자 정보 */}
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af">
-                  <path d="M12 12c2.7 0 5-2.3 5-5S14.7 2 12 2 7 4.3 7 7s2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z" />
+            {/* 사용자 정보 + 드롭다운 */}
+            <div className="relative">
+              <button
+                onClick={toggle}
+                className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-gray-100"
+              >
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#9ca3af">
+                    <path d="M12 12c2.7 0 5-2.3 5-5S14.7 2 12 2 7 4.3 7 7s2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z" />
+                  </svg>
+                </div>
+                <div className="text-xs">
+                  <div className="font-semibold text-gray-800">{user?.name ?? '-'}</div>
+                  <div className="text-[10px] text-gray-400">{user?.adminRole?.name ?? '-'}</div>
+                </div>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="6 9 12 15 18 9" />
                 </svg>
-              </div>
-              <div className="text-xs">
-                <div className="font-semibold text-gray-800">{user?.name ?? '-'}</div>
-                <div className="text-[10px] text-gray-400">{user?.adminRole?.name ?? '-'}</div>
-              </div>
+              </button>
+
+              {profileOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={close} />
+                  <div className="absolute right-0 top-full z-50 mt-1 w-36 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
+                    <button
+                      onClick={() => { close(); logout(); }}
+                      className="flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                      </svg>
+                      로그아웃
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

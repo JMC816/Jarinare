@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -9,12 +10,16 @@ import { Reflector } from "@nestjs/core";
 import { Request } from "express";
 import { IS_PUBLIC_KEY } from "../decorators/public.decorator";
 import { AuthUser, UserRole } from "../interfaces/auth-user.interface";
+import { PrismaService } from "../../prisma/prisma.service";
+import { AppException } from "../../common/errors/app.exception";
+import { ErrorCode } from "../../common/errors/error-code";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
+    private readonly prisma: PrismaService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -44,6 +49,19 @@ export class JwtAuthGuard implements CanActivate {
       const role: UserRole = knownRoles.includes(payload.role as UserRole)
         ? (payload.role as UserRole)
         : "user";
+
+      const user = await this.prisma.user.findUnique({
+        where: { idx: BigInt(payload.sub) },
+        select: { status: true },
+      });
+      if (user?.status === "suspended") {
+        throw new AppException(
+          ErrorCode.ACCOUNT_SUSPENDED,
+          "정지된 계정입니다. 고객센터에 문의해 주세요.",
+          HttpStatus.FORBIDDEN,
+        );
+      }
+
       request.user = {
         idx: payload.sub,
         email: payload.email,
@@ -51,7 +69,8 @@ export class JwtAuthGuard implements CanActivate {
         adminRoleCode: payload.adminRoleCode,
       };
       return true;
-    } catch {
+    } catch (e) {
+      if (e instanceof AppException) throw e;
       throw new UnauthorizedException("유효하지 않거나 만료된 토큰입니다.");
     }
   }

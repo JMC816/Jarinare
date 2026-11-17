@@ -1,5 +1,55 @@
 # WORKLOG
 
+## 2026-11-17 — 정지 계정 로그인 차단 (전면 적용)
+
+### 작업 개요
+
+`users.status` 필드가 있음에도 로그인·토큰 갱신·API 가드 어디에서도 확인하지 않아 정지된 계정이 그대로 로그인되던 문제를 수정했다. 로그인 차단 → 토큰 갱신 차단 → 가드 즉시 차단 세 단계를 모두 적용해 정지 즉시 모든 API 접근이 막힌다.
+
+---
+
+### 백엔드
+
+**`common/errors/error-code.ts`** (수정)
+- `ACCOUNT_SUSPENDED` 에러 코드 추가
+
+**`auth/oauth.controller.ts`** (수정)
+- 로그인 시 비밀번호 일치 후 `status === 'suspended'` 체크
+- 정지 계정이면 `403 + ACCOUNT_SUSPENDED` 반환
+- 비밀번호 불일치 시엔 정지 여부 미확인 (계정 존재 노출 방지)
+
+**`auth/auth.service.ts`** (수정)
+- `rotateRefreshToken`에 status 체크 추가
+- 정지 계정은 토큰 갱신 차단
+
+**`auth/guards/jwt-auth.guard.ts`** (수정)
+- `PrismaService` 주입 추가
+- JWT 서명 검증 후 DB에서 `users.status` 조회
+- `status === 'suspended'`이면 `403 + ACCOUNT_SUSPENDED` 즉시 반환
+- 기발급 액세스 토큰이라도 정지 계정은 모든 API 접근 즉시 차단
+
+---
+
+### 프론트엔드
+
+**`features/Auth/Login/hooks/useLoginState.ts`** (수정)
+- 로그인 실패 시 `403 + ACCOUNT_SUSPENDED` 코드 감지
+- "정지된 계정입니다. 고객센터에 문의해 주세요." 메시지 표시
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `common/errors/error-code.ts` | ACCOUNT_SUSPENDED 에러 코드 추가 |
+| `auth/oauth.controller.ts` | 로그인 시 정지 계정 403 차단 |
+| `auth/auth.service.ts` | 토큰 갱신 시 정지 계정 403 차단 |
+| `auth/guards/jwt-auth.guard.ts` | 가드에서 DB status 조회 → 즉시 차단 |
+| `features/Auth/Login/hooks/useLoginState.ts` | 정지 계정 에러 메시지 처리 |
+
+---
+
 ## 2026-11-17 — 어드민 로그아웃 드롭다운 · 대시보드 매출 버그 수정
 
 ### 작업 개요

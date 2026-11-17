@@ -19,12 +19,17 @@ export const useLoginState = () => {
       localStorage.setItem(ACCESS_TOKEN_KEY, res.accessToken);
       window.location.href = '/';
     } catch (e: unknown) {
-      const status = isAxiosError(e) ? e.response?.status : undefined;
-      if (status === 401)
-        setMessage('이메일 또는 비밀번호가 올바르지 않습니다.');
-      else {
-        console.error('[Login] 오류:', e);
-        setMessage('로그인 중 오류가 발생했습니다.');
+      if (isAxiosError(e)) {
+        const status = e.response?.status;
+        const code = e.response?.data?.code;
+        if (status === 403 && code === 'ACCOUNT_SUSPENDED')
+          setMessage('정지된 계정입니다. 고객센터에 문의해 주세요.');
+        else if (status === 401)
+          setMessage('이메일 또는 비밀번호가 올바르지 않습니다.');
+        else {
+          console.error('[Login] 오류:', e);
+          setMessage('로그인 중 오류가 발생했습니다.');
+        }
       }
     } finally {
       setIsLoading(false);

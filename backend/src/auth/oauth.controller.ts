@@ -8,6 +8,8 @@ import {
   Res,
   UnauthorizedException,
 } from "@nestjs/common";
+import { AppException } from "../common/errors/app.exception";
+import { ErrorCode } from "../common/errors/error-code";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import * as bcrypt from "bcrypt";
 import type { Response } from "express";
@@ -92,6 +94,14 @@ export class OAuthController {
     if (!isMatch) {
       throw new UnauthorizedException(
         "이메일 또는 비밀번호가 올바르지 않습니다.",
+      );
+    }
+
+    if (user.status === "suspended") {
+      throw new AppException(
+        ErrorCode.ACCOUNT_SUSPENDED,
+        "정지된 계정입니다. 고객센터에 문의해 주세요.",
+        HttpStatus.FORBIDDEN,
       );
     }
 

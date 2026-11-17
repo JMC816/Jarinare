@@ -14,6 +14,7 @@ export const ErrorCode = {
 
   // 사용자
   USER_NOT_FOUND: "USER_NOT_FOUND",
+  ACCOUNT_SUSPENDED: "ACCOUNT_SUSPENDED",
 
   // 게시판/댓글/후기 (후속 pass)
   POST_NOT_FOUND: "POST_NOT_FOUND",

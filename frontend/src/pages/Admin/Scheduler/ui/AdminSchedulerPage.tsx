@@ -8,6 +8,7 @@ import { useSchedulerJobs } from '@/features/Admin/Scheduler/hooks/useSchedulerJ
 import { useSchedulerRuns, RunFilter } from '@/features/Admin/Scheduler/hooks/useSchedulerRuns';
 import JobListTab from '@/features/Admin/Scheduler/ui/JobListTab';
 import RunLogsTab from '@/features/Admin/Scheduler/ui/RunLogsTab';
+import AdminLayout from '@/widgets/Admin/Layout/ui/AdminLayout';
 
 type Tab = 'jobs' | 'runs';
 
@@ -30,7 +31,8 @@ const AdminSchedulerPage = () => {
     (dashboardScheduler?.staleJobs?.length ?? 0) > 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <AdminLayout>
+    <div className="p-8">
       <div className="mx-auto max-w-6xl">
         {/* 헤더 */}
         <div className="mb-6 flex items-center justify-between">
@@ -109,6 +111,7 @@ const AdminSchedulerPage = () => {
         )}
       </div>
     </div>
+    </AdminLayout>
   );
 };
 

@@ -1,5 +1,60 @@
 # WORKLOG
 
+## 2026-11-18 — 어드민 공통 레이아웃 분리 · 메뉴 권한 제어
+
+### 작업 개요
+
+헤더·사이드바가 `AdminDashboardPage` 안에 있어 스케줄러 등 다른 페이지에 메뉴가 없던 문제를 수정했다. `AdminLayout` 위젯으로 공통 레이아웃을 분리하고, 미구현 메뉴 페이지를 생성했다. 사이드바 메뉴와 라우트 양쪽에 권한 기반 접근 제어를 적용했다.
+
+---
+
+### 프론트엔드
+
+**`widgets/Admin/Layout/ui/AdminLayout.tsx`** (신규)
+- 헤더 + 사이드바 공통 레이아웃
+- `user.permissions` 기반으로 사이드바 메뉴 필터링
+- `super_admin`은 전체 메뉴 노출
+
+**`widgets/Admin/Guard/ui/AdminGuard.tsx`** (수정)
+- `permission` 파라미터 추가
+- 권한 없으면 `/admin/access-denied` 리다이렉트
+- `super_admin`은 무조건 통과
+
+**`pages/Admin/Dashboard/ui/AdminDashboardPage.tsx`** (수정)
+- `AdminLayout` 적용, 헤더·사이드바 제거
+- "미처리 신고" 카드 → `report:read` 없으면 숨김
+- "스케줄러 실패" 카드 → `scheduler:read` 없으면 숨김
+
+**`pages/Admin/Scheduler/ui/AdminSchedulerPage.tsx`** (수정)
+- `AdminLayout` 적용
+
+**어드민 페이지 9개 신규 생성** (회원·신고·예매좌석·게시판·멤버십·카드할인·알림발송·감사로그·역할어드민)
+- 각 페이지 `AdminLayout` 적용
+- 메인 가운데 "데이터 없음" 표시
+
+**`app/routes.tsx`** (수정)
+- 9개 라우트 추가
+- 전체 11개 어드민 라우트에 `permission` 지정
+
+**`features/Admin/Login/hooks/useProfileDropdown.ts`** (이동)
+- `features/Admin/Dashboard/hooks/` → `features/Admin/Login/hooks/`
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `widgets/Admin/Layout/ui/AdminLayout.tsx` | 공통 레이아웃 신규, permission 필터링 |
+| `widgets/Admin/Guard/ui/AdminGuard.tsx` | permission 파라미터 추가 |
+| `pages/Admin/Dashboard/ui/AdminDashboardPage.tsx` | AdminLayout 적용, 카드 권한 제어 |
+| `pages/Admin/Scheduler/ui/AdminSchedulerPage.tsx` | AdminLayout 적용 |
+| `pages/Admin/*/ui/Admin*Page.tsx` (9개) | 신규 stub 페이지 |
+| `app/routes.tsx` | 9개 라우트 추가, permission 지정 |
+| `features/Admin/Login/hooks/useProfileDropdown.ts` | 위치 이동 |
+
+---
+
 ## 2026-11-18 — 좌석 변경 요청 수 집계 버그 수정
 
 ### 작업 개요

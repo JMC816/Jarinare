@@ -1,7 +1,16 @@
 import AdminAccessDeniedPage from '@/pages/Admin/AccessDenied/ui/AdminAccessDeniedPage';
+import AdminAuditPage from '@/pages/Admin/Audit/ui/AdminAuditPage';
+import AdminBoardPage from '@/pages/Admin/Board/ui/AdminBoardPage';
+import AdminCardDiscountPage from '@/pages/Admin/CardDiscount/ui/AdminCardDiscountPage';
 import AdminDashboardPage from '@/pages/Admin/Dashboard/ui/AdminDashboardPage';
 import AdminLoginPage from '@/pages/Admin/Login/ui/AdminLoginPage';
+import AdminMembershipPage from '@/pages/Admin/Membership/ui/AdminMembershipPage';
+import AdminNotificationsPage from '@/pages/Admin/Notifications/ui/AdminNotificationsPage';
+import AdminReportsPage from '@/pages/Admin/Reports/ui/AdminReportsPage';
+import AdminReservationsPage from '@/pages/Admin/Reservations/ui/AdminReservationsPage';
+import AdminRolesPage from '@/pages/Admin/Roles/ui/AdminRolesPage';
 import AdminSchedulerPage from '@/pages/Admin/Scheduler/ui/AdminSchedulerPage';
+import AdminUsersPage from '@/pages/Admin/Users/ui/AdminUsersPage';
 import AdminGuard from '@/widgets/Admin/Guard/ui/AdminGuard';
 import GithubRedirect from '@/features/Auth/SocialLogin/ui/GithubRedirect';
 import GoogleRedirect from '@/features/Auth/SocialLogin/ui/GoogleRedirect';
@@ -59,8 +68,17 @@ const Router = () => {
         <Routes>
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin/access-denied" element={<AdminAccessDeniedPage />} />
-          <Route path="/admin/dashboard" element={<AdminGuard><AdminDashboardPage /></AdminGuard>} />
-          <Route path="/admin/scheduler" element={<AdminGuard><AdminSchedulerPage /></AdminGuard>} />
+          <Route path="/admin/dashboard" element={<AdminGuard permission="dashboard:read"><AdminDashboardPage /></AdminGuard>} />
+          <Route path="/admin/users" element={<AdminGuard permission="user:read"><AdminUsersPage /></AdminGuard>} />
+          <Route path="/admin/reports" element={<AdminGuard permission="report:read"><AdminReportsPage /></AdminGuard>} />
+          <Route path="/admin/reservations" element={<AdminGuard permission="reservation:read"><AdminReservationsPage /></AdminGuard>} />
+          <Route path="/admin/board" element={<AdminGuard permission="board:manage"><AdminBoardPage /></AdminGuard>} />
+          <Route path="/admin/membership" element={<AdminGuard permission="membership:manage"><AdminMembershipPage /></AdminGuard>} />
+          <Route path="/admin/card-discount" element={<AdminGuard permission="discount:manage"><AdminCardDiscountPage /></AdminGuard>} />
+          <Route path="/admin/notifications" element={<AdminGuard permission="notification:send"><AdminNotificationsPage /></AdminGuard>} />
+          <Route path="/admin/scheduler" element={<AdminGuard permission="scheduler:read"><AdminSchedulerPage /></AdminGuard>} />
+          <Route path="/admin/audit" element={<AdminGuard permission="admin:manage"><AdminAuditPage /></AdminGuard>} />
+          <Route path="/admin/roles" element={<AdminGuard permission="admin:manage"><AdminRolesPage /></AdminGuard>} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/signup" element={<SignUpPage />} />
           <Route path="/oauth/kakao/callback" element={<KakaoRedirect />} />

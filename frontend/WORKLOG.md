@@ -1,5 +1,31 @@
 # WORKLOG
 
+## 2026-11-18 — cs/operator/marketer 계정 adminRoleId 연결
+
+### 작업 개요
+
+시드 마이그레이션(`20261116`)이 `super_admin` 역할 사용자만 adminRoleId를 연결했고, 기존 cs/operator/marketer 사용자들의 adminRoleId가 NULL로 남아 있었다. 마이그레이션을 추가해 각 역할 코드에 맞는 adminRoleId를 채웠다.
+
+---
+
+### 백엔드
+
+**`prisma/migrations/20261118000000_link_admin_roles/migration.sql`** (신규)
+- `role = 'cs'` 사용자 → CS 역할 연결
+- `role = 'operator'` 사용자 → OPERATOR 역할 연결
+- `role = 'marketer'` 사용자 → MARKETER 역할 연결
+- `adminRoleId IS NULL` 조건으로 중복 적용 방지
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `20261118000000_link_admin_roles/migration.sql` | cs/operator/marketer adminRoleId 연결 |
+
+---
+
 ## 2026-11-18 — 대시보드 조회 실패 처리
 
 ### 작업 개요

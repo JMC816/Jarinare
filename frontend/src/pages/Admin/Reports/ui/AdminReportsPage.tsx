@@ -8,7 +8,7 @@ const AdminReportsPage = () => {
   return (
     <AdminLayout>
       <div className="flex h-full items-center justify-center">
-        <p className="text-sm text-gray-400">데이터 없음</p>
+        <p className="text-sm text-gray-400">준비 중</p>
       </div>
     </AdminLayout>
   );

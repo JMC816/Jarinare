@@ -208,7 +208,7 @@ const AdminDashboardPage = () => {
                 </span>
               </div>
               {(summary?.popularRoutes?.length ?? 0) === 0 ? (
-                <p className="text-sm text-gray-300">데이터 없음</p>
+                <p className="text-sm text-gray-300">준비 중</p>
               ) : (
                 <div className="flex flex-col gap-5">
                   {summary!.popularRoutes.map((r, i) => (
@@ -232,7 +232,7 @@ const AdminDashboardPage = () => {
             <div className="rounded-xl bg-white px-5 py-4 shadow-sm">
               <p className="mb-4 text-base font-semibold text-gray-700">인기 목적지 TOP 5</p>
               {(summary?.popularDestinations?.length ?? 0) === 0 ? (
-                <p className="text-sm text-gray-300">데이터 없음</p>
+                <p className="text-sm text-gray-300">준비 중</p>
               ) : (
                 <div className="flex flex-col gap-5">
                   {summary!.popularDestinations.map((d, i) => (

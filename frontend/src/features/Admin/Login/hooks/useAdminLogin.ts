@@ -30,12 +30,16 @@ export const useAdminLogin = () => {
       queryClient.removeQueries({ queryKey: ['currentUser'] });
       navigate('/admin/dashboard');
     } catch (e: unknown) {
-      const status = isAxiosError(e) ? e.response?.status : undefined;
-      setErrorMsg(
-        status === 401
-          ? '이메일 또는 비밀번호가 올바르지 않습니다.'
-          : '로그인 중 오류가 발생했습니다.',
-      );
+      if (isAxiosError(e)) {
+        const status = e.response?.status;
+        const code = e.response?.data?.code;
+        if (status === 403 && code === 'ACCOUNT_SUSPENDED')
+          setErrorMsg('정지된 계정입니다. 고객센터에 문의해 주세요.');
+        else if (status === 401)
+          setErrorMsg('이메일 또는 비밀번호가 올바르지 않습니다.');
+        else
+          setErrorMsg('로그인 중 오류가 발생했습니다.');
+      }
     } finally {
       setIsLoading(false);
     }

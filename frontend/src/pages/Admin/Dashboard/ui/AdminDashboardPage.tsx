@@ -15,8 +15,7 @@ const AdminDashboardPage = () => {
   const { user } = useCurrentUser();
   const { summary, hourly, isLoading, isError, lastUpdated, period, changePeriod, refetch } = useDashboard();
 
-  const isSuperAdmin = user?.role === 'super_admin';
-  const hasPermission = (p: string) => isSuperAdmin || (user?.permissions ?? []).includes(p);
+  const hasPermission = (p: string) => (user?.permissions ?? []).includes(p);
 
   const kstHour = new Date(Date.now() + 9 * 60 * 60 * 1000).getUTCHours();
   const hourlyData = hourly?.hourly ?? EMPTY_HOURLY;

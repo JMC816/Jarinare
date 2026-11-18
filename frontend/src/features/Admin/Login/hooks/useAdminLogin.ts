@@ -37,8 +37,10 @@ export const useAdminLogin = () => {
           setErrorMsg('정지된 계정입니다. 고객센터에 문의해 주세요.');
         else if (status === 401)
           setErrorMsg('이메일 또는 비밀번호가 올바르지 않습니다.');
-        else
+        else {
+          console.error('[AdminLogin] 오류:', e);
           setErrorMsg('로그인 중 오류가 발생했습니다.');
+        }
       }
     } finally {
       setIsLoading(false);

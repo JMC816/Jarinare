@@ -1,5 +1,43 @@
 # WORKLOG
 
+## 2026-11-18 — 프론트 super_admin role 우회 제거
+
+### 작업 개요
+
+`AdminLayout`, `AdminGuard`, `AdminDashboardPage`에서 `role === 'super_admin'`이면 permission 체크를 건너뛰던 우회 로직을 제거했다. SUPER_ADMIN은 이미 모든 permissions를 갖고 있어서 permissions만으로 판단해도 동작이 동일하고, 백엔드와 일관성이 맞춰진다.
+
+---
+
+### 프론트엔드
+
+**`widgets/Admin/Layout/ui/AdminLayout.tsx`** (수정)
+- `isSuperAdmin` 변수 제거
+- 메뉴 필터: `isSuperAdmin || permissions.includes()` → `permissions.includes()`
+
+**`widgets/Admin/Guard/ui/AdminGuard.tsx`** (수정)
+- `isSuperAdmin` 변수 제거
+- 접근 판단: `isSuperAdmin || permissions.includes()` → `permissions.includes()`
+
+**`pages/Admin/Dashboard/ui/AdminDashboardPage.tsx`** (수정)
+- `isSuperAdmin` 변수 제거
+- 카드 표시: `isSuperAdmin || permissions.includes()` → `permissions.includes()`
+
+**`features/Admin/Login/hooks/useAdminLogin.ts`** (수정)
+- 예상치 못한 오류 발생 시 `console.error('[AdminLogin] 오류:', e)` 추가
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `AdminLayout.tsx` | isSuperAdmin 우회 제거 |
+| `AdminGuard.tsx` | isSuperAdmin 우회 제거 |
+| `AdminDashboardPage.tsx` | isSuperAdmin 우회 제거 |
+| `useAdminLogin.ts` | console.error 추가 |
+
+---
+
 ## 2026-11-18 — 어드민 로그인 정지 계정 문구 추가
 
 ### 작업 개요

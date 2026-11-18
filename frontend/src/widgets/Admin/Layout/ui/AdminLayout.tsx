@@ -28,9 +28,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const { logout } = useAdminLogout();
   const { profileOpen, toggle, close } = useProfileDropdown();
 
-  const isSuperAdmin = user?.role === 'super_admin';
   const visibleNavItems = NAV_ITEMS.filter(
-    (item) => isSuperAdmin || (user?.permissions ?? []).includes(item.permission),
+    (item) => (user?.permissions ?? []).includes(item.permission),
   );
 
   return (

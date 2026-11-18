@@ -14,9 +14,7 @@ const AdminGuard = ({ children, permission }: { children: React.ReactNode; permi
   if (!user.adminRole) return <Navigate to="/admin/access-denied" replace />;
 
   if (permission) {
-    const isSuperAdmin = user.role === 'super_admin';
-    const hasPermission = isSuperAdmin || user.permissions.includes(permission);
-    if (!hasPermission) return <Navigate to="/admin/access-denied" replace />;
+    if (!user.permissions.includes(permission)) return <Navigate to="/admin/access-denied" replace />;
   }
 
   return <>{children}</>;

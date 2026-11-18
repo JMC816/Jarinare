@@ -8,8 +8,6 @@ import {
   Res,
   UnauthorizedException,
 } from "@nestjs/common";
-import { AppException } from "../common/errors/app.exception";
-import { ErrorCode } from "../common/errors/error-code";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import * as bcrypt from "bcrypt";
 import type { Response } from "express";
@@ -21,6 +19,8 @@ import { LoginDto } from "./dto/login.dto";
 import { SignUpDto } from "./dto/sign-up.dto";
 import { UsersService } from "../users/users.service";
 import { AppConfigService } from "../config/app-config.service";
+import { PrismaService } from "../prisma/prisma.service";
+import { checkSuspension } from "./helpers/check-suspension";
 
 const REFRESH_TOKEN_COOKIE = "refresh_token";
 
@@ -31,6 +31,7 @@ export class OAuthController {
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     private readonly config: AppConfigService,
+    private readonly prisma: PrismaService,
   ) {}
 
   private setRefreshCookie(res: Response, token: string) {
@@ -97,13 +98,7 @@ export class OAuthController {
       );
     }
 
-    if (user.status === "suspended") {
-      throw new AppException(
-        ErrorCode.ACCOUNT_SUSPENDED,
-        "정지된 계정입니다. 고객센터에 문의해 주세요.",
-        HttpStatus.FORBIDDEN,
-      );
-    }
+    await checkSuspension(user, this.prisma);
 
     const { accessToken, refreshToken } =
       await this.authService.generateTokenPair(user);

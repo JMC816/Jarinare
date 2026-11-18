@@ -1,11 +1,10 @@
-import { HttpStatus, Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { randomBytes } from "crypto";
 import { AppConfigService } from "../config/app-config.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { User } from "../generated/prisma/client";
-import { AppException } from "../common/errors/app.exception";
-import { ErrorCode } from "../common/errors/error-code";
+import { checkSuspension } from "./helpers/check-suspension";
 
 export interface TokenPair {
   accessToken: string;
@@ -82,13 +81,7 @@ export class AuthService {
       throw new UnauthorizedException("리프레시 토큰이 만료되었습니다.");
     }
 
-    if (user.status === "suspended") {
-      throw new AppException(
-        ErrorCode.ACCOUNT_SUSPENDED,
-        "정지된 계정입니다. 고객센터에 문의해 주세요.",
-        HttpStatus.FORBIDDEN,
-      );
-    }
+    await checkSuspension(user, this.prisma);
 
     return this.generateTokenPair(user);
   }

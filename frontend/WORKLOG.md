@@ -1,5 +1,44 @@
 # WORKLOG
 
+## 2026-11-18 — 정지 기간 만료 시 자동 해제
+
+### 작업 개요
+
+`suspendedUntil`이 지나도 어드민이 직접 풀기 전까지 계속 차단되던 문제를 수정했다. 로그인·토큰 갱신·JWT 가드 세 곳에서 정지 만료 여부를 체크하고, 만료됐으면 `status`를 `active`로 되돌린다.
+
+---
+
+### 백엔드
+
+**`auth/helpers/check-suspension.ts`** (신규)
+- `status = 'suspended'` + `suspendedUntil <= now` → DB `active` 업데이트 후 통과
+- `status = 'suspended'` + 아직 유효 → 403 `ACCOUNT_SUSPENDED`
+- 세 곳에 복붙돼 있던 검사를 함수 하나로 통합
+
+**`auth/guards/jwt-auth.guard.ts`** (수정)
+- DB select에 `suspendedUntil` 추가
+- 기존 인라인 suspended 체크 → `checkSuspension` 호출로 교체
+
+**`auth/auth.service.ts`** (수정)
+- `rotateRefreshToken`의 인라인 suspended 체크 → `checkSuspension` 호출로 교체
+
+**`auth/oauth.controller.ts`** (수정)
+- `PrismaService` 주입 추가
+- 로그인 시 인라인 suspended 체크 → `checkSuspension` 호출로 교체
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `auth/helpers/check-suspension.ts` | 정지 자동 해제 헬퍼 신규 |
+| `jwt-auth.guard.ts` | suspendedUntil select 추가, 헬퍼 호출 |
+| `auth.service.ts` | 헬퍼 호출로 교체 |
+| `oauth.controller.ts` | PrismaService 주입, 헬퍼 호출로 교체 |
+
+---
+
 ## 2026-11-18 — cs/operator/marketer 계정 adminRoleId 연결
 
 ### 작업 개요

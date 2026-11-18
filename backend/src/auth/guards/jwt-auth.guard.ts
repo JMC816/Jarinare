@@ -1,7 +1,6 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -12,7 +11,7 @@ import { IS_PUBLIC_KEY } from "../decorators/public.decorator";
 import { AuthUser, UserRole } from "../interfaces/auth-user.interface";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AppException } from "../../common/errors/app.exception";
-import { ErrorCode } from "../../common/errors/error-code";
+import { checkSuspension } from "../helpers/check-suspension";
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -50,15 +49,14 @@ export class JwtAuthGuard implements CanActivate {
         ? (payload.role as UserRole)
         : "user";
 
-      const user = await this.prisma.user.findUnique({
+      const dbUser = await this.prisma.user.findUnique({
         where: { idx: BigInt(payload.sub) },
-        select: { status: true },
+        select: { status: true, suspendedUntil: true },
       });
-      if (user?.status === "suspended") {
-        throw new AppException(
-          ErrorCode.ACCOUNT_SUSPENDED,
-          "정지된 계정입니다. 고객센터에 문의해 주세요.",
-          HttpStatus.FORBIDDEN,
+      if (dbUser) {
+        await checkSuspension(
+          { idx: BigInt(payload.sub), status: dbUser.status, suspendedUntil: dbUser.suspendedUntil },
+          this.prisma,
         );
       }
 

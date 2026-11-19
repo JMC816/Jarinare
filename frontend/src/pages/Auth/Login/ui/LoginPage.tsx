@@ -7,11 +7,13 @@ import useModalStore from '@/widgets/model/AuthStore';
 import { FormProvider } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useLoginPage } from '../hooks/useLoginPage';
+import { LoginMessageStore } from '@/features/Auth/Login/model/useLoginStore';
 
 const LoginPage = () => {
   const { isShow, modalType } = useModalStore();
   const { method: pcMethod } = Login();
   const { method: mobileMethod } = Login();
+  const { message } = LoginMessageStore();
 
   const formOpen =
     isShow && (modalType === 'EmailModal' || modalType === 'PasswordModal');
@@ -93,6 +95,9 @@ const LoginPage = () => {
                 <p className="text-xs text-gray-400">계정에 로그인하세요</p>
               </div>
               <div className="flex flex-col gap-3">
+                {message && (
+                  <p className="text-xs font-bold text-red">{message}</p>
+                )}
                 <LoginList />
                 <div className="before:content-[' '] after:content-[' '] flex w-full items-center gap-3 text-xs text-mediumGray before:h-[1px] before:flex-grow before:bg-gray-200 after:h-[1px] after:flex-grow after:bg-gray-200">
                   또는

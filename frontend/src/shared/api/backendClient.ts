@@ -37,6 +37,16 @@ backendClient.interceptors.response.use(
   async (error) => {
     const original = error.config;
 
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.code === 'ACCOUNT_SUSPENDED'
+    ) {
+      localStorage.removeItem(ACCESS_TOKEN_KEY);
+      const isAdmin = window.location.pathname.startsWith('/admin');
+      window.location.href = isAdmin ? '/admin/login?suspended=1' : '/auth/login?suspended=1';
+      return Promise.reject(error);
+    }
+
     if (error.response?.status !== 401 || original._retry || original.url?.includes('/oauth/logout')) {
       return Promise.reject(error);
     }

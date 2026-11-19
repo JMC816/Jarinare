@@ -2,7 +2,7 @@
  * @role: features/hooks — 어드민 로그인 처리
  * @rule: 로그인 후 /admin/dashboard 로 이동, role 분기는 AdminGuard 에서 처리
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { isAxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
@@ -15,6 +15,13 @@ export const useAdminLogin = () => {
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('suspended') === '1') {
+      setErrorMsg('정지된 계정입니다. 고객센터에 문의해 주세요.');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

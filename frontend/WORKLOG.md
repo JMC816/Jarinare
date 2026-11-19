@@ -102,6 +102,45 @@
 
 ---
 
+## 2026-11-20 — 사용 중 정지 시 프론트엔드 처리
+
+### 작업 개요
+
+로그인 후 어드민·서비스 페이지를 사용하는 도중 계정이 정지된 경우, API 응답에서 403 + `ACCOUNT_SUSPENDED`를 감지해 토큰을 제거하고 로그인 페이지로 이동하면서 정지 안내 문구를 표시하도록 처리했다. 또한 서비스 로그인 페이지에서 정지 메시지가 모달 안에서만 표시되던 문제도 함께 수정했다.
+
+---
+
+### 프론트엔드
+
+**`shared/api/backendClient.ts`** (수정)
+- response 인터셉터에 403 + `ACCOUNT_SUSPENDED` 감지 로직 추가
+- 감지 시 accessToken 삭제 후 경로에 따라 리다이렉트
+  - 어드민(`/admin/*`) → `/admin/login?suspended=1`
+  - 서비스 → `/auth/login?suspended=1`
+
+**`features/Admin/Login/hooks/useAdminLogin.ts`** (수정)
+- `useEffect`에서 URL `?suspended=1` 파라미터 읽어 에러 메시지 표시
+
+**`pages/Auth/Login/hooks/useLoginPage.ts`** (수정)
+- `useEffect`에서 URL `?suspended=1` 파라미터 읽어 `LoginMessageStore`에 메시지 설정
+
+**`pages/Auth/Login/ui/LoginPage.tsx`** (수정)
+- `LoginMessageStore.message`가 `PasswordForm` 모달 안에서만 표시되어 리다이렉트 후 보이지 않던 문제 수정
+- 메인 카드에 message 표시 영역 추가
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `backendClient.ts` | 403 ACCOUNT_SUSPENDED 감지 → 토큰 삭제 + 리다이렉트 |
+| `useAdminLogin.ts` | ?suspended=1 파라미터 읽어 에러 메시지 표시 |
+| `useLoginPage.ts` | ?suspended=1 파라미터 읽어 LoginMessageStore 메시지 설정 |
+| `LoginPage.tsx` | 메인 카드에 정지 안내 메시지 표시 영역 추가 |
+
+---
+
 ## 2026-11-18 — cs/operator/marketer 계정 adminRoleId 연결
 
 ### 작업 개요

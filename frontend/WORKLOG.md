@@ -1,5 +1,46 @@
 # WORKLOG
 
+## 2026-11-21 — 정지 차단 단위 테스트 추가
+
+### 작업 개요
+
+로그인·토큰 갱신·JWT 가드 세 곳에서 `checkSuspension`이 올바르게 호출되는지, 정지 중이면 403을 던지고 종료일이 지났으면 통과하는지를 단위 테스트로 검증했다.
+
+---
+
+### 백엔드
+
+**`auth/helpers/check-suspension.spec.ts`** (신규)
+- status가 `active`이면 통과
+- `suspended` + 미래 → 403 ACCOUNT_SUSPENDED
+- `suspended` + null → 403 ACCOUNT_SUSPENDED
+- `suspended` + 과거(만료) → active 복원 후 통과
+
+**`auth/oauth.controller.spec.ts`** (신규)
+- 로그인 시 정지 중이면 403 ACCOUNT_SUSPENDED
+- 로그인 시 종료일 지났으면 통과하고 토큰 반환
+
+**`auth/auth.service.spec.ts`** (신규)
+- 토큰 갱신 시 정지 중이면 403 ACCOUNT_SUSPENDED
+- 토큰 갱신 시 종료일 지났으면 통과하고 토큰 반환
+
+**`auth/guards/jwt-auth.guard.spec.ts`** (신규)
+- 가드에서 정지 중이면 403 ACCOUNT_SUSPENDED
+- 가드에서 종료일 지났으면 통과
+
+---
+
+### 수정 파일 목록
+
+| 파일 | 변경 내용 |
+|------|----------|
+| `check-suspension.spec.ts` | 헬퍼 단위 테스트 신규 |
+| `oauth.controller.spec.ts` | 로그인 정지 차단 테스트 신규 |
+| `auth.service.spec.ts` | 토큰 갱신 정지 차단 테스트 신규 |
+| `jwt-auth.guard.spec.ts` | 가드 정지 차단 테스트 신규 |
+
+---
+
 ## 2026-11-18 — 프론트 super_admin role 우회 제거
 
 ### 작업 개요
